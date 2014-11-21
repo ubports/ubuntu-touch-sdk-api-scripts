@@ -1,0 +1,143 @@
+{% load cms_tags sekizai_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block defaulthead %}
+  
+  {% block defaultmeta %}
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% endblock defaultmeta%}
+  {% block extrameta %}{% endblock extrameta%}
+  
+  <title>CMS Test </title>
+
+  {% block defaultstyles %}
+  <link rel="shortcut icon" href="https://swift.canonistack.canonical.com/v1/AUTH_c70ce6d1363e4692b1d4fde91eaa3b4b/devportal_static/ubuntu_website/images/favicon.ico" type="image/x-icon" />
+  <!-- stylesheets -->
+  <link rel="stylesheet" type="text/css" media="all" href="//assets.ubuntu.com/sites/guidelines/css/responsive/latest/ubuntu-styles.css"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="//assets.ubuntu.com/sites/ubuntu/latest/u/css/global.css" />
+  {% endblock defaultstyles%}
+  {%block extrastyles %}{% endblock extrastyles%}
+
+  {% block defaultheadjs %}
+  <!-- javascript -->
+  <script src="//assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/yui-min.js"></script>
+  <script src="//assets.ubuntu.com/sites/ubuntu/latest/u/js/global.js"></script>
+
+  <script src="https://assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/modernizr.2.7.1.js"></script>
+  <script src="http://assets.ubuntu.com/sites/ubuntu/1236/u/js/plugins/Imager.js"></script>
+  <script>var website_assets="http://assets.ubuntu.com/sites/ubuntu/1236/u";</script>
+  {% endblock defaultheadjs %}
+ 
+  {% endblock defaulthead %}
+  {% block extrahead %}{% endblock %}
+  {% render_block "css" %}
+  
+</head>
+<body>
+    
+
+{% cms_toolbar %}
+
+    <div class="">
+
+        
+            
+            <header class="banner global" role="banner">
+                <nav role="navigation" class="nav-primary nav-right">
+                    <div class="logo">
+                        <a class="logo-ubuntu" href="/">
+                            <img width="106" height="25" src="https://assets.ubuntu.com/sites/ubuntu/latest/u/img/logos/logo-ubuntu-orange.svg" alt="" />
+                        </a>
+                    </div>
+                    
+                    <ul>
+                    {% block main_nav_links %}{% endblock main_nav_links %}    
+                    </ul>
+
+                    {% block search %}
+                    <form id="form-search" action="/search" class="header-search">
+                        <label for="edit-keys" class="accessibility-aid">Search</label>
+                        <input type="search" maxlength="255" name="q" id="search" class="form-text" placeholder="Search" value="" />
+                        <button type="submit"><img src="https://assets.ubuntu.com/sites/ubuntu/latest/u/img/search-white.svg" alt="Search" height="28" /></button>
+                    </form>
+                    {% endblock search %}
+                </nav>
+            </header>
+
+            <div class="wrapper">
+                <div>
+        
+                    {% block messages %}{% endblock %}
+                    <div id="main-content" class="inner-wrapper">
+                    
+                        {% block sub_nav %}
+                        <nav role="navigation" class="nav-secondary clearfix">
+                            <ul class="breadcrumb">
+                                {% block breadcrumb_links %}
+                                <li>
+                                    <a href="/en/start/">Start</a><span class="separator">&rsaquo;</span>
+                                </li>
+                                {% endblock breadcrumb_links %}
+                            </ul>
+                            <ul class="second-level-nav">
+                                {% block sub_nav_links %}
+                                <li class="child descendant">
+                                    <a href="/en/start/test-nav/sub-page/">Sub Page</a>
+                                </li>
+                                {% endblock sub_nav_links %}
+                            </ul>
+                        </nav>
+                        {% endblock sub_nav %}
+
+                        <div id="content" class="container-12">
+                        {% block content %}{% endblock %}
+                        </div>
+            
+                    </div><!-- div.inner-wrapper -->
+                </div>
+            </div><!-- div.wrapper -->
+
+        
+            {% block footer %}
+            <footer class="global clearfix">
+                <div class="footer-c">
+                    <p class="top-link"><a href="#">Back to top</a></p>
+                </div>
+                <nav id="main-navigation" role="navigation" class="clearfix">
+                    <div class="footer-a">
+                        <div class="clearfix">
+                            
+                    </div><!-- /.footer-a -->
+                    <div class="footer-b inline-lists">
+                        
+                    </div>
+                </nav>
+                <div class="legal clearfix">
+                {% block footer_legal %}
+                <p class="twelve-col">&copy; 2014 Canonical Ltd. Ubuntu and Canonical are registered trademarks of Canonical Ltd.</p>
+                <ul class="inline clear">
+                    <li><a href="#">Legal information</a></li>
+                    <li><a href="#">Report a bug</a></li>
+                </ul>
+                {% endblock footer_legal %}
+                </div><!-- /.legal -->
+            </footer>
+            {% endblock footer %}
+        
+
+            <script>
+                (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+    
+ {% block closure %}{% endblock %}
+      {% render_block "js" %}
+        </div>
+    </body>
+</html>

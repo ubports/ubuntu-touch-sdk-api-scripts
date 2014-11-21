@@ -1,0 +1,36 @@
+{% extends "website_base.html" %}
+{% load cms_tags sekizai_tags menu_tags %}
+
+{% block title %}CMS Test {% endblock %}
+{% block logo_text %}Developer {% endblock %}
+
+{% block top_nav %}{% endblock top_nav %}
+
+{% block main_nav_links %}
+<ul>
+{% show_menu_below_id "home" 0 0  %}
+</ul>
+{% endblock %}
+
+{% block sub_nav_breadcrumbs %}
+{% show_breadcrumb 1 %}
+{% endblock sub_nav_breadcrumbs %}
+
+{% block sub_nav_links %}
+{% show_sub_menu 1 %}
+{% endblock %}
+
+{% block content %}
+      {% placeholder hero_content %}
+      {% block base_content %}{% endblock %}
+{% endblock %}
+
+{% block footer_lists %}{% endblock footer_lists %}
+{% block footer_inlines %}{% endblock footer_inlines %}
+{% block footer_legal %}
+	 <p class="twelve-col">&copy; 2014 Canonical Ltd. Ubuntu and Canonical are registered trademarks of Canonical Ltd.</p>
+	 <ul class="inline clear">
+		 <li><a href="#">Legal information</a></li>
+		 <li><a href="#">Report a bug</a></li>
+		</ul>
+{% endblock %}

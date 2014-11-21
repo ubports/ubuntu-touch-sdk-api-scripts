@@ -1,0 +1,4 @@
+./env
+./static
+*.sqlite3
+local_settings.py

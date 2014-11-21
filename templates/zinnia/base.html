@@ -1,0 +1,48 @@
+{% extends "website_base.html" %}
+{% load zinnia_tags i18n %}
+{% load cms_tags sekizai_tags menu_tags %}
+
+{% block title %}CMS Test {% endblock %}
+{% block logo_text %}Developer {% endblock %}
+
+{% block top_nav %}{% endblock top_nav %}
+
+{% block main_nav_links %}
+<ul>
+{% show_menu_below_id "home" 0 0  %}
+</ul>
+{% endblock %}
+
+{% block sub_nav_breadcrumbs %}
+{% show_breadcrumb 1 %}
+{% endblock sub_nav_breadcrumbs %}
+
+{% block sub_nav_links %}
+<li><a class="sub-nav-item" href="{% url 'zinnia:category_list' %}">{% trans "Categories" %}</a></li>
+<li><a class="sub-nav-item" href="{% url 'zinnia:author_list' %}">{% trans "Authors" %}</a></li>
+{% endblock %}
+
+{% block footer %}
+{% language_chooser %}
+{% endblock %}
+
+{% block meta-keywords %}{% get_tags as entry_tags %}{{ entry_tags|join:", "}}{% endblock meta-keywords %}
+
+{% block meta %}
+    <meta name="generator" content="Zinnia {{ ZINNIA_VERSION }}" />
+{% endblock meta %}
+
+{% block link %}
+    <link rel="index" href="{% url 'zinnia:entry_archive_index' %}" />
+    <link rel="author" type="text/plain" href="{% url 'zinnia:humans' %}" />
+    <link rel="EditURI" type="application/rsd+xml" href="{% url 'zinnia:rsd' %}" />
+    <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="{% url 'zinnia:wlwmanifest' %}" />
+    <link rel="search" type="application/opensearchdescription+xml" title="Zinnia's Weblog" href="{% url 'zinnia:opensearch' %}" />
+    <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of latest entries" %}" href="{% url 'zinnia:entry_latest_feed' %}" />
+    <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of latest discussions" %}" href="{% url 'zinnia:discussion_latest_feed' %}" />
+    {% get_archives_entries "zinnia/tags/entries_archives_link.html" %}
+{% endblock link %}
+
+{% block breadcrumbs %}
+  {% zinnia_breadcrumbs %}
+{% endblock breadcrumbs %}
