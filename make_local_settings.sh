@@ -12,7 +12,7 @@ SWIFT_CONTAINER=${OS_CONTAINER}
 LOCAL_SETTINGS_FILE=./local_settings.py
 
 
-echo "Creating local settings in ${LOCAL_CONFIG_LOCATION}/local_settings.py"
+echo "Creating local settings in ${LOCAL_SETTINGS_FILE}"
 SECRET_KEY=$(pwgen -s 50 1)
 cat > ${LOCAL_SETTINGS_FILE} <<EOF
 # Regularly update Summit
@@ -36,11 +36,11 @@ OS_AUTH_URL = "${SWIFT_AUTH_URL}"
 OS_REGION_NAME = "${SWIFT_REGION}"
 OS_TENANT_NAME = "${SWIFT_TENANT_NAME}"
 
-SWIFT_CONTAINER_NAME='${SWIFT_CONTAINER}'
+SWIFT_CONTAINER_NAME='devportal_uploaded'
 DEFAULT_FILE_STORAGE = "swiftstorage.storage.SwiftStorage"
 
-SWIFT_STATICCONTAINER_NAME='${SWIFT_CONTAINER}'
-SWIFT_STATICFILE_PREFIX='static/'
+SWIFT_STATICCONTAINER_NAME='devportal_static'
+SWIFT_STATICFILE_PREFIX=''
 STATICFILES_STORAGE = 'swiftstorage.storage.SwiftStaticStorage'
 
 MEDIA_URL = "https://swift.canonistack.canonical.com/v1/AUTH_c70ce6d1363e4692b1d4fde91eaa3b4b/%s/" % SWIFT_CONTAINER_NAME
