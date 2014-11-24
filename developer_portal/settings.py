@@ -40,10 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'djangocms_link',
-    'djangocms_picture',
-    'djangocms_video',
-    'djangocms_snippet',
+    #'djangocms_link',
+    #'djangocms_picture',
+    #'djangocms_video',
+    #'djangocms_snippet',
     'djangocms_text_ckeditor',
     'django.contrib.sites',
     'cms', #django CMS itself
@@ -77,7 +77,6 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
     
-    'cmsplugin_blog.middleware.MultilingualBlogEntriesMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

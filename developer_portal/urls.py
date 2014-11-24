@@ -8,7 +8,6 @@ admin.autodiscover()
 
 urlpatterns = i18n_patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^tinymce/', include('tinymce.urls')),
     url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^blog/entries/', include('zinnia.urls', namespace='zinnia')),
     url(r'^blog/comments/', include('django_comments.urls')),

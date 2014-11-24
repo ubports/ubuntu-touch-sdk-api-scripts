@@ -24,7 +24,7 @@ local_settings.py:
 	SWIFT_USERNAME=${OS_USERNAME}
 	SWIFT_PASSWORD=${OS_PASSWORD}
 	SECRET_KEY=$(pwgen -s 50 1)
-	DEBUG_MODE=False
+	DEBUG_MODE=${DEBUG_MODE}
 	@./make_local_settings.sh
 
 
