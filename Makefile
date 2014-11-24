@@ -1,8 +1,9 @@
 #!/usr/bin/make
 PYTHON := /usr/bin/env python
 
-update-charm: initdb collectstatic
+update-charm: collectstatic
 	@echo "Updating charm"
+	if [ $(DATABASE_URL) ]; then $(MAKE) initdb; fi
 
 initdb: syncdb
 	@echo "Initializing database"
