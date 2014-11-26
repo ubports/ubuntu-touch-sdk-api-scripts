@@ -39,27 +39,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    #'djangocms_link',
-    #'djangocms_picture',
-    #'djangocms_video',
-    #'djangocms_snippet',
-    'djangocms_text_ckeditor',
     'django.contrib.sites',
-    'cms', #django CMS itself
+
     'mptt', #utilities for implementing a modified pre-order traversal tree
     'menus', #helper for model independent hierarchical website navigation
     'south', #intelligent schema and data migrations
     'sekizai', #for javascript and css management
     'reversion', #content versioning
     'django_pygments',
-
     'django_comments',
-    'cmsplugin_zinnia',
     'tagging',
+
+    'ckeditor',
+    'djangocms_text_ckeditor',
+
+    'cms', #django CMS itself
+    'djangocms_link',
+    'djangocms_picture',
+    'djangocms_video',
+    'djangocms_snippet',
+
+    'cmsplugin_zinnia',
     'zinnia',
     'zinnia_ckeditor',
-    'ckeditor',
+
     'developer_portal',
 ]
 
@@ -153,6 +156,7 @@ CMS_TEMPLATES = (
 LANGUAGES = [
     ('en', 'English'),
     ('zh', 'Chinese'),
+    ('es', 'Spanish'),
 ]
 
 CMS_LANGUAGES = {
@@ -162,14 +166,22 @@ CMS_LANGUAGES = {
             'name': gettext('English'),
             'public': True,
             'hide_untranslated': True,
-            'redirect_on_fallback':False,
+            'redirect_on_fallback': False,
         },
         {
             'code': 'zh',
             'name': gettext('Chinese'),
             'fallbacks': ['en'],
+            'hide_untranslated': True,
+            'redirect_on_fallback': False,
+            'public': True,
+        },
+        {
+            'code': 'es',
+            'name': gettext('Spanish'),
+            'fallbacks': ['en'],
             'hide_untranslated': False,
-            'redirect_on_fallback':False,
+            'redirect_on_fallback': False,
             'public': True,
         },
     ],
