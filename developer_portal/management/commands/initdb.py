@@ -21,10 +21,9 @@ class Command(BaseCommand):
         all_perms = Permission.objects.filter()
 
         print "Creating admin user."
-        admin, created = User.objects.get_or_create(username='admin')
+        admin, created = User.objects.get_or_create(username='system')
         admin.is_staff = True
         admin.is_superuser = True
-        admin.set_password('password')
         admin.save()
 
         if hasattr(settings, 'ADMIN_GROUP') and settings.ADMIN_GROUP != "":
