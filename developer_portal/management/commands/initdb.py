@@ -11,6 +11,7 @@ import sys
 
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from cms.models.permissionmodels import PageUserGroup
 
 class Command(BaseCommand):
     help = "Make sure the Developer Portal database is set up properly."
@@ -19,14 +20,15 @@ class Command(BaseCommand):
 
         all_perms = Permission.objects.filter()
 
-        print "Configuring api-website-devs group."
-        devs, created = Group.objects.get_or_create(name='ubuntudeveloperportal')
-        devs.permissions.add(*list(all_perms))
-
         print "Creating admin user."
         admin, created = User.objects.get_or_create(username='admin')
         admin.is_staff = True
         admin.is_superuser = True
         admin.set_password('password')
         admin.save()
+
+        print "Configuring ubuntudeveloperportal group."
+        devs, created = PageUserGroup.objects.get_or_create(name='ubuntudeveloperportal', defaults={'created_by': admin})
+        devs.permissions.add(*list(all_perms))
+
 

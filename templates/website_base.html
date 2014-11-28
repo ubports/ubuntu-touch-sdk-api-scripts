@@ -71,7 +71,7 @@
                 <div>
         
                     {% block messages %}{% endblock %}
-                    <div id="main-content" class="inner-wrapper">
+                    <div id="main-content" class="inner-wrapper twelve-col">
                     
                         {% block sub_nav %}
                         <nav role="navigation" class="nav-secondary clearfix">
@@ -92,7 +92,9 @@
                         </nav>
                         {% endblock sub_nav %}
 
-                        <div id="content" class="container-12">
+                        {% block hero %}{% endblock hero %}
+
+                        <div id="content" class="row">
                         {% block content %}{% endblock %}
                         </div>
             

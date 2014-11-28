@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
 
+    # Allow login from Ubuntu SSO
+    'django_openid_auth',
+
     'mptt', #utilities for implementing a modified pre-order traversal tree
     'menus', #helper for model independent hierarchical website navigation
     'south', #intelligent schema and data migrations
@@ -151,6 +154,10 @@ CMS_CACHE_DURATIONS = {
 CMS_TEMPLATES = (
     ('template_1.html', 'Template One'),
     ('template_2.html', 'Template Two'),
+    ('default.html', 'Default'),
+    ('landing_page.html', 'Landing Page'),
+    ('no_subnav.html', 'Without Subnav'),
+    ('with_hero.html', 'With Hero'),
 )
 
 LANGUAGES = [
@@ -196,3 +203,26 @@ CMS_LANGUAGES = {
 CKEDITOR_UPLOAD_PATH = "media/"
 CKEDITOR_IMAGE_BACKEND = "pillow"
 CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+
+AUTHENTICATION_BACKENDS = (
+    'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# OPENID Related settings
+OPENID_STRICT_USERNAMES = True
+OPENID_FOLLOW_RENAMES = True
+OPENID_SREG_REQUIRED_FIELDS = ['email']
+OPENID_CREATE_USERS = True
+OPENID_REUSE_USERS = False
+OPENID_UPDATE_DETAILS_FROM_SREG = True
+OPENID_SSO_SERVER_URL = 'https://login.ubuntu.com/'
+OPENID_LAUNCHPAD_TEAMS_MAPPING_AUTO = True
+
+# Tell django.contrib.auth to use the OpenID signin URLs.
+LOGIN_URL = '/openid/login'
+LOGIN_REDIRECT_URL = '/'
+
+# Django 1.6 uses a JSON serializer by default, which breaks 
+# django_openid_auth, so force it to use the old default
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

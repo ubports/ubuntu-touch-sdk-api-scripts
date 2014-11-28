@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load cms_tags %}
+
+{% block hero %}
+<div id="hero" class="row-hero">
+<div class="header-image" style="float: right;">{% placeholder hero_image %}</div>
+{% placeholder hero_content %}
+</div>
+{% endblock hero %}
+
+{% block base_content %}
+  {% placeholder page_content %}
+{% endblock %}

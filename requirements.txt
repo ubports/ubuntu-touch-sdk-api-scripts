@@ -42,3 +42,5 @@ wsgiref==0.1.2
 zinnia-wysiwyg-ckeditor==1.1
 Pygments==1.6
 django-pygments==0.1
+django-openid-auth==0.5
+python-openid==2.2.4
