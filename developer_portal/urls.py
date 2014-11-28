@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from developer_portal.views import login_failure
+from developer_portal.views import login_failure, listen_for_login
 
 admin.autodiscover()
 
@@ -20,6 +20,8 @@ urlpatterns += patterns(
         kwargs={'render_failure': login_failure}),
     url(r'^openid/logo.gif$', 'logo', name='openid-logo'),
 )
+listen_for_login()
+
 
 urlpatterns += i18n_patterns('',
     url(r'^ckeditor/', include('ckeditor.urls')),

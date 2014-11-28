@@ -19,6 +19,9 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
+from django.conf import settings
+
+from django_openid_auth.signals import openid_login_complete
 
 try:
     from django_openid_auth.exceptions import (
@@ -46,3 +49,11 @@ def login_failure(request, message, status=403,
     data = render_to_string(template_name, context,
         context_instance=RequestContext(request))
     return HttpResponse(data, status=status)
+
+def promote_staff(request, openid_response,**kwargs):
+    if not request.user.is_staff and (settings.ADMIN_GROUP in request.POST['openid.lp.is_member'] or settings.EDITOR_GROUP in request.POST['openid.lp.is_member']):
+        request.user.is_staff = True
+        request.user.save()
+    
+def listen_for_login():
+    openid_login_complete.connect(promote_staff)
