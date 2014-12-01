@@ -16,7 +16,7 @@ syncdb: local_settings.py
 collectstatic: collectstatic.done
 collectstatic.done: local_settings.py
 	@echo "Collecting static files"
-	@python manage.py collectstatic --settings local_settings
+	@python manage.py collectstatic --noinput --settings local_settings
 	@touch collectstatic.done
 
 local_settings.py:
