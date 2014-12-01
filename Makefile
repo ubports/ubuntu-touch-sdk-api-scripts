@@ -13,9 +13,11 @@ syncdb: local_settings.py
 	@echo "Syncing database"
 	@python manage.py syncdb --noinput --migrate --settings local_settings
 
-collectstatic: local_settings.py
+collectstatic: collectstatic.done
+collectstatic.done: local_settings.py
 	@echo "Collecting static files"
-	@python manage.py collectstatic --settings local_settings &
+	@python manage.py collectstatic --settings local_settings
+	@touch collectstatic.done
 
 local_settings.py:
 	SWIFT_AUTH_URL=${OS_AUTH_URL}
