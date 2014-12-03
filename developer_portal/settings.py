@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'django_comments',
     'tagging',
 
-    #'ckeditor',
+    'ckeditor',
     'djangocms_text_ckeditor',
 
     'cms', #django CMS itself

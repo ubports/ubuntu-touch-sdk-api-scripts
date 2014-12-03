@@ -29,4 +29,12 @@ local_settings.py:
 	DEBUG_MODE=${DEBUG_MODE}
 	@./make_local_settings.sh
 
-
+build-pip-cache:
+	-rm -rf pip-cache
+	bzr branch lp:~mhall119/developer-ubuntu-com/dependencies pip-cache
+	pip install --exists-action=w --download pip-cache/ -r requirements.txt
+	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
+	bzr push --directory pip-cache lp:~mhall119/developer-ubuntu-com/dependencies
+	bzr revno pip-cache > pip-cache-revno.txt
+	rm -rf pip-cache
+	@echo "** Remember to commit pip-cache-revno.txt"
