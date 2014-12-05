@@ -20,11 +20,6 @@ collectstatic.done: local_settings.py
 	@touch collectstatic.done
 
 local_settings.py:
-	SWIFT_AUTH_URL=${OS_AUTH_URL}
-	SWIFT_TENANT_NAME=${OS_TENANT_NAME}
-	SWIFT_REGION=${OS_REGION_NAME}
-	SWIFT_USERNAME=${OS_USERNAME}
-	SWIFT_PASSWORD=${OS_PASSWORD}
 	SECRET_KEY=$(pwgen -s 50 1)
 	DEBUG_MODE=${DEBUG_MODE}
 	@./make_local_settings.sh
