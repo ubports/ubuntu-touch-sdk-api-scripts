@@ -155,8 +155,6 @@ CMS_CACHE_DURATIONS = {
 }
 
 CMS_TEMPLATES = (
-    ('template_1.html', 'Template One'),
-    ('template_2.html', 'Template Two'),
     ('default.html', 'Default'),
     ('landing_page.html', 'Landing Page'),
     ('no_subnav.html', 'Without Subnav'),

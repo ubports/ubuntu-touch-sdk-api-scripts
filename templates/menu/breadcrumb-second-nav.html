@@ -1,0 +1,10 @@
+{% for ance in ancestors %}
+<li>
+	{# Show only up to the second level navigation in breadcrumbs #}
+	{% with 2 as nav_level_max %}
+	{% if forloop.counter <= nav_level_max %}
+		<a href="{{ ance.get_absolute_url }}">{{ ance.get_menu_title }}</a> <span class="separator">&rsaquo;</span>
+	{% endif %}
+	{% endwith %}
+</li>
+{% endfor %}
