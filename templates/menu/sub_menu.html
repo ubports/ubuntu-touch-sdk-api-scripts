@@ -1,12 +1,29 @@
 {% load menu_tags %}
 
-{% for child in children %}
-<li class="child{% if child.selected %} active{% endif %}{% if child.ancestor %} ancestor{% endif %}{% if child.sibling %} sibling{% endif %}{% if child.descendant %} descendant{% endif %}">
-	<a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
-	{% if child.children %}
-	<ul>
-		{% show_menu from_level to_level extra_inactive extra_active template "" "" child %}
-	</ul>
-	{% endif %}
-</li>
-{% endfor %}
+{% with 4 as nav_level_max %}
+
+{# Show only up to nav_level_max levels of navigation in the submenu #}
+{% if children and request.current_page.level < nav_level_max %}
+	{% for child in children %}
+    <li class="{% if child.selected %}active{% endif %}">
+	  <a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
+    </li>
+    {% endfor %}
+{% comment %}
+We're now in a leaf node: either it has no children, or we've reached nav_level_max. In any case, no children nodes are
+returned from the show_sub_menu tag, so if we want to show this node and its siblings in the navigation, we'll need to
+resort to its parent and fetch its children.
+{% endcomment %}
+{% elif request.current_page.level == nav_level_max %}
+	{% for sibling in request.current_page.parent.children.all %}
+    <li class="{% if sibling.selected %}active{% endif %}">
+      {% if request.current_page == sibling %}
+        {{ sibling.get_menu_title }}
+      {% else %}
+        <a href="{{ sibling.attr.redirect_url|default:sibling.get_absolute_url }}">{{ sibling.get_menu_title }}</a>
+      {% endif %}
+    </li>
+    {% endfor %}
+{% endif %}
+
+{% endwith %}
