@@ -4,6 +4,7 @@
 
 {# Show only up to nav_level_max levels of navigation in the submenu #}
 {% if children and request.current_page.level < nav_level_max %}
+    {% if request.current_page.level == 1 %}<li class="first active"><a href=".">Overview</a></li>{% endif %}
 	{% for child in children %}
     <li class="{% if child.selected %}active{% endif %}">
 	  <a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
@@ -14,7 +15,7 @@ We're now in a leaf node: either it has no children, or we've reached nav_level_
 returned from the show_sub_menu tag, so if we want to show this node and its siblings in the navigation, we'll need to
 resort to its parent and fetch its children.
 {% endcomment %}
-{% elif request.current_page.level == nav_level_max %}
+{% elif request.current_page.level == nav_level_max or current_page.children.all.count == 0 %}
 	{% for sibling in request.current_page.parent.children.all %}
     <li class="{% if sibling.selected %}active{% endif %}">
       {% if request.current_page == sibling %}

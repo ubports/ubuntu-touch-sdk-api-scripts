@@ -1,8 +1,8 @@
 {% for ance in ancestors %}
 	{% with 3 as nav_level_max %}
 
-    {# Show only up to the nav_level_max level navigation in breadcrumbs #}
-	{% if forloop.counter <= nav_level_max %}
+    {# Show only up to the nav_level_max level navigation as breadcrumbs, but only if the page has children #}
+	{% if forloop.counter <= nav_level_max and ance.children %}
 		<li><a href="{{ ance.get_absolute_url }}">{{ ance.get_menu_title }}</a> &rsaquo;</li>
 	{% endif %}
 
