@@ -13,18 +13,23 @@ syncdb: local_settings.py
 	@echo "Syncing database"
 	@python manage.py syncdb --noinput --migrate --settings local_settings
 
-collectstatic: local_settings.py
+collectstatic: collectstatic.done
+collectstatic.done: local_settings.py
 	@echo "Collecting static files"
-	#@python manage.py collectstatic --settings local_settings
+	@python manage.py collectstatic --noinput --settings local_settings
+	@touch collectstatic.done
 
 local_settings.py:
-	SWIFT_AUTH_URL=${OS_AUTH_URL}
-	SWIFT_TENANT_NAME=${OS_TENANT_NAME}
-	SWIFT_REGION=${OS_REGION_NAME}
-	SWIFT_USERNAME=${OS_USERNAME}
-	SWIFT_PASSWORD=${OS_PASSWORD}
 	SECRET_KEY=$(pwgen -s 50 1)
 	DEBUG_MODE=${DEBUG_MODE}
 	@./make_local_settings.sh
 
-
+build-pip-cache:
+	-rm -rf pip-cache
+	bzr branch lp:~mhall119/developer-ubuntu-com/dependencies pip-cache
+	pip install --exists-action=w --download pip-cache/ -r requirements.txt
+	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
+	bzr push --directory pip-cache lp:~mhall119/developer-ubuntu-com/dependencies
+	bzr revno pip-cache > pip-cache-revno.txt
+	rm -rf pip-cache
+	@echo "** Remember to commit pip-cache-revno.txt"
