@@ -6,7 +6,7 @@
 	{% if child.children %}
 	<ul class="second-level-nav">
     	<li class="first{% if child.selected or child.ancestor %} active{% endif %}"><a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}" >Overview</a></li>
-		{% show_menu from_level to_level extra_inactive extra_active "menu/header_menu_second_level.html" "" "" child %}
+		{% show_menu from_level to_level extra_inactive extra_active "menu/menu_header_second_level.html" "" "" child %}
 	</ul>
 	{% endif %}
 </li>
