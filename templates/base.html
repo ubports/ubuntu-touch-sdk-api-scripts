@@ -1,12 +1,10 @@
 {% extends "website_base.html" %}
 {% load cms_tags sekizai_tags menu_tags %}
 
-{% block title %}CMS Test {% endblock %}
-{% block logo_text %}Developer {% endblock %}
+{% block title %}{% endblock %}
+{% block logo_text %}developer{% endblock %}
 
-{% block top_nav %}{% endblock top_nav %}
-
-{% block main_nav_links %}
+{% block nav_primary_links %}
 {% show_menu_below_id "home" 0 1 0 1000 "menu/menu_header_first_level.html" %}
 {% endblock %}
 
@@ -14,9 +12,9 @@
 {% show_breadcrumb 1 %}
 {% endblock breadcrumb_links %}
 
-{% block sub_nav_links %}
+{% block second_level_nav_links %}
 {% show_sub_menu 1 %}
-{% endblock %}
+{% endblock second_level_nav_links %}
 
 {% block hero %}{% endblock hero %}
 
