@@ -1,10 +1,17 @@
 {% for ance in ancestors %}
-	{% with 3 as nav_level_max %}
+	{% with nav_level_max=3 nav_level_ignore_active=1 nav_level_min=1%}
 
-    {# Show only up to the nav_level_max level navigation in breadcrumbs #}
-	{% if forloop.counter <= nav_level_max %}
-		<li><a href="{{ ance.get_absolute_url }}">{{ ance.get_menu_title }}</a> &rsaquo;</li>
-	{% endif %}
+    {# Show only up to the nav_level_max level navigation as breadcrumbs, but only if the page has children #}
+	{% if forloop.counter <= nav_level_max and ance.children %}
+        {% comment %}
+        Mark the ancestor as active if it's the current page, but only if it's higher than level 1. This way we
+        avoid having both the first level and the overview links marked as active.
+        {% endcomment %}
+		<li class="{% if ance.selected and request.current_page.level > nav_level_ignore_active %}active{% endif %}"><a href="{{ ance.get_absolute_url }}">{{ ance.get_menu_title }}</a> &rsaquo;</li>
+    {% elif forloop.counter == nav_level_min and not ance.children %}
+        {# We're in a top-level page that still has no children #}
+     	<li ><a href="{{ request.current_page.get_absolute_url }}">{{ request.current_page.get_menu_title }}</a> &rsaquo;</li>
+    {% endif %}
 
 	{% endwith %}
 {% endfor %}

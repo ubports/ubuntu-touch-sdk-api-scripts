@@ -1,9 +1,11 @@
 {% load menu_tags %}
 
-{% with 4 as nav_level_max %}
+{% with nav_level_max=4 nav_level_add_overview=1 nav_level_min=1 %}
 
 {# Show only up to nav_level_max levels of navigation in the submenu #}
 {% if children and request.current_page.level < nav_level_max %}
+    {# Show an Overview menu item that points to the first level nav item #}
+    {% if request.current_page.level == nav_level_add_overview %}<li class="first active"><a href="{{ request.current_page.get_absolute_url }}">Overview</a></li>{% endif %}
 	{% for child in children %}
     <li class="{% if child.selected %}active{% endif %}">
 	  <a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
@@ -14,16 +16,23 @@ We're now in a leaf node: either it has no children, or we've reached nav_level_
 returned from the show_sub_menu tag, so if we want to show this node and its siblings in the navigation, we'll need to
 resort to its parent and fetch its children.
 {% endcomment %}
-{% elif request.current_page.level == nav_level_max %}
-	{% for sibling in request.current_page.parent.children.all %}
-    <li class="{% if sibling.selected %}active{% endif %}">
-      {% if request.current_page == sibling %}
-        {{ sibling.get_menu_title }}
-      {% else %}
-        <a href="{{ sibling.attr.redirect_url|default:sibling.get_absolute_url }}">{{ sibling.get_menu_title }}</a>
-      {% endif %}
-    </li>
-    {% endfor %}
+{% elif request.current_page.level == nav_level_max or current_page.children.all.count == 0 %}
+    {% if request.current_page.level == nav_level_min %}
+        {# Show an Overview menu item that points to the first level nav item #}
+        <li class="first active"><a href="{{ request.current_page.get_absolute_url }}">Overview</a></li>
+    {% else %}
+        {# Show an Overview menu item that points to the first level nav item #}
+        {% if request.current_page.parent.level == nav_level_add_overview %}<li class="first"><a href="{{ request.current_page.parent.get_absolute_url }}">Overview</a></li>{% endif %}
+        {% for sibling in request.current_page.parent.children.all %}
+        <li class="{% if sibling.selected %}active{% endif %}">
+          {% if request.current_page == sibling %}
+            {{ sibling.get_menu_title }}
+          {% else %}
+            <a href="{{ sibling.attr.redirect_url|default:sibling.get_absolute_url }}">{{ sibling.get_menu_title }}</a>
+          {% endif %}
+        </li>
+        {% endfor %}
+    {% endif %}
 {% endif %}
 
 {% endwith %}
