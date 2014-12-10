@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for developer_portal project.
 
@@ -163,8 +164,8 @@ CMS_TEMPLATES = (
 
 LANGUAGES = [
     ('en', 'English'),
-    ('zh', 'Chinese'),
-    ('es', 'Spanish'),
+    ('zh-cn', u'简体中文'),
+    ('es', u'Español'),
 ]
 
 CMS_LANGUAGES = {
@@ -227,3 +228,17 @@ LOGIN_REDIRECT_URL = '/'
 # Django 1.6 uses a JSON serializer by default, which breaks 
 # django_openid_auth, so force it to use the old default
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+CMS_PLACEHOLDER_CONF = {
+    'page_content': {
+        'name': gettext("Page content"),
+        'default_plugins': [
+            {
+                'plugin_type': 'TextPlugin',
+                'values': {
+                    'body':'<p>Add content here...</p>',
+                },
+            },
+        ],
+    },
+}

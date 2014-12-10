@@ -10,8 +10,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   {% endblock defaultmeta%}
   {% block extrameta %}{% endblock extrameta%}
-  
-  <title>CMS Test </title>
+
+  <title>{% block title %}Ubuntu developer{% endblock %}</title>
 
   {% block defaultstyles %}
   <link rel="shortcut icon" href="https://swift.canonistack.canonical.com/v1/AUTH_c70ce6d1363e4692b1d4fde91eaa3b4b/devportal_static/ubuntu_website/images/favicon.ico" type="image/x-icon" />
@@ -36,110 +36,103 @@
   {% render_block "css" %}
   
 </head>
+
 <body>
-    
 
 {% cms_toolbar %}
 
     <div class="">
 
-        
-            
-            <header class="banner global" role="banner">
-                <nav role="navigation" class="nav-primary nav-right">
-                    <div class="logo">
-                        <a class="logo-ubuntu" href="/">
-                            <img width="106" height="25" src="https://assets.ubuntu.com/sites/ubuntu/latest/u/img/logos/logo-ubuntu-orange.svg" alt="" />
-                        </a>
-                    </div>
-                    
-                    <ul>
-                    {% block main_nav_links %}{% endblock main_nav_links %}    
-                    </ul>
-
-                    {% block search %}
-                    <form id="form-search" action="/search" class="header-search">
-                        <label for="edit-keys" class="accessibility-aid">Search</label>
-                        <input type="search" maxlength="255" name="q" id="search" class="form-text" placeholder="Search" value="" />
-                        <button type="submit"><img src="https://assets.ubuntu.com/sites/ubuntu/latest/u/img/search-white.svg" alt="Search" height="28" /></button>
-                    </form>
-                    {% endblock search %}
-                </nav>
-            </header>
-
-            <div class="wrapper">
-                <div>
-        
-                    {% block messages %}{% endblock %}
-                    <div id="main-content" class="inner-wrapper twelve-col">
-                    
-                        {% block sub_nav %}
-                        <nav role="navigation" class="nav-secondary clearfix">
-                            <ul class="breadcrumb">
-                                {% block breadcrumb_links %}
-                                <li>
-                                    <a href="/en/start/">Start</a><span class="separator">&rsaquo;</span>
-                                </li>
-                                {% endblock breadcrumb_links %}
-                            </ul>
-                            <ul class="second-level-nav">
-                                {% block sub_nav_links %}
-                                <li class="child descendant">
-                                    <a href="/en/start/test-nav/sub-page/">Sub Page</a>
-                                </li>
-                                {% endblock sub_nav_links %}
-                            </ul>
-                        </nav>
-                        {% endblock sub_nav %}
-
-                        {% block hero %}{% endblock hero %}
-
-                        <div id="content" class="row">
-                        {% block content %}{% endblock %}
-                        </div>
-            
-                    </div><!-- div.inner-wrapper -->
+        {# Header with logo, top level navigation and search bar #}
+        <header class="banner global" role="banner">
+            {% block nav_primary %}
+            <nav role="navigation" class="nav-primary nav-right">
+                <div class="logo">
+                    <a class="logo-ubuntu" href="/">
+                        <img width="106" height="25" src="https://assets.ubuntu.com/sites/ubuntu/latest/u/img/logos/logo-ubuntu-orange.svg" alt="" />
+                        <span>{% block logo_text %}{% endblock %}</span>
+                    </a>
                 </div>
-            </div><!-- div.wrapper -->
 
-        
-            {% block footer %}
-            <footer class="global clearfix">
-                <div class="footer-c">
-                    <p class="top-link"><a href="#">Back to top</a></p>
-                </div>
-                <nav id="main-navigation" role="navigation" class="clearfix">
-                    <div class="footer-a">
-                        <div class="clearfix">
-                            
-                    </div><!-- /.footer-a -->
-                    <div class="footer-b inline-lists">
-                        
-                    </div>
-                </nav>
-                <div class="legal clearfix">
-                {% block footer_legal %}
-                <p class="twelve-col">&copy; 2014 Canonical Ltd. Ubuntu and Canonical are registered trademarks of Canonical Ltd.</p>
-                <ul class="inline clear">
-                    <li><a href="#">Legal information</a></li>
-                    <li><a href="#">Report a bug</a></li>
+                <ul>
+                {% block nav_primary_links %}{% endblock nav_primary_links %}
                 </ul>
-                {% endblock footer_legal %}
-                </div><!-- /.legal -->
-            </footer>
-            {% endblock footer %}
-        
 
-            <script>
-                (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-                })();
-            </script>
-    
- {% block closure %}{% endblock %}
-      {% render_block "js" %}
-        </div>
-    </body>
+                {% block search %}
+                <form id="form-search" action="/search" class="header-search">
+                    <label for="edit-keys" class="accessibility-aid">Search</label>
+                    <input type="search" maxlength="255" name="q" id="search" class="form-text" placeholder="Search" value="" />
+                    <button type="submit"><img src="https://assets.ubuntu.com/sites/ubuntu/latest/u/img/search-white.svg" alt="Search" height="28" /></button>
+                </form>
+                {% endblock search %}
+            </nav>
+            {% endblock nav_primary %}
+        </header>
+
+        {# Wrapper with main content in a twelve column row, including secondary nav with breadcrumbs #}
+        <div class="wrapper">
+            {% block messages %}{% endblock %}
+            <div id="main-content" class="inner-wrapper">
+
+                {% block nav_secondary %}
+                <nav role="navigation" class="nav-secondary clearfix open">
+                    <ul class="breadcrumb">
+                        {% block breadcrumb_links %}{% endblock breadcrumb_links %}
+                    </ul>
+                    <ul class="second-level-nav">
+                        {% block second_level_nav_links %}{% endblock second_level_nav_links %}
+                    </ul>
+                </nav>
+                {% endblock nav_secondary %}
+
+                {% block hero %}{% endblock hero %}
+
+                <div id="content" class="row">
+                {% block content %}{% endblock %}
+                </div>
+
+            </div><!-- div.inner-wrapper -->
+        </div><!-- div.wrapper -->
+
+        {# Footer #}
+        {% block footer %}
+        <footer class="global clearfix">
+            <div class="footer-c">
+                <p class="top-link"><a href="#">Back to top</a></p>
+            </div>
+            <nav id="main-navigation" role="navigation" class="clearfix">
+                <div class="footer-a">
+                    <div class="clearfix">
+
+                </div><!-- /.footer-a -->
+                <div class="footer-b inline-lists">
+
+                </div>
+            </nav>
+            <div class="legal clearfix">
+            {% block footer_legal %}
+            <p class="twelve-col">&copy; 2014 Canonical Ltd. Ubuntu and Canonical are registered trademarks of Canonical Ltd.</p>
+            <ul class="inline clear">
+                <li><a href="#">Legal information</a></li>
+                <li><a href="#">Report a bug</a></li>
+            </ul>
+            {% endblock footer_legal %}
+            </div><!-- /.legal -->
+        </footer>
+        {% endblock footer %}
+
+        <script>
+            (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+        </script>
+
+    {% block closure %}{% endblock %}
+    {% render_block "js" %}
+    </div>
+
+</body>
+
 </html>

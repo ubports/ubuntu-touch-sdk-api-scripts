@@ -25,7 +25,7 @@ listen_for_login()
 
 urlpatterns += i18n_patterns('',
     url(r'^ckeditor/', include('ckeditor.urls')),
-    url(r'^blog/entries/', include('zinnia.urls', namespace='zinnia')),
+    url(r'^blog/', include('zinnia.urls', namespace='zinnia')),
     url(r'^blog/comments/', include('django_comments.urls')),
     url(r'^', include('cms.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

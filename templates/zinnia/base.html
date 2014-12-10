@@ -2,25 +2,20 @@
 {% load zinnia_tags i18n %}
 {% load cms_tags sekizai_tags menu_tags %}
 
-{% block title %}CMS Test {% endblock %}
-{% block logo_text %}Developer {% endblock %}
+{% block title %}{% endblock %}
+{% block logo_text %}developer{% endblock %}
 
-{% block top_nav %}{% endblock top_nav %}
-
-{% block main_nav_links %}
-<ul>
-{% show_menu_below_id "home" 0 0  %}
-</ul>
+{% block nav_primary_links %}
+{% show_menu_below_id "home" 0 1 0 1000 "menu/menu_header_first_level.html" %}
 {% endblock %}
 
-{% block sub_nav_breadcrumbs %}
+{% block breadcrumb_links %}
 {% show_breadcrumb 1 %}
-{% endblock sub_nav_breadcrumbs %}
+{% endblock breadcrumb_links %}
 
-{% block sub_nav_links %}
-<li><a class="sub-nav-item" href="{% url 'zinnia:category_list' %}">{% trans "Categories" %}</a></li>
-<li><a class="sub-nav-item" href="{% url 'zinnia:author_list' %}">{% trans "Authors" %}</a></li>
-{% endblock %}
+{% block second_level_nav_links %}
+{% show_sub_menu 1 %}
+{% endblock second_level_nav_links %}
 
 {% block footer %}
 {% language_chooser %}
