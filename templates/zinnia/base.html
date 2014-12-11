@@ -5,6 +5,10 @@
 {% block title %}{% endblock %}
 {% block logo_text %}{% endblock %}
 
+{% block extrastyles %}
+  <link rel="stylesheet" type="text/css" media="all" href="{% static 'developer_portal/css/devportal.css' %}"/>
+{% endblock extrastyles %}
+
 {% block nav_primary_links %}
 {% show_menu_below_id "home" 0 1 0 1000 "menu/menu_header_first_level.html" %}
 {% endblock %}
