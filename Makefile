@@ -2,8 +2,11 @@
 PYTHON := /usr/bin/env python
 SOURCE_DIR := $(PWD)
 
-update-charm: collectstatic
-	@echo "Updating charm"
+update-instance:
+	@echo "Nothing to do for the app"
+	
+update-common: collectstatic
+	@echo "Updating database"
 	if [ $(DATABASE_URL) ]; then $(MAKE) initdb; fi
 
 initdb: syncdb
