@@ -39,22 +39,6 @@
 	border: 0;
 	width: 202px;
 }
-.box-steps span {
-	padding: 4px;
-	margin: 10px auto 0;
-	display: block;
-	border: 3px solid #dd4814;
-		-moz-border-radius: 40px;
-		-webkit-border-radius: 40px;
-	border-radius: 40px;
-	text-align: center;
-	font-size: 36px;
-	width: 50px;
-	color: #dd4814;
-		-moz-box-shadow: 0 2px 1px #e0e0e0;
-		-webkit-box-shadow: 0 2px 1px #e0e0e0;
-	box-shadow: 0 2px 1px #e0e0e0;
-}
 .box-steps img {
 	margin-top: 10px;
 	margin-bottom: 10px;
