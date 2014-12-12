@@ -17,7 +17,9 @@
   <link rel="shortcut icon" href="https://swift.canonistack.canonical.com/v1/AUTH_c70ce6d1363e4692b1d4fde91eaa3b4b/devportal_static/ubuntu_website/images/favicon.ico" type="image/x-icon" />
   <!-- stylesheets -->
   <link rel="stylesheet" type="text/css" media="all" href="//assets.ubuntu.com/sites/guidelines/css/responsive/latest/ubuntu-styles.css"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="//assets.ubuntu.com/sites/ubuntu/latest/u/css/global.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="http://assets.ubuntu.com/sites/ubuntu/1264/u/css/styles.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="http://assets.ubuntu.com/sites/ubuntu/1264/u/css/beta/global-responsive.css" />
+  <link rel="stylesheet" type="text/css" media="print" href="http://assets.ubuntu.com/sites/ubuntu/1264/u/css/core-print.css" />
   {% endblock defaultstyles%}
   {%block extrastyles %}{% endblock extrastyles%}
 
@@ -26,9 +28,9 @@
   <script src="//assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/yui-min.js"></script>
   <script src="//assets.ubuntu.com/sites/ubuntu/latest/u/js/global.js"></script>
 
-  <script src="https://assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/modernizr.2.7.1.js"></script>
-  <script src="http://assets.ubuntu.com/sites/ubuntu/1236/u/js/plugins/Imager.js"></script>
-  <script>var website_assets="http://assets.ubuntu.com/sites/ubuntu/1236/u";</script>
+  <script src="http://assets.ubuntu.com/sites/ubuntu/1264/u/js/plugins/modernizr.2.7.1.js"></script>
+  <script src="http://assets.ubuntu.com/sites/ubuntu/1264/u/js/plugins/Imager.js"></script>
+  <script>var website_assets="http://assets.ubuntu.com/sites/ubuntu/1264/u";</script>
   {% endblock defaultheadjs %}
  
   {% endblock defaulthead %}
@@ -55,11 +57,12 @@
                 </div>
 
                 <ul>
+                <li class="accessibility-aid"><a accesskey="s" href="#main-content">Jump to content</a></li>
                 {% block nav_primary_links %}{% endblock nav_primary_links %}
                 </ul>
 
                 {% block search %}
-                <form id="form-search" action="/search" class="header-search">
+                <form id="form-search" action="/search" class="header-search" style="max-width: 180px;">
                     <label for="edit-keys" class="accessibility-aid">Search</label>
                     <input type="search" maxlength="255" name="q" id="search" class="form-text" placeholder="Search" value="" />
                     <button type="submit"><img src="https://assets.ubuntu.com/sites/ubuntu/latest/u/img/search-white.svg" alt="Search" height="28" /></button>
@@ -118,7 +121,7 @@
             </div><!-- /.legal -->
         </footer>
         {% endblock footer %}
-
+    </div>
         <script>
             (function() {
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -129,7 +132,25 @@
 
     {% block closure %}{% endblock %}
     {% render_block "js" %}
-    </div>
+
+<!-- Use this only until Modernizr fixes Opera Mini background-size detection -->
+<script>
+	var isOperaMini = (navigator.userAgent.indexOf('Opera Mini') > -1);
+	if(isOperaMini) {
+		var root = document.documentElement;
+		root.className += " opera-mini";
+	}
+</script>
+<script src="http://assets.ubuntu.com/sites/ubuntu/1264/u/js/plugins/yui-combined.min.js"></script>
+<script>
+	if(!core){ var core = {}; }
+	core.globalPrepend = 'body';
+</script>
+<script src="//assets.ubuntu.com/sites/guidelines/js/responsive/core.js"></script>
+<script src="http://assets.ubuntu.com/sites/ubuntu/1264/u/js/global.js"></script>
+<script src="http://assets.ubuntu.com/sites/ubuntu/1264/u/js/scratch.js"></script>
+<script src="http://assets.ubuntu.com/sites/ubuntu/1264/u/js/plugins/respond.min.js"></script>
+
 
 </body>
 
