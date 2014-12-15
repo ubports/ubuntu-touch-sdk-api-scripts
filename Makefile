@@ -20,7 +20,7 @@ syncdb:
 collectstatic: collectstatic.done
 collectstatic.done:
 	@echo "Collecting static files"
-	@python manage.py collectstatic --noinput --settings charm_settings
+	@python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
 	@touch collectstatic.done
 
 update-pip-cache:
