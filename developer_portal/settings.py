@@ -8,7 +8,8 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
-from gettext import gettext
+
+from django.utils.translation import ugettext_lazy as _
 
 ADMIN_GROUP = 'ubuntudeveloperportal'
 EDITOR_GROUP = 'ubuntu-website-editors'
@@ -86,7 +87,7 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
-    
+
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -146,9 +147,9 @@ STATIC_ROOT = os.path.join(PROJECT_PATH, "static")
 MEDIA_ROOT = os.path.join(PROJECT_PATH, "media")
 MEDIA_URL = '/media/'
 
-# 
+#
 # Django CMS specific settings
-# 
+#
 CMS_PERMISSION = True
 
 CMS_CACHE_DURATIONS = {
@@ -163,23 +164,23 @@ CMS_TEMPLATES = (
 )
 
 LANGUAGES = [
-    ('en', 'English'),
-    ('zh-cn', u'简体中文'),
-    ('es', u'Español'),
+    ('en', _('English')),
+    ('zh-cn', _('Simplified Chinese')),
+    ('es', _('Spanish')),
 ]
 
 CMS_LANGUAGES = {
     1: [
         {
             'code': 'en',
-            'name': gettext('English'),
+            'name': _('English'),
             'public': True,
             'hide_untranslated': True,
             'redirect_on_fallback': False,
         },
         {
-            'code': 'zh',
-            'name': gettext('Chinese'),
+            'code': 'zh-cn',
+            'name': _('Simplified Chinese'),
             'fallbacks': ['en'],
             'hide_untranslated': True,
             'redirect_on_fallback': False,
@@ -187,7 +188,7 @@ CMS_LANGUAGES = {
         },
         {
             'code': 'es',
-            'name': gettext('Spanish'),
+            'name': _('Spanish'),
             'fallbacks': ['en'],
             'hide_untranslated': False,
             'redirect_on_fallback': False,
@@ -225,18 +226,21 @@ OPENID_LAUNCHPAD_TEAMS_MAPPING_AUTO = True
 LOGIN_URL = '/openid/login'
 LOGIN_REDIRECT_URL = '/'
 
-# Django 1.6 uses a JSON serializer by default, which breaks 
+# Django 1.6 uses a JSON serializer by default, which breaks
 # django_openid_auth, so force it to use the old default
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 CMS_PLACEHOLDER_CONF = {
     'page_content': {
-        'name': gettext("Page content"),
+        'name': _("Page content"),
         'default_plugins': [
             {
                 'plugin_type': 'TextPlugin',
                 'values': {
-                    'body':'<p>Add content here...</p>',
+                    # Translators: this is the default text that will be shown
+                    # to editors when editing a page. You can use some HTML,
+                    # but don't go wild :)
+                    'body': _('<p>Add content here...</p>'),
                 },
             },
         ],
