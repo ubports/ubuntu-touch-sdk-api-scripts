@@ -41,8 +41,6 @@
 
 {% cms_toolbar %}
 
-    <div class="">
-
         {# Header with logo, top level navigation and search bar #}
         <header class="banner global" role="banner">
             {% block nav_primary %}
@@ -119,7 +117,6 @@
             </div><!-- /.legal -->
         </footer>
         {% endblock footer %}
-    </div>
 
     {% block closure %}{% endblock %}
     {% render_block "js" %}
