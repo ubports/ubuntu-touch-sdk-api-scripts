@@ -3,7 +3,7 @@
 import os
 from developer_portal.settings import *
 
-DEBUG=os.environ.get('DEBUG_MODE', False)
+DEBUG=os.environ.get('DEBUG_MODE', False)=="True"
 
 SECRET_KEY=os.environ.get('SECRET_KEY', '')
 

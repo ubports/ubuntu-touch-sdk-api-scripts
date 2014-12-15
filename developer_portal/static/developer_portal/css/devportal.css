@@ -1,0 +1,74 @@
+/**
+* Ubuntu Developer Portal stylesheet
+*
+* A stylesheet containing site-specific styles
+*
+* @project Ubuntu Developer Portal
+* @version 1.0
+* @author Canonical Community Team
+* @copyright 2011 Canonical Ltd.
+*/
+
+/**
+* @section box steps
+*/
+
+.box-steps {
+	margin-bottom: 30px;
+	border: 3px solid #dd4814;
+		-moz-border-radius: 4px;
+		-webkit-border-radius: 4px;
+	border-radius: 4px;
+		-moz-box-shadow: 0 3px 1px #e0e0e0;
+		-webkit-box-shadow: 0 3px 1px #e0e0e0;
+	box-shadow: 0 3px 1px #e0e0e0;
+	display: inline-block;
+}
+.box-steps li {
+	padding: 15px;
+	float: left;
+	width: 200px;
+	border-right: 1px solid #dd4814;
+	text-align: center;
+	min-height: inherit;
+	list-style-type: none !important;
+	margin-bottom: 0px !important;
+	margin-left: 0px !important;
+}
+.box-steps li.last {
+	border: 0;
+	width: 202px;
+}
+.box-steps img {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+#main-content .box-steps h3 {
+	font-size: 1.05em;
+	border-top: none !important;
+	border-bottom: 1px dotted #aea79f !important;
+}
+.box-steps p {
+	text-align: left;
+}
+.box-steps a {
+	color: #333;
+}
+.box-steps li:hover {
+	background-color: #fcece7;
+	cursor: pointer;
+}
+.box-steps li:hover span {
+	background-color: #dd4814;
+	color: #fff;
+}
+.box-steps li:hover a {
+	color: #dd4814;
+}
+
+#main-content .box-steps li img.stepicon {
+	float: none;
+	margin: 0px;
+	display: inline;
+	height: 88px;
+}
