@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-15 15:42+0000\n"
+"POT-Creation-Date: 2014-12-15 17:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,9 +41,6 @@ msgid "<p>Add content here...</p>"
 msgstr ""
 
 #: templates/menu/menu_header_first_level.html:8
-msgid "Overview"
-msgstr ""
-
 #: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
 #: templates/menu/sub_menu.html:25
 msgid "Overview"
