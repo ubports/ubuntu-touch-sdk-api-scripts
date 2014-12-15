@@ -1,6 +1,6 @@
-{% load cms_tags sekizai_tags %}
+{% load cms_tags sekizai_tags i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   {% block defaulthead %}
   
@@ -17,18 +17,17 @@
   <link rel="shortcut icon" href="https://swift.canonistack.canonical.com/v1/AUTH_c70ce6d1363e4692b1d4fde91eaa3b4b/devportal_static/ubuntu_website/images/favicon.ico" type="image/x-icon" />
   <!-- stylesheets -->
   <link rel="stylesheet" type="text/css" media="all" href="//assets.ubuntu.com/sites/guidelines/css/responsive/latest/ubuntu-styles.css"/>
-  <link rel="stylesheet" type="text/css" media="screen" href="//assets.ubuntu.com/sites/ubuntu/latest/u/css/global.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="http://assets.ubuntu.com/sites/ubuntu/latest/u/css/styles.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="http://assets.ubuntu.com/sites/ubuntu/latest/u/css/beta/global-responsive.css" />
+  <link rel="stylesheet" type="text/css" media="print" href="http://assets.ubuntu.com/sites/ubuntu/latest/u/css/core-print.css" />
   {% endblock defaultstyles%}
   {%block extrastyles %}{% endblock extrastyles%}
 
   {% block defaultheadjs %}
   <!-- javascript -->
-  <script src="//assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/yui-min.js"></script>
-  <script src="//assets.ubuntu.com/sites/ubuntu/latest/u/js/global.js"></script>
-
-  <script src="https://assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/modernizr.2.7.1.js"></script>
-  <script src="http://assets.ubuntu.com/sites/ubuntu/1236/u/js/plugins/Imager.js"></script>
-  <script>var website_assets="http://assets.ubuntu.com/sites/ubuntu/1236/u";</script>
+  <script src="http://assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/modernizr.2.7.1.js"></script>
+  <script src="http://assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/Imager.js"></script>
+  <script>var website_assets="http://assets.ubuntu.com/sites/ubuntu/latest/u";</script>
   {% endblock defaultheadjs %}
  
   {% endblock defaulthead %}
@@ -55,6 +54,7 @@
                 </div>
 
                 <ul>
+                <li class="accessibility-aid"><a accesskey="s" href="#main-content">Jump to content</a></li>
                 {% block nav_primary_links %}{% endblock nav_primary_links %}
                 </ul>
 
@@ -118,18 +118,39 @@
             </div><!-- /.legal -->
         </footer>
         {% endblock footer %}
-
-        <script>
-            (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-        </script>
+    </div>
 
     {% block closure %}{% endblock %}
     {% render_block "js" %}
-    </div>
+
+<!-- Use this only until Modernizr fixes Opera Mini background-size detection -->
+<script>
+	var isOperaMini = (navigator.userAgent.indexOf('Opera Mini') > -1);
+	if(isOperaMini) {
+		var root = document.documentElement;
+		root.className += " opera-mini";
+	}
+</script>
+
+<script>
+	if(!core){ var core = {}; }
+	core.globalPrepend = 'body';
+</script>
+<script src="//assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/yui-combined.min.js"></script>
+<script src="//assets.ubuntu.com/sites/ubuntu/latest/u/js/global.js"></script>
+
+<script src="//assets.ubuntu.com/sites/guidelines/js/responsive/core.js"></script>
+<script src="http://assets.ubuntu.com/sites/ubuntu/latest/u/js/global.js"></script>
+<script src="http://assets.ubuntu.com/sites/ubuntu/latest/u/js/scratch.js"></script>
+<script src="http://assets.ubuntu.com/sites/ubuntu/latest/u/js/plugins/respond.min.js"></script>
+
+<script>
+    (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
 
 </body>
 
