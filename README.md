@@ -10,3 +10,8 @@
     ./env/bin/python manage.py syncdb --noinput --migrate
     ./env/bin/python manage.py initdb
     ./env/bin/python manage.py collectstatic --noinput
+
+4. For updating the .pot file run
+
+    ./env/bin/python manage.py makemessages --keep-pot -i "env/*" --all
+    ./env/bin/python manage.py compilemessages    
