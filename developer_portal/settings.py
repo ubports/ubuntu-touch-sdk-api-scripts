@@ -147,12 +147,9 @@ STATIC_ROOT = os.path.join(PROJECT_PATH, "static")
 MEDIA_ROOT = os.path.join(PROJECT_PATH, "media")
 MEDIA_URL = '/media/'
 
-<<<<<<< TREE
-#
-=======
 ASSETS_URL = '//assets.ubuntu.com/'
 
->>>>>>> MERGE-SOURCE
+#
 # Django CMS specific settings
 #
 CMS_PERMISSION = True
