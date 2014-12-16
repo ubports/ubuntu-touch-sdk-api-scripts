@@ -13,5 +13,5 @@
 
 4. For updating the .pot file run
 
-    ./env/bin/python manage.py makemessages --keep-pot -i "env/*" --all
+    ./env/bin/python manage.py update-template
     ./env/bin/python manage.py compilemessages    
