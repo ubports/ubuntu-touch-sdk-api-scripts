@@ -24,6 +24,7 @@ collectstatic.done:
 	@touch collectstatic.done
 
 update-pip-cache:
+	@echo "Updating pip-cache"
 	rm -rf pip-cache
 	bzr branch lp:~mhall119/developer-ubuntu-com/dependencies pip-cache
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
@@ -34,7 +35,13 @@ update-pip-cache:
 	@echo "** Remember to commit pip-cache-revno.txt"
 
 pip-cache:
+	@echo "Downloading pip-cache"
 	bzr branch -r `cat pip-cache-revno.txt` lp:~mhall119/developer-ubuntu-com/dependencies pip-cache
 
-tarball: pip-cache
+translations:
+	@echo "Updating translations"
+	@python manage.py translations
+
+tarball: pip-cache translations
+	@echo "Creating tarball in ../developer_portal.tar.gz"
 	cd ..; tar -C $(SOURCE_DIR) --exclude-vcs -czf developer_portal.tar.gz .
