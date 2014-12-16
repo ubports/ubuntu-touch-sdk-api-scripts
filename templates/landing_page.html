@@ -7,12 +7,11 @@
 {% block content %}
 
 {% block hero %}
-<div id="hero" class="row row-hero">
+<div id="hero" class="row row-hero equal-height">
     <div class="seven-col">
         {% with True as no_row %}{% placeholder hero_content %}{% endwith %}
     </div>
     <div class="five-col last-col align-center align-vertically">
-        {# FIXME: the image plugin generates an extra span wrapper, and the image has the wrong top position #}
         {% placeholder hero_image %}
     </div>
 </div>
