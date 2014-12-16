@@ -37,14 +37,21 @@ def create_symlinks():
         po_symlink_fn = os.path.join(project_locale_path, locale, 
                 "LC_MESSAGES/django.po")
         create_symlink(po_fn, po_symlink_fn)
-        # As compilemessages processes all .po files in all subdirectories
-        # we better symlink the .mo files as well, to avoid getting out of
-        # date
-        create_symlink(po_fn.replace(".po", ".mo"), 
-                       po_symlink_fn.replace(".po", ".mo"))
 
 def compilemessages():
     run_manage(["compilemessages"])
+
+def remove_toplevel_mos():
+    for mo_fn in glob.glob(project_locale_path+"/*.mo"):
+        locale = os.path.basename(mo_fn).split(".mo")[0]
+        real_mo_fn = os.path.join(project_locale_path, locale,
+                                  "LC_MESSAGES/django.mo")
+        if os.path.exists(real_mo_fn):
+            os.remove(mo_fn)
+        else:
+            # This should never happen
+            print("'%s' exists, but '%s' doesn't." % (mo_fn, real_mo_fn))
+
 
 def check():
     configured_languages = map(lambda a: a[0], settings.LANGUAGES)
@@ -61,4 +68,5 @@ class Command(NoArgsCommand):
         update_template()
         create_symlinks()
         compilemessages()
+        remove_toplevel_mos()
         check()
