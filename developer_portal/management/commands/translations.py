@@ -60,6 +60,9 @@ def check():
         locale = locale.lower().replace("_", "-")
         if locale not in configured_languages:
             print("Consider adding adding '%s' to settings.LANGUAGES." % locale)
+        if locale not in map(lambda a: a['code'], settings.CMS_LANGUAGES[1]):
+            print("Consider adding adding '%s' to settings.CMS_LANGUAGES." % locale)
+
 
 class Command(NoArgsCommand):
     help = "Update translations template."
