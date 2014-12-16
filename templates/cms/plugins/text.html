@@ -1,3 +1,7 @@
-<div class="row">
-{{ body|safe }}
-</div>
+{% if no_row %}
+    {{ body|safe }}
+{% else %}
+    <div class="row">
+    {{ body|safe }}
+    </div>
+{% endif %}

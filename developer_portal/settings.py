@@ -149,7 +149,6 @@ MEDIA_URL = '/media/'
 
 ASSETS_URL = '//assets.ubuntu.com/'
 
-#
 # Django CMS specific settings
 #
 CMS_PERMISSION = True
