@@ -1,8 +1,8 @@
 {% extends "website_base.html" %}
-{% load cms_tags sekizai_tags menu_tags static %}
+{% load cms_tags sekizai_tags i18n menu_tags static %}
 
 {% block title %}{% endblock %}
-{% block logo_text %}{% endblock %}
+{% block logo_text %}{% trans "developer" %}{% endblock %}
 
 {% block extrastyles %}
   <link rel="stylesheet" type="text/css" media="all" href="{% static 'developer_portal/css/devportal.css' %}"/>
@@ -22,9 +22,7 @@
 
 {% block hero %}{% endblock hero %}
 
-{% block content %}
-    {% block base_content %}{% endblock %}
-{% endblock %}
+{% block content %}{% endblock %}
 
 {% block footer_lists %}{% endblock footer_lists %}
 {% block footer_inlines %}{% endblock footer_inlines %}

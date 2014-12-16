@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-16 10:11+0000\n"
+"POT-Creation-Date: 2014-12-16 11:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,31 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: developer_portal/settings.py:173 developer_portal/settings.py:182
+#: developer_portal/settings.py:172 developer_portal/settings.py:181
 msgid "English"
 msgstr ""
 
-#: developer_portal/settings.py:174 developer_portal/settings.py:189
+#: developer_portal/settings.py:173 developer_portal/settings.py:188
 msgid "Simplified Chinese"
 msgstr ""
 
-#: developer_portal/settings.py:175 developer_portal/settings.py:197
+#: developer_portal/settings.py:174 developer_portal/settings.py:196
 msgid "Spanish"
 msgstr ""
 
-#: developer_portal/settings.py:241
+#: developer_portal/settings.py:240
 msgid "Page content"
 msgstr ""
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
-#: developer_portal/settings.py:249
+#: developer_portal/settings.py:248
 msgid "<p>Add content here...</p>"
+msgstr ""
+
+#: templates/base.html:5
+msgid "developer"
 msgstr ""
 
 #: templates/menu/menu_header_first_level.html:8
