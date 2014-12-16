@@ -4,10 +4,12 @@
 {# We're not showing the secondary navigation on a landing page #}
 {% block nav_secondary %}{% endblock %}
 
+{% block content %}
+
 {% block hero %}
 <div id="hero" class="row row-hero">
     <div class="seven-col">
-        {% placeholder hero_content %}
+        {% with True as no_row %}{% placeholder hero_content %}{% endwith %}
     </div>
     <div class="five-col last-col align-center align-vertically">
         {# FIXME: the image plugin generates an extra span wrapper, and the image has the wrong top position #}
@@ -16,6 +18,5 @@
 </div>
 {% endblock hero %}
 
-{% block base_content %}
   {% placeholder page_content %}
 {% endblock %}
