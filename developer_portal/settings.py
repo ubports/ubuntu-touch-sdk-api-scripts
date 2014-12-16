@@ -165,6 +165,10 @@ CMS_TEMPLATES = (
     ('with_hero.html', 'With Hero'),
 )
 
+LOCALE_PATHS = (
+    os.path.join(PROJECT_PATH, 'locale'),
+)
+
 LANGUAGES = [
     ('en', _('English')),
     ('zh-cn', _('Simplified Chinese')),
