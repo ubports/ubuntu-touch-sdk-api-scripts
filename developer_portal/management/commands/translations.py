@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 APP_NAME = "developer_portal"
-project_locale_path = os.path.join(settings.PROJECT_PATH, "locale")
+project_locale_path = settings.LOCALE_PATHS[0]
 po_filenames = glob.glob(project_locale_path+"/*.po")
 
 def run_manage(args):
