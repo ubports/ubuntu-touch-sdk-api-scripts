@@ -24,6 +24,9 @@ def update_template():
               os.path.join(project_locale_path, "%s.pot" % APP_NAME))
     os.removedirs(os.path.join(project_locale_path,
                                "%s/LC_MESSAGES" % DUMMY_LOCALE))
+    old_pot_fn = os.path.join(project_locale_path, "django.pot")
+    if os.path.exists(old_pot_fn):
+        os.remove(old_pot_fn)
     os.chdir(pwd)
 
 
