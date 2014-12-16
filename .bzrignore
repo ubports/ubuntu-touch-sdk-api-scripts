@@ -2,4 +2,6 @@
 ./static
 *.sqlite3
 local_settings.py
+locale/*.mo
+locale/[a-z_]*
 locale/*/LC_MESSAGES/*

@@ -11,7 +11,6 @@
     ./env/bin/python manage.py initdb
     ./env/bin/python manage.py collectstatic --noinput
 
-4. For updating the .pot file run
+4. For any translations related updates run:
 
-    ./env/bin/python manage.py update-template
-    ./env/bin/python manage.py compilemessages    
+    ./env/bin/python manage.py translations
