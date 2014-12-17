@@ -21,10 +21,6 @@
 {% show_sub_menu 1 %}
 {% endblock second_level_nav_links %}
 
-{% block footer %}
-{% language_chooser %}
-{% endblock %}
-
 {% block meta-keywords %}{% get_tags as entry_tags %}{{ entry_tags|join:", "}}{% endblock meta-keywords %}
 
 {% block meta %}
@@ -45,6 +41,7 @@
 {% block breadcrumbs %}
   {% zinnia_breadcrumbs %}
 {% endblock breadcrumbs %}
+
 {% block closure %}
 <script type='text/javascript' src='{% static "developer_portal/syntaxhighlighter3/scripts/shCore.js?ver=3.0.83"  %}c'></script>
 <script type='text/javascript' src='{% static "developer_portal/syntaxhighlighter3/scripts/shAutoloader.js?ver=3.0.83c" %}'></script>
