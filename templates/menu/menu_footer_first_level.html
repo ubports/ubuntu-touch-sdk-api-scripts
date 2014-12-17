@@ -1,0 +1,13 @@
+{% load menu_tags i18n %}
+
+{% for child in children %}
+<li>
+	<h2><a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}" class="{% if child.selected or child.ancestor %}active{% endif %}">{{ child.get_menu_title }}</a></h2>
+	{% if child.children %}
+	<ul class="second-level-nav">
+    	<li class="first{% if child.selected or child.ancestor %} active{% endif %}"><a href="{{ child.attr.redirect_url|default:child.get_absolute_url }}" >{% trans "Overview" %}</a></li>
+		{% show_menu from_level to_level extra_inactive extra_active "menu/menu_header_second_level.html" "" "" child %}
+	</ul>
+	{% endif %}
+</li>
+{% endfor %}
