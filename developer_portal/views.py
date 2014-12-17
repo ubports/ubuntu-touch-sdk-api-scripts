@@ -61,4 +61,6 @@ def listen_for_login():
 
 def site_logout(request):
     logout(request)
+    if "next" in request.GET:
+        return HttpResponseRedirect(request.GET['next'])
     return HttpResponseRedirect('/')
