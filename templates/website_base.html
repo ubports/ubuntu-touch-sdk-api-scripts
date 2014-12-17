@@ -55,6 +55,22 @@
                 <ul>
                 <li class="accessibility-aid"><a accesskey="s" href="#main-content">Jump to content</a></li>
                 {% block nav_primary_links %}{% endblock nav_primary_links %}
+		{% if user.is_authenticated %}
+  		<li class="logout">
+		    <a href="#">{{ user.username }}</a>
+		    <ul class="second-level-nav">
+			<li>
+			    <a href="https://myapps.developer.ubuntu.com/dev/click-apps/">My Apps</a>
+			<li>
+			    <a href="/admin/logout">Log out</a>
+			</li>
+		    </ul>
+		</li>
+		{% else %}
+		<li class="login">
+  		    <a href="/openid/login/?next={{request.path}}">Log in</a>
+		</li>		
+		{% endif %}
                 </ul>
 
                 {% block search %}

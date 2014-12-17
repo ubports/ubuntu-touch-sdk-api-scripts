@@ -9,6 +9,36 @@
 * @copyright 2011 Canonical Ltd.
 */
 
+
+/**
+* @section header
+*/
+
+header.banner .logo-ubuntu span {
+	padding-left: 117px;
+}
+
+.login,
+.logout {
+	max-width: 86px;	
+}
+
+.login > a,
+.logout > a {
+	width: 100%;
+	text-overflow: ellipsis;
+	float: left;
+	overflow: hidden;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#box-search, .header-search {
+	max-width: 150px;
+}
+
+
 /**
 * @section box steps
 */
