@@ -14,8 +14,12 @@
 * @section header
 */
 
+header.banner .logo-ubuntu span {
+	padding-left: 117px;
+}
+
 #box-search, .header-search {
-	max-width: 195px;
+	max-width: 165px;
 }
 
 
