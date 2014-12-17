@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-17 13:09+0000\n"
+"POT-Creation-Date: 2014-12-17 13:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,6 +44,14 @@ msgstr ""
 msgid "developer"
 msgstr ""
 
+#: templates/base.html:74
+msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
+msgstr ""
+
+#: templates/base.html:78
+msgid "Report a bug on this site"
+msgstr ""
+
 #: templates/website_base.html:56
 msgid "Jump to content"
 msgstr ""
@@ -56,18 +64,6 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
-#: templates/website_base.html:125
-msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
-msgstr ""
-
-#: templates/website_base.html:127
-msgid "Legal information"
-msgstr ""
-
-#: templates/website_base.html:128
-msgid "Report a bug"
-msgstr ""
-
 #: templates/comments/zinnia/entry/form.html:25
 msgid "Comment as"
 msgstr ""
@@ -76,6 +72,7 @@ msgstr ""
 msgid "Post"
 msgstr ""
 
+#: templates/menu/menu_footer_first_level.html:8
 #: templates/menu/menu_header_first_level.html:8
 #: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
 #: templates/menu/sub_menu.html:25
