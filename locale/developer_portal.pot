@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-17 13:15+0000\n"
+"POT-Creation-Date: 2014-12-17 15:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,6 +62,10 @@ msgstr ""
 
 #: templates/website_base.html:71
 msgid "Log in"
+msgstr ""
+
+#: templates/website_base.html:79
+msgid "Search"
 msgstr ""
 
 #: templates/comments/zinnia/entry/form.html:25
