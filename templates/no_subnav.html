@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load cms_tags %}
 
-{% block sub_nav %}
+{% block title %}{{ current_page.get_page_title }} | {{ block.super }}{% endblock title%}
+
+{% block nav_secondary %}
 {% endblock %}
 
 {% block content %}

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load cms_tags %}
 
+{% block title %}{{ current_page.get_page_title }} | {{ block.super }}{% endblock title%}
+
 {# We're not showing the secondary navigation on a landing page #}
 {% block nav_secondary %}{% endblock %}
 
