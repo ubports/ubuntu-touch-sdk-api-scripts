@@ -9,6 +9,16 @@
 * @copyright 2011 Canonical Ltd.
 */
 
+
+/**
+* @section header
+*/
+
+#box-search, .header-search {
+	max-width: 195px;
+}
+
+
 /**
 * @section box steps
 */
