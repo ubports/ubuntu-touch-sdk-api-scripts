@@ -18,8 +18,20 @@ header.banner .logo-ubuntu span {
 	padding-left: 117px;
 }
 
+.login,
+.logout {
+	max-width: 86px;
+	
+}
+
+.login > a,
+.logout > a {
+	width: 100%;
+	text-overflow: ellipsis;
+}
+
 #box-search, .header-search {
-	max-width: 165px;
+	max-width: 150px;
 }
 
 
