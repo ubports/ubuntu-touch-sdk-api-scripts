@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-17 15:25+0000\n"
+"POT-Creation-Date: 2014-12-17 16:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,6 +52,10 @@ msgstr ""
 msgid "Report a bug on this site"
 msgstr ""
 
+#: templates/search_results.html:9
+msgid "Search results for:"
+msgstr ""
+
 #: templates/website_base.html:56
 msgid "Jump to content"
 msgstr ""
@@ -64,7 +68,8 @@ msgstr ""
 msgid "Log in"
 msgstr ""
 
-#: templates/website_base.html:79
+#: templates/website_base.html:78 templates/website_base.html.py:79
+#: templates/website_base.html:80
 msgid "Search"
 msgstr ""
 
