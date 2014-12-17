@@ -57,8 +57,10 @@
                 {% block nav_primary_links %}{% endblock nav_primary_links %}
 		{% if user.is_authenticated %}
   		<li class="logout">
-		    <a href="{{ user.get_absolute_url }}">{{ user.username }}</a>
+		    <a href="#">{{ user.username }}</a>
 		    <ul class="second-level-nav">
+			<li>
+			    <a href="https://myapps.developer.ubuntu.com/dev/click-apps/">My Apps</a>
 			<li>
 			    <a href="/admin/logout">Log out</a>
 			</li>
