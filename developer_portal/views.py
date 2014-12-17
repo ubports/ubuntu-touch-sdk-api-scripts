@@ -17,9 +17,10 @@
 from django.shortcuts import render_to_response, redirect
 from django.template.loader import render_to_string
 from django.template import RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth import logout
 
 from django_openid_auth.signals import openid_login_complete
 
@@ -57,3 +58,9 @@ def promote_staff(request, openid_response,**kwargs):
     
 def listen_for_login():
     openid_login_complete.connect(promote_staff)
+
+def site_logout(request):
+    logout(request)
+    if "next" in request.GET:
+        return HttpResponseRedirect(request.GET['next'])
+    return HttpResponseRedirect('/')

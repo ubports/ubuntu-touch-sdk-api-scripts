@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-16 11:39+0000\n"
+"POT-Creation-Date: 2014-12-17 13:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,18 +44,118 @@ msgstr ""
 msgid "developer"
 msgstr ""
 
+#: templates/base.html:74
+msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
+msgstr ""
+
+#: templates/base.html:78
+msgid "Report a bug on this site"
+msgstr ""
+
+#: templates/website_base.html:56
+msgid "Jump to content"
+msgstr ""
+
+#: templates/website_base.html:65 templates/comments/zinnia/entry/form.html:25
+msgid "Log out"
+msgstr ""
+
+#: templates/website_base.html:71
+msgid "Log in"
+msgstr ""
+
+#: templates/comments/zinnia/entry/form.html:25
+msgid "Comment as"
+msgstr ""
+
+#: templates/comments/zinnia/entry/form.html:28
+msgid "Post"
+msgstr ""
+
+#: templates/menu/menu_footer_first_level.html:8
 #: templates/menu/menu_header_first_level.html:8
 #: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
 #: templates/menu/sub_menu.html:25
 msgid "Overview"
 msgstr ""
 
-#: templates/zinnia/base.html:40
+#: templates/zinnia/_entry_detail_base.html:33
+#, python-format
+msgid "%(percent)s%% of %(object)s still remains to read."
+msgstr ""
+
+#: templates/zinnia/_entry_detail_base.html:33
+msgid "Continue reading"
+msgstr ""
+
+#: templates/zinnia/_entry_detail_base.html:47
+#: templates/zinnia/author_list.html:19
+#, python-format
+msgid "Show all %(author)s's entries"
+msgstr ""
+
+#: templates/zinnia/_entry_detail_base.html:50
+msgid "Written on"
+msgstr ""
+
+#: templates/zinnia/_entry_detail_base.html:62
+msgid "Filed under:"
+msgstr ""
+
+#: templates/zinnia/_entry_detail_base.html:64
+#: templates/zinnia/tag_list.html:19
+#, python-format
+msgid "Show all entries tagged by %(tag)s"
+msgstr ""
+
+#: templates/zinnia/_entry_detail_base.html:66
+msgid "No tags"
+msgstr ""
+
+#: templates/zinnia/author_list.html:4 templates/zinnia/author_list.html:12
+msgid "Author list"
+msgstr ""
+
+#: templates/zinnia/author_list.html:6
+msgid "Authors"
+msgstr ""
+
+#: templates/zinnia/author_list.html:21 templates/zinnia/category_list.html:19
+#: templates/zinnia/tag_list.html:20
+#, python-format
+msgid "%(entry_count)s entry"
+msgid_plural "%(entry_count)s entries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/zinnia/author_list.html:25
+msgid "No authors yet."
+msgstr ""
+
+#: templates/zinnia/base.html:36
 msgid "RSS Feed of latest entries"
 msgstr ""
 
-#: templates/zinnia/base.html:41
+#: templates/zinnia/base.html:37
 msgid "RSS Feed of latest discussions"
+msgstr ""
+
+#: templates/zinnia/category_list.html:4
+#: templates/zinnia/category_list.html:12
+msgid "Category list"
+msgstr ""
+
+#: templates/zinnia/category_list.html:6
+msgid "Categories"
+msgstr ""
+
+#: templates/zinnia/category_list.html:18
+#, python-format
+msgid "Show all entries in %(category)s"
+msgstr ""
+
+#: templates/zinnia/category_list.html:24
+msgid "No categories yet."
 msgstr ""
 
 #: templates/zinnia/entry_detail_base.html:22
@@ -74,37 +174,108 @@ msgstr ""
 msgid "RSS Feed of trackbacks on"
 msgstr ""
 
-#: templates/zinnia/entry_detail_base.html:47
-msgid "Next entry"
-msgstr ""
-
-#: templates/zinnia/entry_detail_base.html:61
-msgid "Previous entry"
-msgstr ""
-
-#: templates/zinnia/entry_detail_base.html:77
+#: templates/zinnia/entry_detail_base.html:43
 msgid "Comments"
 msgstr ""
 
-#: templates/zinnia/entry_detail_base.html:97
-msgctxt "on date"
-msgid "on"
-msgstr ""
-
-#: templates/zinnia/entry_detail_base.html:103
-msgid "Direct link to this comment"
-msgstr ""
-
-#: templates/zinnia/entry_detail_base.html:115
-#: templates/zinnia/entry_detail_base.html:121
+#: templates/zinnia/entry_detail_base.html:82
+#: templates/zinnia/entry_detail_base.html:88
 msgid "Comments are closed."
 msgstr ""
 
-#: templates/zinnia/entry_detail_base.html:119
+#: templates/zinnia/entry_detail_base.html:86
 msgid "No comments yet."
 msgstr ""
 
-#: templates/zinnia/entry_detail_base.html:138
-#: templates/zinnia/entry_detail_base.html:139
+#: templates/zinnia/entry_detail_base.html:96
+msgid "Add your comment"
+msgstr ""
+
+#: templates/zinnia/entry_detail_base.html:108
+#: templates/zinnia/entry_detail_base.html:109
 msgid "Edit the entry"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:4
+msgid "Latest entries for"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:4
+msgid "the category"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:4
+msgid "the tag"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:4
+msgid "the author"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:6
+msgid "page"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:11 templates/zinnia/entry_list.html:14
+#: templates/zinnia/entry_list.html:17
+msgid "RSS Feed"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:21
+msgid "Category"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:21
+msgid "Tag"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:21
+msgid "Author"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:23
+msgid "Page"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:32
+#, python-format
+msgid "Category archives: %(category)s"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:41
+#, python-format
+msgid "Tag archives: %(tag)s"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:47
+#, python-format
+msgid "Author archives: %(author)s"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:58
+msgid "No entries yet."
+msgstr ""
+
+#: templates/zinnia/entry_list.html:75 templates/zinnia/entry_list.html:76
+msgid "Edit the category"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:82 templates/zinnia/entry_list.html:83
+msgid "Edit the tag"
+msgstr ""
+
+#: templates/zinnia/entry_list.html:89 templates/zinnia/entry_list.html:90
+msgid "Edit the author"
+msgstr ""
+
+#: templates/zinnia/tag_list.html:4 templates/zinnia/tag_list.html.py:12
+msgid "Tag list"
+msgstr ""
+
+#: templates/zinnia/tag_list.html:6
+msgid "Tags"
+msgstr ""
+
+#: templates/zinnia/tag_list.html:24
+msgid "No tags yet."
 msgstr ""

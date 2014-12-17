@@ -10,6 +10,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^logout$', 'developer_portal.views.site_logout', name='logout')
 )
 
 urlpatterns += patterns(
@@ -22,11 +23,9 @@ urlpatterns += patterns(
 )
 listen_for_login()
 
-
 urlpatterns += i18n_patterns('',
     url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^blog/', include('zinnia.urls', namespace='zinnia')),
     url(r'^blog/comments/', include('django_comments.urls')),
     url(r'^', include('cms.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
