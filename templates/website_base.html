@@ -1,5 +1,4 @@
-{% load cms_tags sekizai_tags i18n %}
-{% load cms_tags sekizai_tags i18n static assets %}
+{% load cms_tags sekizai_tags i18n static assets menu_tags %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
@@ -123,9 +122,11 @@
         <!-- /.footer-a -->
         <div class="footer-b inline-lists">
             <ul class="clearfix">
-		{% block footer_inlines %}{% endblock footer_inlines %}
+            {% block footer_inlines %}{% endblock footer_inlines %}
+            <li>
+            {% language_chooser "menu/menu_language_chooser.html" %}
+            </li>
             </ul>
-        </div>
     </nav>
 
     <div class="legal clearfix has-cookie">

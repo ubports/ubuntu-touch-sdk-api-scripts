@@ -171,7 +171,6 @@ LOCALE_PATHS = (
 LANGUAGES = [
     ('en', _('English')),
     ('zh-cn', _('Simplified Chinese')),
-    ('es', _('Spanish')),
 ]
 
 CMS_LANGUAGES = {
