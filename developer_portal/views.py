@@ -64,3 +64,34 @@ def site_logout(request):
     if "next" in request.GET:
         return HttpResponseRedirect(request.GET['next'])
     return HttpResponseRedirect('/')
+    
+from cms.utils import get_template_from_request, get_language_code
+from cms.utils.i18n import get_language_list
+from cms.models.pagemodel import Page
+from django.utils.translation import get_language
+from django.contrib.sites.models import Site
+from django.template.response import TemplateResponse
+def search(request):
+    query = request.GET.get('q', None)
+    if query is None or query == '':
+        return HttpResponseRedirect('/')
+
+    current_language = request.REQUEST.get('language', None)
+    if current_language:
+        current_language = get_language_code(current_language)
+    if current_language is None:
+        current_language = get_language_code(getattr(request, 'LANGUAGE_CODE', None))
+        if current_language:
+            current_language = get_language_code(current_language)
+    if current_language is None:
+        current_language = get_language_code(get_language())
+
+    site = Site.objects.get_current()
+    pages = Page.objects.public().published(site=site)
+    matches = pages.filter(title_set__title__icontains=query, title_set__language=current_language).distinct()
+
+    context = {
+        'page_matches': matches, 
+        'query': query,
+    }
+    return TemplateResponse(request, 'search_results.html', RequestContext(request, context))
