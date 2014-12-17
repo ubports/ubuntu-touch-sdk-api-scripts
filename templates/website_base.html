@@ -107,29 +107,32 @@
 
         {# Footer #}
         {% block footer %}
-        <footer class="global clearfix">
-            <div class="footer-c">
-                <p class="top-link"><a href="#">Back to top</a></p>
+        <footer class="global clearfix no-global">
+    <div class="footer-c">
+        <p class="top-link"><a href="#">Back to top</a>
+        </p>
+    </div>
+    <nav id="main-navigation" role="navigation" class="clearfix">
+        <div class="footer-a">
+            <div class="clearfix">
+                <ul>
+		    {% block footer_lists %}{% endblock footer_lists %}
+                </ul>
             </div>
-            <nav id="main-navigation" role="navigation" class="clearfix">
-                <div class="footer-a">
-                    <div class="clearfix">
-
-                </div><!-- /.footer-a -->
-                <div class="footer-b inline-lists">
-
-                </div>
-            </nav>
-            <div class="legal clearfix">
-            {% block footer_legal %}
-            <p class="twelve-col">&copy; 2014 Canonical Ltd. Ubuntu and Canonical are registered trademarks of Canonical Ltd.</p>
-            <ul class="inline clear">
-                <li><a href="#">Legal information</a></li>
-                <li><a href="#">Report a bug</a></li>
+        </div>
+        <!-- /.footer-a -->
+        <div class="footer-b inline-lists">
+            <ul class="clearfix">
+		{% block footer_inlines %}{% endblock footer_inlines %}
             </ul>
-            {% endblock footer_legal %}
-            </div><!-- /.legal -->
-        </footer>
+        </div>
+    </nav>
+
+    <div class="legal clearfix has-cookie">
+	{% block footer_legal %}{% endblock footer_legal %}
+    </div>
+    <!-- /.legal -->
+</footer>
         {% endblock footer %}
 
     {% block closure %}{% endblock %}
