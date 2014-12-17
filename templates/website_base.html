@@ -55,6 +55,15 @@
                 <ul>
                 <li class="accessibility-aid"><a accesskey="s" href="#main-content">Jump to content</a></li>
                 {% block nav_primary_links %}{% endblock nav_primary_links %}
+		{% if user.is_authenticated %}
+  		<li class="logout">
+		    <a href="{{ user.get_absolute_url }}">{{ user.username }}</a> | <a href="/admin/logout">Log out</a>
+		</li>
+		{% else %}
+		<li class="login">
+  		    <a href="/openid/login/?next={{request.path}}">Log in or register</a>
+		</li>		
+		{% endif %}
                 </ul>
 
                 {% block search %}
