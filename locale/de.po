@@ -7,38 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-12-15 17:11+0000\n"
-"PO-Revision-Date: 2014-12-15 17:50+0000\n"
+"POT-Creation-Date: 2014-12-16 11:39+0000\n"
+"PO-Revision-Date: 2014-12-16 12:45+0000\n"
 "Last-Translator: Daniel Holbach <daniel.holbach@ubuntu.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-12-16 07:39+0000\n"
+"X-Launchpad-Export-Date: 2014-12-17 07:35+0000\n"
 "X-Generator: Launchpad (build 17286)\n"
 
-#: developer_portal/settings.py:167 developer_portal/settings.py:176
+#: developer_portal/settings.py:172 developer_portal/settings.py:181
 msgid "English"
 msgstr "Englisch"
 
-#: developer_portal/settings.py:168 developer_portal/settings.py:183
+#: developer_portal/settings.py:173 developer_portal/settings.py:188
 msgid "Simplified Chinese"
 msgstr "Vereinfachtes Chinesisch"
 
-#: developer_portal/settings.py:169 developer_portal/settings.py:191
+#: developer_portal/settings.py:174 developer_portal/settings.py:196
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: developer_portal/settings.py:235
+#: developer_portal/settings.py:240
 msgid "Page content"
 msgstr "Seiteninhalt"
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
-#: developer_portal/settings.py:243
+#: developer_portal/settings.py:248
 msgid "<p>Add content here...</p>"
 msgstr "<p>Inhalt hier einfügen...</p>"
+
+#: templates/base.html:5
+msgid "developer"
+msgstr "Entwickler"
 
 #: templates/menu/menu_header_first_level.html:8
 #: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
@@ -89,7 +93,7 @@ msgstr "am"
 
 #: templates/zinnia/entry_detail_base.html:103
 msgid "Direct link to this comment"
-msgstr ""
+msgstr "Direkter Link zu diesem Kommentar"
 
 #: templates/zinnia/entry_detail_base.html:115
 #: templates/zinnia/entry_detail_base.html:121

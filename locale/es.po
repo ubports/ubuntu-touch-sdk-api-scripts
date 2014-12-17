@@ -1,4 +1,4 @@
-# Chinese (Simplified) translation for developer-ubuntu-com
+# Spanish translation for developer-ubuntu-com
 # Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
 # This file is distributed under the same license as the developer-ubuntu-com package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-12-16 11:39+0000\n"
-"PO-Revision-Date: 2014-12-16 18:28+0000\n"
-"Last-Translator: Samantha Jian-Pielak <Unknown>\n"
-"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
+"PO-Revision-Date: 2014-12-17 05:36+0000\n"
+"Last-Translator: Adolfo Jayme <fitoschido@gmail.com>\n"
+"Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,92 +19,92 @@ msgstr ""
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:181
 msgid "English"
-msgstr ""
+msgstr "Inglés"
 
 #: developer_portal/settings.py:173 developer_portal/settings.py:188
 msgid "Simplified Chinese"
-msgstr "简体中文"
+msgstr "Chino simplificado"
 
 #: developer_portal/settings.py:174 developer_portal/settings.py:196
 msgid "Spanish"
-msgstr ""
+msgstr "Español"
 
 #: developer_portal/settings.py:240
 msgid "Page content"
-msgstr ""
+msgstr "Contenido de la página"
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
 #: developer_portal/settings.py:248
 msgid "<p>Add content here...</p>"
-msgstr ""
+msgstr "<p>Añada el contenido aquí…</p>"
 
 #: templates/base.html:5
 msgid "developer"
-msgstr "开发人员"
+msgstr "desarrollador"
 
 #: templates/menu/menu_header_first_level.html:8
 #: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
 #: templates/menu/sub_menu.html:25
 msgid "Overview"
-msgstr "总览"
+msgstr ""
 
 #: templates/zinnia/base.html:40
 msgid "RSS Feed of latest entries"
-msgstr ""
+msgstr "Canal RSS de publicaciones recientes"
 
 #: templates/zinnia/base.html:41
 msgid "RSS Feed of latest discussions"
-msgstr ""
+msgstr "Canal RSS de discusiones recientes"
 
 #: templates/zinnia/entry_detail_base.html:22
 msgid "RSS Feed of discussions on"
-msgstr ""
+msgstr "Canal RSS de discusiones en"
 
 #: templates/zinnia/entry_detail_base.html:24
 msgid "RSS Feed of comments on"
-msgstr ""
+msgstr "Canal RSS de comentarios en"
 
 #: templates/zinnia/entry_detail_base.html:26
 msgid "RSS Feed of pingbacks on"
-msgstr ""
+msgstr "Canal RSS de «pinbacks» en"
 
 #: templates/zinnia/entry_detail_base.html:28
 msgid "RSS Feed of trackbacks on"
-msgstr ""
+msgstr "Canal RSS de «trackbacks» en"
 
 #: templates/zinnia/entry_detail_base.html:47
 msgid "Next entry"
-msgstr ""
+msgstr "Publicación siguiente"
 
 #: templates/zinnia/entry_detail_base.html:61
 msgid "Previous entry"
-msgstr ""
+msgstr "Publicación anterior"
 
 #: templates/zinnia/entry_detail_base.html:77
 msgid "Comments"
-msgstr "评论"
+msgstr "Comentarios"
 
 #: templates/zinnia/entry_detail_base.html:97
 msgctxt "on date"
 msgid "on"
-msgstr ""
+msgstr "el"
 
 #: templates/zinnia/entry_detail_base.html:103
 msgid "Direct link to this comment"
-msgstr ""
+msgstr "Enlace directo a este comentario"
 
 #: templates/zinnia/entry_detail_base.html:115
 #: templates/zinnia/entry_detail_base.html:121
 msgid "Comments are closed."
-msgstr ""
+msgstr "Se han desactivado los comentarios."
 
 #: templates/zinnia/entry_detail_base.html:119
 msgid "No comments yet."
-msgstr ""
+msgstr "Todavía no hay comentarios."
 
 #: templates/zinnia/entry_detail_base.html:138
 #: templates/zinnia/entry_detail_base.html:139
 msgid "Edit the entry"
-msgstr ""
+msgstr "Editar la publicación"
