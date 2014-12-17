@@ -24,6 +24,7 @@ urlpatterns += patterns(
 listen_for_login()
 
 urlpatterns += i18n_patterns('',
+    url(r'^search/', 'developer_portal.views.search', name='search'),
     url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^blog/', include('zinnia.urls', namespace='zinnia')),
     url(r'^blog/comments/', include('django_comments.urls')),
