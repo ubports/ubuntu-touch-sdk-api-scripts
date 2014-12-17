@@ -53,7 +53,7 @@
                 </div>
 
                 <ul>
-                <li class="accessibility-aid"><a accesskey="s" href="#main-content">Jump to content</a></li>
+		 <li class="accessibility-aid"><a accesskey="s" href="#main-content">{% trans "Jump to content" %}</a></li>
                 {% block nav_primary_links %}{% endblock nav_primary_links %}
 		{% if user.is_authenticated %}
   		<li class="logout">
@@ -62,13 +62,13 @@
 			<li>
 			    <a href="https://myapps.developer.ubuntu.com/dev/click-apps/">My Apps</a>
 			<li>
-			    <a href="/logout">Log out</a>
+			    <a href="/logout">{% trans "Log out" %}</a>
 			</li>
 		    </ul>
 		</li>
 		{% else %}
 		<li class="login">
-  		    <a href="/openid/login/?next={{request.path}}">Log in</a>
+		    <a href="/openid/login/?next={{request.path}}">{% trans "Log in" %}</a>
 		</li>		
 		{% endif %}
                 </ul>
@@ -122,10 +122,10 @@
             </nav>
             <div class="legal clearfix">
             {% block footer_legal %}
-            <p class="twelve-col">&copy; 2014 Canonical Ltd. Ubuntu and Canonical are registered trademarks of Canonical Ltd.</p>
+	     <p class="twelve-col">&copy; 2014 Canonical Ltd. {% trans "Ubuntu and Canonical are registered trademarks of Canonical Ltd." %}</p>
             <ul class="inline clear">
-                <li><a href="#">Legal information</a></li>
-                <li><a href="#">Report a bug</a></li>
+	         <li><a href="#">{% trans "Legal information" %}</a></li>
+	         <li><a href="#">{% trans "Report a bug" %}</a></li>
             </ul>
             {% endblock footer_legal %}
             </div><!-- /.legal -->
