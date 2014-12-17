@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load cms_tags i18n %}
+
+{% block nav_secondary %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <h3>{% trans 'Search results for:' %} "{{query}}"</h3>
+    <hr />
+    <ul>
+      {% for page in page_matches %}
+      <li><a href="{{page.get_absolute_url}}">{{page.get_page_title}}</a></li>
+      {% endfor %}
+    </ul>
+</div>
+{% endblock %}
