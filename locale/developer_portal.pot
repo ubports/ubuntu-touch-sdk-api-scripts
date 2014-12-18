@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 10:18+0000\n"
+"POT-Creation-Date: 2014-12-18 10:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,6 +38,10 @@ msgstr ""
 #. but don't go wild :)
 #: developer_portal/settings.py:247
 msgid "<p>Add content here...</p>"
+msgstr ""
+
+#: templates/base.html:4
+msgid "Ubuntu Developer Portal"
 msgstr ""
 
 #: templates/base.html:5
