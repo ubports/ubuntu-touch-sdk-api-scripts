@@ -250,3 +250,28 @@ CMS_PLACEHOLDER_CONF = {
         ],
     },
 }
+
+CKEDITOR_IMAGE_BACKEND = 'dummy'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Full',
+    },
+    'zinnia-content': {
+        'toolbar_Zinnia': [
+            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Undo', 'Redo'],
+            ['Scayt'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
+            ['Source'],
+            ['Maximize'],
+            '/',
+            ['Bold', 'Italic', 'Underline', 'Strike',
+             'Subscript', 'Superscript', '-', 'RemoveFormat'],
+            ['NumberedList', 'BulletedList', '-',
+             'Outdent', 'Indent', '-', 'Blockquote'],
+            ['Styles', 'Format'],
+        ],
+        'toolbar': 'Zinnia',
+    },
+}
