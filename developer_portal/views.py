@@ -21,6 +21,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.auth import logout
+from django.utils.translation import ugettext_lazy as _
 
 from django_openid_auth.signals import openid_login_complete
 
@@ -45,7 +46,7 @@ def login_failure(request, message, status=403,
     if isinstance(exception, MissingPhysicalMultiFactor):
         context['solution'] = 'Try logging in again using your Yubikey'
     elif isinstance(exception, MissingUsernameViolation):
-        context['solution'] = 'You will need to create a <a href="https://launchpad.net/people/+me">Launchpad profile</a> to use The Summit Scheduler'
+        context['solution'] = _('You will need to create a <a href="https://launchpad.net/+login">Launchpad profile</a> to use the developer site')
 
     data = render_to_string(template_name, context,
         context_instance=RequestContext(request))
