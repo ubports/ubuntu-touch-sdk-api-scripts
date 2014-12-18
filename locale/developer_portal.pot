@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 10:27+0000\n"
+"POT-Creation-Date: 2014-12-18 10:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,6 +38,12 @@ msgstr ""
 #. but don't go wild :)
 #: developer_portal/settings.py:247
 msgid "<p>Add content here...</p>"
+msgstr ""
+
+#: developer_portal/views.py:49
+msgid ""
+"You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
+"profile</a> to use the developer site"
 msgstr ""
 
 #: templates/base.html:4
@@ -145,6 +151,12 @@ msgstr ""
 #: templates/error_base.html:78 templates/website_base.html:77
 #: templates/website_base.html.py:78 templates/website_base.html:79
 msgid "Search"
+msgstr ""
+
+#: templates/login_failure.html:19
+msgid ""
+"If you continue to experience problems with the developer site, please <a "
+"href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
 msgstr ""
 
 #: templates/search_results.html:4 templates/search_results.html.py:11
