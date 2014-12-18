@@ -59,7 +59,8 @@
 		    <a href="#">{{ user.first_name }}</a>
 		    <ul class="second-level-nav">
 			<li>
-			    <a href="https://myapps.developer.ubuntu.com/dev/click-apps/">My Apps</a>
+			    <a href="https://myapps.developer.ubuntu.com/openid/login/?next=/dev/click-apps/">My Apps</a>
+			</li>
 			<li>
 			    <a href="/logout?next={{request.path}}"">{% trans "Log out" %}</a>
 			</li>
@@ -67,7 +68,12 @@
 		</li>
 		{% else %}
 		<li class="login">
-		    <a href="/openid/login/?next={{request.path}}">{% trans "Log in" %}</a>
+		    <a href="#">{% trans "Log in" %}</a>
+		    <ul class="second-level-nav">
+			<li>
+			    <a href="https://myapps.developer.ubuntu.com/openid/login/?next=/dev/click-apps/">My Apps</a>
+			</li>
+		    </ul>
 		</li>		
 		{% endif %}
                 </ul>
@@ -160,10 +166,22 @@
 <script src="{% assets 'sites/ubuntu/latest/u/js/scratch.js' %}"></script>
 <script src="{% assets 'sites/ubuntu/latest/u/js/plugins/respond.min.js' %}"></script>
 
-<script>
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+      
+    /* Save to developer.ubuntu.com profile */	
+    _gaq.push(['_setAccount', 'UA-1018242-33']);
+    _gaq.push(['_setDomainName', '.ubuntu.com']);
+    _gaq.push(['_trackPageview']);
+
+    /* Save to www.ubuntu.com profile */	
+    _gaq.push(['b._setAccount', 'UA-1018242-4']);
+    _gaq.push(['b._setDomainName', '.ubuntu.com']);
+    _gaq.push(['b._trackPageview']);
+
     (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
