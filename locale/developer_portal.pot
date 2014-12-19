@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-18 12:58+0000\n"
+"POT-Creation-Date: 2014-12-18 14:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,6 +44,17 @@ msgstr ""
 msgid ""
 "You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
 "profile</a> to use the developer site"
+msgstr ""
+
+#: templates/404.html:3
+msgid "This page does not exist"
+msgstr ""
+
+#: templates/404.html:8
+msgid ""
+"This page does not exist. If you feel that this is an error, please <a "
+"href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>file a bug</"
+"a>."
 msgstr ""
 
 #: templates/base.html:4
