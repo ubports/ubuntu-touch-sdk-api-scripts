@@ -75,20 +75,30 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
+
+    # Replace standard session middleware with one that will strip
+    # sessionid from the Cookie on anonymous sessions
+    #
+    #'django.contrib.sessions.middleware.SessionMiddleware',
+    'developer_portal.middleware.CacheFriendlySessionMiddleware',
+
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'django.middleware.cache.FetchFromCacheMiddleware',
+    
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
     'cms.middleware.language.LanguageCookieMiddleware',
 
 )
+CACHE_MIDDLEWARE_SECONDS = 600
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -207,10 +217,6 @@ CMS_LANGUAGES = {
     }
 }
 
-CKEDITOR_UPLOAD_PATH = "media/"
-CKEDITOR_IMAGE_BACKEND = "pillow"
-CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
-
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
     'django.contrib.auth.backends.ModelBackend',
@@ -251,6 +257,8 @@ CMS_PLACEHOLDER_CONF = {
     },
 }
 
+CKEDITOR_UPLOAD_PATH = "media/"
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
 CKEDITOR_IMAGE_BACKEND = 'dummy'
 CKEDITOR_CONFIGS = {
     'default': {
