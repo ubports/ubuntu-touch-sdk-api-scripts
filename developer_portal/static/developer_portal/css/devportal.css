@@ -9,6 +9,11 @@
 * @copyright 2011 Canonical Ltd.
 */
 
+h2 img,
+h3 img {
+	vertical-align: middle;
+	margin-right: 10px;
+}
 
 /**
 * @section header
