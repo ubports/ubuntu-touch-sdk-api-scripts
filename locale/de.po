@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-12-17 20:13+0000\n"
+"POT-Creation-Date: 2014-12-18 12:58+0000\n"
 "PO-Revision-Date: 2014-12-17 13:47+0000\n"
 "Last-Translator: Daniel Holbach <daniel.holbach@ubuntu.com>\n"
 "Language-Team: German <de@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-12-18 07:16+0000\n"
+"X-Launchpad-Export-Date: 2014-12-19 06:56+0000\n"
 "X-Generator: Launchpad (build 17286)\n"
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:180
@@ -41,37 +41,131 @@ msgstr "Seiteninhalt"
 msgid "<p>Add content here...</p>"
 msgstr "<p>Inhalt hier einfügen...</p>"
 
+#: developer_portal/views.py:49
+msgid ""
+"You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
+"profile</a> to use the developer site"
+msgstr ""
+
+#: templates/base.html:4
+msgid "Ubuntu developer portal"
+msgstr ""
+
 #: templates/base.html:5
 msgid "developer"
 msgstr "Entwickler"
+
+#: templates/base.html:32
+msgid "Download"
+msgstr ""
+
+#: templates/base.html:34 templates/base.html.py:51
+#: templates/menu/menu_footer_first_level.html:8
+#: templates/menu/menu_header_first_level.html:8
+#: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
+#: templates/menu/sub_menu.html:25
+msgid "Overview"
+msgstr "Übersicht"
+
+#: templates/base.html:36
+msgid "Cloud"
+msgstr ""
+
+#: templates/base.html:38
+msgid "Server"
+msgstr ""
+
+#: templates/base.html:40
+msgid "Desktop"
+msgstr ""
+
+#: templates/base.html:42
+msgid "Ubuntu Kylin"
+msgstr ""
+
+#: templates/base.html:44
+msgid "Alternative downloads"
+msgstr ""
+
+#: templates/base.html:49
+msgid "Support"
+msgstr ""
+
+#: templates/base.html:53
+msgid "Security notices"
+msgstr ""
+
+#: templates/base.html:58
+msgid "About"
+msgstr ""
+
+#: templates/base.html:60
+msgid "About Ubuntu"
+msgstr ""
+
+#: templates/base.html:62
+msgid "Careers"
+msgstr ""
+
+#: templates/base.html:64
+msgid "Canonical and Ubuntu"
+msgstr ""
+
+#: templates/base.html:66
+msgid "Contact us"
+msgstr ""
+
+#: templates/base.html:68
+msgid "Canonical news feed"
+msgstr ""
 
 #: templates/base.html:74
 msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
 msgstr "Ubuntu und Canonical sind eingetragene Marken von Canonical Ltd."
 
+#: templates/base.html:76
+msgid "Legal information"
+msgstr ""
+
 #: templates/base.html:78
 msgid "Report a bug on this site"
 msgstr ""
 
-#: templates/search_results.html:9
-msgid "Search results for:"
+#: templates/base.html:81
+msgid "Go to the top of the page"
 msgstr ""
 
-#: templates/website_base.html:55
+#: templates/error_base.html:54 templates/website_base.html:55
 msgid "Jump to content"
 msgstr ""
 
-#: templates/website_base.html:64 templates/comments/zinnia/entry/form.html:25
+#: templates/error_base.html:63 templates/website_base.html:64
+#: templates/comments/zinnia/entry/form.html:25
 msgid "Log out"
 msgstr "Abmelden"
 
-#: templates/website_base.html:70
+#: templates/error_base.html:69 templates/website_base.html:70
 msgid "Log in"
 msgstr "Anmelden"
 
-#: templates/website_base.html:77 templates/website_base.html.py:78
-#: templates/website_base.html:79
+#: templates/error_base.html:76 templates/error_base.html.py:77
+#: templates/error_base.html:78 templates/website_base.html:77
+#: templates/website_base.html.py:78 templates/website_base.html:79
 msgid "Search"
+msgstr ""
+
+#: templates/login_failure.html:19
+msgid ""
+"If you continue to experience problems with the developer site, please <a "
+"href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
+msgstr ""
+
+#: templates/search_results.html:4 templates/search_results.html.py:11
+msgid "Search results for:"
+msgstr ""
+
+#: templates/website_base.html:111
+msgid "Back to top"
 msgstr ""
 
 #: templates/comments/zinnia/entry/form.html:25
@@ -81,13 +175,6 @@ msgstr ""
 #: templates/comments/zinnia/entry/form.html:28
 msgid "Post"
 msgstr ""
-
-#: templates/menu/menu_footer_first_level.html:8
-#: templates/menu/menu_header_first_level.html:8
-#: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
-#: templates/menu/sub_menu.html:25
-msgid "Overview"
-msgstr "Übersicht"
 
 #: templates/menu/menu_language_chooser.html:6
 msgid "View in:"

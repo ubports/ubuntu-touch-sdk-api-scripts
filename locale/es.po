@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-12-17 20:13+0000\n"
-"PO-Revision-Date: 2014-12-17 05:36+0000\n"
+"POT-Creation-Date: 2014-12-18 12:58+0000\n"
+"PO-Revision-Date: 2014-12-18 17:58+0000\n"
 "Last-Translator: Adolfo Jayme <fitoschido@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-12-18 07:16+0000\n"
+"X-Launchpad-Export-Date: 2014-12-19 06:56+0000\n"
 "X-Generator: Launchpad (build 17286)\n"
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:180
@@ -41,76 +41,168 @@ msgstr "Contenido de la página"
 msgid "<p>Add content here...</p>"
 msgstr "<p>Añada el contenido aquí…</p>"
 
+#: developer_portal/views.py:49
+msgid ""
+"You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
+"profile</a> to use the developer site"
+msgstr ""
+"Debe crear un <a href=\"https://launchpad.net/+login\">perfil de "
+"Launchpad</a> para usar el sitio de desarrollo"
+
+#: templates/base.html:4
+msgid "Ubuntu developer portal"
+msgstr "Portal de desarrollo de Ubuntu"
+
 #: templates/base.html:5
 msgid "developer"
 msgstr "desarrollador"
 
-#: templates/base.html:74
-msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
-msgstr ""
+#: templates/base.html:32
+msgid "Download"
+msgstr "Descargar"
 
-#: templates/base.html:78
-msgid "Report a bug on this site"
-msgstr ""
-
-#: templates/search_results.html:9
-msgid "Search results for:"
-msgstr ""
-
-#: templates/website_base.html:55
-msgid "Jump to content"
-msgstr ""
-
-#: templates/website_base.html:64 templates/comments/zinnia/entry/form.html:25
-msgid "Log out"
-msgstr ""
-
-#: templates/website_base.html:70
-msgid "Log in"
-msgstr ""
-
-#: templates/website_base.html:77 templates/website_base.html.py:78
-#: templates/website_base.html:79
-msgid "Search"
-msgstr ""
-
-#: templates/comments/zinnia/entry/form.html:25
-msgid "Comment as"
-msgstr ""
-
-#: templates/comments/zinnia/entry/form.html:28
-msgid "Post"
-msgstr ""
-
+#: templates/base.html:34 templates/base.html.py:51
 #: templates/menu/menu_footer_first_level.html:8
 #: templates/menu/menu_header_first_level.html:8
 #: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
 #: templates/menu/sub_menu.html:25
 msgid "Overview"
+msgstr "Visión general"
+
+#: templates/base.html:36
+msgid "Cloud"
+msgstr "Nube"
+
+#: templates/base.html:38
+msgid "Server"
+msgstr "Servidor"
+
+#: templates/base.html:40
+msgid "Desktop"
+msgstr "Escritorio"
+
+#: templates/base.html:42
+msgid "Ubuntu Kylin"
+msgstr "Ubuntu Kylin"
+
+#: templates/base.html:44
+msgid "Alternative downloads"
+msgstr "Otras descargas"
+
+#: templates/base.html:49
+msgid "Support"
+msgstr "Asistencia"
+
+#: templates/base.html:53
+msgid "Security notices"
+msgstr "Avisos de seguridad"
+
+#: templates/base.html:58
+msgid "About"
+msgstr "Acerca de"
+
+#: templates/base.html:60
+msgid "About Ubuntu"
+msgstr "Acerca de Ubuntu"
+
+#: templates/base.html:62
+msgid "Careers"
+msgstr "Empleo"
+
+#: templates/base.html:64
+msgid "Canonical and Ubuntu"
+msgstr "Canonical y Ubuntu"
+
+#: templates/base.html:66
+msgid "Contact us"
+msgstr "Contáctenos"
+
+#: templates/base.html:68
+msgid "Canonical news feed"
+msgstr "Canal de noticias de Canonical"
+
+#: templates/base.html:74
+msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
+msgstr "Ubuntu y Canonical son marcas registradas de Canonical Ltd."
+
+#: templates/base.html:76
+msgid "Legal information"
+msgstr "Información legal"
+
+#: templates/base.html:78
+msgid "Report a bug on this site"
+msgstr "Informar de un error en este sitio"
+
+#: templates/base.html:81
+msgid "Go to the top of the page"
+msgstr "Ir al principio de la página"
+
+#: templates/error_base.html:54 templates/website_base.html:55
+msgid "Jump to content"
+msgstr "Ir al contenido"
+
+#: templates/error_base.html:63 templates/website_base.html:64
+#: templates/comments/zinnia/entry/form.html:25
+msgid "Log out"
+msgstr "Salir"
+
+#: templates/error_base.html:69 templates/website_base.html:70
+msgid "Log in"
+msgstr "Acceder"
+
+#: templates/error_base.html:76 templates/error_base.html.py:77
+#: templates/error_base.html:78 templates/website_base.html:77
+#: templates/website_base.html.py:78 templates/website_base.html:79
+msgid "Search"
+msgstr "Buscar"
+
+#: templates/login_failure.html:19
+msgid ""
+"If you continue to experience problems with the developer site, please <a "
+"href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
 msgstr ""
+"Si siguen ocurriendo problemas con el sitio de desarrollo, <a "
+"href='https://bugs.launchpad.net/ubuntudeveloperportal'>cree un informe de "
+"error"
+
+#: templates/search_results.html:4 templates/search_results.html.py:11
+msgid "Search results for:"
+msgstr "Resultados de búsqueda para:"
+
+#: templates/website_base.html:111
+msgid "Back to top"
+msgstr "Volver al principio"
+
+#: templates/comments/zinnia/entry/form.html:25
+msgid "Comment as"
+msgstr "Comentar como"
+
+#: templates/comments/zinnia/entry/form.html:28
+msgid "Post"
+msgstr "Publicar"
 
 #: templates/menu/menu_language_chooser.html:6
 msgid "View in:"
-msgstr ""
+msgstr "Ver en:"
 
 #: templates/menu/menu_language_chooser.html:10
 msgid "Change to language:"
-msgstr ""
+msgstr "Cambiar al idioma:"
 
 #: templates/zinnia/_entry_detail_base.html:33
 #, python-format
 msgid "%(percent)s%% of %(object)s still remains to read."
-msgstr ""
+msgstr "Queda por leer un %(percent)s %% de %(object)s."
 
 #: templates/zinnia/_entry_detail_base.html:33
 msgid "Continue reading"
-msgstr ""
+msgstr "Seguir leyendo"
 
 #: templates/zinnia/_entry_detail_base.html:47
 #: templates/zinnia/author_list.html:19
 #, python-format
 msgid "Show all %(author)s's entries"
-msgstr ""
+msgstr "Todas las entradas de %(author)s"
 
 #: templates/zinnia/_entry_detail_base.html:50
 msgid "Written on"
@@ -118,37 +210,37 @@ msgstr ""
 
 #: templates/zinnia/_entry_detail_base.html:62
 msgid "Filed under:"
-msgstr ""
+msgstr "Archivado en:"
 
 #: templates/zinnia/_entry_detail_base.html:64
 #: templates/zinnia/tag_list.html:19
 #, python-format
 msgid "Show all entries tagged by %(tag)s"
-msgstr ""
+msgstr "Todas las entradas con la etiqueta «%(tag)s»"
 
 #: templates/zinnia/_entry_detail_base.html:66
 msgid "No tags"
-msgstr ""
+msgstr "Sin etiquetas"
 
 #: templates/zinnia/author_list.html:4 templates/zinnia/author_list.html:12
 msgid "Author list"
-msgstr ""
+msgstr "Lista de autores"
 
 #: templates/zinnia/author_list.html:6
 msgid "Authors"
-msgstr ""
+msgstr "Autores"
 
 #: templates/zinnia/author_list.html:21 templates/zinnia/category_list.html:19
 #: templates/zinnia/tag_list.html:20
 #, python-format
 msgid "%(entry_count)s entry"
 msgid_plural "%(entry_count)s entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(entry_count)s entrada"
+msgstr[1] "%(entry_count)s entradas"
 
 #: templates/zinnia/author_list.html:25
 msgid "No authors yet."
-msgstr ""
+msgstr "Todavía no hay autores."
 
 #: templates/zinnia/base.html:36
 msgid "RSS Feed of latest entries"
@@ -161,20 +253,20 @@ msgstr "Canal RSS de discusiones recientes"
 #: templates/zinnia/category_list.html:4
 #: templates/zinnia/category_list.html:12
 msgid "Category list"
-msgstr ""
+msgstr "Lista de categorías"
 
 #: templates/zinnia/category_list.html:6
 msgid "Categories"
-msgstr ""
+msgstr "Categorías"
 
 #: templates/zinnia/category_list.html:18
 #, python-format
 msgid "Show all entries in %(category)s"
-msgstr ""
+msgstr "Todas las entradas en «%(category)s»"
 
 #: templates/zinnia/category_list.html:24
 msgid "No categories yet."
-msgstr ""
+msgstr "Todavía no hay categorías."
 
 #: templates/zinnia/entry_detail_base.html:22
 msgid "RSS Feed of discussions on"
@@ -207,7 +299,7 @@ msgstr "Todavía no hay comentarios."
 
 #: templates/zinnia/entry_detail_base.html:96
 msgid "Add your comment"
-msgstr ""
+msgstr "Añada un comentario"
 
 #: templates/zinnia/entry_detail_base.html:108
 #: templates/zinnia/entry_detail_base.html:109
@@ -216,84 +308,84 @@ msgstr "Editar la publicación"
 
 #: templates/zinnia/entry_list.html:4
 msgid "Latest entries for"
-msgstr ""
+msgstr "Entradas recientes en"
 
 #: templates/zinnia/entry_list.html:4
 msgid "the category"
-msgstr ""
+msgstr "la categoría"
 
 #: templates/zinnia/entry_list.html:4
 msgid "the tag"
-msgstr ""
+msgstr "la etiqueta"
 
 #: templates/zinnia/entry_list.html:4
 msgid "the author"
-msgstr ""
+msgstr "el autor"
 
 #: templates/zinnia/entry_list.html:6
 msgid "page"
-msgstr ""
+msgstr "página"
 
 #: templates/zinnia/entry_list.html:11 templates/zinnia/entry_list.html:14
 #: templates/zinnia/entry_list.html:17
 msgid "RSS Feed"
-msgstr ""
+msgstr "Canal RSS"
 
 #: templates/zinnia/entry_list.html:21
 msgid "Category"
-msgstr ""
+msgstr "Categoría"
 
 #: templates/zinnia/entry_list.html:21
 msgid "Tag"
-msgstr ""
+msgstr "Etiqueta"
 
 #: templates/zinnia/entry_list.html:21
 msgid "Author"
-msgstr ""
+msgstr "Autor"
 
 #: templates/zinnia/entry_list.html:23
 msgid "Page"
-msgstr ""
+msgstr "Página"
 
 #: templates/zinnia/entry_list.html:32
 #, python-format
 msgid "Category archives: %(category)s"
-msgstr ""
+msgstr "Archivo de la categoría: %(category)s"
 
 #: templates/zinnia/entry_list.html:41
 #, python-format
 msgid "Tag archives: %(tag)s"
-msgstr ""
+msgstr "Archivo de la etiqueta: %(tag)s"
 
 #: templates/zinnia/entry_list.html:47
 #, python-format
 msgid "Author archives: %(author)s"
-msgstr ""
+msgstr "Archivo del autor: %(author)s"
 
 #: templates/zinnia/entry_list.html:58
 msgid "No entries yet."
-msgstr ""
+msgstr "Todavía no hay entradas."
 
 #: templates/zinnia/entry_list.html:75 templates/zinnia/entry_list.html:76
 msgid "Edit the category"
-msgstr ""
+msgstr "Editar la categoría"
 
 #: templates/zinnia/entry_list.html:82 templates/zinnia/entry_list.html:83
 msgid "Edit the tag"
-msgstr ""
+msgstr "Editar la etiqueta"
 
 #: templates/zinnia/entry_list.html:89 templates/zinnia/entry_list.html:90
 msgid "Edit the author"
-msgstr ""
+msgstr "Editar el autor"
 
 #: templates/zinnia/tag_list.html:4 templates/zinnia/tag_list.html.py:12
 msgid "Tag list"
-msgstr ""
+msgstr "Lista de etiquetas"
 
 #: templates/zinnia/tag_list.html:6
 msgid "Tags"
-msgstr ""
+msgstr "Etiquetas"
 
 #: templates/zinnia/tag_list.html:24
 msgid "No tags yet."
-msgstr ""
+msgstr "Todavía no hay etiquetas."
