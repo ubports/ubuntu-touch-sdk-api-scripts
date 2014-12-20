@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-12-18 12:58+0000\n"
+"POT-Creation-Date: 2014-12-18 14:25+0000\n"
 "PO-Revision-Date: 2014-12-17 13:47+0000\n"
 "Last-Translator: Daniel Holbach <daniel.holbach@ubuntu.com>\n"
 "Language-Team: German <de@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-12-19 06:56+0000\n"
+"X-Launchpad-Export-Date: 2014-12-20 06:42+0000\n"
 "X-Generator: Launchpad (build 17286)\n"
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:180
@@ -45,6 +45,17 @@ msgstr "<p>Inhalt hier einfügen...</p>"
 msgid ""
 "You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
 "profile</a> to use the developer site"
+msgstr ""
+
+#: templates/404.html:3
+msgid "This page does not exist"
+msgstr ""
+
+#: templates/404.html:8
+msgid ""
+"This page does not exist. If you feel that this is an error, please <a "
+"href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>file a "
+"bug</a>."
 msgstr ""
 
 #: templates/base.html:4

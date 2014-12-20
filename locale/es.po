@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-12-18 12:58+0000\n"
+"POT-Creation-Date: 2014-12-18 14:25+0000\n"
 "PO-Revision-Date: 2014-12-18 17:58+0000\n"
 "Last-Translator: Adolfo Jayme <fitoschido@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-12-19 06:56+0000\n"
+"X-Launchpad-Export-Date: 2014-12-20 06:42+0000\n"
 "X-Generator: Launchpad (build 17286)\n"
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:180
@@ -48,6 +48,17 @@ msgid ""
 msgstr ""
 "Debe crear un <a href=\"https://launchpad.net/+login\">perfil de "
 "Launchpad</a> para usar el sitio de desarrollo"
+
+#: templates/404.html:3
+msgid "This page does not exist"
+msgstr ""
+
+#: templates/404.html:8
+msgid ""
+"This page does not exist. If you feel that this is an error, please <a "
+"href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>file a "
+"bug</a>."
+msgstr ""
 
 #: templates/base.html:4
 msgid "Ubuntu developer portal"
