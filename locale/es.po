@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-12-18 14:25+0000\n"
-"PO-Revision-Date: 2014-12-18 17:58+0000\n"
+"PO-Revision-Date: 2015-01-07 06:38+0000\n"
 "Last-Translator: Adolfo Jayme <fitoschido@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2014-12-20 06:42+0000\n"
+"X-Launchpad-Export-Date: 2015-01-07 06:42+0000\n"
 "X-Generator: Launchpad (build 17286)\n"
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:180
@@ -51,7 +51,7 @@ msgstr ""
 
 #: templates/404.html:3
 msgid "This page does not exist"
-msgstr ""
+msgstr "Esta página no existe"
 
 #: templates/404.html:8
 msgid ""
@@ -59,6 +59,9 @@ msgid ""
 "href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>file a "
 "bug</a>."
 msgstr ""
+"Esta página no existe. Si cree que es un error, <a "
+"href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>cree un "
+"informe</a>."
 
 #: templates/base.html:4
 msgid "Ubuntu developer portal"
@@ -217,7 +220,7 @@ msgstr "Todas las entradas de %(author)s"
 
 #: templates/zinnia/_entry_detail_base.html:50
 msgid "Written on"
-msgstr ""
+msgstr "Escrito el"
 
 #: templates/zinnia/_entry_detail_base.html:62
 msgid "Filed under:"
