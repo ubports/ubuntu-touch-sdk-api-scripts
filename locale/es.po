@@ -15,8 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-01-07 06:42+0000\n"
-"X-Generator: Launchpad (build 17286)\n"
+"X-Launchpad-Export-Date: 2015-01-08 07:15+0000\n"
+"X-Generator: Launchpad (build 17298)\n"
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:180
 msgid "English"
