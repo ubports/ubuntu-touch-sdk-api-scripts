@@ -284,3 +284,4 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'Zinnia',
     },
 }
+CMSPLUGIN_ZINNIA_APP_URLS = ['developer_portal.blog.urls']

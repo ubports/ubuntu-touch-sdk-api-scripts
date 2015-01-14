@@ -2,25 +2,6 @@
 {% load zinnia_tags i18n %}
 {% load cms_tags sekizai_tags menu_tags static %}
 
-{% block title %}{% endblock %}
-{% block logo_text %}{% endblock %}
-
-{% block extrastyles %}
-  <link rel="stylesheet" type="text/css" media="all" href="{% static 'developer_portal/css/devportal.css' %}"/>
-{% endblock extrastyles %}
-
-{% block nav_primary_links %}
-{% show_menu_below_id "home" 0 100 100 1000 "menu/menu_header_first_level.html" %}
-{% endblock %}
-
-{% block breadcrumb_links %}
-{% show_breadcrumb 1 %}
-{% endblock breadcrumb_links %}
-
-{% block second_level_nav_links %}
-{% show_sub_menu 1 %}
-{% endblock second_level_nav_links %}
-
 {% block meta-keywords %}{% get_tags as entry_tags %}{{ entry_tags|join:", "}}{% endblock meta-keywords %}
 
 {% block meta %}
@@ -37,10 +18,6 @@
     <link rel="alternate" type="application/rss+xml" title="{% trans "RSS Feed of latest discussions" %}" href="{% url 'zinnia:discussion_latest_feed' %}" />
     {% get_archives_entries "zinnia/tags/entries_archives_link.html" %}
 {% endblock link %}
-
-{% block breadcrumbs %}
-  {% zinnia_breadcrumbs %}
-{% endblock breadcrumbs %}
 
 {% block closure %}
 <script type='text/javascript' src='{% static "developer_portal/syntaxhighlighter3/scripts/shCore.js?ver=3.0.83"  %}c'></script>
