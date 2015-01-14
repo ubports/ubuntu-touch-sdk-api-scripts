@@ -24,6 +24,7 @@ resort to its parent and fetch its children.
         {# Show an Overview menu item that points to the first level nav item #}
         {% if request.current_page.parent.level == nav_level_add_overview %}<li class="first"><a href="{{ request.current_page.parent.get_absolute_url }}">{% trans "Overview" %}</a></li>{% endif %}
         {% for sibling in request.current_page.parent.children.all %}
+        {% if sibling.in_navigation %}
         <li class="{% if sibling.selected %}active{% endif %}">
           {% if request.current_page == sibling %}
             {{ sibling.get_menu_title }}
@@ -31,6 +32,7 @@ resort to its parent and fetch its children.
             <a href="{{ sibling.attr.redirect_url|default:sibling.get_absolute_url }}">{{ sibling.get_menu_title }}</a>
           {% endif %}
         </li>
+        {% endif %}
         {% endfor %}
     {% endif %}
 {% endif %}
