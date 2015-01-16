@@ -3,7 +3,7 @@
 
 {% block meta-description %}{% trans "Tag list" %}{% endblock meta-description %}
 
-{% block title %}{% trans "Tags" %}{% endblock title %}
+{% block title %}{% trans "Tags" %} | {{ block.super }}{% endblock title%}
 
 {% block body-class %}tag-list{% endblock body-class %}
 

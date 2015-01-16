@@ -3,7 +3,7 @@
 
 {% block meta-description %}{% trans "Author list" %}{% endblock meta-description %}
 
-{% block title %}{% trans "Authors" %}{% endblock title %}
+{% block title %}{% trans "Authors" %} | {{ block.super }}{% endblock title%}
 
 {% block body-class %}author-list{% endblock body-class %}
 

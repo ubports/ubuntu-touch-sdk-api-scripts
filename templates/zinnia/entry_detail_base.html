@@ -2,7 +2,7 @@
 {% load i18n comments zinnia_tags %}
 {% load cycle from future %}
 
-{% block title %}CMS Test - {{ object.title }}{% endblock title %}
+{% block title %}{{ object.title }} | {{ block.super }}{% endblock title%}
 
 {% block meta-description %}{{ object.excerpt|safe }}{% endblock meta-description %}
 
