@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-12-18 14:25+0000\n"
-"PO-Revision-Date: 2015-01-12 16:08+0000\n"
-"Last-Translator: Niklas Wenzel <nikwen.developer@gmail.com>\n"
+"PO-Revision-Date: 2015-01-16 15:31+0000\n"
+"Last-Translator: Tobias Bannert <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-01-13 08:20+0000\n"
-"X-Generator: Launchpad (build 17298)\n"
+"X-Launchpad-Export-Date: 2015-01-17 07:16+0000\n"
+"X-Generator: Launchpad (build 17304)\n"
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:180
 msgid "English"
@@ -46,8 +46,8 @@ msgid ""
 "You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
 "profile</a> to use the developer site"
 msgstr ""
-"Um die Entwickler-Seite zu nutzen, müssen Sie ein <a "
-"href=\"https://launchpad.net/+login\">Launchpad Profil</a> erstellen."
+"Um die Entwicklerseite zu nutzen, müssen Sie ein <a "
+"href=\"https://launchpad.net/+login\">Launchpad-Profil</a> erstellen."
 
 #: templates/404.html:3
 msgid "This page does not exist"
@@ -65,7 +65,7 @@ msgstr ""
 
 #: templates/base.html:4
 msgid "Ubuntu developer portal"
-msgstr "Ubuntu Entwicklerportal"
+msgstr "Ubuntu-Entwicklerportal"
 
 #: templates/base.html:5
 msgid "developer"
@@ -73,7 +73,7 @@ msgstr "Entwickler"
 
 #: templates/base.html:32
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 #: templates/base.html:34 templates/base.html.py:51
 #: templates/menu/menu_footer_first_level.html:8
@@ -175,7 +175,7 @@ msgid ""
 "If you continue to experience problems with the developer site, please <a "
 "href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
 msgstr ""
-"Wenn Sie weiterhin Probleme mit der Entwickler-Seite haben, bitte <a "
+"Wenn Sie weiterhin Probleme mit der Entwicklerseite haben, bitte <a "
 "href='https://bugs.launchpad.net/ubuntudeveloperportal'>melden Sie diese"
 
 #: templates/search_results.html:4 templates/search_results.html.py:11
@@ -237,7 +237,7 @@ msgstr "Keine Tags"
 
 #: templates/zinnia/author_list.html:4 templates/zinnia/author_list.html:12
 msgid "Author list"
-msgstr "Autoren-Liste"
+msgstr "Autorenliste"
 
 #: templates/zinnia/author_list.html:6
 msgid "Authors"
@@ -393,7 +393,7 @@ msgstr "Den Autor bearbeiten"
 
 #: templates/zinnia/tag_list.html:4 templates/zinnia/tag_list.html.py:12
 msgid "Tag list"
-msgstr "Schlagwort-Liste"
+msgstr "Schlagwortliste"
 
 #: templates/zinnia/tag_list.html:6
 msgid "Tags"
