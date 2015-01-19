@@ -24,12 +24,13 @@ urlpatterns += patterns(
 listen_for_login()
 
 urlpatterns += i18n_patterns('',
+    url(r'^blog/', include('developer_portal.blog.urls', namespace='zinnia')),
+    url(r'^blog/comments/', include('django_comments.urls')),
+)
+
+urlpatterns += i18n_patterns('',
     url(r'^search/', 'developer_portal.views.search', name='search'),
     url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^', include('cms.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += patterns('',
-    url(r'^blog/', include('zinnia.urls', namespace='zinnia')),
-    url(r'^blog/comments/', include('django_comments.urls')),
-)
