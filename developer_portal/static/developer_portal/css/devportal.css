@@ -15,6 +15,10 @@ h3 img {
 	margin-right: 10px;
 }
 
+code, pre {
+	text-align: left;
+}
+
 /**
 * @section header
 */

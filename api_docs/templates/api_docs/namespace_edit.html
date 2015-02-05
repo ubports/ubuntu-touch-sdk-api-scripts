@@ -1,0 +1,48 @@
+{% extends "api_docs/article.html" %}
+
+{% block editor_links %}
+	{% if namespace.id and perms.apidocs.delete_namespace %}
+    <li><a href="{% url namespace_edit topic.slug version.slug namespace.id %}?action=delete">Delete</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block article_content %}
+{% if namespace.id %}
+<h1>Edit: {{namespace.name}}</h1>
+{% else %}
+<h1>New Namespace</h1>
+{% endif %}
+
+<form action="" method="POST" id="namespace_form">
+{% csrf_token %}
+<div id="namespace_content">
+{{ form.as_p }}
+</div>
+<input type="submit" value="Save">
+</form>
+
+{% comment %}
+<h3>Snippets</h3>
+{% for snippet in snippets %}
+    <div>
+        <li>{{ snippet.name }}</li>
+    </div>
+{% endfor %}
+
+<h3>Questions & Answers</h3>
+{% for question in questions %}
+    <div>
+        <li><a href="{{ question.url }}">{{ question.name }}</a></li>
+    </div>
+{% endfor %}
+<h3>Tutorials</h3>
+{% for tutorial in tutorials %}
+    <div>
+        <li><a href="{{ tutorial.url }}">{{ tutorial.name }}</a></li>
+    </div>
+{% endfor %}
+{% endcomment %}
+{% endblock %}

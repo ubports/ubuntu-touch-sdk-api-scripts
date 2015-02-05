@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{namespace.name}} [{{version.slug}}/{{namespace.name}}] - Ubuntu Developer{% endblock %}
+
+{% block editor_links %}
+    {% if perms.apidocs.change_namespace %}
+    <li><a href="{% url 'api_docs:namespace_edit' version.language.topic.slug version.language.slug version.slug namespace.id%}">Edit</a></li>
+    {% endif %}
+    {% if perms.apidocs.add_element %}
+    <li><a href="{% url 'api_docs:element_edit' version.language.topic.slug version.language.slug version.slug %}">+ Element</a></li>
+    {% endif %}
+    {% if perms.apidocs.add_page %}
+    <li><a href="{% url 'api_docs:page_edit' version.language.topic.slug version.language.slug version.slug %}">+ Page</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb_links %}
+<li class=""><a href="/{{version.language.topic.slug}}/">{{version.language.topic.name}}</a> &rsaquo;</li>
+<li class=""><a href="/{{version.language.topic.slug}}/{{version.language.slug}}/">{{version.language.name}}</a> &rsaquo;</li>
+<li class=""><a href="/{{version.language.topic.slug}}/{{version.language.slug}}/api/">API</a> &rsaquo;</li>
+<li><a class="sub-nav-item" href="{% url 'api_docs:version' version.language.topic.slug version.language.slug version.slug %}">{{version.name}}</a> &rsaquo;</li>
+<li>{{namespace.name}}</li>
+{% endblock %}
+
+{% block content %}
+<!-- Source File: {{element.source_file}} -->
+<!-- Source Format: {{element.source_format}} -->
+
+<div id="namespace_content" class="row {{namespace.source_format}}">
+    <div class="ten-col">
+        <h2>{{namespace.name}}</h2>
+
+        {% if namespace.data %}
+        <!-- Start Namespace Content -->
+        {{namespace.data|safe}}
+        <!-- End Namespace Content -->
+    </div>
+</div>
+<div id="namespace_content" class="row {{namespace.source_format}}">
+    <div class="ten-col">
+        {% endif %}
+
+        {% if namespace.page_set.count %}
+        <h3>Pages</h3>
+        <ul>
+        {% for page in namespace.page_set.all %}
+            <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug page.fullname %}">{{page.title}}</a></li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if namespace.element_set.count %}
+        <h3>Elements</h3>
+        <ul>
+        {% for element in namespace.element_set.all %}
+            <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug element.fullname %}">{{element.name}}</a> - {{ element.description|safe }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

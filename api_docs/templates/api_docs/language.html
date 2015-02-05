@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block sub_nav %}{% endblock %}
+
+{% block content %}
+
+<h2>{{language.name}} Versions</h2>
+<ul>
+{% for version in language.version_set.all %}
+    <li>
+        <a href="{% url 'api_docs:version' language.topic.slug language.slug version.slug %}">{{version.name}}</a>
+        {% if language.current_version == version %}(Current){% endif %}
+        {% if language.development_version == version %}(Development){% endif %}
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

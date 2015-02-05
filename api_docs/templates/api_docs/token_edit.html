@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block sub_nav %}{% endblock %}
+
+{% block content %}
+
+<table width="100%">
+<tr><th>User</th><th>Token</th><th>Actions</th></tr>
+{% for t in tokens %}
+<tr>
+    <td>{{t.user.username}}</td>
+    <td>{{t.key}}</td>
+    <td>
+        <a href="{% url 'api_docs:token_edit' t.key %}?action=reset">Reset</a> | 
+        <a href="{% url 'api_docs:token_edit' t.key %}?action=delete">Delete</a>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<table width="100%">
+<tr><td width="50%" style="vertical-align: top; text-align: left; border: 0;">
+
+<h2>Generate Token</h2>
+<form action="{% url 'api_docs:token_edit' %}" method="POST" id="token_form">
+{% csrf_token %}
+<input type="hidden" name="form" value="token"/>
+{{ form.as_p }}
+<input type="submit" value="Generate">
+</form>
+
+</td><td width="50%" style="vertical-align: top; text-align: left; border: 0;">
+
+<h2>Add User</h2>
+<form action="{% url 'api_docs:token_edit' %}" method="POST" id="user_form">
+{% csrf_token %}
+<input type="hidden" name="form" value="user"/>
+{{ adduser.as_p }}
+<input type="submit" value="Add">
+</form>
+
+</td></tr></table>
+{% endblock %}

@@ -75,6 +75,7 @@ from cms.models.pagemodel import Page
 from django.utils.translation import get_language
 from django.contrib.sites.models import Site
 from django.template.response import TemplateResponse
+import api_docs.models
 def search(request):
     query = request.GET.get('q', None)
     if query is None or query == '':
@@ -92,10 +93,19 @@ def search(request):
 
     site = Site.objects.get_current()
     pages = Page.objects.public().published(site=site)
-    matches = pages.filter(title_set__title__icontains=query, title_set__language=current_language).distinct()
+    cms_page_matches = pages.filter(title_set__title__icontains=query, title_set__language=current_language).distinct()
 
+    current_versions = []
+    for language in api_docs.models.Language.objects.all():
+        current_versions.append(language.current_version)
+    api_element_matches = api_docs.models.Element.objects.filter(section__topic_version__in=current_versions, fullname__icontains=query).order_by('section', 'fullname')
+
+    api_page_matches = api_docs.models.Page.objects.filter(fullname__icontains=query)
+    
     context = {
-        'page_matches': matches, 
+        'cms_page_matches': cms_page_matches, 
+        'api_element_matches': api_element_matches, 
+        'api_page_matches': api_page_matches, 
         'query': query,
     }
     return TemplateResponse(request, 'search_results.html', RequestContext(request, context))

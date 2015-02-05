@@ -1,0 +1,2 @@
+# m h  dom mon dow   command
+* 0 0 0 0 cd /srv/devportal-app-0/code/latest/; python manage.py import_all --settings charm_settings 2>&1 > /srv/devportal-app-0/logs/import_apidocs.log

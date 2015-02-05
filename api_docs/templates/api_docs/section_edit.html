@@ -1,0 +1,25 @@
+{% extends "api_docs/article.html" %}
+
+{% block editor_links %}
+	{% if section.id and perms.common.delete_section %}
+    <li><a href="{% url section_edit topic.slug language.slug version.slug section.id %}?action=delete">Delete</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block article_content %}
+{% if section.id %}
+<h2>Edit {{section.name}}</h2>
+{% else %}
+<h2>New Section</h2>
+{% endif %}
+
+<form action="" method="POST" id="section_form">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Save">
+</form>
+
+{% endblock %}

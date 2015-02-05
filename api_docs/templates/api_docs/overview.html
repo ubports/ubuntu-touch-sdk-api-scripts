@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block sub_nav %}{% endblock %}
+
+{% block content %}
+
+<h2>Topics</h2>
+<ul>
+{% for topic in topics %}
+    <li><a href="{% url 'api_docs:topic' topic.slug %}">{{topic.name}}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock %}

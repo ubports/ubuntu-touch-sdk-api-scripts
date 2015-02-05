@@ -1,0 +1,23 @@
+{% extends "api_docs/article.html" %}
+
+{% block editor_links %}
+    <li><a href="?action=delete_cancel">Cancel</a></li>
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block article_content %}
+<h1>Delete: {{name}}</h1>
+
+Are you sure that you want to delete this {{type}}?
+
+<form action="?action=delete_confirm" method="GET" id="delete_form">
+{% csrf_token %}
+<div id="element_content">
+<input type="hidden" name="action" value="delete_confirm" />
+</div>
+<input type="submit" value="Confirm">
+</form>
+
+{% endblock %}

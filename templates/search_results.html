@@ -7,13 +7,33 @@
 {% endblock %}
 
 {% block content %}
+<div class="row row-grey">
+    <h2>{% trans 'Search results for:' %} "{{query}}"</h2>
+</div>
+
+{% if cms_page_matches %}
 <div class="row">
-    <h3>{% trans 'Search results for:' %} "{{query}}"</h3>
-    <hr />
+    <h3>{% trans 'Pages:' %}</h3>
     <ul>
-      {% for page in page_matches %}
+      {% for page in cms_page_matches %}
       <li><a href="{{page.get_absolute_url}}">{{page.get_page_title}}</a></li>
       {% endfor %}
     </ul>
 </div>
+{% endif %}
+
+{% if api_element_matches %}
+<div class="row">
+    <h3>{% trans 'API Docs:' %}</h3>
+    {% regroup api_element_matches by section.topic_version as version_list %}
+    {% for version in version_list %}
+        <h4>{{ version.grouper }}</h4>
+        <ul>
+        {% for element in version.list %}
+            <li><a href="{% url 'api_docs:element' element.section.topic_version.language.topic.slug element.section.topic_version.language.slug element.section.topic_version.slug element.fullname %}">{{element.fullname}}</a> - {{element.description|safe}}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

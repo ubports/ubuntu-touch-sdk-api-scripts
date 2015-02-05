@@ -1,0 +1,20 @@
+#!/bin/sh
+
+sqlite3 db.sqlite3 "delete from api_docs_element;"
+sqlite3 db.sqlite3 "delete from api_docs_page;"
+sqlite3 db.sqlite3 "delete from api_docs_namespace;"
+./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Language Types" -N QtQml -i /home/mhall/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/qt5/doc/qtqml/qtqml.index
+
+./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Graphical Interface" -n QtQuick -i /home/mhall/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/qt5/doc/qtquick/qtquick.index
+./env/bin/python manage.py import_qdoc -P -t apps -l qml -r sdk-14.10 -s "Graphical Interface" -n Ubuntu.Components -i /home/mhall/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/ubuntu-ui-toolkit/doc/html/ubuntuuserinterfacetoolkit.index
+
+./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtSensors -i ~/projects/Ubuntu/sdk/qtsensors-opensource-src/doc/qtsensors/qtsensors.index
+./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtFeedback -i ~/projects/Ubuntu/sdk/qtfeedback-opensource-src/doc/html/qtfeedback.index
+
+./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i /home/mhall/projects/Ubuntu/sdk/qtlocation-opensource-src/doc/qtlocation/qtlocation.index
+./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/qtpim-opensource-src/doc/html/qtpim.index
+./env/bin/python manage.py import_qdoc -P -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/accounts-qml-module/doc/html/onlineaccounts-qml-api.index
+./env/bin/python manage.py import_qdoc -P -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/doc/content-hub/qml/html/ubuntu-content-qml-api.index
+./env/bin/python manage.py import_qdoc -p -N U1db -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/u1db-qt/doc/html/u1db-qt.index
+
+./env/bin/python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /home/mhall/projects/Ubuntu/api-website/apidocs-production/sources/usr/share/doc/python3-autopilot/json/objects.inv
