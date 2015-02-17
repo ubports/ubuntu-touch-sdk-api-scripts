@@ -10,7 +10,7 @@ from django.core.files.storage import get_storage_class
 from django.conf import settings
 
 from api_docs.models import *
-from api_docs.importers.scopes import ScopesImporter
+from api_docs.importers.doxygen import DoxygenImporter
 
 
 __all__ = (
@@ -93,5 +93,5 @@ class Command(BaseCommand):
         version = Version.objects.get(slug=options.get('version'), language=language)
         section = None # Will be determined during import
         
-        importer = ScopesImporter(topic, language, version, section, options)
+        importer = DoxygenImporter(topic, language, version, section, options)
         importer.run()

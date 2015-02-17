@@ -22,6 +22,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.contrib.auth import logout
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
 
 from django_openid_auth.signals import openid_login_complete
 
@@ -98,9 +99,9 @@ def search(request):
     current_versions = []
     for language in api_docs.models.Language.objects.all():
         current_versions.append(language.current_version)
-    api_element_matches = api_docs.models.Element.objects.filter(section__topic_version__in=current_versions, fullname__icontains=query).order_by('section', 'fullname')
+    api_element_matches = api_docs.models.Element.objects.filter(section__topic_version__in=current_versions).filter(Q(fullname__icontains=query)|Q(description__icontains=query)).order_by('section', 'fullname')
 
-    api_page_matches = api_docs.models.Page.objects.filter(fullname__icontains=query)
+    api_page_matches = api_docs.models.Page.objects.filter(Q(fullname__icontains=query)|Q(description__icontains=query))
     
     context = {
         'cms_page_matches': cms_page_matches, 

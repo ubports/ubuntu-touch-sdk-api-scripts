@@ -14,4 +14,9 @@ SECTIONS = {
     'autopilot.display': 'Input and Display',
     'autopilot.gestures': 'Input and Display',
     'autopilot.input': 'Input and Display',
+
+    'tutorial/': 'Tutorials',
+    'guides/': 'Guides',
+    'faq/': 'Frequently Asked Questions',
+    'porting/': 'Porting',
 }

@@ -26,6 +26,8 @@ class SphinxImporter(Importer):
         self.source = self.options.get('dir')
         self.DOC_ROOT = self.source
         self.sections_file = self.options.get('sections')
+        self.pages_sections = dict()
+        self.page_data_map = dict()
 
     def parse_line(self, line, source_file, element_fullname):
         line = line.replace(u'\u00b6', u'')
@@ -59,16 +61,23 @@ class SphinxImporter(Importer):
         if anchor != '' and anchor[1:] in self.class_map:
             return anchor[1:]
             
+        url_part = url.replace('../', '')
+        if url_part.endswith('/'):
+            url_part = url_part[:-1]
+            
+        if url_part in self.class_map or url_part in self.page_map:
+            return url_part
+            
         anchor_part = anchor[1:anchor.rfind('.')]
-        if anchor_part in self.class_map:
+        if anchor_part in self.class_map or anchor_part in self.page_map:
             return anchor_part
             
         anchor_with_ns = element_fullname[:element_fullname.rfind('.')] + '.'+anchor[1:]
-        if anchor_with_ns in self.class_map:
+        if anchor_with_ns in self.class_map or anchor_with_ns in self.page_map:
             return anchor_with_ns
             
         anchor_without_function = anchor_with_ns[:anchor_with_ns.rfind('.')]
-        if anchor_without_function in self.class_map:
+        if anchor_without_function in self.class_map or anchor_without_function in self.page_map:
             return anchor_without_function
             
         return url
@@ -78,6 +87,8 @@ class SphinxImporter(Importer):
             return SECTIONS[fullname]
         elif namespace in SECTIONS:
             return SECTIONS[namespace]
+        elif '/' in fullname and fullname.split('/')[0]+'/' in SECTIONS:
+            return SECTIONS[fullname.split('/')[0]+'/']
         else:
             return SECTIONS["*"]
     
@@ -144,8 +155,14 @@ class SphinxImporter(Importer):
                     continue
                 if "<span class=\"viewcode-link\">[source]</span>" in line:
                     line = line.replace("<span class=\"viewcode-link\">[source]</span>", "")
-                if '<div class="section" id="quick-start">' in line:
-                    line = line.replace('<div class="section" id="quick-start">', "")
+                if '<div class="section" id="' in line:
+                    start_div = line.find('<div class="section"')
+                    end_div = line.find('>', start_div)
+                    line = line[:start_div] + line[end_div+1:]
+                if '<h1><tt class="docutils literal"><span class="pre">' in line:
+                    start_div = line.find('<h1><tt class="docutils literal"><span class="pre">')
+                    end_div = line.find('</h1>', start_div)
+                    line = line[:start_div] + line[end_div+5:]
                 line = self.parse_line(line, doc_file, element_fullname)
                 cleaned_data += line
                 
@@ -155,84 +172,7 @@ class SphinxImporter(Importer):
             import pdb; pdb.set_trace()
             print e
             return unclean_data
-        
-    def read_classes(self, ns_data, namespace_parent=None):
-        for namespace_def in ns_data:
-            namespace_shortname = namespace_def[0]
-            namespace_file = namespace_def[1]
-            namespace_data = namespace_def[2]
-            if namespace_parent:
-                namespace_fullname = namespace_parent + '.' + namespace_shortname
-            else:
-                namespace_fullname = namespace_shortname
-
-            if namespace_file and namespace_data:
-                if '#' in namespace_file:
-                    namespace_file = namespace_file[:namespace_file.index('#')]
-                else:
-                    namespace_file = namespace_file
-
-                if namespace_file.startswith('namespace'):
-                    print "Namespace: %s" % (namespace_fullname)
-                    if namespace_file not in self.namespace_map:
-                        self.page_map[namespace_file] = (namespace_parent, namespace_shortname, namespace_fullname, namespace_fullname)
-                        self.namespace_order.append(namespace_file)
-                    if isinstance(namespace_data, (str, unicode)) and os.path.exists(os.path.join(self.source, namespace_data+'.js')):
-                        child_data = self.read_json_file(os.path.join(self.source, namespace_data+'.js'))
-                        self.read_classes(child_data, namespace_fullname)
-                elif namespace_file.startswith('class'):
-                    print "Class: %s" % (namespace_fullname)
-                    if namespace_file not in self.class_map:
-                        self.class_map[namespace_file] = (namespace_parent, namespace_shortname, namespace_fullname)
-                    if isinstance(namespace_data, (str, unicode)) and os.path.exists(os.path.join(self.source, namespace_data+'.js')):
-                        child_data = self.read_json_file(os.path.join(self.source, namespace_data+'.js'))
-                        self.read_classes(child_data, namespace_fullname)
-                elif namespace_file.startswith('struct'):
-                    print "Struct: %s" % (namespace_fullname)
-                    if namespace_file not in self.class_map:
-                        self.class_map[namespace_file] = (namespace_parent, namespace_shortname, namespace_fullname)
-
-            elif namespace_data:
-                if isinstance(namespace_data, list):
-                    self.read_classes(namespace_data, namespace_fullname)
-                    
-    def read_pages(self, ns_data, namespace_parent=None):
-        for namespace_def in ns_data:
-            page_title = namespace_def[0]
-            page_href = namespace_def[1]
-            page_data = namespace_def[2]
-            
-            if page_title in ("Namespaces", "Classes", "Files"):
-                return
                 
-            if page_href == 'index.html' and self.options.get('no_index', False):
-                return
-
-            if page_href:
-                if '#' in page_href:
-                    page_file = page_href[:page_href.index('#')]
-                else:
-                    page_file = page_href
-                    
-                if page_file.endswith('.html'):
-                    page_shortname = page_file[:-5]
-                else:
-                    page_shortname = page_file
-                    
-                if namespace_parent:
-                    page_fullname = namespace_parent + '.' + page_shortname
-                else:
-                    page_fullname = page_shortname
-
-                if not page_file in self.page_map:
-                    print "Page: %s" % (page_file)
-                    self.page_map[page_file] = (namespace_parent, page_shortname, page_fullname, page_title)
-                    self.page_order.append(page_file)
-
-                if page_data:
-                    if isinstance(page_data, list):
-                        self.read_pages(page_data, namespace_parent)
-        
     def run(self):
         self.source = self.options.get('inv')
         if not os.path.exists(self.source):
@@ -303,8 +243,29 @@ class SphinxImporter(Importer):
                 elif doc_type == 'py:method':
                     self.class_map[fullname] = '.'.join(fullname.split('.')[:-1])
             elif doc_enum == DOC_PAGE:
+                print "Found Page: %s" % fullname
                 ns_name = ''
-                self.page_map[fullname] = fullname
+                page_path, page_anchor = href.split('#')
+                if page_path.endswith('/'):
+                    page_path = page_path[:-1]
+
+                if page_anchor == '#$':
+                    page_anchor = '#'+fullname
+
+                print "Adding Page: %s" % page_path
+                if len(obj_data) > 4:
+                    page_title = ' '.join(obj_data[4:])
+                else:
+                    page_title = page_anchor
+
+                if page_path not in self.pages_sections:
+                    self.pages_sections[page_path] = dict()
+                self.pages_sections[page_path][page_anchor] = fullname
+
+                if not page_path in self.page_order:
+                    self.page_map[page_path] = self.parse_pagename(page_path)
+                    self.page_data_map[page_path] = (ns_name, fullname, fullname, page_title)
+                    self.page_order.append(page_path)
             else:
                 ns_name = ''
                 
@@ -317,6 +278,8 @@ class SphinxImporter(Importer):
             cleaned_ns_name = self.parse_namespace(ns_name)
 
             section, created = Section.objects.get_or_create(name=self.get_section(ns_name, None), topic_version=self.version)
+            if created:
+                print "Created section: %s" % section.name
 
             if self.verbosity >= 1:
                 print 'Namespace: ' + ns_name
@@ -369,60 +332,53 @@ class SphinxImporter(Importer):
                     element.source_format = "sphinx"
                     element.save()
                 
-        exit(0)
+        #exit(0)
         
         if not self.options.get('no_pages', False):
             page_order_index = 0
             
-            self.page_order.extend(self.namespace_order)
+            #self.page_order.extend(self.namespace_order)
                 
-            for pagefile in self.page_order:
-                ns_name, pagename, pagefullname, pagetitle = self.page_map[pagefile]
-                if pagename == 'notitle':
-                    pagename = 'index'
-                    pagefullname = 'index'
-                    pagetitle = 'Introduction'
+            for pagefile in self.pages_sections:
+                ns_name, pagename, pagefullname, pagetitle = self.page_data_map[pagefile]
                 try:
-                    self.import_page(pagefile, pagename, pagetitle, pagefullname, ns_name, page_order_index)
+                    self.import_page(pagefile, ns_name, page_order_index)
                     page_order_index += 1
-                except ServiceOperationFailed as e:
-                    print "Failed to import page '%s': %s'" % (pagefile, e.message)
+                except Exception as e:
+                    print "Failed to import page '%s': %s'" % (pagefile, e)
 
-    def import_page(self, pagehref, pagename, pagetitle, pagefullname, ns_name, page_order_index):
-            if pagename.endswith('.html'):
-                pagename = pagename[:-5]
+    def import_page(self, pagehref, ns_name, page_order_index):
+            doc_file = os.path.join(self.DOC_ROOT, pagehref+'.fjson')
+            doc_data = self.read_json_file(doc_file)
+            if not 'body' in doc_data:
+                return
+            doc_data = doc_data['body'].split('\n')
 
             cleaned_ns_name = self.parse_namespace(ns_name)
-            section = Section.objects.get(name=self.get_section(ns_name, pagename), topic_version=self.version)
+            section, section_created = Section.objects.get_or_create(name=self.get_section(ns_name, pagehref), topic_version=self.version)
+            if section_created:
+                print "Created section: %s" % section.name
             
             if cleaned_ns_name is not None and cleaned_ns_name != '':
                 namespace, created = Namespace.objects.get_or_create(name=ns_name, display_name=cleaned_ns_name, platform_section=section)
             else:
                 namespace = None
-                                
-            if len(pagetitle) >= 64:
-                pagetitle = pagetitle[:60]+'...'
-            page, created = Page.objects.get_or_create(slug=pagename, fullname=pagefullname, title=pagetitle, section=section, namespace=namespace)
 
-            if self.verbosity >= 1:
-                print 'Page[%s]: %s' % (page_order_index, page.slug)
-            
-            doc_file = os.path.join(self.DOC_ROOT, pagehref)
-            doc_handle = open(doc_file)
-            doc_data = doc_handle.readlines()
-            doc_handle.close()
+            pagename = self.parse_pagename(pagehref)
+            page, created = Page.objects.get_or_create(slug=pagename, fullname=pagename, section=section, namespace=namespace)
+            if not page.title:
+                page.title = pagename
+                page.save()
             
             doc_start = 2
             doc_end = len(doc_data)
             for i, line in enumerate(doc_data):
-                if '<div class="contents">' in line:
-                    doc_start = i+1
-                if '</div><!-- doc-content -->' in line and doc_end > i:
-                    doc_end = i-1
-                if '<!-- start footer part -->' in line and doc_end > i:
-                    doc_end = i-2
-            if self.verbosity >= 2:
-                print "Doc range: %s:%s" % (doc_start, doc_end)
+                if '<h1>' in line:
+                    page.title = self.just_text(line[line.find('<h1>')+4:line.find('</h1>', 4)])
+                    if len(page.title) >= 64:
+                        page.title = page.title[:60]+'...'
+                    print "Setting title of %s to: %s" % (pagename, page.title)
+                    page.save()
 
             try:
                 # Change the content of the docs 
@@ -430,9 +386,7 @@ class SphinxImporter(Importer):
                 for line in doc_data[doc_start:doc_end]:
                     if line == '' or line == '\n':
                         continue
-                    if '<h1 class="title">' in line:
-                        continue
-                    line = self.parse_line(line, pagehref, pagename)
+                    line = self.parse_line(line, pagehref, pagehref)
                     if isinstance(line, unicode):
                         line = line.encode('ascii', 'replace')
                     cleaned_data += line

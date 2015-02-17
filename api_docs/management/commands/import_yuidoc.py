@@ -10,7 +10,7 @@ from django.core.files.storage import get_storage_class
 from django.conf import settings
 
 from api_docs.models import *
-from api_docs.importers.qdoc import QDocImporter
+from api_docs.importers.yuidoc import YUIDocImporter
 
 
 __all__ = (
@@ -24,7 +24,14 @@ class Command(BaseCommand):
             "-i",
             "--index",
             dest="index",
-            help="QDoc .index file to import documentation from",
+            help="Include index.html as a page",
+            action='store_true',
+        ),
+        make_option(
+            "-d",
+            "--data",
+            dest="data",
+            help="YUIDoc generated data.json file",
         ),
         make_option(
             "-s",
@@ -37,6 +44,12 @@ class Command(BaseCommand):
             "--release",
             dest="version",
             help="Version of the topic the documentation if from",
+        ),
+        make_option(
+            "-l",
+            "--lang",
+            dest="lang",
+            help="Target programming language (cpp or qml)",
         ),
         make_option(
             "-t",
@@ -56,26 +69,6 @@ class Command(BaseCommand):
             dest="force_namespace",
             help="Force a specific namespace, ignoring anything in the docs",
         ),
-        make_option(
-            "-p",
-            "--pages",
-            dest="all_pages",
-            action="store_true",
-            help="Import all Pages, not just those referenced by Elements",
-        ),
-        make_option(
-            "-P",
-            "--force-pages",
-            dest="force_pages",
-            action="store_true",
-            help="Import pages of any type",
-        ),
-        make_option(
-            "-l",
-            "--lang",
-            dest="lang",
-            help="Target programming language (cpp or qml)",
-        ),
     )
 
     def handle(self, *args, **options):
@@ -86,5 +79,5 @@ class Command(BaseCommand):
         version = Version.objects.get(slug=options.get('version'), language=language)
         section, created = Section.objects.get_or_create(name=options.get('section'), topic_version=version)
         
-        importer = QDocImporter(topic, language, version, section, options)
+        importer = YUIDocImporter(topic, language, version, section, options)
         importer.run()

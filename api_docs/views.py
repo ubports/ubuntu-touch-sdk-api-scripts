@@ -114,6 +114,7 @@ def version_view(request, topic_name, language_name, release_version):
         for section in sections:
             section_count = section.namespace_set.count()
             section_count += section.free_element_set().count()
+            section_count += section.free_page_set().count()
             if section_count == 0 and not request.user.has_perm('common.change_version'):
                 continue
             total_size += section_count + 2 # Extra 2 for the section header
@@ -127,7 +128,7 @@ def version_view(request, topic_name, language_name, release_version):
 
         first_column_size = 0
         for section in sorted_sections:
-            section_size = section.namespace_set.count() + section.free_element_set().count() + 2  # Extra 2 for the section header
+            section_size = section.namespace_set.count() + section.free_element_set().count() + section.free_page_set().count() + 2  # Extra 2 for the section header
             if (first_column_size + section_size) <= (total_size / 2):
                 first_column.append(section)
                 first_column_size += (section_size)

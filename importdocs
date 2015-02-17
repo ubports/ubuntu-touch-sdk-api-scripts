@@ -3,18 +3,59 @@
 sqlite3 db.sqlite3 "delete from api_docs_element;"
 sqlite3 db.sqlite3 "delete from api_docs_page;"
 sqlite3 db.sqlite3 "delete from api_docs_namespace;"
+sqlite3 db.sqlite3 "delete from api_docs_section;"
+
+
+#### Apps/QML
+#qtdeclarative5-doc-html
 ./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Language Types" -N QtQml -i /home/mhall/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/qt5/doc/qtqml/qtqml.index
-
+#qtdeclarative5-doc-html
 ./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Graphical Interface" -n QtQuick -i /home/mhall/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/qt5/doc/qtquick/qtquick.index
-./env/bin/python manage.py import_qdoc -P -t apps -l qml -r sdk-14.10 -s "Graphical Interface" -n Ubuntu.Components -i /home/mhall/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/ubuntu-ui-toolkit/doc/html/ubuntuuserinterfacetoolkit.index
 
+#! NEED
+./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Multimedia" -n QtMultimedia -i ~/projects/Ubuntu/sdk/qtmultimedia-opensource-src/doc/qtmultimedia/qtmultimedia.index
+#! NEED
 ./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtSensors -i ~/projects/Ubuntu/sdk/qtsensors-opensource-src/doc/qtsensors/qtsensors.index
+#! NEED
 ./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtFeedback -i ~/projects/Ubuntu/sdk/qtfeedback-opensource-src/doc/html/qtfeedback.index
-
+#! NEED
 ./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i /home/mhall/projects/Ubuntu/sdk/qtlocation-opensource-src/doc/qtlocation/qtlocation.index
+#! NEED
 ./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/qtpim-opensource-src/doc/html/qtpim.index
+#ubuntu-ui-toolkit-doc
+./env/bin/python manage.py import_qdoc -P -t apps -l qml -r sdk-14.10 -s "Graphical Interface" -n Ubuntu.Components -i /home/mhall/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/ubuntu-ui-toolkit/doc/html/ubuntuuserinterfacetoolkit.index
+#accounts-qml-module-doc
 ./env/bin/python manage.py import_qdoc -P -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/accounts-qml-module/doc/html/onlineaccounts-qml-api.index
+#libcontent-hub-doc
 ./env/bin/python manage.py import_qdoc -P -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/doc/content-hub/qml/html/ubuntu-content-qml-api.index
-./env/bin/python manage.py import_qdoc -p -N U1db -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/u1db-qt/doc/html/u1db-qt.index
+#! NEED
+./env/bin/python manage.py import_qdoc -P -t apps -l qml -r sdk-14.10 -s "Platform Services" -N U1db -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/u1db-qt/doc/html/u1db-qt.index
+#libubuntu-download-manager-client-doc
+./env/bin/python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/doc/ubuntu-download-manager/qml/html/ubuntu-download-manager-qml-api.index
+#qtdeclarative5-ubuntu-web-plugin-doc
 
+#### Aps/HTML5
+#! NEED
+./env/bin/python manage.py import_yuidoc -i -t apps -l html5 -r sdk-14.10 -s "Graphical Interface" -d /home/mhall/projects/Ubuntu/sdk/ubuntu-html5-theme/0.1/ambiance/js/build/data.json
+#! NEED
+./env/bin/python manage.py import_cordova -t apps -l html5 -r sdk-14.10 -i /home/mhall/projects/Ubuntu/sdk/cordova-docs-pkg/edge/index.json
+#! NEED
+./env/bin/python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /home/mhall/projects/Ubuntu/sdk/unity-webapps-qml/src/Ubuntu/UnityWebApps/bindings/online-accounts/client/docsbuild/data.json
+#! NEED
+./env/bin/python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /home/mhall/projects/Ubuntu/sdk/unity-webapps-qml/src/Ubuntu/UnityWebApps/bindings/alarm-api/client/docsbuild/data.json
+#! NEED
+./env/bin/python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /home/mhall/projects/Ubuntu/sdk/unity-webapps-qml/src/Ubuntu/UnityWebApps/bindings/content-hub/client/docsbuild/data.json
+#! NEED
+./env/bin/python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /home/mhall/projects/Ubuntu/sdk/unity-webapps-qml/src/Ubuntu/UnityWebApps/bindings/runtime-api/client/docsbuild/data.json
+
+#### Autopilot/Python
+#python3-autopilot
 ./env/bin/python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /home/mhall/projects/Ubuntu/api-website/apidocs-production/sources/usr/share/doc/python3-autopilot/json/objects.inv
+
+#### Scopes/C++ 
+#libunity-scopes-doc
+./env/bin/python manage.py import_doxygen -t scopes -l cpp -r sdk-14.10 -s ./api_docs/importers/scope_sections.py -N unity.scopes -d /home/mhall/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/doc/unity-scopes/
+#libaccounts-qt-doc
+./env/bin/python manage.py import_doxygen -t scopes -l cpp -r sdk-14.10 -s ./api_docs/importers/accounts_sections.py -n Accounts -d ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/doc/libaccounts-qt/html/
+#libu1db-qt5-doc
+./env/bin/python manage.py import_qdoc -p -N U1db -t scopes -l cpp -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/apidocs-importers/sources/usr/share/u1db-qt/doc/html/u1db-qt.index

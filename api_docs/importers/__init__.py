@@ -37,26 +37,23 @@ class Importer(object):
             # Clean Links
             clean_line = line
             source_line = line
-            if source_filename in clean_line:
-                clean_line = clean_line.replace('href="'+source_filename+'#', 'href="#')
-                source_line = clean_line
+            #~ if source_filename in clean_line:
+                #~ clean_line = clean_line.replace('href="'+source_filename+'#', 'href="#')
+                #~ source_line = clean_line
                 
             match = self.LINK_REGEX.search(source_line)
             while match:
                 if self.verbosity >= 3:
                     print "Matched line [%s:%s]: %s " % (match.start(), match.end(), source_line)
-                if '://' in match.group('url'):
-                    # Continue trying to match on this line
-                    source_line = source_line[match.end():]
-                    match = self.LINK_REGEX.search(source_line)
-                    continue
                     
+                match_url = match.group('url') or ''
+                match_anchor = match.group('anchor') or ''
                 if self.verbosity >= 2:
                     print "In: %s" % source_filename
-                    print "  URL: %s" % match.group('url')
-                    print "  Anchor: %s" % match.group('anchor')
+                    print "  URL: %s" % match_url
+                    print "  Anchor: %s" % match_anchor
 
-                filename = self.lookup_from_url(match.group('url'), match.group('anchor'), element_fullname)
+                filename = self.lookup_from_url(match_url, match_anchor, element_fullname)
 
                 if self.verbosity >= 2:
                     print "Checking for: %s" % filename
@@ -65,13 +62,13 @@ class Importer(object):
                     if self.verbosity >= 2:
                         print "Found in page map: " + self.page_map[filename]
                     new_link = '/'.join(('/api', self.topic.slug, self.language.slug, self.version.slug, self.page_map[filename], ''))
-                    clean_line = clean_line.replace('href="'+match.group('url'), 'href="'+unicode.encode(new_link, 'ascii'))
+                    clean_line = clean_line.replace('href="'+match_url+match_anchor, 'href="'+unicode.encode(new_link, 'ascii')+match_anchor)
 
                 elif filename in self.class_map:
                     if self.verbosity >= 2:
                         print "Found in class map: " + self.class_map[filename]
                     new_link = '/'.join(('/api', self.topic.slug, self.language.slug, self.version.slug, self.class_map[filename], ''))
-                    clean_line = clean_line.replace('href="'+match.group('url'), 'href="'+unicode.encode(new_link, 'ascii'))
+                    clean_line = clean_line.replace('href="'+match_url+match_anchor, 'href="'+unicode.encode(new_link, 'ascii')+match_anchor)
 
                 # Replace links to things we don't recognize
                 else:
@@ -83,16 +80,21 @@ class Importer(object):
                     element = Element.objects.filter(source_file=url_base, source_format=self.SOURCE_FORMAT)
                     if element:
                         element = element[0]
-                        new_link = '/'.join(('/api', element.section.topic_version.language.topic.slug, element.section.topic_version.slug, element.fullname, ''))
-                        clean_line = clean_line.replace('href="'+match.group('url'), 'href="'+unicode.encode(new_link, 'ascii'))
+                        new_link = '/'.join(('/api', element.section.topic_version.language.topic.slug, element.section.topic_version.language.slug, element.section.topic_version.slug, element.fullname, ''))
+                        clean_line = clean_line.replace('href="'+match_url+match_anchor, 'href="'+unicode.encode(new_link, 'ascii')+match_anchor)
                     else:
                         page = Page.objects.filter(source_file=url_base, source_format=self.SOURCE_FORMAT)
                         if page:
                             page = page[0]
-                            new_link = '/'.join(('/api', page.section.topic_version.language.topic.slug, page.section.topic_version.slug, page.fullname, ''))
-                            clean_line = clean_line.replace('href="'+match.group('url'), 'href="'+unicode.encode(new_link, 'ascii'))
+                            new_link = '/'.join(('/api', page.section.topic_version.language.topic.slug, element.section.topic_version.language.slug, page.section.topic_version.slug, page.fullname, ''))
+                            clean_line = clean_line.replace('href="'+match_url+match_anchor, 'href="'+unicode.encode(new_link, 'ascii')+match_anchor)
                         # Remove links we couldn't match
-                        else:
+                        elif '://' not in match.group('url'):
+                            #if '://' in match.group('url'):
+                                ## Continue trying to match on this line
+                                #source_line = source_line[match.end():]
+                                #match = self.LINK_REGEX.search(source_line)
+                                #continue
                             if self.verbosity >= 3:
                                 print "Removing links from: %s" % clean_line
 
@@ -135,8 +137,12 @@ class Importer(object):
                     if self.verbosity >= 2:
                         print "Image in %s: %s" % (source_filename, img_match.group('url'))
                     if img_match.group('url').startswith('.'):
-                        src_filename = os.path.abspath(os.path.join(source_filename, img_match.group('url')))
-                        rel_filename = os.path.join('api', self.topic.slug, self.language.slug, self.version.slug, element_fullname, src_filename[len(self.DOC_ROOT)+1:])
+                        if source_filename.startswith('/'):
+                            src_filename = os.path.abspath(os.path.join(source_filename, img_match.group('url')))
+                            rel_filename = os.path.join('api', self.topic.slug, self.language.slug, self.version.slug, element_fullname, src_filename[len(self.DOC_ROOT)+1:])
+                        else:
+                            src_filename = os.path.abspath(os.path.join(self.DOC_ROOT, source_filename, img_match.group('url')))
+                            rel_filename = os.path.join('api', self.topic.slug, self.language.slug, self.version.slug, element_fullname, src_filename[len(self.DOC_ROOT)+1:])
                     else:
                         src_filename = os.path.join(self.DOC_ROOT, img_match.group('url'))
                         rel_filename = os.path.join('api', self.topic.slug, self.language.slug, self.version.slug, element_fullname, img_match.group('url'))
@@ -159,12 +165,22 @@ class Importer(object):
             else:
                 return line
 
+    def just_text(self, line):
+        while '<' in line:
+            start_of_tag = line.find('<')
+            end_of_tag = line.find('>', start_of_tag)
+            line = line[:start_of_tag] + line[end_of_tag+1:]
+        return line.encode('ascii', 'ignore')
+        
     def parse_line(self, line, source_filename, element_fullname=None):
         clean_line = self.clean_images(line, source_filename, element_fullname)
         clean_line = self.clean_links(clean_line, source_filename, element_fullname)
         return clean_line
 
     def lookup_from_url(self, url, anchor, element_fullname):
+        if not anchor:
+            return url
+        
         if anchor != '' and anchor[1:] in self.class_map:
             return anchor[1:]
         else:

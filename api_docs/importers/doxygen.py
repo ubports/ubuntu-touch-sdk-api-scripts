@@ -11,7 +11,7 @@ from . import Importer
 
 
 __all__ = (
-    'ScopesImporter',
+    'DoxygenImporter',
 )
 
 SECTIONS = {
@@ -71,12 +71,12 @@ SECTIONS = {
     
     'tutorial': 'Searching',
 }
-class ScopesImporter(Importer):
+class DoxygenImporter(Importer):
 
     SOURCE_FORMAT = "qdoc"
     
     def __init__(self, *args, **kwargs):
-        super(ScopesImporter, self).__init__(*args, **kwargs)
+        super(DoxygenImporter, self).__init__(*args, **kwargs)
         self.source = self.options.get('dir')
         self.DOC_ROOT = self.source
         self.sections_file = self.options.get('sections')
@@ -181,7 +181,7 @@ class ScopesImporter(Importer):
             ns_name, classname, fullname = classdef
             cleaned_ns_name = self.parse_namespace(ns_name)
 
-            section = Section.objects.get(name=self.get_section(ns_name, fullname), topic_version=self.version)
+            section, section_created = Section.objects.get_or_create(name=self.get_section(ns_name, fullname), topic_version=self.version)
 
             if cleaned_ns_name is not None and cleaned_ns_name != '':
                 namespace, created = Namespace.objects.get_or_create(name=ns_name, display_name=cleaned_ns_name, platform_section=section)
@@ -351,7 +351,7 @@ class ScopesImporter(Importer):
                 pagename = pagename[:-5]
 
             cleaned_ns_name = self.parse_namespace(ns_name)
-            section = Section.objects.get(name=self.get_section(ns_name, pagename), topic_version=self.version)
+            section, section_created = Section.objects.get_or_create(name=self.get_section(ns_name, pagename), topic_version=self.version)
             
             if cleaned_ns_name is not None and cleaned_ns_name != '':
                 namespace, created = Namespace.objects.get_or_create(name=ns_name, display_name=cleaned_ns_name, platform_section=section)
@@ -411,7 +411,7 @@ class ScopesImporter(Importer):
             if nsname.endswith('.html'):
                 nsname = nsname[:-5]
 
-            section = Section.objects.get(name=self.get_section(nsname, None), topic_version=self.version)
+            section, section_created = Section.objects.get_or_create(name=self.get_section(nsname, None), topic_version=self.version)
             
             if len(nstitle) >= 64:
                 nstitle = nstitle[:60]+'...'
