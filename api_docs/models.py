@@ -137,11 +137,11 @@ class Page(models.Model):
     def __unicode__(self):
         return u'%s' % self.fullname
 
-class DocSource(models.Model):
-    'Source of API documentation'
-    source_name = models.CharField(max_length=64, help_text='Unique name, processed in alphabetical order')
-    source_url = models.UrlField(max_length=256, help_text='Publicly accessible download location')
-    last_run = models.DateTime(auto_now=True)
-    run_script = models.TextField(help_text='Script to run on package contents to import their docs')
-    last_stdout = models.TextField(help_text='Output from the last run')
-    last_stdeff = models.TextField(help_text='Errors from the last run')
+#class DocSource(models.Model):
+    #'Source of API documentation'
+    #source_name = models.CharField(max_length=64, help_text='Unique name, processed in alphabetical order')
+    #source_url = models.UrlField(max_length=256, help_text='Publicly accessible download location')
+    #last_run = models.DateTime(auto_now=True)
+    #run_script = models.TextField(help_text='Script to run on package contents to import their docs')
+    #last_stdout = models.TextField(help_text='Output from the last run')
+    #last_stdeff = models.TextField(help_text='Errors from the last run')

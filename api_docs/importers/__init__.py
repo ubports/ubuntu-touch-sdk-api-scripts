@@ -86,7 +86,7 @@ class Importer(object):
                         page = Page.objects.filter(source_file=url_base, source_format=self.SOURCE_FORMAT)
                         if page:
                             page = page[0]
-                            new_link = '/'.join(('/api', page.section.topic_version.language.topic.slug, element.section.topic_version.language.slug, page.section.topic_version.slug, page.fullname, ''))
+                            new_link = '/'.join(('/api', page.section.topic_version.language.topic.slug, page.section.topic_version.language.slug, page.section.topic_version.slug, page.fullname, ''))
                             clean_line = clean_line.replace('href="'+match_url+match_anchor, 'href="'+unicode.encode(new_link, 'ascii')+match_anchor)
                         # Remove links we couldn't match
                         elif '://' not in match.group('url'):

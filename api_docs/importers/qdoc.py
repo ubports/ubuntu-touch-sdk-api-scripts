@@ -114,10 +114,13 @@ class QDocImporter(Importer):
                 self.page_refs[pagenode.get('href')] = 0
                 
                 try:
-                    self.import_page(pagenode.get('href'), pagenode.get('name'), pagenode.get('title'), self.parse_namespace(pagenode.get('module')), page_order_index)
+                    self.import_page(pagenode.get('href'), pagenode.get('href'), pagenode.get('title'), self.parse_namespace(pagenode.get('module')), page_order_index)
                     page_order_index += 1
-                except ServiceOperationFailed as e:
-                    print "Failed to import page '%s': %s'" % (pagenode.get('href'), e.message)
+                except Exception as e:
+                    print "Failed to import page '%s''" % (pagenode.get('href'))
+                    import pdb; pdb.set_trace()
+                    self.import_page(pagenode.get('href'), pagenode.get('href'), pagenode.get('title'), self.parse_namespace(pagenode.get('module')), page_order_index)
+                    
 
     def import_class(self, classhref, classname, ns_name):
         doc_file = os.path.join(self.DOC_ROOT, classhref)
@@ -188,73 +191,77 @@ class QDocImporter(Importer):
 
         
     def import_page(self, pagehref, pagename, pagetitle, ns_name, page_order_index):
-            if pagename.endswith('.html'):
-                pagename = pagename[:-5]
+        if pagename.endswith('.html'):
+            pagename = pagename[:-5]
 
-            if ns_name is not None:
-                namespace, created = Namespace.objects.get_or_create(name=ns_name, platform_section=self.section)
+        doc_file = os.path.join(self.DOC_ROOT, pagehref)
+        if not os.path.exists(doc_file):
+            print "Warning: Could not find QML page %s doc file %s, skipping" % (pagename, pagehref)
+            return
+
+        if ns_name is not None:
+            namespace, created = Namespace.objects.get_or_create(name=ns_name, platform_section=self.section)
+        else:
+            namespace = None
+            
+        if namespace is not None:
+            if pagename == ns_name:
+                fullname = 'index'
             else:
-                namespace = None
+                fullname = namespace.name + '.' + pagename
+        else:
+            fullname = pagename
+            
+        if not pagetitle:
+            pagetitle = pagename
+
+        if len(pagetitle) >= 64:
+            pagetitle = pagetitle[:60]+'...'
+        page, created = Page.objects.get_or_create(slug=pagename, fullname=fullname, title=pagetitle, section=self.section, namespace=namespace)
+
+        if self.verbosity >= 1:
+            print 'Page[%s]: %s' % (page_order_index, page.slug)
+        
+        doc_handle = open(doc_file)
+        doc_data = doc_handle.readlines()
+        doc_handle.close()
+        
+        doc_start = 2
+        doc_end = -2
+        for i, line in enumerate(doc_data):
+            if '<body' in line:
+                doc_start = i+1
+            elif '<h1 class="title">' in line:
+                doc_start = i+1
+            if '<div class="footer"' in line:
+                doc_end = i-1
+            elif '<footer' in line:
+                doc_end = i-1
+        if self.verbosity >= 3:
+            print "Doc range: %s:%s" % (doc_start, doc_end)
+
+        try:
+            # Change the content of the docs 
+            cleaned_data = ''
+            for line in doc_data[doc_start:doc_end]:
+                if line == '' or line == '\n':
+                    continue
+                if '<h1 class="title">' in line:
+                    continue
+                line = self.parse_line(line, pagehref, pagename)
+                if isinstance(line, unicode):
+                    line = line.encode('ascii', 'replace')
+                cleaned_data += line
                 
-            if namespace is not None:
-                if pagename == ns_name:
-                    fullname = 'index'
-                else:
-                    fullname = namespace.name + '.' + pagename
-            else:
-                fullname = pagename
-                
-            if not pagetitle:
-                pagetitle = pagename
-
-            if len(pagetitle) >= 64:
-                pagetitle = pagetitle[:60]+'...'
-            page, created = Page.objects.get_or_create(slug=pagename, fullname=fullname, title=pagetitle, section=self.section, namespace=namespace)
-
-            if self.verbosity >= 1:
-                print 'Page[%s]: %s' % (page_order_index, page.slug)
-            
-            doc_file = os.path.join(self.DOC_ROOT, pagehref)
-            doc_handle = open(doc_file)
-            doc_data = doc_handle.readlines()
-            doc_handle.close()
-            
-            doc_start = 2
-            doc_end = -2
-            for i, line in enumerate(doc_data):
-                if '<body' in line:
-                    doc_start = i+1
-                elif '<h1 class="title">' in line:
-                    doc_start = i+1
-                if '<div class="footer"' in line:
-                    doc_end = i-1
-                elif '<footer' in line:
-                    doc_end = i-1
-            if self.verbosity >= 3:
-                print "Doc range: %s:%s" % (doc_start, doc_end)
-
-            try:
-                # Change the content of the docs 
-                cleaned_data = ''
-                for line in doc_data[doc_start:doc_end]:
-                    if line == '' or line == '\n':
-                        continue
-                    if '<h1 class="title">' in line:
-                        continue
-                    line = self.parse_line(line, pagehref, pagename)
-                    if isinstance(line, unicode):
-                        line = line.encode('ascii', 'replace')
-                    cleaned_data += line
-                    
-                page.data = cleaned_data
-            except Exception, e:
-                print "Parsing content failed:"
-                print e
-                #continue
-                #import pdb; pdb.set_trace()
-            
-            page.source_file = os.path.basename(doc_file)
-            page.source_format = "qdoc"
-            page.order_index = page_order_index
-            page.save()
+            page.data = cleaned_data
+        except Exception, e:
+            print "Parsing content failed:"
+            print e
+            #continue
+            #import pdb; pdb.set_trace()
+        
+        page.source_file = os.path.basename(doc_file)
+        page.source_format = "qdoc"
+        page.order_index = page_order_index
+        page.save()
 
