@@ -10,7 +10,7 @@ if [ "X$SERIES" = "X" ]; then
     SERIES="utopic"
 fi
 
-REV=$(rmadison -s ${SERIES} ${PACKAGE} |awk -e "{ print \$3; }")
+REV=$(./rmadison -s ${SERIES} ${PACKAGE} |awk -e "{ print \$3; }")
 if [ "X${REV}" = "X" ]; then
     echo "No revision found for ${PACKAGE} on ${SERIES}"
     exit 2
