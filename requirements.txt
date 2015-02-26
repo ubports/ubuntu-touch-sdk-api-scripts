@@ -44,3 +44,4 @@ Pygments==1.6
 django-pygments==0.1
 django-openid-auth==0.5
 python-openid==2.2.4
+djangorestframework==3.0.4
