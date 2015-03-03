@@ -1,5 +1,7 @@
 #!/bin/sh
 
+mkdir -p /tmp/apidoc_sources/
+
 # Archives to download packages from
 export SERIES="utopic"
 
@@ -9,11 +11,21 @@ export SERIES="utopic"
 python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Language Types" -N QtQml -i /tmp/apidoc_sources/usr/share/qt5/doc/qtqml/qtqml.index
 python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Graphical Interface" -n QtQuick -i /tmp/apidoc_sources/usr/share/qt5/doc/qtquick/qtquick.index
 
-#python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Multimedia" -n QtMultimedia -i ~/projects/Ubuntu/sdk/qtmultimedia-opensource-src/doc/qtmultimedia/qtmultimedia.index
-#python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtSensors -i ~/projects/Ubuntu/sdk/qtsensors-opensource-src/doc/qtsensors/qtsensors.index
+## QtMultimedia & QtAudioEngine
+./get_package.sh qtmultimedia5-doc-html
+python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Multimedia" -n QtMultimedia -i /tmp/apidoc_sources/usr/share/qt5/doc/qtmultimedia/qtmultimedia.index
+
+## QtSensors
+./get_package.sh qtsensors5-doc-html
+python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtSensors -i /tmp/apidoc_sources/usr/share/qt5/doc/qtsensors/qtsensors.index
+
 #python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtFeedback -i ~/projects/Ubuntu/sdk/qtfeedback-opensource-src/doc/html/qtfeedback.index
-#python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i /home/mhall/projects/Ubuntu/sdk/qtlocation-opensource-src/doc/qtlocation/qtlocation.index
-#python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/qtpim-opensource-src/doc/html/qtpim.index
+
+## QtLocation
+./get_package.sh qtlocation5-doc-html
+python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Platform Services" -i /tmp/apidoc_sources/usr/share/qt5/doc/qtlocation/qtlocation.index
+
+#(Need to poke Mirv)python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/qtpim-opensource-src/doc/html/qtpim.index
 
 ## Ubuntu.Components
 ./get_package.sh ubuntu-ui-toolkit-doc
@@ -37,7 +49,9 @@ gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-download-manager/qml/html/ubu
 python manage.py import_qdoc -Pp -t apps -l qml -r sdk-14.10 -s "Platform Services" -N Ubuntu.DownloadManager -i /tmp/apidoc_sources/usr/share/doc/ubuntu-download-manager/qml/html/ubuntu-download-manager-qml-api.index
 
 ## Ubuntu.Web
-#???
+./get_package.sh qtdeclarative5-ubuntu-web-plugin-doc
+gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index.gz
+python manage.py import_qdoc -Pp -t apps -l qml -r sdk-14.10 -s "Graphical Interface" -N Ubuntu.Web -i /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index
 
 #### Aps/HTML5
 #python manage.py import_yuidoc -i -t apps -l html5 -r sdk-14.10 -s "Graphical Interface" -d /home/mhall/projects/Ubuntu/sdk/ubuntu-html5-theme/0.1/ambiance/js/build/data.json
@@ -49,8 +63,9 @@ python manage.py import_qdoc -Pp -t apps -l qml -r sdk-14.10 -s "Platform Servic
 
 #### Autopilot/Python
 ## Autopilot
-#./get_package.sh python3-autopilot
-#python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/objects.inv
+SERIES=vivid ./get_package.sh python3-autopilot
+find /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
+python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/objects.inv
 
 #### Scopes/C++ 
 ## unity.scopes
@@ -64,3 +79,5 @@ python manage.py import_doxygen -t scopes -l cpp -r sdk-14.10 -s ./api_docs/impo
 ## U1db
 ./get_package.sh libu1db-qt5-doc
 python manage.py import_qdoc -Pp -N U1db -t scopes -l cpp -r sdk-14.10 -s "Platform Services" -i /tmp/apidoc_sources/usr/share/u1db-qt/doc/html/u1db-qt.index
+
+#rm -r /tmp/apidoc_sources/

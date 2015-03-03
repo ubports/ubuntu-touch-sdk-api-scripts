@@ -13,7 +13,7 @@
 
 {% if cms_page_matches %}
 <div class="row">
-    <h3>{% trans 'Pages:' %}</h3>
+    <h2>{% trans 'Pages:' %}</h2>
     <ul>
       {% for page in cms_page_matches %}
       <li><a href="{{page.get_absolute_url}}">{{page.get_page_title}}</a></li>
@@ -24,15 +24,16 @@
 
 {% if api_element_matches %}
 <div class="row">
-    <h3>{% trans 'API Docs:' %}</h3>
+    <h2>{% trans 'API Docs:' %}</h2>
     {% regroup api_element_matches by section.topic_version as version_list %}
     {% for version in version_list %}
-        <h4>{{ version.grouper }}</h4>
-        <ul>
+        <br />
+        <h3>{{ version.grouper }}</h3>
+        <dl>
         {% for element in version.list %}
-            <li><a href="{% url 'api_docs:element' element.section.topic_version.language.topic.slug element.section.topic_version.language.slug element.section.topic_version.slug element.fullname %}">{{element.fullname}}</a> - {{element.description|safe}}</li>
+            <dt><a href="{% url 'api_docs:element' element.section.topic_version.language.topic.slug element.section.topic_version.language.slug element.section.topic_version.slug element.fullname %}">{{element.fullname}}</a></dt><dd>{{element.description|safe}}</dd>
         {% endfor %}
-        </ul>
+        </dl>
     {% endfor %}
 </div>
 {% endif %}

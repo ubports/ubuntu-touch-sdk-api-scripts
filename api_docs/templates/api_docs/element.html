@@ -1,6 +1,6 @@
 {% extends "api_docs/article.html" %}
 
-{% block title %}{{element.name}} [{{version.slug}}/{{element.fullname}}] - Ubuntu Developer{% endblock %}
+{% block title %}{{element.name}} [{{version.slug}}/{{element.fullname}}] | {{ block.super }}{% endblock %}
 
 {% block editor_links %}
     {% if perms.apidocs.change_element %}

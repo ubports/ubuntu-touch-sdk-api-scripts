@@ -19,6 +19,10 @@ code, pre {
 	text-align: left;
 }
 
+dd {
+	margin-bottom: 10px;
+}
+
 /**
 * @section header
 */

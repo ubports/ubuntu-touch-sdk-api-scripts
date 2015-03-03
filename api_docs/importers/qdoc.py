@@ -69,7 +69,7 @@ class QDocImporter(Importer):
         # Map document filename to page names
         self.page_map = {}
         for pagenode in root.find('namespace').iter('page'):
-            if pagenode.get('subtype') != 'page' and not self.options.get('force_pages', False):
+            if pagenode.get('subtype') not in ('page', 'example', 'internal') and not self.options.get('force_pages', False):
                 if self.verbosity >= 2:
                     print "%s page type: %s" % (pagenode.get('href'), pagenode.get('subtype'))
                 continue

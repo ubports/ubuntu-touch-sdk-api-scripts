@@ -1,5 +1,7 @@
 {% extends "api_docs/article.html" %}
 
+{% block title %}{{ page.title }} | {{ block.super }}{% endblock title%}
+
 {% block editor_links %}
     {% if perms.apidocs.change_page %}
     <li><a href="{% url 'api_docs:page_edit' topic.slug version.language.slug version.slug page.id %}">Edit</a></li>
