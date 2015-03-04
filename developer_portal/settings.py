@@ -72,6 +72,8 @@ INSTALLED_APPS = [
     'zinnia_ckeditor',
 
     'developer_portal',
+
+    'webapp_creator',
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -85,7 +87,7 @@ MIDDLEWARE_CLASSES = (
     #'django.contrib.sessions.middleware.SessionMiddleware',
     'developer_portal.middleware.CacheFriendlySessionMiddleware',
 
-    'django.middleware.csrf.CsrfViewMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
