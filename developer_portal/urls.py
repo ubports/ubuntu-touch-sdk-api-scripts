@@ -36,4 +36,5 @@ urlpatterns += i18n_patterns('',
 
 urlpatterns += patterns('webapp_creator.views',
                        url(r'^webapp$', 'webapp', name='webapp'),
+                       url(r'^download$', 'download', name='download'),
 )
