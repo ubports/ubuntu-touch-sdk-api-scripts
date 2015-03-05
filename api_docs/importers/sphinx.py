@@ -227,6 +227,8 @@ class SphinxImporter(Importer):
             if not obj_item:
                 continue
             #autopilot.display py:module 0 api/autopilot.display/#module-$ -
+            if self.verbosity >= 3:
+                print "Object: %s" % obj_item
             obj_data = obj_item.split(' ')
             try:
                 fullname, doc_type, doc_enum, href = obj_data[0:4]

@@ -10,19 +10,24 @@ if [ "X$SERIES" = "X" ]; then
     SERIES="utopic"
 fi
 
-REV=$(./rmadison -s ${SERIES} ${PACKAGE} |awk -e "{ print \$3; }")
+if [ "X$ARCH" = "X" ]; then
+    echo "No ARCH env, defaulting to all"
+    ARCH="all"
+fi
+
+REV=$(./rmadison -s ${SERIES} ${PACKAGE} |grep ${ARCH} |awk -e "{ print \$3; }")
 if [ "X${REV}" = "X" ]; then
-    echo "No revision found for ${PACKAGE} on ${SERIES}"
+    echo "No revision found for ${PACKAGE} in ${SERIES} for ${ARCH}"
     exit 2
 fi
-echo "Fetching ${PACKAGE}_${REV}"
+echo "Fetching ${PACKAGE}_${REV}_${ARCH}"
 if [ ! -d /tmp/apidoc_sources ]; then
     mkdir /tmp/apidoc_sources
 fi
 
-if [ -e /tmp/apidoc_sources/${PACKAGE}_${REV}_all.deb ]; then
-    rm /tmp/apidoc_sources/${PACKAGE}_${REV}_all.deb
+if [ -e /tmp/apidoc_sources/${PACKAGE}_${REV}_${ARCH}.deb ]; then
+    rm /tmp/apidoc_sources/${PACKAGE}_${REV}_${ARCH}.deb
 fi
 
-wget -P /tmp/apidoc_sources/ -nc https://launchpad.net/ubuntu/+archive/primary/+files/${PACKAGE}_${REV}_all.deb
-dpkg-deb --extract /tmp/apidoc_sources/${PACKAGE}_${REV}_all.deb /tmp/apidoc_sources/
+wget -P /tmp/apidoc_sources/ -nc "https://launchpad.net/ubuntu/+archive/primary/+files/${PACKAGE}_${REV}_${ARCH}.deb"
+dpkg-deb --extract /tmp/apidoc_sources/${PACKAGE}_${REV}_${ARCH}.deb /tmp/apidoc_sources/
