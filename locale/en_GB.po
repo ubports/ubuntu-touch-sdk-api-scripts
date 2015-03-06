@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2014-12-18 14:25+0000\n"
-"PO-Revision-Date: 2015-02-26 18:41+0000\n"
+"PO-Revision-Date: 2015-03-05 13:55+0000\n"
 "Last-Translator: Andi Chandler <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-02-27 05:58+0000\n"
-"X-Generator: Launchpad (build 17361)\n"
+"X-Launchpad-Export-Date: 2015-03-06 06:09+0000\n"
+"X-Generator: Launchpad (build 17374)\n"
 
 #: developer_portal/settings.py:172 developer_portal/settings.py:180
 msgid "English"
@@ -117,286 +117,288 @@ msgstr "About"
 
 #: templates/base.html:60
 msgid "About Ubuntu"
-msgstr ""
+msgstr "About Ubuntu"
 
 #: templates/base.html:62
 msgid "Careers"
-msgstr ""
+msgstr "Careers"
 
 #: templates/base.html:64
 msgid "Canonical and Ubuntu"
-msgstr ""
+msgstr "Canonical and Ubuntu"
 
 #: templates/base.html:66
 msgid "Contact us"
-msgstr ""
+msgstr "Contact us"
 
 #: templates/base.html:68
 msgid "Canonical news feed"
-msgstr ""
+msgstr "Canonical news feed"
 
 #: templates/base.html:74
 msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
-msgstr ""
+msgstr "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
 
 #: templates/base.html:76
 msgid "Legal information"
-msgstr ""
+msgstr "Legal information"
 
 #: templates/base.html:78
 msgid "Report a bug on this site"
-msgstr ""
+msgstr "Report a bug on this site"
 
 #: templates/base.html:81
 msgid "Go to the top of the page"
-msgstr ""
+msgstr "Go to the top of the page"
 
 #: templates/error_base.html:54 templates/website_base.html:55
 msgid "Jump to content"
-msgstr ""
+msgstr "Jump to content"
 
 #: templates/error_base.html:63 templates/website_base.html:64
 #: templates/comments/zinnia/entry/form.html:25
 msgid "Log out"
-msgstr ""
+msgstr "Log out"
 
 #: templates/error_base.html:69 templates/website_base.html:70
 msgid "Log in"
-msgstr ""
+msgstr "Log in"
 
 #: templates/error_base.html:76 templates/error_base.html.py:77
 #: templates/error_base.html:78 templates/website_base.html:77
 #: templates/website_base.html.py:78 templates/website_base.html:79
 msgid "Search"
-msgstr ""
+msgstr "Search"
 
 #: templates/login_failure.html:19
 msgid ""
 "If you continue to experience problems with the developer site, please <a "
 "href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
 msgstr ""
+"If you continue to experience problems with the developer site, please <a "
+"href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
 
 #: templates/search_results.html:4 templates/search_results.html.py:11
 msgid "Search results for:"
-msgstr ""
+msgstr "Search results for:"
 
 #: templates/website_base.html:111
 msgid "Back to top"
-msgstr ""
+msgstr "Back to top"
 
 #: templates/comments/zinnia/entry/form.html:25
 msgid "Comment as"
-msgstr ""
+msgstr "Comment as"
 
 #: templates/comments/zinnia/entry/form.html:28
 msgid "Post"
-msgstr ""
+msgstr "Post"
 
 #: templates/menu/menu_language_chooser.html:6
 msgid "View in:"
-msgstr ""
+msgstr "View in:"
 
 #: templates/menu/menu_language_chooser.html:10
 msgid "Change to language:"
-msgstr ""
+msgstr "Change to language:"
 
 #: templates/zinnia/_entry_detail_base.html:33
 #, python-format
 msgid "%(percent)s%% of %(object)s still remains to read."
-msgstr ""
+msgstr "%(percent)s%% of %(object)s still remains to read."
 
 #: templates/zinnia/_entry_detail_base.html:33
 msgid "Continue reading"
-msgstr ""
+msgstr "Continue reading"
 
 #: templates/zinnia/_entry_detail_base.html:47
 #: templates/zinnia/author_list.html:19
 #, python-format
 msgid "Show all %(author)s's entries"
-msgstr ""
+msgstr "Show all %(author)s's entries"
 
 #: templates/zinnia/_entry_detail_base.html:50
 msgid "Written on"
-msgstr ""
+msgstr "Written on"
 
 #: templates/zinnia/_entry_detail_base.html:62
 msgid "Filed under:"
-msgstr ""
+msgstr "Filed under:"
 
 #: templates/zinnia/_entry_detail_base.html:64
 #: templates/zinnia/tag_list.html:19
 #, python-format
 msgid "Show all entries tagged by %(tag)s"
-msgstr ""
+msgstr "Show all entries tagged by %(tag)s"
 
 #: templates/zinnia/_entry_detail_base.html:66
 msgid "No tags"
-msgstr ""
+msgstr "No tags"
 
 #: templates/zinnia/author_list.html:4 templates/zinnia/author_list.html:12
 msgid "Author list"
-msgstr ""
+msgstr "Author list"
 
 #: templates/zinnia/author_list.html:6
 msgid "Authors"
-msgstr ""
+msgstr "Authors"
 
 #: templates/zinnia/author_list.html:21 templates/zinnia/category_list.html:19
 #: templates/zinnia/tag_list.html:20
 #, python-format
 msgid "%(entry_count)s entry"
 msgid_plural "%(entry_count)s entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(entry_count)s entry"
+msgstr[1] "%(entry_count)s entries"
 
 #: templates/zinnia/author_list.html:25
 msgid "No authors yet."
-msgstr ""
+msgstr "No authors yet."
 
 #: templates/zinnia/base.html:36
 msgid "RSS Feed of latest entries"
-msgstr ""
+msgstr "RSS Feed of latest entries"
 
 #: templates/zinnia/base.html:37
 msgid "RSS Feed of latest discussions"
-msgstr ""
+msgstr "RSS Feed of latest discussions"
 
 #: templates/zinnia/category_list.html:4
 #: templates/zinnia/category_list.html:12
 msgid "Category list"
-msgstr ""
+msgstr "Category list"
 
 #: templates/zinnia/category_list.html:6
 msgid "Categories"
-msgstr ""
+msgstr "Categories"
 
 #: templates/zinnia/category_list.html:18
 #, python-format
 msgid "Show all entries in %(category)s"
-msgstr ""
+msgstr "Show all entries in %(category)s"
 
 #: templates/zinnia/category_list.html:24
 msgid "No categories yet."
-msgstr ""
+msgstr "No categories yet."
 
 #: templates/zinnia/entry_detail_base.html:22
 msgid "RSS Feed of discussions on"
-msgstr ""
+msgstr "RSS Feed of discussions on"
 
 #: templates/zinnia/entry_detail_base.html:24
 msgid "RSS Feed of comments on"
-msgstr ""
+msgstr "RSS Feed of comments on"
 
 #: templates/zinnia/entry_detail_base.html:26
 msgid "RSS Feed of pingbacks on"
-msgstr ""
+msgstr "RSS Feed of pingbacks on"
 
 #: templates/zinnia/entry_detail_base.html:28
 msgid "RSS Feed of trackbacks on"
-msgstr ""
+msgstr "RSS Feed of trackbacks on"
 
 #: templates/zinnia/entry_detail_base.html:43
 msgid "Comments"
-msgstr ""
+msgstr "Comments"
 
 #: templates/zinnia/entry_detail_base.html:82
 #: templates/zinnia/entry_detail_base.html:88
 msgid "Comments are closed."
-msgstr ""
+msgstr "Comments are closed."
 
 #: templates/zinnia/entry_detail_base.html:86
 msgid "No comments yet."
-msgstr ""
+msgstr "No comments yet."
 
 #: templates/zinnia/entry_detail_base.html:96
 msgid "Add your comment"
-msgstr ""
+msgstr "Add your comment"
 
 #: templates/zinnia/entry_detail_base.html:108
 #: templates/zinnia/entry_detail_base.html:109
 msgid "Edit the entry"
-msgstr ""
+msgstr "Edit the entry"
 
 #: templates/zinnia/entry_list.html:4
 msgid "Latest entries for"
-msgstr ""
+msgstr "Latest entries for"
 
 #: templates/zinnia/entry_list.html:4
 msgid "the category"
-msgstr ""
+msgstr "the category"
 
 #: templates/zinnia/entry_list.html:4
 msgid "the tag"
-msgstr ""
+msgstr "the tag"
 
 #: templates/zinnia/entry_list.html:4
 msgid "the author"
-msgstr ""
+msgstr "the author"
 
 #: templates/zinnia/entry_list.html:6
 msgid "page"
-msgstr ""
+msgstr "page"
 
 #: templates/zinnia/entry_list.html:11 templates/zinnia/entry_list.html:14
 #: templates/zinnia/entry_list.html:17
 msgid "RSS Feed"
-msgstr ""
+msgstr "RSS Feed"
 
 #: templates/zinnia/entry_list.html:21
 msgid "Category"
-msgstr ""
+msgstr "Category"
 
 #: templates/zinnia/entry_list.html:21
 msgid "Tag"
-msgstr ""
+msgstr "Tag"
 
 #: templates/zinnia/entry_list.html:21
 msgid "Author"
-msgstr ""
+msgstr "Author"
 
 #: templates/zinnia/entry_list.html:23
 msgid "Page"
-msgstr ""
+msgstr "Page"
 
 #: templates/zinnia/entry_list.html:32
 #, python-format
 msgid "Category archives: %(category)s"
-msgstr ""
+msgstr "Category archives: %(category)s"
 
 #: templates/zinnia/entry_list.html:41
 #, python-format
 msgid "Tag archives: %(tag)s"
-msgstr ""
+msgstr "Tag archives: %(tag)s"
 
 #: templates/zinnia/entry_list.html:47
 #, python-format
 msgid "Author archives: %(author)s"
-msgstr ""
+msgstr "Author archives: %(author)s"
 
 #: templates/zinnia/entry_list.html:58
 msgid "No entries yet."
-msgstr ""
+msgstr "No entries yet."
 
 #: templates/zinnia/entry_list.html:75 templates/zinnia/entry_list.html:76
 msgid "Edit the category"
-msgstr ""
+msgstr "Edit the category"
 
 #: templates/zinnia/entry_list.html:82 templates/zinnia/entry_list.html:83
 msgid "Edit the tag"
-msgstr ""
+msgstr "Edit the tag"
 
 #: templates/zinnia/entry_list.html:89 templates/zinnia/entry_list.html:90
 msgid "Edit the author"
-msgstr ""
+msgstr "Edit the author"
 
 #: templates/zinnia/tag_list.html:4 templates/zinnia/tag_list.html.py:12
 msgid "Tag list"
-msgstr ""
+msgstr "Tag list"
 
 #: templates/zinnia/tag_list.html:6
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: templates/zinnia/tag_list.html:24
 msgid "No tags yet."
-msgstr ""
+msgstr "No tags yet."
