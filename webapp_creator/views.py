@@ -6,9 +6,10 @@ from django import forms
 import woc
 
 APP_OPTIONS = (
-    ('--enable-addressbar', 'Header'),
-    ('--enable-back-forward', 'Back and forward buttons'),
-    ('--fullscreen', 'Fullscreen'),
+    ('--store-session-cookies', 'Store cookies'),
+    ('--enable-addressbar', 'Show header'),
+    ('--enable-back-forward', 'Show back and forward buttons'),
+    ('--fullscreen', 'Run fullscreen'),
 )
 
 
