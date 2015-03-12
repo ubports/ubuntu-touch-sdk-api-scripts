@@ -33,6 +33,7 @@ def create(data):
     url = data['url']
     displayname = data['displayname']
     domain = urlsplit(url)[1]
+    options = ' '.join(data.getlist('options'))
     appname = create_appname(domain)
     tmp = create_tmp(appname, domain)
 
@@ -40,7 +41,7 @@ def create(data):
     file_desktop = open("webapp_creator/resources/appname.desktop").read()
     desktop_new = file_desktop.format(appname=appname,
                                       displayname=displayname,
-                                      container_options='',
+                                      container_options=options,
                                       domain=domain,
                                       url=url,)
     with open(tmp+"/resources/%s.desktop" % (appname,), "w") as f:

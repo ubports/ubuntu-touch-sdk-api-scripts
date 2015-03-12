@@ -1,5 +1,13 @@
-<form action="/download" method="post">{% csrf_token %}
-{{ webapp_form.as_p }}
-<input type="submit" value="Submit" />
-</form>
+{% extends "base.html" %}
 
+{% block content %}
+<div class="row">
+    <h2>Create your Webapp package</h2>
+    <div class="six-col">
+        <form action="/download" method="post">{% csrf_token %}
+        {{ webapp_form.as_p }}
+        <input type="submit" value="Submit" />
+        </form>
+    </div>
+</div>
+{% endblock content %}

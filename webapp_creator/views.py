@@ -5,12 +5,22 @@ from django.template import RequestContext
 from django import forms
 import woc
 
+APP_OPTIONS = (
+    ('--enable-addressbar', 'Header'),
+    ('--enable-back-forward', 'Back and forward buttons'),
+    ('--fullscreen', 'Fullscreen'),
+)
+
 
 class WebappForm(forms.Form):
     displayname = forms.CharField(
         max_length=200, required=True, label='App name')
-    url = forms.CharField(
+    url = forms.URLField(
         max_length=200, required=True, label='Web app URL')
+    options = forms.MultipleChoiceField(
+        choices=APP_OPTIONS,
+        label="App options (Ctrl to multiselect)",
+        required=False)
     nickname = forms.CharField(
         max_length=200, required=True, label='MyApps ID')
     fullname = forms.CharField(
