@@ -65,9 +65,8 @@ def create(data):
         f.write(json.dumps(manifest_new))
         f.close()
 
-    # Build click package
-    subprocess.call(['click', 'build', tmp+'/resources'])
-    # FIXME support click staying in /tmp
-    click_path = '%s.%s_0.1_all.click' % (appname, nickname,)
+    # Build click package in tmp dir
+    subprocess.call(['click', 'build', tmp+'/resources'], cwd=tmp)
+    click_path = '%s/%s.%s_0.1_all.click' % (tmp, appname, nickname,)
     click_name = '%s.%s_0.1_all.click' % (appname, nickname,)
     return tmp, click_name, click_path
