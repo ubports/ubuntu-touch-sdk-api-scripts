@@ -3,9 +3,16 @@ import tempfile
 import shutil
 import re
 import subprocess
+import random
+import string
 
 from urlparse import urlsplit
 from urllib import urlretrieve
+
+
+def random_str(length):
+    """Generates a random str to differentiate apps using the same domain."""
+    return ''.join(random.choice(string.lowercase) for i in range(length))
 
 
 def create_appname(domain):
@@ -23,8 +30,6 @@ def create_tmp(appname, domain):
                 tmp+"/resources/%s.apparmor" % (appname,))
     shutil.move(tmp+'/resources/appname.desktop',
                 tmp+"/resources/%s.desktop" % (appname,))
-    # FIXME BYOI
-    #urlretrieve('http://grabicon.com/icon?domain=%s&size=32&origin=example.com' % (domain,), tmp + "/resources/%s.png" % (appname,))
     return tmp
 
 
@@ -34,7 +39,7 @@ def create(data):
     displayname = data['displayname']
     domain = urlsplit(url)[1]
     options = ' '.join(data['options'])
-    appname = create_appname(domain)
+    appname = '%s-%s' % (create_appname(domain), random_str(3))
     tmp = create_tmp(appname, domain)
 
     # Create desktop file
