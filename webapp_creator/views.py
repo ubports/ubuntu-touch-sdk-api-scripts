@@ -20,7 +20,8 @@ class WebappForm(forms.Form):
     url = forms.URLField(
         max_length=200, required=True, label='Webapp URL',
         help_text='ex. https://duckduckgo.com')
-    icon = forms.FileField(required=True,
+    icon = forms.FileField(
+        required=True,
         label='App icon (recommended 256x256 px)')
     options = forms.MultipleChoiceField(
         choices=APP_OPTIONS,

@@ -7,7 +7,6 @@ import random
 import string
 
 from urlparse import urlsplit
-from urllib import urlretrieve
 
 
 def random_str(length):
@@ -24,8 +23,6 @@ def create_appname(domain):
 def create_tmp(appname, domain):
     tmp = tempfile.mkdtemp()
     shutil.copytree('webapp_creator/resources', tmp+"/resources")
-    shutil.move(tmp+'/resources/appname.png',
-                tmp+"/resources/%s.png" % (appname,))
     shutil.move(tmp+'/resources/appname.apparmor',
                 tmp+"/resources/%s.apparmor" % (appname,))
     shutil.move(tmp+'/resources/appname.desktop',
@@ -42,13 +39,25 @@ def create(data):
     appname = '%s-%s' % (create_appname(domain), random_str(3))
     tmp = create_tmp(appname, domain)
 
+    # Create icon
+    if 'icon' in data:
+        ext = data['icon'].name.split('.')[-1]
+        if len(ext) > 0:
+            appicon = "%s.%s" % [appname, ext]
+        else:
+            appicon = appname
+        with open(tmp+"/resources/%s" % (appicon,), 'wb+') as f:
+            for chunk in data['icon'].chunks():
+                f.write(chunk)
+
     # Create desktop file
     file_desktop = open("webapp_creator/resources/appname.desktop").read()
     desktop_new = file_desktop.format(appname=appname,
                                       displayname=displayname,
                                       container_options=options,
                                       domain=domain,
-                                      url=url,)
+                                      url=url,
+                                      appicon=appicon)
     with open(tmp+"/resources/%s.desktop" % (appname,), "w") as f:
         f.write(desktop_new)
         f.close()
@@ -70,14 +79,9 @@ def create(data):
         f.write(json.dumps(manifest_new))
         f.close()
 
-    # Create icon
-    if 'icon' in data:
-        with open(tmp+"/resources/%s.png" % (appname,), 'wb+') as f:
-            for chunk in data['icon'].chunks():
-                f.write(chunk)
-
     # Build click package in tmp dir
-    subprocess.call(['click', 'build', '--no-validate', tmp+'/resources'], cwd=tmp)
+    subprocess.call(['click', 'build', '--no-validate', tmp+'/resources'],
+                    cwd=tmp)
     click_path = '%s/%s.%s_0.1_all.click' % (tmp, appname, nickname,)
     click_name = '%s.%s_0.1_all.click' % (appname, nickname,)
     return tmp, click_name, click_path

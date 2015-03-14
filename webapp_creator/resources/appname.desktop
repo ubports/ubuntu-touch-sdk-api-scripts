@@ -2,7 +2,7 @@
 Name={displayname}
 Comment=Web app for {domain}
 Type=Application
-Icon={appname}.png
+Icon={appicon}
 Exec=webapp-container {container_options} --webappUrlPatterns=https?://{domain}/* {url}
 Terminal=false
 X-Ubuntu-Touch=true
