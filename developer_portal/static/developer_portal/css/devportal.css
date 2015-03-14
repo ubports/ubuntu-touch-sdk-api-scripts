@@ -203,7 +203,7 @@ header.banner .logo-ubuntu span {
 
 /* Used in Webapp-generator */
 
-form input[type="url"] {
+form#webappform input[type="url"] {
 	-webkit-appearance: none;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -217,16 +217,16 @@ form input[type="url"] {
 	padding: 0.6956522em 0.869565em
 }
 
-form .helptext {
+form#webappform .helptext {
 	color: #888888;
 }
 
-form ul.errorlist {
+form#webappform ul.errorlist {
 	margin:0px;
 	float:right;
 }
 
-form ul.errorlist li {
+form#webappform ul.errorlist li {
 	top: 7px;
 	font-size: 12px;
 	right: -95px;
