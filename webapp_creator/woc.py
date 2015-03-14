@@ -31,17 +31,17 @@ def create_tmp(appname, domain):
 
 
 def create(data):
-    nickname = data['nickname']
-    url = data['url']
-    displayname = data['displayname']
-    domain = urlsplit(url)[1]
+    nickname = data['nickname'].encode('UTF-8')
+    url = data['url'].encode('UTF-8')
+    displayname = data['displayname'].encode('UTF-8')
+    domain = urlsplit(url)[1].encode('UTF-8')
     options = ' '.join(data['options'])
     appname = '%s-%s' % (create_appname(domain), random_str(3))
     tmp = create_tmp(appname, domain)
 
     # Create icon
     if 'icon' in data:
-        appicon = data['icon'].name
+        appicon = data['icon'].name.encode('UTF-8')
         with open(tmp+"/resources/%s" % (appicon,), 'wb+') as f:
             for chunk in data['icon'].chunks():
                 f.write(chunk)

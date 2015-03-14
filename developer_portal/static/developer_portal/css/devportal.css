@@ -218,7 +218,10 @@ form#webappform input[type="url"] {
 }
 
 form#webappform .helptext {
-	color: #888888;
+	color: #888;
+	padding: 5px;
+	line-height: 2em;
+	font-size: 90%;
 }
 
 form#webappform ul.errorlist {

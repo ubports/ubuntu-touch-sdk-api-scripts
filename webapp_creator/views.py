@@ -21,15 +21,18 @@ class WebappForm(forms.Form):
         max_length=200, required=True, label='Webapp URL',
         help_text='ex. https://duckduckgo.com')
     icon = forms.FileField(
-        required=True,
-        label='App icon (recommended 256x256 px)')
+        required=True, label='App icon',
+        help_text='Recommended 256x256 px, png format')
     options = forms.MultipleChoiceField(
         choices=APP_OPTIONS,
-        label="App options (Ctrl to multiselect)",
+        label="App options", help_text='Use CTRL to select multiple options',
         required=False)
-    nickname = forms.CharField(
-        max_length=200, required=True, label='MyApps ID',
-        help_text='ex. miaotian')
+    nickname = forms.RegexField(
+        regex='^[\w-]+$', max_length=200, required=True,
+        label='Developer namespace',
+        help_text='The namespace you picked for your \
+            <a href="https://myapps.developer.ubuntu.com \
+            /dev/account/">MyApps account</a>')
     fullname = forms.CharField(
         max_length=200, required=True, label='Maintainer full name',
         help_text='ex. Miao Tian')
