@@ -29,13 +29,13 @@ class WebappForm(forms.Form):
         required=False)
     nickname = forms.CharField(
         max_length=200, required=True, label='MyApps ID',
-        help_text='ex. joeblobbs')
+        help_text='ex. miaotian')
     fullname = forms.CharField(
         max_length=200, required=True, label='Maintainer full name',
-        help_text='ex. Joe Blobbs')
+        help_text='ex. Miao Tian')
     email = forms.EmailField(
         max_length=200, required=True, label='Maintainer email',
-        help_text='ex. joeblobbs@ubuntu.com')
+        help_text='ex. miaotian@ubuntu.com')
 
 
 def webapp(request):
