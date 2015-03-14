@@ -41,11 +41,7 @@ def create(data):
 
     # Create icon
     if 'icon' in data:
-        ext = data['icon'].name.split('.')[-1]
-        if len(ext) > 0:
-            appicon = "%s.%s" % [appname, ext]
-        else:
-            appicon = appname
+        appicon = data['icon'].name
         with open(tmp+"/resources/%s" % (appicon,), 'wb+') as f:
             for chunk in data['icon'].chunks():
                 f.write(chunk)
