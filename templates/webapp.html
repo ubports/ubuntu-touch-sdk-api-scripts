@@ -3,11 +3,14 @@
 {% block content %}
 <div class="row">
     <h2>Create your Webapp package</h2>
-    <div class="six-col">
-        <form action="/download" method="post">{% csrf_token %}
+    <div class="six-col append-one">
+        <form action="{% url 'webapp_creator.views.webapp' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
         {{ webapp_form.as_p }}
         <input type="submit" value="Submit" />
         </form>
     </div>
+    <div class="five-col last-col box">
+    <p>This form generates simple Ubuntu webapps, ready to upload to the store. To create more complex applications, you will need to use the Ubuntu SDK.</p>
+    <p class="right"><a href="">Get started with the Ubuntu SDK ›</a></p></div>
 </div>
 {% endblock content %}

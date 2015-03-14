@@ -35,6 +35,5 @@ urlpatterns += i18n_patterns('',
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += patterns('webapp_creator.views',
-                       url(r'^webapp$', 'webapp', name='webapp'),
-                       url(r'^download$', 'download', name='download'),
+                       url(r'^webapp-generator/$', 'webapp', name='webapp'),
 )

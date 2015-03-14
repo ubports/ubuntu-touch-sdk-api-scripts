@@ -24,7 +24,7 @@ def create_tmp(appname, domain):
     shutil.move(tmp+'/resources/appname.desktop',
                 tmp+"/resources/%s.desktop" % (appname,))
     # FIXME BYOI
-    urlretrieve('http://grabicon.com/icon?domain=%s&size=32&origin=example.com' % (domain,), tmp + "/resources/%s.png" % (appname,))
+    #urlretrieve('http://grabicon.com/icon?domain=%s&size=32&origin=example.com' % (domain,), tmp + "/resources/%s.png" % (appname,))
     return tmp
 
 
@@ -33,7 +33,7 @@ def create(data):
     url = data['url']
     displayname = data['displayname']
     domain = urlsplit(url)[1]
-    options = ' '.join(data.getlist('options'))
+    options = ' '.join(data['options'])
     appname = create_appname(domain)
     tmp = create_tmp(appname, domain)
 
@@ -65,8 +65,14 @@ def create(data):
         f.write(json.dumps(manifest_new))
         f.close()
 
+    # Create icon
+    if 'icon' in data:
+        with open(tmp+"/resources/%s.png" % (appname,), 'wb+') as f:
+            for chunk in data['icon'].chunks():
+                f.write(chunk)
+
     # Build click package in tmp dir
-    subprocess.call(['click', 'build', tmp+'/resources'], cwd=tmp)
+    subprocess.call(['click', 'build', '--no-validate', tmp+'/resources'], cwd=tmp)
     click_path = '%s/%s.%s_0.1_all.click' % (tmp, appname, nickname,)
     click_name = '%s.%s_0.1_all.click' % (appname, nickname,)
     return tmp, click_name, click_path
