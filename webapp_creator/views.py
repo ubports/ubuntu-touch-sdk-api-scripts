@@ -16,10 +16,10 @@ APP_OPTIONS = (
 class WebappForm(forms.Form):
     displayname = forms.CharField(
         max_length=200, required=True, label='App name',
-        help_text='ex. Duck Duck Go')
+        help_text='eg. Duck Duck Go')
     url = forms.URLField(
         max_length=200, required=True, label='Webapp URL',
-        help_text='ex. https://duckduckgo.com')
+        help_text='eg. https://duckduckgo.com')
     icon = forms.FileField(
         required=True, label='App icon',
         help_text='Recommended 256x256 px, png format')
@@ -35,10 +35,10 @@ class WebappForm(forms.Form):
             /dev/account/">MyApps account</a>')
     fullname = forms.CharField(
         max_length=200, required=True, label='Maintainer full name',
-        help_text='ex. Miao Tian')
+        help_text='eg. Miao Tian')
     email = forms.EmailField(
         max_length=200, required=True, label='Maintainer email',
-        help_text='ex. miaotian@ubuntu.com')
+        help_text='eg. miaotian@ubuntu.com')
 
 
 def webapp(request):
