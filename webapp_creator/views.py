@@ -3,42 +3,43 @@ from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
 from django.template import RequestContext
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 import woc
 
 APP_OPTIONS = (
-    ('--store-session-cookies', 'Store cookies'),
-    ('--enable-addressbar', 'Show header'),
-    ('--enable-back-forward', 'Show back and forward buttons'),
-    ('--fullscreen', 'Run fullscreen'),
+    ('--store-session-cookies', _('Store cookies')),
+    ('--enable-addressbar', _('Show header')),
+    ('--enable-back-forward', _('Show back and forward buttons')),
+    ('--fullscreen', _('Run fullscreen')),
 )
 
 
 class WebappForm(forms.Form):
     displayname = forms.CharField(
-        max_length=200, required=True, label='App name',
-        help_text='eg. Duck Duck Go')
+        max_length=200, required=True, label=_('App name'),
+        help_text=_('eg. DuckDuck Go'))
     url = forms.URLField(
-        max_length=200, required=True, label='Webapp URL',
-        help_text='eg. https://duckduckgo.com')
+        max_length=200, required=True, label=_('Webapp URL'),
+        help_text=_('eg. https://duckduckgo.com'))
     icon = forms.FileField(
-        required=True, label='App icon',
-        help_text='Recommended 256x256 px, png format')
+        required=True, label=_('App icon'),
+        help_text=_('Recommended 256x256 px, png format'))
     options = forms.MultipleChoiceField(
         choices=APP_OPTIONS,
-        label="App options", help_text='Use CTRL to select multiple options',
+        label=_("App options"), help_text=_('Use CTRL to select multiple options'),
         required=False)
     nickname = forms.RegexField(
         regex='^[\w-]+$', max_length=200, required=True,
-        label='Developer namespace',
-        help_text='The namespace you picked for your\
+        label=_('Developer namespace'),
+        help_text=_('The namespace you picked for your\
             <a href="https://myapps.developer.ubuntu.com/dev/account/">\
-            MyApps account</a>')
+            MyApps account</a>'))
     fullname = forms.CharField(
-        max_length=200, required=True, label='Maintainer full name',
-        help_text='eg. Miao Tian')
+        max_length=200, required=True, label=_('Maintainer full name'),
+        help_text=_('eg. Miao Tian'))
     email = forms.EmailField(
-        max_length=200, required=True, label='Maintainer email',
-        help_text='eg. miaotian@ubuntu.com')
+        max_length=200, required=True, label=_('Maintainer email'),
+        help_text=_('eg. miaotian@ubuntu.com'))
 
 
 def webapp(request):
