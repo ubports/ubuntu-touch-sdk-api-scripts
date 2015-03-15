@@ -30,9 +30,9 @@ class WebappForm(forms.Form):
     nickname = forms.RegexField(
         regex='^[\w-]+$', max_length=200, required=True,
         label='Developer namespace',
-        help_text='The namespace you picked for your \
-            <a href="https://myapps.developer.ubuntu.com \
-            /dev/account/">MyApps account</a>')
+        help_text='The namespace you picked for your\
+            <a href="https://myapps.developer.ubuntu.com/dev/account/">\
+            MyApps account</a>')
     fullname = forms.CharField(
         max_length=200, required=True, label='Maintainer full name',
         help_text='eg. Miao Tian')
