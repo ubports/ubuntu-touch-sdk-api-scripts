@@ -17,7 +17,7 @@ APP_OPTIONS = (
 class WebappForm(forms.Form):
     displayname = forms.CharField(
         max_length=200, required=True, label=_('App name'),
-        help_text=_('eg. DuckDuck Go'))
+        help_text=_('eg. Duck Duck Go'))
     url = forms.URLField(
         max_length=200, required=True, label=_('Webapp URL'),
         help_text=_('eg. https://duckduckgo.com'))
