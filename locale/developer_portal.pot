@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-16 07:51+0000\n"
+"POT-Creation-Date: 2015-03-16 08:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -461,32 +461,32 @@ msgstr ""
 msgid "App options"
 msgstr ""
 
-#: webapp_creator/views.py:30
+#: webapp_creator/views.py:31
 msgid "Use CTRL to select multiple options"
 msgstr ""
 
-#: webapp_creator/views.py:34
+#: webapp_creator/views.py:35
 msgid "Developer namespace"
 msgstr ""
 
-#: webapp_creator/views.py:35
+#: webapp_creator/views.py:36
 msgid ""
 "The namespace you picked for your <a href=\"https://myapps.developer.ubuntu."
 "com/dev/account/\"> MyApps account</a>. E.g. miaotian"
 msgstr ""
 
-#: webapp_creator/views.py:37
+#: webapp_creator/views.py:38
 msgid "Maintainer full name"
 msgstr ""
 
-#: webapp_creator/views.py:38
+#: webapp_creator/views.py:39
 msgid "E.g. Miao Tian"
 msgstr ""
 
-#: webapp_creator/views.py:40
-msgid "Maintainer email"
+#: webapp_creator/views.py:41
+msgid "Maintainer e-mail"
 msgstr ""
 
-#: webapp_creator/views.py:41
+#: webapp_creator/views.py:42
 msgid "E.g. miaotian@ubuntu.com"
 msgstr ""
