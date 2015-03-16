@@ -72,6 +72,8 @@ INSTALLED_APPS = [
     'zinnia_ckeditor',
 
     'developer_portal',
+
+    'webapp_creator',
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -224,7 +226,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # OPENID Related settings
-OPENID_STRICT_USERNAMES = True
+OPENID_STRICT_USERNAMES = False
 OPENID_FOLLOW_RENAMES = True
 OPENID_SREG_REQUIRED_FIELDS = ['email']
 OPENID_CREATE_USERS = True

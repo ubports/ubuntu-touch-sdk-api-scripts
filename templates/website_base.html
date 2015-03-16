@@ -56,7 +56,7 @@
                 {% block nav_primary_links %}{% endblock nav_primary_links %}
 		{% if user.is_authenticated %}
   		<li class="logout">
-		    <a href="#">{{ user.first_name }}</a>
+		    <a href="#">{{ user.first_name|default:user.email }}</a>
 		    <ul class="second-level-nav">
 			<li>
 			    <a href="https://myapps.developer.ubuntu.com/openid/login/?next=/dev/click-apps/">My Apps</a>

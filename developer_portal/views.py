@@ -53,9 +53,12 @@ def login_failure(request, message, status=403,
     return HttpResponse(data, status=status)
 
 def promote_staff(request, openid_response,**kwargs):
-    if not request.user.is_staff and (settings.ADMIN_GROUP in request.POST['openid.lp.is_member'] or settings.EDITOR_GROUP in request.POST['openid.lp.is_member']):
-        request.user.is_staff = True
-        request.user.save()
+    try:
+        if not request.user.is_staff and (settings.ADMIN_GROUP in request.POST['openid.lp.is_member'] or settings.EDITOR_GROUP in request.POST['openid.lp.is_member']):
+            request.user.is_staff = True
+    except:
+        request.user.is_staff = False
+    request.user.save()
     
 def listen_for_login():
     openid_login_complete.connect(promote_staff)

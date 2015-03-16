@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="row">
+    <h2>{% trans "Create your Webapp package" %}</h2>
+    <div class="six-col append-one">
+        <form id="webappform" action="{% url 'webapp_creator.views.webapp' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ webapp_form.as_p }}
+        <input type="submit" value='{% trans "Submit" %}' />
+        </form>
+    </div>
+    <div class="five-col last-col box">
+    <p>{% trans "This form generates simple Ubuntu webapps, ready to upload to the store. To create more complex applications, you will need to use the Ubuntu SDK." %}</p>
+    <p class="right"><a href="https://developer.ubuntu.com/en/apps/sdk/">{% trans "Get started with the Ubuntu SDK ›" %}</a></p></div>
+</div>
+{% endblock content %}
