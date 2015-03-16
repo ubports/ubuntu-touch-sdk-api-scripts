@@ -33,15 +33,14 @@ class WebappForm(forms.Form):
     nickname = forms.RegexField(
         regex='^[\w-]+$', max_length=200, required=True,
         label=_('Developer namespace'),
-        help_text=_('The namespace you picked for your\
-            <a href="https://myapps.developer.ubuntu.com/dev/account/">\
-            MyApps account</a>. E.g. miaotian'))
+        help_text=_('The namespace you picked for your <a href="https://myapps.developer.ubuntu.com/dev/account/"> MyApps account</a>. E.g. miaotian'))
     fullname = forms.CharField(
         max_length=200, required=True, label=_('Maintainer full name'),
         help_text=_('E.g. Miao Tian'))
     email = forms.EmailField(
         max_length=200, required=True, label=_('Maintainer e-mail'),
         help_text=_('E.g. miaotian@ubuntu.com'))
+
 
 @login_required
 def webapp(request):
