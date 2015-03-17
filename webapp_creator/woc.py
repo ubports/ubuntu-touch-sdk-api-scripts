@@ -76,7 +76,7 @@ def create(data):
         f.close()
 
     # Build click package in tmp dir
-    subprocess.call(['click', 'build', '--no-validate', tmp+'/resources'],
+    subprocess.call(['click', 'build', tmp+'/resources'],
                     cwd=tmp)
     click_path = '%s/%s.%s_0.1_all.click' % (tmp, appname, nickname,)
     click_name = '%s.%s_0.1_all.click' % (appname, nickname,)
