@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-12-18 14:25+0000\n"
+"POT-Creation-Date: 2015-03-16 08:07+0000\n"
 "PO-Revision-Date: 2015-03-05 13:55+0000\n"
 "Last-Translator: Andi Chandler <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -15,29 +15,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-03-06 06:09+0000\n"
-"X-Generator: Launchpad (build 17374)\n"
+"X-Launchpad-Export-Date: 2015-03-17 05:49+0000\n"
+"X-Generator: Launchpad (build 17389)\n"
 
-#: developer_portal/settings.py:172 developer_portal/settings.py:180
+#: developer_portal/cms_plugins.py:10
+msgid "Raw HTML"
+msgstr ""
+
+#: developer_portal/settings.py:185 developer_portal/settings.py:193
 msgid "English"
 msgstr "English"
 
-#: developer_portal/settings.py:173 developer_portal/settings.py:187
+#: developer_portal/settings.py:186 developer_portal/settings.py:200
 msgid "Simplified Chinese"
 msgstr "Simplified Chinese"
 
-#: developer_portal/settings.py:195
+#: developer_portal/settings.py:208
 msgid "Spanish"
 msgstr "Spanish"
 
-#: developer_portal/settings.py:239
+#: developer_portal/settings.py:248
 msgid "Page content"
 msgstr "Page content"
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
-#: developer_portal/settings.py:247
+#: developer_portal/settings.py:256
 msgid "<p>Add content here...</p>"
 msgstr "<p>Add content here...</p>"
 
@@ -49,11 +53,11 @@ msgstr ""
 "You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
 "profile</a> to use the developer site"
 
-#: templates/404.html:3
+#: templates/404.html:4
 msgid "This page does not exist"
 msgstr "This page does not exist"
 
-#: templates/404.html:8
+#: templates/404.html:9
 msgid ""
 "This page does not exist. If you feel that this is an error, please <a "
 "href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>file a "
@@ -155,22 +159,22 @@ msgstr "Go to the top of the page"
 msgid "Jump to content"
 msgstr "Jump to content"
 
-#: templates/error_base.html:63 templates/website_base.html:64
+#: templates/error_base.html:63 templates/website_base.html:65
 #: templates/comments/zinnia/entry/form.html:25
 msgid "Log out"
 msgstr "Log out"
 
-#: templates/error_base.html:69 templates/website_base.html:70
+#: templates/error_base.html:69 templates/website_base.html:71
 msgid "Log in"
 msgstr "Log in"
 
 #: templates/error_base.html:76 templates/error_base.html.py:77
-#: templates/error_base.html:78 templates/website_base.html:77
-#: templates/website_base.html.py:78 templates/website_base.html:79
+#: templates/error_base.html:78 templates/website_base.html:83
+#: templates/website_base.html.py:84 templates/website_base.html:85
 msgid "Search"
 msgstr "Search"
 
-#: templates/login_failure.html:19
+#: templates/login_failure.html:21
 msgid ""
 "If you continue to experience problems with the developer site, please <a "
 "href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
@@ -182,7 +186,25 @@ msgstr ""
 msgid "Search results for:"
 msgstr "Search results for:"
 
-#: templates/website_base.html:111
+#: templates/webapp.html:6
+msgid "Create your Webapp package"
+msgstr ""
+
+#: templates/webapp.html:10
+msgid "Submit"
+msgstr ""
+
+#: templates/webapp.html:14
+msgid ""
+"This form generates simple Ubuntu webapps, ready to upload to the store. To "
+"create more complex applications, you will need to use the Ubuntu SDK."
+msgstr ""
+
+#: templates/webapp.html:15
+msgid "Get started with the Ubuntu SDK ›"
+msgstr ""
+
+#: templates/website_base.html:117
 msgid "Back to top"
 msgstr "Back to top"
 
@@ -255,11 +277,11 @@ msgstr[1] "%(entry_count)s entries"
 msgid "No authors yet."
 msgstr "No authors yet."
 
-#: templates/zinnia/base.html:36
+#: templates/zinnia/base.html:17
 msgid "RSS Feed of latest entries"
 msgstr "RSS Feed of latest entries"
 
-#: templates/zinnia/base.html:37
+#: templates/zinnia/base.html:18
 msgid "RSS Feed of latest discussions"
 msgstr "RSS Feed of latest discussions"
 
@@ -402,3 +424,78 @@ msgstr "Tags"
 #: templates/zinnia/tag_list.html:24
 msgid "No tags yet."
 msgstr "No tags yet."
+
+#: webapp_creator/views.py:11
+msgid "Store cookies"
+msgstr ""
+
+#: webapp_creator/views.py:12
+msgid "Show header"
+msgstr ""
+
+#: webapp_creator/views.py:13
+msgid "Show back and forward buttons"
+msgstr ""
+
+#: webapp_creator/views.py:14
+msgid "Run fullscreen"
+msgstr ""
+
+#: webapp_creator/views.py:20
+msgid "App name"
+msgstr ""
+
+#: webapp_creator/views.py:21
+msgid "E.g. Duck Duck Go"
+msgstr ""
+
+#: webapp_creator/views.py:23
+msgid "Webapp URL"
+msgstr ""
+
+#: webapp_creator/views.py:24
+msgid "E.g. https://duckduckgo.com"
+msgstr ""
+
+#: webapp_creator/views.py:26
+msgid "App icon"
+msgstr ""
+
+#: webapp_creator/views.py:27
+msgid "Recommended 256x256 px, PNG format"
+msgstr ""
+
+#: webapp_creator/views.py:30
+msgid "App options"
+msgstr ""
+
+#: webapp_creator/views.py:31
+msgid "Use CTRL to select multiple options"
+msgstr ""
+
+#: webapp_creator/views.py:35
+msgid "Developer namespace"
+msgstr ""
+
+#: webapp_creator/views.py:36
+msgid ""
+"The namespace you picked for your <a "
+"href=\"https://myapps.developer.ubuntu.com/dev/account/\"> MyApps "
+"account</a>. E.g. miaotian"
+msgstr ""
+
+#: webapp_creator/views.py:38
+msgid "Maintainer full name"
+msgstr ""
+
+#: webapp_creator/views.py:39
+msgid "E.g. Miao Tian"
+msgstr ""
+
+#: webapp_creator/views.py:41
+msgid "Maintainer e-mail"
+msgstr ""
+
+#: webapp_creator/views.py:42
+msgid "E.g. miaotian@ubuntu.com"
+msgstr ""
