@@ -3,20 +3,12 @@ import tempfile
 import shutil
 import re
 import subprocess
-import random
-import string
-
 from urlparse import urlsplit
 
 
-def random_str(length):
-    """Generates a random str to differentiate apps using the same domain."""
-    return ''.join(random.choice(string.lowercase) for i in range(length))
-
-
-def create_appname(domain):
-    domain_nowww = re.sub('www\.', '', domain)
-    appname = re.sub('\.', '', domain_nowww)
+def create_appname(name):
+    name = re.sub('[^0-9a-zA-Z]+', '', name)
+    appname = name[:20].lower()
     return appname
 
 
@@ -33,10 +25,11 @@ def create_tmp(appname, domain):
 def create(data):
     nickname = data['nickname'].encode('UTF-8')
     url = data['url'].encode('UTF-8')
+    version = data['version'].encode('UTF-8')
     displayname = data['displayname'].encode('UTF-8')
     domain = urlsplit(url)[1].encode('UTF-8')
     options = ' '.join(data['options'])
-    appname = '%s-%s' % (create_appname(domain), random_str(3))
+    appname = create_appname(displayname)
     tmp = create_tmp(appname, domain)
 
     # Create icon
@@ -63,7 +56,8 @@ def create(data):
         open("webapp_creator/resources/manifest.json").read())
     manifest_new['name'] = '%s.%s' % (appname, nickname,)
     manifest_new['title'] = displayname
-    manifest_new['description'] = 'Web app for %s' % (domain,)
+    manifest_new['version'] = version
+    manifest_new['description'] = 'Webapp for %s' % (domain,)
     manifest_new['hooks'] = {appname:
                              {'apparmor': '%s.apparmor' % (appname,),
                               'desktop': '%s.desktop' % (appname,)
@@ -78,6 +72,6 @@ def create(data):
     # Build click package in tmp dir
     subprocess.call(['click', 'build', tmp+'/resources'],
                     cwd=tmp)
-    click_path = '%s/%s.%s_0.1_all.click' % (tmp, appname, nickname,)
-    click_name = '%s.%s_0.1_all.click' % (appname, nickname,)
+    click_path = '%s/%s.%s_%s_all.click' % (tmp, appname, nickname, version)
+    click_name = '%s.%s_%s_all.click' % (appname, nickname, version)
     return tmp, click_name, click_path

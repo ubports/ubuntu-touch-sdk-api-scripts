@@ -30,6 +30,9 @@ class WebappForm(forms.Form):
         label=_("App options"),
         help_text=_('Use CTRL to select multiple options'),
         required=False)
+    version = forms.CharField(
+        max_length=20, required=True, label=_('Version'),
+        help_text=_('E.g. 0.1'), initial=0.1)
     nickname = forms.RegexField(
         regex='^[\w-]+$', max_length=200, required=True,
         label=_('Developer namespace'),
@@ -57,7 +60,14 @@ def webapp(request):
                 click_name,)
             return response
     else:
+        try:
+            name = "%s %s" % (request.user.first_name, request.user.last_name)
+            email = request.user.email
+        except:
+            name, email = '', ''
         webapp_form = WebappForm()
+        webapp_form.fields['email'].initial = email
+        webapp_form.fields['fullname'].initial = name.strip()
     return render_to_response(
         'webapp.html',
         {'webapp_form': webapp_form},
