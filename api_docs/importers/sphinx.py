@@ -122,7 +122,7 @@ class SphinxImporter(Importer):
         if isinstance(module_html, (str,unicode)) and '\n' in module_html:
             module_html = module_html.split('\n')
         html_len = len(module_html)
-        if self.verbosity >= 1:
+        if self.verbosity >= 2:
             print "Looking for classes in %s lines" % html_len
 
         while i < html_len:
@@ -151,8 +151,6 @@ class SphinxImporter(Importer):
             # Change the content of the docs 
             cleaned_data = ''
             for line in unclean_data:
-                if line == '' or line == '\n':
-                    continue
                 if "<span class=\"viewcode-link\">[source]</span>" in line:
                     line = line.replace("<span class=\"viewcode-link\">[source]</span>", "")
                 if '<div class="section" id="' in line:
@@ -164,7 +162,7 @@ class SphinxImporter(Importer):
                     end_div = line.find('</h1>', start_div)
                     line = line[:start_div] + line[end_div+5:]
                 line = self.parse_line(line, doc_file, element_fullname)
-                cleaned_data += line
+                cleaned_data += line + '\n'
                 
             return cleaned_data
         except Exception, e:
@@ -245,7 +243,8 @@ class SphinxImporter(Importer):
                 elif doc_type == 'py:method':
                     self.class_map[fullname] = '.'.join(fullname.split('.')[:-1])
             elif doc_enum == DOC_PAGE:
-                print "Found Page: %s" % fullname
+                if self.verbosity >= 2:
+                    print "Found Page: %s" % fullname
                 ns_name = ''
                 page_path, page_anchor = href.split('#')
                 if page_path.endswith('/'):
@@ -254,7 +253,8 @@ class SphinxImporter(Importer):
                 if page_anchor == '#$':
                     page_anchor = '#'+fullname
 
-                print "Adding Page: %s" % page_path
+                if self.verbosity >= 2:
+                    print "Adding Page: %s" % page_path
                 if len(obj_data) > 4:
                     page_title = ' '.join(obj_data[4:])
                 else:
@@ -271,9 +271,6 @@ class SphinxImporter(Importer):
             else:
                 ns_name = ''
                 
-            
-            print "Namespace: %s" % ns_name
-            print "API part: %s" % fullname
             continue
             
         for ns_name in self.namespace_order:
@@ -381,19 +378,18 @@ class SphinxImporter(Importer):
                     page.title = self.just_text(line[line.find('<h1>')+4:line.find('</h1>', 4)])
                     if len(page.title) >= 64:
                         page.title = page.title[:60]+'...'
-                    print "Setting title of %s to: %s" % (pagename, page.title)
+                    if self.verbosity >= 2:
+                        print "Setting title of %s to: %s" % (pagename, page.title)
                     page.save()
 
             try:
                 # Change the content of the docs 
                 cleaned_data = ''
                 for line in doc_data[doc_start:doc_end]:
-                    if line == '' or line == '\n':
-                        continue
                     line = self.parse_line(line, pagehref, pagehref)
                     if isinstance(line, unicode):
                         line = line.encode('ascii', 'replace')
-                    cleaned_data += line
+                    cleaned_data += line + '\n'
                     
                 page.data = cleaned_data
             except Exception, e:
@@ -441,14 +437,12 @@ class SphinxImporter(Importer):
                 # Change the content of the docs 
                 cleaned_data = ''
                 for line in doc_data[doc_start:doc_end]:
-                    if line == '' or line == '\n':
-                        continue
                     if '<h1 class="title">' in line:
                         continue
                     line = self.parse_line(line, nshref, nsfullname)
                     if isinstance(line, unicode):
                         line = line.encode('ascii', 'replace')
-                    cleaned_data += line
+                    cleaned_data += line + '\n'
                     
                 ns.data = cleaned_data
             except Exception, e:
