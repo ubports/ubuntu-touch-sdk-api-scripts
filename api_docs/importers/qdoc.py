@@ -94,9 +94,9 @@ class QDocImporter(Importer):
             self.import_class(qmlclass.get('href'), classname, ns_name)
             
         page_order_index = 0
-        if os.path.exists(os.path.join(self.DOC_ROOT, 'index.html')) and 'index.html' not in self.page_refs and 'index.html' not in self.class_map:
-            self.import_page('index.html', 'index', root.get('title'), self.parse_namespace(self.PRIMARY_NAMESPACE), 0)
-            page_order_index = 1
+        #if os.path.exists(os.path.join(self.DOC_ROOT, 'index.html')) and 'index.html' not in self.page_refs and 'index.html' not in self.class_map:
+        #    self.import_page('index.html', 'index', root.get('title'), self.parse_namespace(self.PRIMARY_NAMESPACE), 0)
+        #    page_order_index = 1
 
         while 1 in self.page_refs.values():
             if self.verbosity >= 2:

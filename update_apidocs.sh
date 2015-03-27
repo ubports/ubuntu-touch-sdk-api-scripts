@@ -20,14 +20,17 @@ python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Multimedia" -n Q
 python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtSensors -i /tmp/apidoc_sources/usr/share/qt5/doc/qtsensors/qtsensors.index
 
 ## QtFeedback
-# ???
-#python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtFeedback -i ~/projects/Ubuntu/sdk/qtfeedback-opensource-src/doc/html/qtfeedback.index
+SERIES=vivid ./get_package.sh qtfeedback5-doc-html
+python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Device and Sensors" -n QtFeedback -i /tmp/apidoc_sources/usr/share/qt5/doc/qtfeedback/qtfeedback.index
 
 ## QtLocation
 ./get_package.sh qtlocation5-doc-html
 python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Platform Services" -i /tmp/apidoc_sources/usr/share/qt5/doc/qtlocation/qtlocation.index
 
-#(Need to poke Mirv)python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i ~/projects/Ubuntu/api-website/qtpim-opensource-src/doc/html/qtpim.index
+## QtOrganizer
+SERIES=vivid ./get_package.sh qtpim5-doc-html
+python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i /tmp/apidoc_sources/usr/share/qt5/doc/qtorganizer/qtorganizer.index
+python manage.py import_qdoc -t apps -l qml -r sdk-14.10 -s "Platform Services" -i /tmp/apidoc_sources/usr/share/qt5/doc/qtcontacts/qtcontacts.index
 
 ## Ubuntu.Components
 ./get_package.sh ubuntu-ui-toolkit-doc
@@ -43,8 +46,8 @@ gunzip -f /tmp/apidoc_sources/usr/share/doc/content-hub/qml/html/ubuntu-content-
 python manage.py import_qdoc -Pp -t apps -l qml -r sdk-14.10 -s "Platform Services" -N Ubuntu.Content -i /tmp/apidoc_sources/usr/share/doc/content-hub/qml/html/ubuntu-content-qml-api.index
 
 # U1db
-#???
-#python manage.py import_qdoc -Pp -t apps -l qml -r sdk-14.10 -s "Platform Services" -N U1db -i /tmp/apidoc_sources/usr/share/u1db-qt/doc/html/u1db-qt.index
+SERIES=vivid ./get_package.sh libu1db-qt5-doc
+python manage.py import_qdoc -p -t apps -l qml -r sdk-14.10 -s "Platform Services" -N U1db -i /tmp/apidoc_sources/usr/share/u1db-qt/doc/html/u1db-qt.index
 
 ## Ubuntu.DownloadManager
 ./get_package.sh libubuntu-download-manager-client-doc
