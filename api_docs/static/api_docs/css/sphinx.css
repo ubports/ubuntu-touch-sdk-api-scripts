@@ -12,3 +12,8 @@
 
 /* All selectors should start with .sphinx */
 
+.sphinx dt {
+    background-color: #f0edea;
+    padding: 15px 10px;
+    border: 1px dotted #888;
+}

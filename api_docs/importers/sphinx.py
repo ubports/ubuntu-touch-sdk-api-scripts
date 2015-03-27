@@ -83,11 +83,11 @@ class SphinxImporter(Importer):
         return url
 
     def get_section(self, namespace, fullname):
-        if fullname in SECTIONS:
+        if fullname is not None and fullname in SECTIONS:
             return SECTIONS[fullname]
-        elif namespace in SECTIONS:
+        elif namespace is not None and namespace in SECTIONS:
             return SECTIONS[namespace]
-        elif '/' in fullname and fullname.split('/')[0]+'/' in SECTIONS:
+        elif fullname is not None and '/' in fullname and fullname.split('/')[0]+'/' in SECTIONS:
             return SECTIONS[fullname.split('/')[0]+'/']
         else:
             return SECTIONS["*"]
@@ -297,6 +297,8 @@ class SphinxImporter(Importer):
                 if created:
                     print "Created Namespace: %s" % ns_name
                 namespace.data = self.clean_content(extra, doc_file, ns_name)
+                namespace.source_file = os.path.basename(doc_file)
+                namespace.source_format = "sphinx"
                 namespace.save()
             else:
                 namespace = None

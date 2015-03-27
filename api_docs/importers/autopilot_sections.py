@@ -1,4 +1,3 @@
-
 SECTIONS = {
     '*': 'Test Cases',
     'autopilot': 'Test Cases',
