@@ -52,6 +52,8 @@ SECTIONS = {
     'unity.scopes.ObjectProxy': 'Common',
     'unity.scopes.Variant': 'Common',
     'unity.scopes.VariantBuilder': 'Common',
+
+    'unity.scopes.OnlineAccountClient': 'Platform Services',
     
     'tutorial': 'Searching',
     '*': 'Searching',

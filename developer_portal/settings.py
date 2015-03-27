@@ -76,9 +76,6 @@ INSTALLED_APPS = [
     'webapp_creator',
 
     'api_docs',
-    'service',
-    'rest_framework',
-    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE_CLASSES = (

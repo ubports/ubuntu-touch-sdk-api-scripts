@@ -1,6 +1,12 @@
 {% extends "api_docs/article.html" %}
+{% load static %}
 
 {% block title %}{{element.name}} [{{version.slug}}/{{element.fullname}}] | {{ block.super }}{% endblock %}
+
+{% block extrastyles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" media="all" href="{% static 'api_docs/css/' %}{{element.source_format}}.css"/>
+{% endblock extrastyles %}
 
 {% block editor_links %}
     {% if perms.apidocs.change_element %}
