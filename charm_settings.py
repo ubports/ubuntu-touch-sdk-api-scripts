@@ -21,10 +21,10 @@ OS_AUTH_URL = os.environ.get('OS_AUTH_URL', '')
 OS_REGION_NAME = os.environ.get('OS_REGION_NAME', '')
 OS_TENANT_NAME = os.environ.get('OS_TENANT_NAME', '')
 
-SWIFT_CONTAINER_NAME='devportal_uploaded'
+SWIFT_CONTAINER_NAME=os.environ.get('SWIFT_CONTAINER_NAME', 'devportal_uploaded')
 DEFAULT_FILE_STORAGE = "swiftstorage.storage.SwiftStorage"
 
-SWIFT_STATICCONTAINER_NAME='devportal_static'
+SWIFT_STATICCONTAINER_NAME=os.environ.get('SWIFT_STATICCONTAINER_NAME', 'devportal_static')
 SWIFT_STATICFILE_PREFIX=''
 STATICFILES_STORAGE = 'swiftstorage.storage.SwiftStaticStorage'
 

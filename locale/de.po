@@ -7,39 +7,43 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-12-18 14:25+0000\n"
-"PO-Revision-Date: 2015-01-23 16:47+0000\n"
-"Last-Translator: Ergü Muchzul <Unknown>\n"
+"POT-Creation-Date: 2015-03-17 02:07+0000\n"
+"PO-Revision-Date: 2015-03-26 18:10+0000\n"
+"Last-Translator: Tobias Bannert <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-01-24 06:29+0000\n"
-"X-Generator: Launchpad (build 17306)\n"
+"X-Launchpad-Export-Date: 2015-03-27 05:41+0000\n"
+"X-Generator: Launchpad (build 17413)\n"
 
-#: developer_portal/settings.py:172 developer_portal/settings.py:180
+#: developer_portal/cms_plugins.py:10
+msgid "Raw HTML"
+msgstr "Rohes HTML"
+
+#: developer_portal/settings.py:185 developer_portal/settings.py:193
 msgid "English"
 msgstr "Englisch"
 
-#: developer_portal/settings.py:173 developer_portal/settings.py:187
+#: developer_portal/settings.py:186 developer_portal/settings.py:200
 msgid "Simplified Chinese"
 msgstr "Vereinfachtes Chinesisch"
 
-#: developer_portal/settings.py:195
+#: developer_portal/settings.py:208
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: developer_portal/settings.py:239
+#: developer_portal/settings.py:248
 msgid "Page content"
 msgstr "Seiteninhalt"
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
-#: developer_portal/settings.py:247
+#: developer_portal/settings.py:256
 msgid "<p>Add content here...</p>"
-msgstr "<p>Inhalt hier einfügen...</p>"
+msgstr "<p>Inhalt hier einfügen …</p>"
 
 #: developer_portal/views.py:49
 msgid ""
@@ -49,19 +53,19 @@ msgstr ""
 "Um die Entwicklerseite zu nutzen, müssen Sie ein <a "
 "href=\"https://launchpad.net/+login\">Launchpad-Profil</a> erstellen."
 
-#: templates/404.html:3
+#: templates/404.html:4
 msgid "This page does not exist"
-msgstr "Diese Seite existiert nicht."
+msgstr "Diese Seite besteht nicht."
 
-#: templates/404.html:8
+#: templates/404.html:9
 msgid ""
 "This page does not exist. If you feel that this is an error, please <a "
 "href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>file a "
 "bug</a>."
 msgstr ""
-"Diese Seite existiert nicht. Bitte <a "
+"Diese Seite besteht nicht. Bitte <a "
 "href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>melden Sie "
-"einen Fehler</a>, wenn Sie glauben, dass dies ein Fehler ist."
+"einen Fehler</a>, wenn Sie glauben, dass das ein Fehler ist."
 
 #: templates/base.html:4
 msgid "Ubuntu developer portal"
@@ -93,7 +97,7 @@ msgstr "Server"
 
 #: templates/base.html:40
 msgid "Desktop"
-msgstr "Arbeitsfläche"
+msgstr "Schreibtisch"
 
 #: templates/base.html:42
 msgid "Ubuntu Kylin"
@@ -105,7 +109,7 @@ msgstr "Alternative Downloads"
 
 #: templates/base.html:49
 msgid "Support"
-msgstr "Support"
+msgstr "Kundendienst"
 
 #: templates/base.html:53
 msgid "Security notices"
@@ -129,11 +133,11 @@ msgstr "Canonical und Ubuntu"
 
 #: templates/base.html:66
 msgid "Contact us"
-msgstr "Kontaktieren Sie uns"
+msgstr "Kontaktaufnahme"
 
 #: templates/base.html:68
 msgid "Canonical news feed"
-msgstr "Canonical News-Feed"
+msgstr "Canonical-Nachrichtenverlauf"
 
 #: templates/base.html:74
 msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
@@ -155,22 +159,22 @@ msgstr "Zum Anfang der Seite springen"
 msgid "Jump to content"
 msgstr "Zum Inhalt springen"
 
-#: templates/error_base.html:63 templates/website_base.html:64
+#: templates/error_base.html:63 templates/website_base.html:65
 #: templates/comments/zinnia/entry/form.html:25
 msgid "Log out"
 msgstr "Abmelden"
 
-#: templates/error_base.html:69 templates/website_base.html:70
+#: templates/error_base.html:69 templates/website_base.html:71
 msgid "Log in"
 msgstr "Anmelden"
 
 #: templates/error_base.html:76 templates/error_base.html.py:77
-#: templates/error_base.html:78 templates/website_base.html:77
-#: templates/website_base.html.py:78 templates/website_base.html:79
+#: templates/error_base.html:78 templates/website_base.html:83
+#: templates/website_base.html.py:84 templates/website_base.html:85
 msgid "Search"
 msgstr "Suchen"
 
-#: templates/login_failure.html:19
+#: templates/login_failure.html:21
 msgid ""
 "If you continue to experience problems with the developer site, please <a "
 "href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
@@ -182,7 +186,25 @@ msgstr ""
 msgid "Search results for:"
 msgstr "Ergebnisse suchen für:"
 
-#: templates/website_base.html:111
+#: templates/webapp.html:6
+msgid "Create your Webapp package"
+msgstr ""
+
+#: templates/webapp.html:10
+msgid "Submit"
+msgstr "Absenden"
+
+#: templates/webapp.html:14
+msgid ""
+"This form generates simple Ubuntu webapps, ready to upload to the store. To "
+"create more complex applications, you will need to use the Ubuntu SDK."
+msgstr ""
+
+#: templates/webapp.html:15
+msgid "Get started with the Ubuntu SDK ›"
+msgstr ""
+
+#: templates/website_base.html:117
 msgid "Back to top"
 msgstr "Zurück zum Anfang"
 
@@ -200,7 +222,7 @@ msgstr "Anzeigen in:"
 
 #: templates/menu/menu_language_chooser.html:10
 msgid "Change to language:"
-msgstr "Wechsle zur Sprache:"
+msgstr "Sprache ändern:"
 
 #: templates/zinnia/_entry_detail_base.html:33
 #, python-format
@@ -229,11 +251,11 @@ msgstr "Abgelegt unter:"
 #: templates/zinnia/tag_list.html:19
 #, python-format
 msgid "Show all entries tagged by %(tag)s"
-msgstr "Alle Einträge zeigen, die mit %(tag)s getaggt sind."
+msgstr "Alle Einträge anzeigen, die mit %(tag)s verschlagwortet sind."
 
 #: templates/zinnia/_entry_detail_base.html:66
 msgid "No tags"
-msgstr "Keine Tags"
+msgstr "Keine Schlagworte"
 
 #: templates/zinnia/author_list.html:4 templates/zinnia/author_list.html:12
 msgid "Author list"
@@ -255,11 +277,11 @@ msgstr[1] "%(entry_count)s Einträge"
 msgid "No authors yet."
 msgstr "Bisher keine Autoren."
 
-#: templates/zinnia/base.html:36
+#: templates/zinnia/base.html:17
 msgid "RSS Feed of latest entries"
 msgstr "RSS-Feed der letzten Einträge"
 
-#: templates/zinnia/base.html:37
+#: templates/zinnia/base.html:18
 msgid "RSS Feed of latest discussions"
 msgstr "RSS-Feed der letzten Diskussionen"
 
@@ -308,7 +330,7 @@ msgstr "Kommentare geschlossen."
 
 #: templates/zinnia/entry_detail_base.html:86
 msgid "No comments yet."
-msgstr "Keine Kommentare bisher."
+msgstr "Bisher keine Kommentare"
 
 #: templates/zinnia/entry_detail_base.html:96
 msgid "Add your comment"
@@ -317,7 +339,7 @@ msgstr "Ihren Kommentar hinzufügen"
 #: templates/zinnia/entry_detail_base.html:108
 #: templates/zinnia/entry_detail_base.html:109
 msgid "Edit the entry"
-msgstr "Ändere den Eintrag"
+msgstr "Eintrag ändern"
 
 #: templates/zinnia/entry_list.html:4
 msgid "Latest entries for"
@@ -329,7 +351,7 @@ msgstr "die Kategorie"
 
 #: templates/zinnia/entry_list.html:4
 msgid "the tag"
-msgstr "das Tag"
+msgstr "das Schlagwort"
 
 #: templates/zinnia/entry_list.html:4
 msgid "the author"
@@ -350,7 +372,7 @@ msgstr "Kategorie"
 
 #: templates/zinnia/entry_list.html:21
 msgid "Tag"
-msgstr "Tag"
+msgstr "Schlagwort"
 
 #: templates/zinnia/entry_list.html:21
 msgid "Author"
@@ -363,17 +385,17 @@ msgstr "Seite"
 #: templates/zinnia/entry_list.html:32
 #, python-format
 msgid "Category archives: %(category)s"
-msgstr "Kategorien-Archiv: %(category)s"
+msgstr "Kategorienarchiv: %(category)s"
 
 #: templates/zinnia/entry_list.html:41
 #, python-format
 msgid "Tag archives: %(tag)s"
-msgstr "Tag-Archiv: %(tag)s"
+msgstr "Schlagwortarchiv: %(tag)s"
 
 #: templates/zinnia/entry_list.html:47
 #, python-format
 msgid "Author archives: %(author)s"
-msgstr "Autoren-Archiv: %(author)s"
+msgstr "Autorenarchiv: %(author)s"
 
 #: templates/zinnia/entry_list.html:58
 msgid "No entries yet."
@@ -402,3 +424,78 @@ msgstr "Schlagwörter"
 #: templates/zinnia/tag_list.html:24
 msgid "No tags yet."
 msgstr "Bisher keine Schlagwörter"
+
+#: webapp_creator/views.py:11
+msgid "Store cookies"
+msgstr ""
+
+#: webapp_creator/views.py:12
+msgid "Show header"
+msgstr "Kopfzeile anzeigen"
+
+#: webapp_creator/views.py:13
+msgid "Show back and forward buttons"
+msgstr "Vorwärts- und Zurückknöpfe anzeigen"
+
+#: webapp_creator/views.py:14
+msgid "Run fullscreen"
+msgstr "Vollbild starten"
+
+#: webapp_creator/views.py:20
+msgid "App name"
+msgstr "App-Name"
+
+#: webapp_creator/views.py:21
+msgid "E.g. Duck Duck Go"
+msgstr "Z.B.: Duck Duck Go"
+
+#: webapp_creator/views.py:23
+msgid "Webapp URL"
+msgstr ""
+
+#: webapp_creator/views.py:24
+msgid "E.g. https://duckduckgo.com"
+msgstr "Z.B.: https://duckduckgo.com"
+
+#: webapp_creator/views.py:26
+msgid "App icon"
+msgstr "App-Symbol"
+
+#: webapp_creator/views.py:27
+msgid "Recommended 256x256 px, PNG format"
+msgstr ""
+
+#: webapp_creator/views.py:30
+msgid "App options"
+msgstr "App-Optionen"
+
+#: webapp_creator/views.py:31
+msgid "Use CTRL to select multiple options"
+msgstr "STRG, für mehrere Optionen benutzen"
+
+#: webapp_creator/views.py:35
+msgid "Developer namespace"
+msgstr "Entwicklernamensraum"
+
+#: webapp_creator/views.py:36
+msgid ""
+"The namespace you picked for your <a "
+"href=\"https://myapps.developer.ubuntu.com/dev/account/\"> MyApps "
+"account</a>. E.g. miaotian"
+msgstr ""
+
+#: webapp_creator/views.py:40
+msgid "Maintainer full name"
+msgstr ""
+
+#: webapp_creator/views.py:41
+msgid "E.g. Miao Tian"
+msgstr "Z.B.: Miao Tian"
+
+#: webapp_creator/views.py:43
+msgid "Maintainer e-mail"
+msgstr ""
+
+#: webapp_creator/views.py:44
+msgid "E.g. miaotian@ubuntu.com"
+msgstr "Z.B.: miaotian@ubuntu.com"
