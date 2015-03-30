@@ -61,9 +61,10 @@ python manage.py import_qdoc -Pp -t apps -l qml -r sdk-14.10 -s "Graphical Inter
 
 #### Aps/HTML5
 ## UbuntuUI
-wget -P /tmp/apidoc_sources/ -nc https://swift.canonistack.canonical.com/v1/AUTH_28f73a401b8a4dfeab9f0f02f789d1ac/html5-api-docs/docs/ubuntu-html5-ui-toolkit-docs.utopic.tar.gz
-tar -C /tmp/apidoc_sources/ -xzf /tmp/apidoc_sources/ubuntu-html5-ui-toolkit-docs.utopic.tar.gz
-python manage.py import_yuidoc -i -t apps -l html5 -r sdk-14.10 -s "Graphical Interface" -d /tmp/apidoc_sources/utopic/ubuntu-html5-theme-14.10/0.1/ambiance/js/docsbuild/data.json
+# TODO: update when these docs are somewhere they can be downloaded
+#wget -P /tmp/apidoc_sources/ -nc https://swift.canonistack.canonical.com/v1/AUTH_28f73a401b8a4dfeab9f0f02f789d1ac/html5-api-docs/docs/ubuntu-html5-ui-toolkit-docs.utopic.tar.gz
+#tar -C /tmp/apidoc_sources/ -xzf /tmp/apidoc_sources/ubuntu-html5-ui-toolkit-docs.utopic.tar.gz
+python manage.py import_yuidoc -i -t apps -l html5 -r sdk-14.10 -s "Graphical Interface" -d ./api_docs/sources/utopic/ubuntu-html5-theme-14.10/0.1/ambiance/js/docsbuild/data.json
 
 ## Cordova
 #wget -P /tmp/apidoc_sources/ -nc https://swift.canonistack.canonical.com/v1/AUTH_28f73a401b8a4dfeab9f0f02f789d1ac/html5-api-docs/docs/cordova-docs.utopic.tar.gz
@@ -71,16 +72,17 @@ python manage.py import_yuidoc -i -t apps -l html5 -r sdk-14.10 -s "Graphical In
 #python manage.py import_cordova -t apps -l html5 -r sdk-14.10 -i /tmp/apidoc_sources/utopic/cordova-docs/public/en/4.0.0/index.json
 
 ## Platform Bindings
-wget -P /tmp/apidoc_sources/ -nc https://swift.canonistack.canonical.com/v1/AUTH_28f73a401b8a4dfeab9f0f02f789d1ac/html5-api-docs/docs/ubuntu-html5-api-docs.utopic.tar.gz
-tar -C /tmp/apidoc_sources/ -xzf /tmp/apidoc_sources/ubuntu-html5-api-docs.utopic.tar.gz
-## OnlineAccounts
-python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /tmp/apidoc_sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/online-accounts/client/docsbuild/data.json
+# TODO: update when these docs are somewhere they can be downloaded
+#wget -P /tmp/apidoc_sources/ -nc https://swift.canonistack.canonical.com/v1/AUTH_28f73a401b8a4dfeab9f0f02f789d1ac/html5-api-docs/docs/ubuntu-html5-api-docs.utopic.tar.gz
+#tar -C /tmp/apidoc_sources/ -xzf /tmp/apidoc_sources/ubuntu-html5-api-docs.utopic.tar.gz
+## OnlineAccounts3
+python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d ./api_docs/sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/online-accounts/client/docsbuild/data.json
 ## AlarmAPI
-python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /tmp/apidoc_sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/alarm-api/client/docsbuild/data.json
+python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d ./api_docs/sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/alarm-api/client/docsbuild/data.json
 ## ContentHub
-python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /tmp/apidoc_sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/content-hub/client/docsbuild/data.json
+python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d ./api_docs/sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/content-hub/client/docsbuild/data.json
 ## RuntimeAPI
-python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /tmp/apidoc_sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/runtime-api/client/docsbuild/data.json
+python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d ./api_docs/sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/runtime-api/client/docsbuild/data.json
 
 #### Autopilot/Python
 ## Autopilot
