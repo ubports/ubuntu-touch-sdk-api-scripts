@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-30 21:06+0000\n"
+"POT-Creation-Date: 2015-03-31 09:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,15 +192,15 @@ msgstr ""
 
 #: templates/webapp.html:15
 msgid ""
-"This form generates simple Webapps packages ready to test on a device and "
+"This form generates simple Webapps packages ready to test on your device and "
 "upload to the Ubuntu store."
 msgstr ""
 
-#: templates/webapp.html:17
+#: templates/webapp.html:26
 msgid "How to test a click package on your device ›"
 msgstr ""
 
-#: templates/webapp.html:18
+#: templates/webapp.html:27
 msgid "How to publish an app to the store ›"
 msgstr ""
 
@@ -214,7 +214,7 @@ msgid ""
 "heavy applications with the Ubuntu SDK."
 msgstr ""
 
-#: templates/webapp.html:34
+#: templates/webapp.html:43
 msgid "Get started with the Ubuntu SDK ›"
 msgstr ""
 
