@@ -30,11 +30,11 @@ class WebappForm(forms.Form):
         label=_("App options"),
         help_text=_('Use CTRL to select multiple options'),
         required=False)
-    version = forms.CharField(
+    version = forms.RegexField(
         max_length=20, required=True, label=_('Version'),
-        help_text=_('E.g. 0.1'), initial=0.1)
+        help_text=_('E.g. 0.1'), initial=0.1, regex='^[0-9]')
     nickname = forms.RegexField(
-        regex='^[\w-]+$', max_length=200, required=True,
+        regex='^[a-zA-Z0-9-]+$', max_length=200, required=True,
         label=_('Developer namespace'),
         help_text=_('The namespace you picked for your '
                     '<a href="https://myapps.developer.ubuntu.com'

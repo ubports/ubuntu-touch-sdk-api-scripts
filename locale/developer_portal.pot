@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-17 02:07+0000\n"
+"POT-Creation-Date: 2015-03-31 09:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -187,12 +187,34 @@ msgid "Submit"
 msgstr ""
 
 #: templates/webapp.html:14
-msgid ""
-"This form generates simple Ubuntu webapps, ready to upload to the store. To "
-"create more complex applications, you will need to use the Ubuntu SDK."
+msgid "A first step into your Ubuntu developer adventure"
 msgstr ""
 
 #: templates/webapp.html:15
+msgid ""
+"This form generates simple Webapps packages ready to test on your device and "
+"upload to the Ubuntu store."
+msgstr ""
+
+#: templates/webapp.html:26
+msgid "How to test a click package on your device ›"
+msgstr ""
+
+#: templates/webapp.html:27
+msgid "How to publish an app to the store ›"
+msgstr ""
+
+#: templates/webapp.html:31
+msgid "Embrace QML native apps"
+msgstr ""
+
+#: templates/webapp.html:32
+msgid ""
+"For your next project, learn how to create stylish, powerful and content-"
+"heavy applications with the Ubuntu SDK."
+msgstr ""
+
+#: templates/webapp.html:43
 msgid "Get started with the Ubuntu SDK ›"
 msgstr ""
 
@@ -465,28 +487,36 @@ msgstr ""
 msgid "Use CTRL to select multiple options"
 msgstr ""
 
+#: webapp_creator/views.py:34
+msgid "Version"
+msgstr ""
+
 #: webapp_creator/views.py:35
+msgid "E.g. 0.1"
+msgstr ""
+
+#: webapp_creator/views.py:38
 msgid "Developer namespace"
 msgstr ""
 
-#: webapp_creator/views.py:36
+#: webapp_creator/views.py:39
 msgid ""
 "The namespace you picked for your <a href=\"https://myapps.developer.ubuntu."
 "com/dev/account/\"> MyApps account</a>. E.g. miaotian"
 msgstr ""
 
-#: webapp_creator/views.py:40
+#: webapp_creator/views.py:43
 msgid "Maintainer full name"
 msgstr ""
 
-#: webapp_creator/views.py:41
+#: webapp_creator/views.py:44
 msgid "E.g. Miao Tian"
 msgstr ""
 
-#: webapp_creator/views.py:43
+#: webapp_creator/views.py:46
 msgid "Maintainer e-mail"
 msgstr ""
 
-#: webapp_creator/views.py:44
+#: webapp_creator/views.py:47
 msgid "E.g. miaotian@ubuntu.com"
 msgstr ""

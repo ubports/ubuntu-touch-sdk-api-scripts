@@ -481,7 +481,7 @@ msgid ""
 "account</a>. E.g. miaotian"
 msgstr ""
 "为您的 <a href=\"https://myapps.developer.ubuntu.com/dev/account/\"> MyApps "
-"</a> 帐号选取的命名空间， 例如 田苗"
+"</a> 帐号选取的命名空间， 例如 miaotian"
 
 #: webapp_creator/views.py:40
 msgid "Maintainer full name"
