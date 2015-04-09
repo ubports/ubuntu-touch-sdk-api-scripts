@@ -72,17 +72,15 @@ python manage.py import_yuidoc -i -t apps -l html5 -r sdk-14.10 -s "Graphical In
 #python manage.py import_cordova -t apps -l html5 -r sdk-14.10 -i /tmp/apidoc_sources/utopic/cordova-docs/public/en/4.0.0/index.json
 
 ## Platform Bindings
-# TODO: update when these docs are somewhere they can be downloaded
-#wget -P /tmp/apidoc_sources/ -nc https://swift.canonistack.canonical.com/v1/AUTH_28f73a401b8a4dfeab9f0f02f789d1ac/html5-api-docs/docs/ubuntu-html5-api-docs.utopic.tar.gz
-#tar -C /tmp/apidoc_sources/ -xzf /tmp/apidoc_sources/ubuntu-html5-api-docs.utopic.tar.gz
+SERIES=vivid ./get_package.sh unity-webapps-qml-doc
 ## OnlineAccounts3
-python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d ./api_docs/sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/online-accounts/client/docsbuild/data.json
+python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /tmp/apidoc_sources/usr/share/unity-webapps-qml/doc/api/online-accounts/data.json
 ## AlarmAPI
-python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d ./api_docs/sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/alarm-api/client/docsbuild/data.json
+python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /tmp/apidoc_sources/usr/share/unity-webapps-qml/doc/api/alarm-api/data.json
 ## ContentHub
-python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d ./api_docs/sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/content-hub/client/docsbuild/data.json
+python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /tmp/apidoc_sources/usr/share/unity-webapps-qml/doc/api/content-hub/data.json
 ## RuntimeAPI
-python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d ./api_docs/sources/utopic/unity-webapps-qml-14.10/src/Ubuntu/UnityWebApps/bindings/runtime-api/client/docsbuild/data.json
+python manage.py import_yuidoc -t apps -l html5 -r sdk-14.10 -s "Platform Services" -d /tmp/apidoc_sources/usr/share/unity-webapps-qml/doc/api/runtime-api/data.json
 
 #### Autopilot/Python
 ## Autopilot
@@ -90,9 +88,9 @@ SERIES=vivid ./get_package.sh python3-autopilot
 find /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
 python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/objects.inv
 
-#SERIES=vivid ARCH=i386 ./get_package.sh ubuntu-ui-toolkit-autopilot
-#find /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
-#python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/objects.inv
+SERIES=vivid ARCH=i386 ./get_package.sh ubuntu-ui-toolkit-autopilot
+find /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
+python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/objects.inv
 
 #### Scopes/C++ 
 ## unity.scopes

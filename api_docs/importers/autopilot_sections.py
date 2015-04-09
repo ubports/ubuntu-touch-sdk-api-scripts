@@ -18,4 +18,6 @@ SECTIONS = {
     'guides/': 'Guides',
     'faq/': 'Frequently Asked Questions',
     'porting/': 'Porting',
+
+    'ubuntuuitoolkit': 'Input and Display',
 }

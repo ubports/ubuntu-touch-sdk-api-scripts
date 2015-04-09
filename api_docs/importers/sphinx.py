@@ -234,8 +234,12 @@ class SphinxImporter(Importer):
                 print "Not enough values: %s" % obj_item
                 exit(1)
             if doc_enum == DOC_MODULE:
+                page_path, page_anchor = href.split('#')
+                if page_path.endswith('/'):
+                    page_path = page_path[:-1]
                 ns_name = fullname
                 self.namespace_order.append(fullname)
+                self.namespace_map[fullname] = page_path
             elif doc_enum == DOC_API_PART:
                 ns_name = '.'.join(fullname.split('.')[:2])
                 if doc_type == 'py:class':
@@ -285,7 +289,7 @@ class SphinxImporter(Importer):
                 print 'Section: ' + section.name
 
                 
-            doc_file = os.path.join(self.DOC_ROOT, 'api', ns_name+'.fjson')
+            doc_file = os.path.join(self.DOC_ROOT, self.namespace_map[ns_name]+'.fjson')
             ns_data = self.read_json_file(doc_file)
             classes, extra = self.extract_classes(ns_data['body'])
 
