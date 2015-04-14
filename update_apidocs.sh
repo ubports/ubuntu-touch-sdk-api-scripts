@@ -61,10 +61,8 @@ python manage.py import_qdoc -Pp -t apps -l qml -r sdk-14.10 -s "Graphical Inter
 
 #### Aps/HTML5
 ## UbuntuUI
-# TODO: update when these docs are somewhere they can be downloaded
-#wget -P /tmp/apidoc_sources/ -nc https://swift.canonistack.canonical.com/v1/AUTH_28f73a401b8a4dfeab9f0f02f789d1ac/html5-api-docs/docs/ubuntu-html5-ui-toolkit-docs.utopic.tar.gz
-#tar -C /tmp/apidoc_sources/ -xzf /tmp/apidoc_sources/ubuntu-html5-ui-toolkit-docs.utopic.tar.gz
-python manage.py import_yuidoc -i -t apps -l html5 -r sdk-14.10 -s "Graphical Interface" -d ./api_docs/sources/utopic/ubuntu-html5-theme-14.10/0.1/ambiance/js/docsbuild/data.json
+SERIES=vivid ./get_package.sh ubuntu-html5-ui-toolkit-doc
+python manage.py import_yuidoc -i -t apps -l html5 -r sdk-14.10 -s "Graphical Interface" -d /tmp/apidoc_sources/usr/share/doc/ubuntu-html5-ui-toolkit-doc/data.json
 
 ## Cordova
 #wget -P /tmp/apidoc_sources/ -nc https://swift.canonistack.canonical.com/v1/AUTH_28f73a401b8a4dfeab9f0f02f789d1ac/html5-api-docs/docs/cordova-docs.utopic.tar.gz
