@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-03-17 02:07+0000\n"
+"POT-Creation-Date: 2015-03-31 18:38+0000\n"
 "PO-Revision-Date: 2015-03-16 11:06+0000\n"
 "Last-Translator: F.J Kong <fanjun.kong@canonical.com>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2015-03-26 05:33+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2015-04-14 05:38+0000\n"
+"X-Generator: Launchpad (build 17423)\n"
 
 #: developer_portal/cms_plugins.py:10
 msgid "Raw HTML"
@@ -193,12 +193,34 @@ msgid "Submit"
 msgstr "提交"
 
 #: templates/webapp.html:14
-msgid ""
-"This form generates simple Ubuntu webapps, ready to upload to the store. To "
-"create more complex applications, you will need to use the Ubuntu SDK."
-msgstr "这个表格将生成简单的 Ubuntu Web 应用，即将上传至应用商店。若要创建更复杂的应用程序，您将需要使用 Ubuntu SDK。"
+msgid "A first step into your Ubuntu developer adventure"
+msgstr ""
 
 #: templates/webapp.html:15
+msgid ""
+"This form generates simple Webapps packages ready to test on your device and "
+"upload to the Ubuntu store."
+msgstr ""
+
+#: templates/webapp.html:26
+msgid "How to test a click package on your device ›"
+msgstr ""
+
+#: templates/webapp.html:27
+msgid "How to publish an app to the store ›"
+msgstr ""
+
+#: templates/webapp.html:31
+msgid "Embrace QML native apps"
+msgstr ""
+
+#: templates/webapp.html:32
+msgid ""
+"For your next project, learn how to create stylish, powerful and content-"
+"heavy applications with the Ubuntu SDK."
+msgstr ""
+
+#: templates/webapp.html:43
 msgid "Get started with the Ubuntu SDK ›"
 msgstr "Ubuntu SDK 入门"
 
@@ -470,31 +492,44 @@ msgstr "应用选项"
 msgid "Use CTRL to select multiple options"
 msgstr "使用 CTRL 键选取多个选项"
 
+#: webapp_creator/views.py:34
+msgid "Version"
+msgstr ""
+
 #: webapp_creator/views.py:35
+msgid "E.g. 0.1"
+msgstr ""
+
+#: webapp_creator/views.py:38
 msgid "Developer namespace"
 msgstr "开发者命名空间"
 
-#: webapp_creator/views.py:36
+#: webapp_creator/views.py:39
 msgid ""
 "The namespace you picked for your <a "
 "href=\"https://myapps.developer.ubuntu.com/dev/account/\"> MyApps "
 "account</a>. E.g. miaotian"
 msgstr ""
 "为您的 <a href=\"https://myapps.developer.ubuntu.com/dev/account/\"> MyApps "
-"</a> 帐号选取的命名空间， 例如 miaotian"
+"</a> 帐号选取的命名空间， 例如 田苗"
 
-#: webapp_creator/views.py:40
+#: webapp_creator/views.py:43
 msgid "Maintainer full name"
 msgstr "维护者全名"
 
-#: webapp_creator/views.py:41
+#: webapp_creator/views.py:44
 msgid "E.g. Miao Tian"
 msgstr "例如 田苗"
 
-#: webapp_creator/views.py:43
+#: webapp_creator/views.py:46
 msgid "Maintainer e-mail"
 msgstr "维护者电子邮件地址"
 
-#: webapp_creator/views.py:44
+#: webapp_creator/views.py:47
 msgid "E.g. miaotian@ubuntu.com"
 msgstr "例如  miaotian@ubuntu.com"
+
+#~ msgid ""
+#~ "This form generates simple Ubuntu webapps, ready to upload to the store. To "
+#~ "create more complex applications, you will need to use the Ubuntu SDK."
+#~ msgstr "这个表格将生成简单的 Ubuntu Web 应用，即将上传至应用商店。若要创建更复杂的应用程序，您将需要使用 Ubuntu SDK。"
