@@ -55,12 +55,16 @@ class SphinxImporter(Importer):
         return namespace
 
     def lookup_from_url(self, url, anchor, element_fullname):
-        if not anchor:
-            return url
+        if anchor is None:
+            anchor = ''
         
         if anchor != '' and anchor[1:] in self.class_map:
             return anchor[1:]
             
+        rel_url = os.path.relpath(os.path.join(element_fullname, url))
+        if rel_url in self.class_map or rel_url in self.page_map:
+            return rel_url
+        
         url_part = url.replace('../', '')
         if url_part.endswith('/'):
             url_part = url_part[:-1]

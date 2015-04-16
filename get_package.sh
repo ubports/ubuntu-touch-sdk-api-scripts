@@ -5,6 +5,11 @@ if [ "X$1" = "X" ]; then
     echo "You must supply a package name"
     exit 1
 fi
+if [ "X$DISTRO" = "X" ]; then
+    echo "No DISTRO env, defaulting to ubuntu"
+    DISTRO="ubuntu"
+fi
+
 if [ "X$SERIES" = "X" ]; then
     echo "No SERIES env, defaulting to utopic"
     SERIES="utopic"
@@ -29,5 +34,5 @@ if [ -e /tmp/apidoc_sources/${PACKAGE}_${REV}_${ARCH}.deb ]; then
     rm /tmp/apidoc_sources/${PACKAGE}_${REV}_${ARCH}.deb
 fi
 
-wget -P /tmp/apidoc_sources/ -nc "https://launchpad.net/ubuntu/+archive/primary/+files/${PACKAGE}_${REV}_${ARCH}.deb"
+wget -P /tmp/apidoc_sources/ -nc "https://launchpad.net/${DISTRO}/+archive/primary/+files/${PACKAGE}_${REV}_${ARCH}.deb"
 dpkg-deb --extract /tmp/apidoc_sources/${PACKAGE}_${REV}_${ARCH}.deb /tmp/apidoc_sources/
