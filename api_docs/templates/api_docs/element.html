@@ -1,0 +1,44 @@
+{% extends "api_docs/article.html" %}
+{% load static %}
+
+{% block title %}{{element.name}} [{{version.slug}}/{{element.fullname}}] | {{ block.super }}{% endblock %}
+
+{% block extrastyles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" media="all" href="{% static 'api_docs/css/' %}{{element.source_format}}.css"/>
+{% endblock extrastyles %}
+
+{% block editor_links %}
+    {% if perms.apidocs.change_element %}
+    <li><a href="{% url element_edit topic.slug version.language.slug version.slug element.id %}">Edit</a></li>
+    {% endif %}
+    {% if perms.apidocs.delete_element %}
+    <li><a href="{% url element_edit topic.slug version.language.slug version.slug element.id %}?action=delete">Delete</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb_links %}
+<li class=""><a href="{% url 'api_docs:overview' %}">APIs</a> &rsaquo;</li>
+<li class=""><a href="{% url 'api_docs:topic' version.language.topic.slug %}">{{version.language.topic.name}}</a> &rsaquo;</li>
+<li class=""><a href="{% url 'api_docs:language' version.language.topic.slug version.language.slug %}">{{version.language.name}}</a> &rsaquo;</li>
+<li><a href="{% url 'api_docs:version' version.language.topic.slug version.language.slug version.slug %}">{{version.name}}</a> &rsaquo;</li>
+{% if element.namespace %}
+<li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug element.namespace.name %}">{{element.namespace.name}}</a> &rsaquo;</li>
+{% endif %}
+{% endblock %}
+
+{% block second_level_nav_links %}
+<li class="active">{{element.name}}</li>
+{% endblock %}
+
+{% block article_content %}
+	<!-- Source File: {{element.source_file}} -->
+	<!-- Source Format: {{element.source_format}} -->
+<h1>{{element.name}}</h1>
+<div id="element_content" class="{{element.source_format}}">
+<!-- Start Element Content -->
+{{element.data|safe}}
+<!-- End Element Content -->
+</div>
+
+{% endblock %}

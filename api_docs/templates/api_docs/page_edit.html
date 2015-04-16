@@ -1,0 +1,25 @@
+{% extends "api_docs/article.html" %}
+
+{% block editor_links %}
+	{% if page.id and perms.apidocs.delete_page %}
+    <li><a href="{% url page_edit topic.slug version.slug page.id %}?action=delete">Delete</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{% block article_content %}
+{% if page.id %}
+<h2>Edit {{page.name}}</h2>
+{% else %}
+<h2>New Page</h2>
+{% endif %}
+
+<form action="" method="POST" id="page_form">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Save">
+</form>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% if sidenav = 'qml' or sidenav = 'html5' or sidenav = 'cordova' %}
+		<h3><a href="http://developer.ubuntu.com/apps/sdk/">Ubuntu SDK</a></h3>
+	<div>
+		<ul>
+			<li class="page_item page-item-6266 "><a href="http://developer.ubuntu.com/apps/sdk/">Overview</a></li>
+			<li class="page_item page-item-6269 page_item_has_children"><a href="http://developer.ubuntu.com/apps/sdk/tutorials/">Tutorials</a></li>
+		</ul>
+	</div>
+		<h3><a href="http://developer.ubuntu.com/apps/platform/">Ubuntu App Platform</a></h3>
+	<div>
+		<ul>
+			<li class="page_item page-item-6262 "><a href="http://developer.ubuntu.com/apps/platform/">Overview</a></li>
+			<li class="page_item page-item-6264 page_item_has_children"><a href="http://developer.ubuntu.com/apps/platform/guides/">Guides</a></li>
+		</ul>
+	</div>
+		<h3><a href="http://developer.ubuntu.com/apps/qml/">QML</a></h3>
+	<div>
+		<ul>
+			<li class="page_item page-item-4917 "><a href="http://developer.ubuntu.com/apps/qml/">Overview</a></li>
+			<li class="page_item page-item-6034 page_item_has_children"><a href="http://developer.ubuntu.com/apps/qml/tutorial/">Tutorials</a></li>
+<li class="page_item page-item-4937 {% if sidenav = 'qml' %}current_page_item{% endif %}"><a href="http://developer.ubuntu.com/apps/qml/api/">APIs</a></li>
+<li class="page_item page-item-4939 page_item_has_children"><a href="http://developer.ubuntu.com/apps/qml/cookbook/">Cookbook</a></li>
+		</ul>
+	</div>
+		<h3><a href="http://developer.ubuntu.com/apps/html-5/">HTML5</a></h3>
+	<div>
+		<ul>
+			<li class="page_item page-item-4787 "><a href="http://developer.ubuntu.com/apps/html-5/">Overview</a></li>
+			<li class="page_item page-item-6291 page_item_has_children"><a href="http://developer.ubuntu.com/apps/html-5/guides/">Guides</a></li>
+<li class="page_item page-item-6298 page_item_has_children"><a href="http://developer.ubuntu.com/apps/html-5/tutorials/">Tutorials</a></li>
+<li class="page_item page-item-5046 {% if sidenav = 'html5' %}current_page_item{% endif %}"><a href="http://developer.ubuntu.com/apps/html-5/api/">APIs</a></li>
+<li class="page_item page-item-4849"><a href="http://developer.ubuntu.com/apps/html-5/cookbook/">Cookbook</a></li>
+		</ul>
+	</div>
+{% endif %}
+
+{% if sidenav = 'charms' %}
+	<h3><a href="/cloud/">Cloud</a></h3>
+	<div>
+		<ul>
+<li class="page_item page-item-3165"><a href="/cloud/">Overview</a></li>
+<li class="page_item page-item-5020  current_page_item"><a href="/cloud/api/">API</a></li>
+		</ul>
+	</div>
+{% endif %}
+
+{% if sidenav = 'scopes' %}
+	<h3><a href="/scopes/">Scopes</a></h3>
+	<div>
+		<ul>
+<li class="page_item page-item-4995"><a href="/scopes/overview/">Overview</a></li>
+<li class="page_item page-item-4409"><a href="/scopes/tutorial/">Tutorial</a></li>
+<li class="page_item page-item-5000 current_page_item"><a href="/scopes/api/">API</a></li>
+<li class="page_item page-item-4997"><a href="/scopes/cookbook/">Cookbook</a></li>
+		</ul>
+	</div>
+{% endif %}
+
+{% if sidenav = 'webapps' %}
+	<h3><a href="/web/">Web</a></h3>
+	<div>
+		<ul>
+<li class="page_item page-item-3165"><a href="/web/overview/">Overview</a></li>
+<li class="page_item page-item-3173"><a href="/web/tutorial/">Tutorial</a></li>
+<li class="page_item page-item-5020  current_page_item"><a href="/web/api/">API</a></li>
+<li class="page_item page-item-5022"><a href="/web/cookbook/">Cookbook</a></li>
+		</ul>
+	</div>
+{% endif %}

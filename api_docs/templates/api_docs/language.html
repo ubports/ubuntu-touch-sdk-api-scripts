@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block sub_nav %}{% endblock %}
+
+{% block breadcrumb_links %}
+<li class=""><a href="{% url 'api_docs:overview' %}">APIs</a> &rsaquo;</li>
+<li class=""><a href="{% url 'api_docs:topic' language.topic.slug %}">{{language.topic.name}}</a> &rsaquo;</li>
+<li class="">{{language.name}}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+<h2>{{language.name}} Versions</h2>
+<ul>
+{% for version in language.version_set.all %}
+    <li>
+        <a href="{% url 'api_docs:version' language.topic.slug language.slug version.slug %}">{{version.name}}</a>
+        {% if language.current_version == version %}(Current){% endif %}
+        {% if language.development_version == version %}(Development){% endif %}
+    </li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

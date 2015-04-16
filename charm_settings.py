@@ -31,3 +31,6 @@ STATICFILES_STORAGE = 'swiftstorage.storage.SwiftStaticStorage'
 MEDIA_URL = os.environ.get('SWIFT_URL_BASE', '/media/') + "/%s/" % SWIFT_CONTAINER_NAME
 STATIC_URL = os.environ.get('SWIFT_URL_BASE', '/static/') + "/%s/" % SWIFT_STATICCONTAINER_NAME
 ASSETS_URL = os.environ.get('ASSETS_URL_BASE', '//assets.ubuntu.com/')
+
+CACHE_MIDDLEWARE_SECONDS = 3600
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True

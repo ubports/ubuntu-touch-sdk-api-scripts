@@ -1,0 +1,31 @@
+/**
+* Ubuntu Developer Portal stylesheet
+*
+* A stylesheet containing API doc styles
+*
+* @project Ubuntu Developer Portal
+* @version 1.0
+* @author Canonical Community Team
+* @copyright 2015 Canonical Ltd.
+*/
+
+
+/* All selectors should start with .doxygen */
+
+.doxygen table td {
+    text-align: left;
+    vertical-align: top;
+}
+
+.doxygen table tr.heading td {
+    background: none;
+    border: none;
+}
+.doxygen table.memname td {
+    border: none;
+}
+
+.doxygen td.memSeparator {
+    background: none;
+    border: none;
+}

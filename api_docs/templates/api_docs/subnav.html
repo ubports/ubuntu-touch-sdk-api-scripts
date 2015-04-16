@@ -1,0 +1,19 @@
+{% if sidenav = 'qml' or sidenav = 'html5' or sidenav = 'cordova' %}
+                    <nav role="navigation" class="nav-secondary">
+                        <ul class="clearfix">
+<li class="page_item page-item-6266 page_item_has_children"><a href="http://developer.ubuntu.com/apps/sdk/">Ubuntu SDK</a></li>
+<li class="page_item page-item-6262 page_item_has_children"><a href="http://developer.ubuntu.com/apps/platform/">Ubuntu App Platform</a></li>
+<li class="sub-nav-item page_item page-item-4917 {% if sidenav = 'qml' %}current_page_ancestor current_page_parent{% endif %}"><a href="/apps/qml/">QML</a></li>
+<li class="sub-nav-item page_item page-item-4787 {% if sidenav = 'html5' %}current_page_ancestor current_page_parent{% endif %}"><a href="/apps/html-5/">HTML5</a></li>
+                        </ul>
+                    </nav>
+{% endif %}
+
+{% if sidenav = 'charms' %}
+{% endif %}
+
+{% if sidenav = 'scopes' %}
+{% endif %}
+
+{% if sidenav = 'webapps' %}
+{% endif %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block sub_nav %}{% endblock %}
+
+{% block breadcrumb_links %}
+<li class=""><a href="{% url 'api_docs:overview' %}">APIs</a> &rsaquo;</li>
+<li class="">{{topic.name}}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+<h2>{{topic.name}} Languages</h2>
+<ul>
+{% for language in topic.language_set.all %}
+    <li>
+        <a href="{% url 'api_docs:language' topic.slug language.slug %}">{{language.name}}</a>
+    </li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

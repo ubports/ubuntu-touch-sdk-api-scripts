@@ -74,6 +74,8 @@ INSTALLED_APPS = [
     'developer_portal',
 
     'webapp_creator',
+
+    'api_docs',
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -100,8 +102,8 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.language.LanguageCookieMiddleware',
 
 )
-CACHE_MIDDLEWARE_SECONDS = 3600
-CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+#CACHE_MIDDLEWARE_SECONDS = 3600
+#CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -287,3 +289,24 @@ CKEDITOR_CONFIGS = {
     },
 }
 CMSPLUGIN_ZINNIA_APP_URLS = ['developer_portal.blog.urls']
+
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.HyperlinkedModelSerializer',
+
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    
+    #'PAGINATE_BY': 10,
+}

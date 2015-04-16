@@ -1,0 +1,27 @@
+{% extends "api_docs/article.html" %}
+
+{% block editor_actions %}{% endblock %}
+
+{% block breadcrumbs %}
+<li><a class="sub-nav-item" href="{% url topic topic.slug %}">{{topic.name}}</a></li>
+<li> › <a class="sub-nav-item" href="{% url language topic.slug version.language.slug %}">{{language.name}}</a></li>
+<li> › <a class="sub-nav-item" href="{% url version topic.slug version.language.slug version.slug %}">{{version.name}}</a></li>
+<li> › Search</li>
+{% endblock %}
+
+{% block article_content %}
+{% if query != '' %}
+<h2>Results for '{{query}}':</h2>
+<ul id="search_results">
+    {% for element in results %}
+    {% ifchanged %}
+    <h3>{{ element.section.name }}</h3>
+    {% endifchanged %}
+    <li><a href="{% url element topic.slug version.language.slug version.slug element.fullname %}">{{element.fullname}}</a> {{element.description|safe }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<h3>You must provide a search query</h3>
+{% endif %}
+
+{% endblock %}

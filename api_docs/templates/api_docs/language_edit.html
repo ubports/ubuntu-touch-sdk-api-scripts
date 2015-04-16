@@ -1,0 +1,18 @@
+{% extends "api_docs/base.html" %}
+
+{% block sub_nav %}{% endblock %}
+
+{% block content %}
+
+{% if language.id %}
+<h2>Edit: {{language.name}}</h2>
+{% else %}
+<h2>New Language</h2>
+{% endif %}
+
+<form action="" method="POST" id="language_form">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Save">
+</form>
+{% endblock %}

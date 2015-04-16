@@ -1,0 +1,73 @@
+{% extends "api_docs/article.html" %}
+{% load static %}
+
+{% block title %}{{namespace.name}} [{{version.slug}}/{{namespace.name}}] | {{ block.super }}{% endblock %}
+
+{% block extrastyles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" media="all" href="{% static 'api_docs/css/' %}{{namespace.source_format}}.css"/>
+{% endblock extrastyles %}
+
+{% block editor_links %}
+    {% if perms.apidocs.change_namespace %}
+    <li><a href="{% url 'api_docs:namespace_edit' version.language.topic.slug version.language.slug version.slug namespace.id%}">Edit</a></li>
+    {% endif %}
+    {% if perms.apidocs.add_element %}
+    <li><a href="{% url 'api_docs:element_edit' version.language.topic.slug version.language.slug version.slug %}">+ Element</a></li>
+    {% endif %}
+    {% if perms.apidocs.add_page %}
+    <li><a href="{% url 'api_docs:page_edit' version.language.topic.slug version.language.slug version.slug %}">+ Page</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb_links %}
+<li class=""><a href="{% url 'api_docs:overview' %}">APIs</a> &rsaquo;</li>
+<li class=""><a href="{% url 'api_docs:topic' version.language.topic.slug %}">{{version.language.topic.name}}</a> &rsaquo;</li>
+<li class=""><a href="{% url 'api_docs:language' version.language.topic.slug version.language.slug %}">{{version.language.name}}</a> &rsaquo;</li>
+<li><a class="sub-nav-item" href="{% url 'api_docs:version' version.language.topic.slug version.language.slug version.slug %}">{{version.name}}</a> &rsaquo;</li>
+<li>{{namespace.name}}</li>
+{% endblock %}
+
+{% block content %}
+<!-- Source File: {{element.source_file}} -->
+<!-- Source Format: {{element.source_format}} -->
+
+{% if namespace.data %}
+<div id="namespace_content" class="row {{namespace.source_format}}">
+    <div class="ten-col">
+        <h2>{{namespace.name}}</h2>
+
+        <!-- Start Namespace Content -->
+        {{namespace.data|safe}}
+        <!-- End Namespace Content -->
+    </div>
+</div>
+{% endif %}
+<div id="namespace_content" class="row {{namespace.source_format}}">
+
+    {% if namespace.element_set.count %}
+    <div class="eight-col">
+    <h3>Elements</h3>
+    <dl>
+    {% for element in namespace.element_set.all %}
+        <dt><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug element.fullname %}">{{element.name}}</a></dt><dd>{{ element.description|safe }}</dd>
+    {% endfor %}
+    </dl>
+    </div>
+    {% endif %}
+
+    {% if namespace.page_set.count %}
+    <div class="four-col last-col">
+    <h3>Pages</h3>
+    <ul>
+    {% for page in namespace.page_set.all %}
+        <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug page.fullname %}">{{page.title}}</a></li>
+    {% endfor %}
+    </ul>
+    </div>
+    {% endif %}
+
+
+</div>
+
+{% endblock %}

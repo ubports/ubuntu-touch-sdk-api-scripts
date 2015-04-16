@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}{{version.slug}} - Ubuntu Developer{% endblock %}
+
+{% block breadcrumb_links %}
+<li class=""><a href="{% url 'api_docs:overview' %}">APIs</a> &rsaquo;</li>
+<li class=""><a href="{% url 'api_docs:topic' version.language.topic.slug %}">{{version.language.topic.name}}</a> &rsaquo;</li>
+<li class=""><a href="{% url 'api_docs:language' version.language.topic.slug version.language.slug %}">{{version.language.name}}</a> &rsaquo;</li>
+<li class="">{{version.name}}</li>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+    <h2>{{version.language.name}} {{version.language.topic.name}} for {{version.name}}</h2>
+        <div id="first_column" class="six-col">
+        {% for section in first_column %}
+            <h3 class="section_title">{{section.name}}{% if perms.common.change_section %}<a class="section_editor_action" href="{% url section_edit version.language.topic.slug version.language.slug version.slug section.id %}">Edit</a>{% endif %}</h3>
+            <ul>
+            {% if section.has_free_pages %}
+                {% if section.has_namespaces or section.has_free_elements %}
+                    <li><b>Pages</b></li>
+                    <ul>
+                {% endif %}
+                {% for page in section.free_page_set.all %}
+                    <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug page.fullname %}">{{page.title}}</a>{% if page.description %} - {{ page.description|safe }}{% endif %}</li>
+                {% endfor %}
+                {% if section.has_namespaces or section.has_free_elements %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+            {% if section.has_namespaces %}
+                {% if section.has_free_elements or section.has_free_pages %}
+                    <li><b>Namespaces</b></li>
+                    <ul>
+                {% endif %}
+                {% for namespace in section.namespace_set.all %}
+                    <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug namespace.name %}">{{namespace.display}}</a></li>
+                {% endfor %}
+                {% if section.has_free_pages or section.has_free_elements %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+            {% if section.has_free_elements %}
+                {% if section.has_namespaces or section.has_free_pages %}
+                    <li><b>Elements</b></li>
+                    <ul>
+                {% endif %}
+                {% for element in section.free_element_set.all %}
+                    <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug element.fullname %}">{{element.name}}</a>{% if element.description %} - {{ element.description|safe }}{% endif %}</li>
+                {% endfor %}
+                {% if section.has_namespaces or section.has_free_pages %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+            </ul>
+        {% endfor %}
+        </div>
+        {% if second_column %}
+        <div id="second_column" class="six-col last-col">
+        {% for section in second_column %}
+            <h3 class="section_title">{{section.name}}{% if perms.common.change_section %}<a class="section_editor_action" href="{% url section_edit version.language.topic.slug version.language.slug version.slug section.id %}">Edit</a>{% endif %}</h3>
+            <ul>
+            {% if section.has_free_pages %}
+                {% if section.has_namespaces or section.has_free_elements %}
+                    <li><b>Pages</b></li>
+                    <ul>
+                {% endif %}
+                {% for page in section.free_page_set.all %}
+                    <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug page.fullname %}">{{page.title}}</a>{% if page.description %} - {{ page.description|safe }}{% endif %}</li>
+                {% endfor %}
+                {% if section.has_namespaces or section.has_free_elements %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+            {% if section.has_namespaces %}
+                {% if section.has_free_elements or section.has_free_pages %}
+                    <li><b>Namespaces</b></li>
+                    <ul>
+                {% endif %}
+                {% for namespace in section.namespace_set.all %}
+                    <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug namespace.name %}">{{namespace.display}}</a></li>
+                {% endfor %}
+                {% if section.has_free_pages or section.has_free_elements %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+            {% if section.has_free_elements %}
+                {% if section.has_namespaces or section.has_free_pages %}
+                    <li><b>Elements</b></li>
+                    <ul>
+                {% endif %}
+                {% for element in section.free_element_set.all %}
+                    <li><a href="{% url 'api_docs:element' version.language.topic.slug version.language.slug version.slug element.fullname %}">{{element.name}}</a>{% if element.description %} - {{ element.description|safe }}{% endif %}</li>
+                {% endfor %}
+                {% if section.has_namespaces or section.has_free_pages %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+            </ul>
+        {% endfor %}
+        </div>
+    {% endif %}
+	</div>
+{% endblock %}

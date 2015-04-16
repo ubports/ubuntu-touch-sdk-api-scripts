@@ -20,6 +20,8 @@ urlpatterns += patterns(
     url(r'^openid/complete/$', 'login_complete', name='openid-complete',
         kwargs={'render_failure': login_failure}),
     url(r'^openid/logo.gif$', 'logo', name='openid-logo'),
+    url(r'^api/service/', include('service.urls', namespace='rest_framework')),
+    url(r'^api/', include('api_docs.urls', namespace='api_docs')),
 )
 listen_for_login()
 
