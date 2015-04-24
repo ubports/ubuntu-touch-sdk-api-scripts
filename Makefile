@@ -25,6 +25,8 @@ crontab:
 	@echo SECRET_KEY=\"${SECRET_KEY}\" >> crontab
 	@echo SWIFT_URL_BASE=\"${SWIFT_URL_BASE}\" >> crontab
 	@echo DJANGO_SETTINGS_MODULE=\"charm_settings\" >> crontab
+	@echo http_proxy=\"${http_proxy}\" >> crontab
+	@echo https_proxy=\"${https_proxy}\" >> crontab
 	@echo "0 4 * * * cd ${PWD}; ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log" >> crontab
 	@crontab ./crontab
 
