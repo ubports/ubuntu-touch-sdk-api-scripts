@@ -12,3 +12,6 @@
 
 /* All selectors should start with .qdoc */
 
+.qdoc .qmlitem table { margin-bottom: 18px; margin-top: 16px; }
+.qdoc .qmlitem { margin-bottom: 20px; }
+.qdoc .qmlitem table p { text-align: left; font-size:large; padding-left:5px; }
