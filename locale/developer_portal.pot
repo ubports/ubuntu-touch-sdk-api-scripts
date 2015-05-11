@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-31 18:38+0000\n"
+"POT-Creation-Date: 2015-04-24 09:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,30 +21,30 @@ msgstr ""
 msgid "Raw HTML"
 msgstr ""
 
-#: developer_portal/settings.py:185 developer_portal/settings.py:193
+#: developer_portal/settings.py:187 developer_portal/settings.py:195
 msgid "English"
 msgstr ""
 
-#: developer_portal/settings.py:186 developer_portal/settings.py:200
+#: developer_portal/settings.py:188 developer_portal/settings.py:202
 msgid "Simplified Chinese"
 msgstr ""
 
-#: developer_portal/settings.py:208
+#: developer_portal/settings.py:210
 msgid "Spanish"
 msgstr ""
 
-#: developer_portal/settings.py:248
+#: developer_portal/settings.py:250
 msgid "Page content"
 msgstr ""
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
-#: developer_portal/settings.py:256
+#: developer_portal/settings.py:258
 msgid "<p>Add content here...</p>"
 msgstr ""
 
-#: developer_portal/views.py:49
+#: developer_portal/views.py:50
 msgid ""
 "You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
 "profile</a> to use the developer site"
@@ -176,6 +176,14 @@ msgstr ""
 
 #: templates/search_results.html:4 templates/search_results.html.py:11
 msgid "Search results for:"
+msgstr ""
+
+#: templates/search_results.html:16
+msgid "Pages:"
+msgstr ""
+
+#: templates/search_results.html:27
+msgid "API Docs:"
 msgstr ""
 
 #: templates/webapp.html:6

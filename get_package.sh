@@ -1,5 +1,8 @@
 #!/bin/sh
 
+export http_proxy=${internal_proxy}
+export https_proxy=${internal_proxy}
+
 PACKAGE=$1
 if [ "X$1" = "X" ]; then
     echo "You must supply a package name"

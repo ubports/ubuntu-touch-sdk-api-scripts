@@ -25,10 +25,10 @@ crontab:
 	@echo SECRET_KEY=\"${SECRET_KEY}\" >> crontab
 	@echo SWIFT_URL_BASE=\"${SWIFT_URL_BASE}\" >> crontab
 	@echo DJANGO_SETTINGS_MODULE=\"charm_settings\" >> crontab
-	@echo http_proxy=\"${http_proxy}\" >> crontab
-	@echo https_proxy=\"${https_proxy}\" >> crontab
+	@echo internal_proxy=\"${internal_proxy}\" >> crontab
 	@echo "0 4 * * * cd ${PWD}; ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log" >> crontab
 	@crontab ./crontab
+	@rm ./crontab
 
 initdb: syncdb
 	@echo "Initializing database"
@@ -42,7 +42,7 @@ syncdb:
 collectstatic: collectstatic.done
 collectstatic.done:
 	@echo "Collecting static files"
-	@python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
+	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
 	@touch collectstatic.done
 
 update-pip-cache:
