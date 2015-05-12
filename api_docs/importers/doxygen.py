@@ -106,7 +106,10 @@ class DoxygenImporter(Importer):
                 
         self.read_classes(self.read_json_file(os.path.join(self.source, 'annotated.js')))
         if not self.options.get('no_pages', False):
-            self.read_pages(self.read_json_file(os.path.join(self.source, 'navtree.js')), self.parse_namespace(None))
+            if os.path.exists(os.path.join(self.source, 'navtreedata.js')):
+                self.read_pages(self.read_json_file(os.path.join(self.source, 'navtreedata.js')), self.parse_namespace(None))
+            elif os.path.exists(os.path.join(self.source, 'navtree.js')):
+                self.read_pages(self.read_json_file(os.path.join(self.source, 'navtree.js')), self.parse_namespace(None))
         #exit(0)
             
         namespace_order_index = 0
