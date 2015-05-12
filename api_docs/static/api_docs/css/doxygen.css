@@ -21,6 +21,7 @@
     background: none;
     border: none;
 }
+
 .doxygen table.memname td {
     border: none;
 }
@@ -28,4 +29,79 @@
 .doxygen td.memSeparator {
     background: none;
     border: none;
+}
+
+.doxygen div.fragment {
+    padding: 4px 6px;
+    margin: 4px 8px 4px 2px;
+    background-color: #FDF6F2;
+}
+
+.doxygen div.line {
+    font-family: "Ubuntu Mono","Consolas","Monaco","Lucida Console","Courier New",Courier,monospace;
+    line-height: 1.0;
+    text-wrap: unrestricted;
+    white-space: -moz-pre-wrap; /* Moz */
+    white-space: -pre-wrap;     /* Opera 4-6 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    white-space: pre-wrap;      /* CSS3  */
+    word-wrap: break-word;      /* IE 5.5+ */
+    text-indent: -53px;
+    padding-left: 53px;
+    padding-bottom: 0px;
+    margin: 0px;
+    -webkit-transition-property: background-color, box-shadow;
+    -webkit-transition-duration: 0.5s;
+    -moz-transition-property: background-color, box-shadow;
+    -moz-transition-duration: 0.5s;
+    -ms-transition-property: background-color, box-shadow;
+    -ms-transition-duration: 0.5s;
+    -o-transition-property: background-color, box-shadow;
+    -o-transition-duration: 0.5s;
+    transition-property: background-color, box-shadow;
+    transition-duration: 0.5s;
+}
+
+.doxygen span.keyword {
+    color: #008000
+}
+
+.doxygen span.keywordtype {
+    color: #604020
+}
+
+.doxygen span.keywordflow {
+    color: #e08000
+}
+
+.doxygen span.comment {
+    color: #800000
+}
+
+.doxygen span.preprocessor {
+    color: #806020
+}
+
+.doxygen span.stringliteral {
+    color: #002080
+}
+
+.doxygen span.charliteral {
+    color: #008080
+}
+
+.doxygen span.vhdldigit { 
+    color: #ff00ff 
+}
+
+.doxygen span.vhdlchar { 
+    color: #000000 
+}
+
+.doxygen span.vhdlkeyword { 
+    color: #700070 
+}
+
+.doxygen span.vhdllogic { 
+    color: #ff0000 
 }
