@@ -67,4 +67,4 @@ translations:
 
 tarball: pip-cache translations
 	@echo "Creating tarball in ../developer_portal.tar.gz"
-	cd ..; tar -C $(SOURCE_DIR) --exclude-vcs -czf developer_portal.tar.gz .
+	cd ..; tar -C $(SOURCE_DIR) --exclude-vcs --exclude=./media --exclude=./env --exclude=./db.sqlite3 --exclude=*.pyc -czf developer_portal.tar.gz .
