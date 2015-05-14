@@ -160,7 +160,7 @@ class QDocImporter(Importer):
 
         try:
             brief_start = doc_data.index('<!-- $$$'+element.name+'-brief -->\n')
-            element.description = self.parse_line(doc_data[brief_start+1][3:-35], classhref, fullname)
+            element.description = self.strip_links(doc_data[brief_start+1][3:-35])
             if len(element.description) >= 256:
                 element.description = element.description[:252]+'...'
         except ValueError:
