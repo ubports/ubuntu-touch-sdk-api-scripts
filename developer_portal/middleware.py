@@ -15,6 +15,10 @@ class CacheFriendlySessionMiddleware(SessionMiddleware):
     def process_response(self, request, response):
         response = super(CacheFriendlySessionMiddleware, self).process_response(request, response)
 
+        #Don't do anything if it's a redirect, not found, or error
+        if response.status_code != 200:
+            return response
+            
         #You have access to request.user in this method
         if not hasattr(request, 'user') or not request.user.is_authenticated():
             response.delete_cookie(settings.SESSION_COOKIE_NAME)
