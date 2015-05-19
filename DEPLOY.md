@@ -25,7 +25,7 @@ with a tarball of the code which is deployed with a juju charm
 
 1. Email ubuntu-platform@rt.canonical.com requesting a deployment
 2. Inform them of the location of the new tarball (on Launchpad)
-3. Instruct them to set build_label="${releasename}" using the release name from step 4 above
+3. Instruct them to update build_label according to the new release number
 
 They will first deploy to the staging environment, where you will need
 to verify the changes. If everything looks good, reply to the RT email
