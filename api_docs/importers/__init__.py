@@ -32,6 +32,22 @@ class Importer(object):
                 
         self.file_storage = get_storage_class()()
         
+    def strip_links(self, line):
+        clean_line = line
+        removal = self.LINK_REGEX.search(line)
+        while removal:
+            source = removal.group(0)
+            replace = removal.group('text')
+            if '</a>' in replace:
+                source = source[:source.index('</a>')+4]
+                replace = replace[:replace.index('</a>')]
+            if self.verbosity >= 3:
+                print "Removing link: %s" % removal.group(0)
+                print "  From: %s\n  To: %s" % (source, replace)
+            clean_line = clean_line.replace(source, replace)
+            removal = self.LINK_REGEX.search(clean_line)
+        return clean_line
+
     def clean_links(self, line, source_filename, element_fullname=None):
         try:
             # Clean Links
