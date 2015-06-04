@@ -28,6 +28,7 @@ class SphinxImporter(Importer):
         self.sections_file = self.options.get('sections')
         self.pages_sections = dict()
         self.page_data_map = dict()
+        self.module_order = []
 
     def parse_line(self, line, source_file, element_fullname):
         line = line.replace(u'\u00b6', u'')
@@ -213,7 +214,7 @@ class SphinxImporter(Importer):
         
         self.PRIMARY_NAMESPACE = None
 
-        namespace_order_index = 0
+        module_order_index = 0
             
         DOC_MODULE = '0'
         DOC_API_PART = '1'
@@ -242,7 +243,7 @@ class SphinxImporter(Importer):
                 if page_path.endswith('/'):
                     page_path = page_path[:-1]
                 ns_name = fullname
-                self.namespace_order.append(fullname)
+                self.module_order.append(fullname)
                 self.namespace_map[fullname] = page_path
             elif doc_enum == DOC_API_PART:
                 ns_name = '.'.join(fullname.split('.')[:2])
@@ -281,40 +282,43 @@ class SphinxImporter(Importer):
                 
             continue
             
-        for ns_name in self.namespace_order:
-            cleaned_ns_name = self.parse_namespace(ns_name)
+        for module in self.module_order:
 
-            section, created = Section.objects.get_or_create(name=self.get_section(ns_name, None), topic_version=self.version)
-            if created:
-                print "Created section: %s" % section.name
-
-            if self.verbosity >= 1:
-                print 'Namespace: ' + ns_name
-                print 'Section: ' + section.name
-
-                
-            doc_file = os.path.join(self.DOC_ROOT, self.namespace_map[ns_name]+'.fjson')
-            ns_data = self.read_json_file(doc_file)
-            classes, extra = self.extract_classes(ns_data['body'])
-
-            if cleaned_ns_name is not None and cleaned_ns_name != '':
-                namespace, created = Namespace.objects.get_or_create(name=ns_name, display_name=cleaned_ns_name, platform_section=section)
-                if created:
-                    print "Created Namespace: %s" % ns_name
-                namespace.data = self.clean_content(extra, doc_file, ns_name)
-                namespace.source_file = os.path.basename(doc_file)
-                namespace.source_format = "sphinx"
-                namespace.save()
-            else:
-                namespace = None
+            doc_file = os.path.join(self.DOC_ROOT, self.namespace_map[module]+'.fjson')
+            module_data = self.read_json_file(doc_file)
+            classes, extra = self.extract_classes(module_data['body'])
 
             if len(classes) > 0:
                             
                 for fullname, doc_data in classes:
-                    if fullname.startswith(ns_name):
-                        classname = fullname[len(ns_name)+1:]
+                    if '.' in fullname:
+                        ns_name = fullname[:fullname.rindex('.')]
+                        classname = fullname[fullname.rindex('.')+1:]
                     else:
                         classname = fullname
+                        ns_name = None
+
+                    cleaned_ns_name = self.parse_namespace(ns_name)
+
+                    section, created = Section.objects.get_or_create(name=self.get_section(ns_name, None), topic_version=self.version)
+                    if created:
+                        print "Created section: %s" % section.name
+
+                    if self.verbosity >= 1:
+                        print 'Namespace: ' + ns_name
+                        print 'Section: ' + section.name
+
+                    if cleaned_ns_name is not None and cleaned_ns_name != '':
+                        namespace, created = Namespace.objects.get_or_create(name=ns_name, display_name=cleaned_ns_name, platform_section=section)
+                        if created:
+                            print "Created Namespace: %s" % ns_name
+                        namespace.data = self.clean_content(extra, doc_file, ns_name)
+                        namespace.source_file = os.path.basename(doc_file)
+                        namespace.source_format = "sphinx"
+                        namespace.save()
+                    else:
+                        namespace = None
+                        
 
                     if self.verbosity >= 1:
                         print 'Element: ' + fullname
@@ -346,7 +350,7 @@ class SphinxImporter(Importer):
         if not self.options.get('no_pages', False):
             page_order_index = 0
             
-            #self.page_order.extend(self.namespace_order)
+            #self.page_order.extend(self.module_order)
                 
             for pagefile in self.pages_sections:
                 ns_name, pagename, pagefullname, pagetitle = self.page_data_map[pagefile]
