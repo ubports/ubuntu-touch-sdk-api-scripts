@@ -76,9 +76,3 @@ class Command(BaseCommand):
                 }
             )
             editorsperms.sites.add(settings.SITE_ID)
-
-        print('Adding initial set of architectures.')
-        Architecture.objects.get_or_create(name='amd64')
-        Architecture.objects.get_or_create(name='i386')
-        Architecture.objects.get_or_create(name='armhf')
-        Architecture.objects.get_or_create(name='all')
