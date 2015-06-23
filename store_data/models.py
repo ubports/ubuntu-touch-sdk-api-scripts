@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class Release(models.Model):
     name = models.CharField(max_length=25)
@@ -16,7 +14,7 @@ class GadgetSnap(models.Model):
     release = models.ManyToManyField(Release)
     name = models.CharField(max_length=50)
     ratings_average = models.DecimalField(max_digits=2, decimal_places=1)
-    alias = models.CharField(max_length=50)
+    alias = models.CharField(max_length=50, blank=True, null=True)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     publisher = models.CharField(max_length=50)
     store_url = models.URLField(blank=True)
