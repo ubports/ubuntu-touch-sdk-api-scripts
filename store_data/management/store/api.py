@@ -9,7 +9,7 @@ else:
     from urllib.request import Request, urlopen
 
 
-STORE_URL   = 'https://search.apps.ubuntu.com'
+STORE_URL = 'https://search.apps.ubuntu.com'
 PACKAGE_API = STORE_URL + '/api/v1/search'
 
 
