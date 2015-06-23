@@ -13,8 +13,6 @@ from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from cms.models.permissionmodels import PageUserGroup, GlobalPagePermission
 
-from store_data.models import Architecture
-
 class Command(BaseCommand):
     help = "Make sure the Developer Portal database is set up properly."
 
