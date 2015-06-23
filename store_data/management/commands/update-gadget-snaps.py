@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from datetime import datetime
+import pytz
 
 from django.core.management.base import NoArgsCommand
 
@@ -23,7 +24,7 @@ def add_release(release):
 
 
 def update_gadget_snaps():
-    now = datetime.now()
+    now = datetime.now(pytz.utc)
     for entry in api.get_oem_snap_entries():
         gadget_snap, created = GadgetSnap.objects.get_or_create(
             icon_url=entry['icon_url'], name=entry['name'],
@@ -39,6 +40,7 @@ def update_gadget_snaps():
         for release in entry['release']:
             rel_ob = add_release(release)
             gadget_snap.release.add(rel_ob)
+    GadgetSnap.objects.exclude(last_updated=now).delete()
 
 
 class Command(NoArgsCommand):
