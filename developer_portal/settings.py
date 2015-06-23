@@ -75,6 +75,8 @@ INSTALLED_APPS = [
 
     'webapp_creator',
 
+    'store_data',
+
     'api_docs',
 ]
 
