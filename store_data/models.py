@@ -21,7 +21,7 @@ class GadgetSnap(models.Model):
     publisher = models.CharField(max_length=50)
     store_url = models.URLField(blank=True)
     publisher = models.CharField(max_length=10)
-    content = models.CharField(max_length=10)
+    version = models.CharField(max_length=15)
     architecture = models.ManyToManyField(Architecture)
     title = models.CharField(max_length=30)
     last_updated = models.DateTimeField()
