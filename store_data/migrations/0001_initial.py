@@ -26,14 +26,14 @@ class Migration(SchemaMigration):
         db.create_table(u'store_data_gadgetsnap', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('icon_url', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('ratings_average', self.gf('django.db.models.fields.DecimalField')(max_digits=2, decimal_places=1)),
-            ('alias', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
-            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=4, decimal_places=2)),
+            ('alias', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
+            ('price', self.gf('django.db.models.fields.DecimalField')(max_digits=5, decimal_places=2)),
+            ('publisher', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('store_url', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
-            ('publisher', self.gf('django.db.models.fields.CharField')(max_length=10)),
-            ('version', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('version', self.gf('django.db.models.fields.CharField')(max_length=25)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('last_updated', self.gf('django.db.models.fields.DateTimeField')()),
         ))
         db.send_create_signal(u'store_data', ['GadgetSnap'])
@@ -82,19 +82,19 @@ class Migration(SchemaMigration):
         },
         u'store_data.gadgetsnap': {
             'Meta': {'object_name': 'GadgetSnap'},
-            'alias': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'alias': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'architecture': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['store_data.Architecture']", 'symmetrical': 'False'}),
             'icon_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_updated': ('django.db.models.fields.DateTimeField', [], {}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '4', 'decimal_places': '2'}),
-            'publisher': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'price': ('django.db.models.fields.DecimalField', [], {'max_digits': '5', 'decimal_places': '2'}),
+            'publisher': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'ratings_average': ('django.db.models.fields.DecimalField', [], {'max_digits': '2', 'decimal_places': '1'}),
             'release': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['store_data.Release']", 'symmetrical': 'False'}),
             'store_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'version': ('django.db.models.fields.CharField', [], {'max_length': '15'})
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'version': ('django.db.models.fields.CharField', [], {'max_length': '25'})
         },
         u'store_data.release': {
             'Meta': {'object_name': 'Release'},
