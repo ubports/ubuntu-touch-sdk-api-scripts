@@ -18,6 +18,7 @@ def get_oem_snap_entries():
     url = PACKAGE_API + "?%s" % params
     req = Request(url)
     req.add_header('X-Ubuntu-Frameworks', 'ubuntu-core-15.04-dev1')
+    # XXX: This is supposed to work, but doesn't.
     # req.add_header('X-Ubuntu-Release',
     #                '[15.04-core|rolling-core|rolling-personal]')
     req.add_header('Accept', 'application/hal+json')
