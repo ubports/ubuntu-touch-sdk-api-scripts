@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="row">
+    <h2>{% trans "Translations dashboard" %}</h2>
+    <p>A simple dashboard to keep track of page updates between languages.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Page</th>
+                <th>en</th>
+                <th>zh-cn</th>
+            </tr>
+        </thead>
+        <tbody
+            {% for page in cms_pages %}
+                 <tr>
+
+                    <td style="text-align:left;width:40%;"><a href="/{{ page.path }}">{{ page.title }}</a></td>
+                    <td style="text-align:left;">{{ page.en }}</td>
+                    <td style="text-align:left;">
+                        {% if page.zh_cn > page.en %}
+                            <span style="color:green;">
+                        {% else %}
+                            <span style="color:red;">
+                        {% endif %}
+                            {{ page.zh_cn }}
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tblody>
+    </table>
+</div>
+{% endblock content %}
