@@ -2,28 +2,13 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from cms.models.pagemodel import Page
 import json
-from django.db import connection
 
-
-def get_plugin_changes():
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM `cms_cmsplugin` ORDER BY `changed_date` DESC")
-    row = cursor.fetchall()
-    return row
+from cms.models import CMSPlugin
+from reversion.models import Version
 
 
 def get_revision(plugin_id):
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM `reversion_version` WHERE `object_id_int` = %s ORDER BY `id` DESC limit 1", [plugin_id])
-    row = cursor.fetchone()
-    return row
-
-
-def get_page_for_placeholder(ph):
-    cursor = connection.cursor()
-    cursor.execute("SELECT `page_id` FROM `cms_page_placeholders` WHERE `placeholder_id` = %s", [ph])
-    row = cursor.fetchone()
-    return row
+    return Version.objects.filter(object_id_int=plugin_id).order_by('-id')
 
 
 def parse_time(time):
@@ -32,17 +17,15 @@ def parse_time(time):
 
 
 class AllPages():
-    all_pages = Page.objects.filter()
     dashboard_data = []
     known_paths = []
-    for data in get_plugin_changes():
-        rev = get_revision(data[0])
+    for plugin_change in CMSPlugin.objects.order_by('-changed_date'):
+        rev = get_revision(plugin_change.id)
         if rev:
-            content = json.loads(rev[7])
-            date = data[7]
-            lang = data[4].replace('-', '_')
-            page_id = get_page_for_placeholder(data[1])[0]
-            page = Page.objects.filter(id=page_id)[0]
+            content = json.loads(rev[0].serialized_data)
+            date = plugin_change.changed_date
+            lang = plugin_change.language.replace('-', '_')
+            page = plugin_change.placeholder.page
             path = page.get_path()
             if path not in known_paths:
                 known_paths.append(path)
