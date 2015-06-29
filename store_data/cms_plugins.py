@@ -9,6 +9,7 @@ class GadgetSnapListPlugin(CMSPluginBase):
     model = GadgetSnap
     name = _("Gadget Snap List Plugin")
     render_template = "gadget_snap_list.html"
+    change_form_template = "gadget_snap_list.html"
 
     def render(self, context, instance, placeholder):
         context['instance'] = instance
