@@ -1,0 +1,27 @@
+{% load i18n %}
+<table>
+	<thead>
+		<tr>
+			<th>{% trans "Name" %}</th>
+			<th>{% trans "Publisher" %}</th>
+			<th>{% trans "Version" %}</th>
+			<th>{% trans "Release(s)" %}</th>
+			<th>{% trans "Architecture(s)" %}</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for snap in gadget_snap_list %}
+		<tr>
+			<td>{{ snap.alias|default_if_none:snap.name }}</td>
+			<td>{{ snap.publisher }}</td>
+			<td>{{ snap.version }}</td>
+			<td>{{ snap.release|join:", " }}</td>
+			<td>{{ snap.architecture|join:", " }}</td>
+		</tr>
+	{% empty %}
+		<tr>
+			<td colspan='5'>No Gadget snaps available.</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
