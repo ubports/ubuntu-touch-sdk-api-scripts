@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-29 10:13+0000\n"
+"POT-Creation-Date: 2015-06-29 13:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -190,6 +190,10 @@ msgstr ""
 
 #: templates/gadget_snap_list.html:9
 msgid "Architecture(s)"
+msgstr ""
+
+#: templates/gadget_snap_list.html:23
+msgid "No Gadget snaps available."
 msgstr ""
 
 #: templates/login_failure.html:21
