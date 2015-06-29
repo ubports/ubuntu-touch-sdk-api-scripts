@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-24 09:17+0000\n"
+"POT-Creation-Date: 2015-06-29 10:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,26 +21,26 @@ msgstr ""
 msgid "Raw HTML"
 msgstr ""
 
-#: developer_portal/settings.py:187 developer_portal/settings.py:195
+#: developer_portal/settings.py:189 developer_portal/settings.py:197
 msgid "English"
 msgstr ""
 
-#: developer_portal/settings.py:188 developer_portal/settings.py:202
+#: developer_portal/settings.py:190 developer_portal/settings.py:204
 msgid "Simplified Chinese"
 msgstr ""
 
-#: developer_portal/settings.py:210
+#: developer_portal/settings.py:212
 msgid "Spanish"
 msgstr ""
 
-#: developer_portal/settings.py:250
+#: developer_portal/settings.py:252
 msgid "Page content"
 msgstr ""
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
-#: developer_portal/settings.py:258
+#: developer_portal/settings.py:260
 msgid "<p>Add content here...</p>"
 msgstr ""
 
@@ -48,6 +48,10 @@ msgstr ""
 msgid ""
 "You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
 "profile</a> to use the developer site"
+msgstr ""
+
+#: store_data/cms_plugins.py:10
+msgid "Gadget Snap List Plugin"
 msgstr ""
 
 #: templates/404.html:4
@@ -166,6 +170,26 @@ msgstr ""
 #: templates/error_base.html:78 templates/website_base.html:83
 #: templates/website_base.html.py:84 templates/website_base.html:85
 msgid "Search"
+msgstr ""
+
+#: templates/gadget_snap_list.html:5
+msgid "Name"
+msgstr ""
+
+#: templates/gadget_snap_list.html:6
+msgid "Publisher"
+msgstr ""
+
+#: templates/gadget_snap_list.html:7 webapp_creator/views.py:34
+msgid "Version"
+msgstr ""
+
+#: templates/gadget_snap_list.html:8
+msgid "Release(s)"
+msgstr ""
+
+#: templates/gadget_snap_list.html:9
+msgid "Architecture(s)"
 msgstr ""
 
 #: templates/login_failure.html:21
@@ -493,10 +517,6 @@ msgstr ""
 
 #: webapp_creator/views.py:31
 msgid "Use CTRL to select multiple options"
-msgstr ""
-
-#: webapp_creator/views.py:34
-msgid "Version"
 msgstr ""
 
 #: webapp_creator/views.py:35
