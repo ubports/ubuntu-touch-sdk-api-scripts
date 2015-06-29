@@ -33,7 +33,6 @@ class Migration(SchemaMigration):
             ('publisher', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('store_url', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
             ('version', self.gf('django.db.models.fields.CharField')(max_length=25)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('last_updated', self.gf('django.db.models.fields.DateTimeField')()),
         ))
         db.send_create_signal(u'store_data', ['GadgetSnap'])
@@ -93,7 +92,6 @@ class Migration(SchemaMigration):
             'ratings_average': ('django.db.models.fields.DecimalField', [], {'max_digits': '2', 'decimal_places': '1'}),
             'release': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['store_data.Release']", 'symmetrical': 'False'}),
             'store_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'version': ('django.db.models.fields.CharField', [], {'max_length': '25'})
         },
         u'store_data.release': {
