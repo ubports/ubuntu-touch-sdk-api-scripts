@@ -17,7 +17,7 @@ def update_gadget_snaps():
             defaults={
                 'icon_url': entry['icon_url'],
                 'ratings_average': entry['ratings_average'],
-                'alias': entry['alias'], 'price': entry['price'], 
+                'alias': entry['alias'], 'price': entry['price'],
                 'publisher': entry['publisher'], 'version': entry['version'],
                 'last_updated': now})
         if not created:
@@ -25,7 +25,7 @@ def update_gadget_snaps():
             gadget_snap.icon_url = entry['icon_url']
             gadget_snap.ratings_average = entry['ratings_average']
             gadget_snap.alias = entry['alias']
-            gadget_snap.price: entry['price']
+            gadget_snap.price = entry['price']
             gadget_snap.publisher = entry['publisher']
             gadget_snap.version = entry['version']
             gadget_snap.save()
