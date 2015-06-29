@@ -9,8 +9,8 @@
         <thead>
             <tr>
                 <th>Page</th>
-                <th>en</th>
-                <th>zh-cn</th>
+                <th>English</th>
+                <th>Simplified chinese</th>
             </tr>
         </thead>
         <tbody
@@ -19,18 +19,20 @@
 
                     <td style="text-align:left;width:40%;"><a href="/{{ page.path }}">{{ page.title }}</a></td>
                     <td style="text-align:left;">{{ page.en }}</td>
-                    <td style="text-align:left;">
                         {% if page.zh_cn > page.en %}
-                            <span style="color:green;">
+                            <td style="text-align:left;background-color:#60ab5d;color:#fff;">
                         {% else %}
-                            <span style="color:red;">
+                            <td style="text-align:left;background-color:#f95e5d;color:#fff;">
                         {% endif %}
+                        {% if page.zh_cn %}
                             {{ page.zh_cn }}
-                        </span>
+                        {% else %}
+                            <span style="color:lightgrey">Not available</span>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
-        </tblody>
+        </tbody>
     </table>
 </div>
 {% endblock content %}
