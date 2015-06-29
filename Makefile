@@ -27,6 +27,7 @@ crontab:
 	@echo DJANGO_SETTINGS_MODULE=\"charm_settings\" >> crontab
 	@echo internal_proxy=\"${internal_proxy}\" >> crontab
 	@echo "0 4 * * * cd ${PWD}; ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log" >> crontab
+	@echo "15 4 * * * cd ${PWD}; ${PYTHON} manage.py update-gadget-snaps > ${PWD}/../../logs/update_gadgetsnaps.log 2>${PWD}/../../logs/update_gadgetsnaps_errors.log" >> crontab
 	@crontab ./crontab
 	@rm ./crontab
 
