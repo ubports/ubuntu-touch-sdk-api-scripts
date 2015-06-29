@@ -13,13 +13,17 @@ def update_gadget_snaps():
     now = datetime.now(pytz.utc)
     for entry in api.get_oem_snap_entries():
         gadget_snap, created = GadgetSnap.objects.get_or_create(
-            icon_url=entry['icon_url'], name=entry['name'],
-            ratings_average=entry['ratings_average'], alias=entry['alias'],
-            price=entry['price'], publisher=entry['publisher'],
-            store_url=entry['_links']['self']['href'],
-            version=entry['version'], last_updated=now)
+            store_url=entry['_links']['self']['href'], name=entry['name'],
+            defaults={
+                'icon_url': entry['icon_url'],
+                'ratings_average': entry['ratings_average'],
+                'alias': entry['alias'], 'price': entry['price'], 
+                'publisher': entry['publisher'], 'version': entry['version'],
+                'last_updated': now})
+        print(gadget_snap, created)
         if not created:
             gadget_snap.last_updated = now
+            gadget_snap.save()
         for arch in entry['architecture']:
             arch_ob, created = Architecture.objects.get_or_create(name=arch)
             gadget_snap.architecture.add(arch_ob)
