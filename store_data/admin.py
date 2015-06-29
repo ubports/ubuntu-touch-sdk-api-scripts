@@ -18,5 +18,5 @@ admin.site.register(Architecture, ArchitectureAdmin)
 
 class GadgetSnapAdmin(admin.ModelAdmin):
     list_display = ('name',)
-    search_fields = ('name', 'alias', 'title')
+    search_fields = ('name', 'alias', 'publisher')
 admin.site.register(GadgetSnap, GadgetSnapAdmin)
