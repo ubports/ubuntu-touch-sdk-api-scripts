@@ -1,17 +1,15 @@
 from django.db import models
 
-from cms.models.pluginmodel import CMSPlugin
 
-
-class Release(CMSPlugin):
+class Release(models.Model):
     name = models.CharField(max_length=25)
 
 
-class Architecture(CMSPlugin):
+class Architecture(models.Model):
     name = models.CharField(max_length=10)
 
 
-class GadgetSnap(CMSPlugin):
+class GadgetSnap(models.Model):
     icon_url = models.URLField(blank=True)
     release = models.ManyToManyField(Release)
     name = models.CharField(max_length=100)
