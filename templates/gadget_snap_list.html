@@ -15,8 +15,8 @@
 			<td>{{ snap.alias|default_if_none:snap.name }}</td>
 			<td>{{ snap.publisher }}</td>
 			<td>{{ snap.version }}</td>
-			<td>{{ snap.release|join:", " }}</td>
-			<td>{{ snap.architecture|join:", " }}</td>
+			<td>{% for rel in snap.release.all %}{{ rel.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+			<td>{% for arch in snap.architecture.all %}{{ arch.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
 		</tr>
 	{% empty %}
 		<tr>
