@@ -12,7 +12,10 @@
 	<tbody>
 	{% for snap in gadget_snap_list %}
 		<tr>
-			<td>{{ snap.alias|default_if_none:snap.name }}</td>
+			<td>
+				{% if snap.icon_url %}<img width="64" height="64" src="{{ snap.icon_url }}" /> {% endif %}
+				{{ snap.alias|default_if_none:snap.name }}
+			</td>
 			<td>{{ snap.publisher }}</td>
 			<td>{{ snap.version }}</td>
 			<td>{% for rel in snap.release.all %}{{ rel.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
