@@ -8,6 +8,7 @@ from .models import GadgetSnap
 class GadgetSnapListPlugin(CMSPluginBase):
     name = _("Gadget Snap List Plugin")
     render_template = "gadget_snap_list.html"
+    text_enabled = True
 
     def render(self, context, instance, placeholder):
         context.update({
