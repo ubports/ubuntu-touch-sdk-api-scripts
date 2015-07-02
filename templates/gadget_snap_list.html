@@ -1,30 +1,29 @@
 {% load i18n %}
-<table>
-	<thead>
-		<tr>
-			<th>{% trans "Name" %}</th>
-			<th>{% trans "Publisher" %}</th>
-			<th>{% trans "Version" %}</th>
-			<th>{% trans "Release(s)" %}</th>
-			<th>{% trans "Architecture(s)" %}</th>
-		</tr>
-	</thead>
-	<tbody>
+{% load text_extras %}
+
+<div class="row equal-height no-border">
 	{% for snap in gadget_snap_list %}
-		<tr>
-			<td>
-				{% if snap.icon_url %}<img width="64" height="64" src="{{ snap.icon_url }}" /> {% endif %}
-				{{ snap.alias|default_if_none:snap.name }}
-			</td>
-			<td>{{ snap.publisher }}</td>
-			<td>{{ snap.version }}</td>
-			<td>{% for rel in snap.release.all %}{{ rel.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
-			<td>{% for arch in snap.architecture.all %}{{ arch.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
-		</tr>
-	{% empty %}
-		<tr>
-			<td colspan='5'>{% trans "No Gadget snaps available." %}</td>
-		</tr>
-	{% endfor %}
-	</tbody>
-</table>
+	    {% if gadget_snap_list|index:snap|divisibleby:3 %}
+	        <div class="left four-col last-col box">
+        {% else %}
+            <div class="left four-col box">
+        {% endif %}
+        {% if snap.screenshot_url.0.url %}
+	        <p><img src="{{ snap.screenshot_url.0.url }}"/></p>
+        {% else %}
+            <p><img src="http://i.imgur.com/DGb4wKs.png"/></p>
+        {% endif %}
+            <h3>{{ snap.alias|default_if_none:snap.name }}</h3>
+            {% if snap.description|length > 180 %}
+                <p>{{ snap.description|truncatechars:180 }}</p>
+            {% else %}
+                <p>{% autoescape off %}{{ snap.description|html_links }}{% endautoescape %}</p>
+            {% endif %}
+	        <ul class="list-ubuntu">
+	            <li>
+	                <a href="https://developer.ubuntu.com/en/snappy/start/">Install Snappy on this device</a>
+                </li>
+            </ul>
+        </div>
+    {% endfor %}
+</div>
