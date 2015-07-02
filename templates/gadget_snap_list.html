@@ -8,29 +8,22 @@
         {% else %}
             <div class="left four-col box">
         {% endif %}
-        {% if snap.screenshot_url.url %}
-	        <p><img src="{{ snap.screenshot_url.url }}"/></p>
+        {% if snap.screenshot_url.0.url %}
+	        <p><img src="{{ snap.screenshot_url.0.url }}"/></p>
         {% else %}
-            <p><img src="http://cdn2.bigcommerce.com/n-zfvgw8/ym66unw/product_images/uploaded_images/cutting-board-1-.jpg"/></p>
+            <p><img src="http://i.imgur.com/DGb4wKs.png"/></p>
         {% endif %}
             <h3>{{ snap.alias|default_if_none:snap.name }}</h3>
-            {% if snap.description|length > 200 %}
-                <p>{{ snap.description|truncatechars:200 }}</p>
+            {% if snap.description|length > 180 %}
+                <p>{{ snap.description|truncatechars:180 }}</p>
             {% else %}
                 <p>{% autoescape off %}{{ snap.description|html_links }}{% endautoescape %}</p>
             {% endif %}
-	        <p>{{ snap.architecture.name }}</p>
-	        <p>{{ snap.release.name }}</p>
-	        <a href="">
-	        <div class="four-col equal-height box-grey">
-	            <div class="one-col no-margin-bottom">
-	                <img src="{{ snap.icon_url }}"/>
-                </div>
-                <div class="three-col last-col no-margin-bottom">
-                    <p><strong>{{ snap.alias|default_if_none:snap.name }}</strong> on the Ubuntu Store</p>
-                </div>
-            </div>
-            </a>
+	        <ul class="list-ubuntu">
+	            <li>
+	                <a href="https://developer.ubuntu.com/en/snappy/start/">Install Snappy on this device</a>
+                </li>
+            </ul>
         </div>
     {% endfor %}
 </div>
