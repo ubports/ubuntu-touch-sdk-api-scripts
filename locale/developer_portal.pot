@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-29 13:22+0000\n"
+"POT-Creation-Date: 2015-07-03 07:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgid ""
 "profile</a> to use the developer site"
 msgstr ""
 
-#: store_data/cms_plugins.py:10
+#: store_data/cms_plugins.py:9
 msgid "Gadget Snap List Plugin"
 msgstr ""
 
@@ -170,30 +170,6 @@ msgstr ""
 #: templates/error_base.html:78 templates/website_base.html:83
 #: templates/website_base.html.py:84 templates/website_base.html:85
 msgid "Search"
-msgstr ""
-
-#: templates/gadget_snap_list.html:5
-msgid "Name"
-msgstr ""
-
-#: templates/gadget_snap_list.html:6
-msgid "Publisher"
-msgstr ""
-
-#: templates/gadget_snap_list.html:7 webapp_creator/views.py:34
-msgid "Version"
-msgstr ""
-
-#: templates/gadget_snap_list.html:8
-msgid "Release(s)"
-msgstr ""
-
-#: templates/gadget_snap_list.html:9
-msgid "Architecture(s)"
-msgstr ""
-
-#: templates/gadget_snap_list.html:23
-msgid "No Gadget snaps available."
 msgstr ""
 
 #: templates/login_failure.html:21
@@ -521,6 +497,10 @@ msgstr ""
 
 #: webapp_creator/views.py:31
 msgid "Use CTRL to select multiple options"
+msgstr ""
+
+#: webapp_creator/views.py:34
+msgid "Version"
 msgstr ""
 
 #: webapp_creator/views.py:35
