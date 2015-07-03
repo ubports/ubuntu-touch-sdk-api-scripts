@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-03 07:57+0000\n"
+"POT-Creation-Date: 2015-07-03 07:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,6 +170,10 @@ msgstr ""
 #: templates/error_base.html:78 templates/website_base.html:83
 #: templates/website_base.html.py:84 templates/website_base.html:85
 msgid "Search"
+msgstr ""
+
+#: templates/gadget_snap_list.html:27
+msgid "Install Snappy on this device"
 msgstr ""
 
 #: templates/login_failure.html:21
