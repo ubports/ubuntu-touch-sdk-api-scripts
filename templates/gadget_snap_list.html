@@ -1,5 +1,4 @@
-{% load i18n %}
-{% load text_extras %}
+{% load i18n static text_extras %}
 
 <div class="row equal-height no-border">
 	{% for snap in gadget_snap_list %}
@@ -11,7 +10,11 @@
         {% if snap.screenshot_url.0.url %}
 	        <p><img src="{{ snap.screenshot_url.0.url }}"/></p>
         {% else %}
-            <p><img src="http://i.imgur.com/DGb4wKs.png"/></p>
+            {% with 0|randint:10|string as rand %} 
+                {% with "img/boards/noboard-"|add:rand|add:".png" as noboard %}
+                    <p><img src="{% static noboard %}"/></p>
+                {% endwith %}
+            {% endwith %}
         {% endif %}
             <h3>{{ snap.alias|default_if_none:snap.name }}</h3>
             {% if snap.description|length > 180 %}
