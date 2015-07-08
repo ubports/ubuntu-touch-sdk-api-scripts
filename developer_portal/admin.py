@@ -3,6 +3,8 @@ from django.contrib import admin
 from reversion.models import Revision, Version
 from reversion.admin import VersionAdmin
 
+from .models import SnappyDocsBranch
+
 __all__ = (
 )
 
@@ -22,3 +24,8 @@ class VersionAdmin(admin.ModelAdmin):
 
 admin.site.register(Version, VersionAdmin)
 
+class SnappyDocsBranchAdmin(admin.ModelAdmin):
+    list_display = ('branch_origin', 'path_alias')
+    list_filter = ('path_alias')
+
+admin.site.register(SnappyDocsBranch, SnappyDocsBranchAdmin)
