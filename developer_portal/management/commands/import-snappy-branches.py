@@ -33,6 +33,8 @@ def import_branches():
             shutil.rmtree(os.path.join(tempdir, branch.path_alias))
             break
     os.chdir(pwd)
+    # for local_branch in tempdir:
+    # import markdown from local_branch
     shutil.rmtree(tempdir)
 
 
