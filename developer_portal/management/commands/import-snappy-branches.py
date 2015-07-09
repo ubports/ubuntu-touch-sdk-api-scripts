@@ -1,5 +1,6 @@
 from django.core.management.base import NoArgsCommand
 
+import glob
 import logging
 import os
 import shutil
@@ -18,6 +19,10 @@ def clean_up(directory):
     shutil.rmtree(directory)
 
 
+def import_markdown(local_branch):
+    print(local_branch)
+
+
 def import_branches():
     if not SnappyDocsBranch.objects.count():
         logging.error('No Snappy branches registered in the '
@@ -33,8 +38,9 @@ def import_branches():
             shutil.rmtree(os.path.join(tempdir, branch.path_alias))
             break
     os.chdir(pwd)
-    # for local_branch in tempdir:
-    # import markdown from local_branch
+    for local_branch in [a for a in glob.glob(tempdir+'/*')
+                         if os.path.isdir(a)]:
+        import_markdown(local_branch)
     shutil.rmtree(tempdir)
 
 
