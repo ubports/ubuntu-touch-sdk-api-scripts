@@ -13,6 +13,7 @@ APP_NAME = "developer_portal"
 project_locale_path = settings.LOCALE_PATHS[0]
 po_filenames = glob.glob(project_locale_path+"/*.po")
 
+
 def run_manage(args):
     pwd = os.getcwd()
     os.chdir(settings.PROJECT_PATH)
@@ -23,6 +24,7 @@ def run_manage(args):
 def update_template():
     run_manage(["update-template"])
 
+
 def create_symlink(file_fn, symlink_fn):
     if os.path.exists(symlink_fn) and not os.path.islink(symlink_fn):
         os.remove(symlink_fn)
@@ -31,15 +33,18 @@ def create_symlink(file_fn, symlink_fn):
     if not os.path.exists(symlink_fn):
         os.symlink(file_fn, symlink_fn)
 
+
 def create_symlinks():
     for po_fn in po_filenames:
         locale = os.path.basename(po_fn).split(".po")[0]
-        po_symlink_fn = os.path.join(project_locale_path, locale, 
-                "LC_MESSAGES/django.po")
+        po_symlink_fn = os.path.join(
+            project_locale_path, locale, "LC_MESSAGES/django.po")
         create_symlink(po_fn, po_symlink_fn)
+
 
 def compilemessages():
     run_manage(["compilemessages"])
+
 
 def remove_toplevel_mos():
     for mo_fn in glob.glob(project_locale_path+"/*.mo"):
@@ -59,9 +64,11 @@ def check():
         locale = os.path.basename(po_fn).split(".po")[0]
         locale = locale.lower().replace("_", "-")
         if locale not in configured_languages:
-            print("Consider adding adding '%s' to settings.LANGUAGES." % locale)
+            print(
+                "Consider adding '%s' to settings.LANGUAGES." % locale)
         if locale not in map(lambda a: a['code'], settings.CMS_LANGUAGES[1]):
-            print("Consider adding adding '%s' to settings.CMS_LANGUAGES." % locale)
+            print(
+                "Consider adding '%s' to settings.CMS_LANGUAGES." % locale)
 
 
 class Command(NoArgsCommand):
