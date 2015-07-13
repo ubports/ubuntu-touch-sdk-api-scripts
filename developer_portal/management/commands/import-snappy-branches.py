@@ -14,16 +14,16 @@ import tempfile
 
 from developer_portal.models import SnappyDocsBranch
 
-MAP = {"autopilot.md": None,
-       "config.md": "config-command",
-       "cross-build.md": None,
-       "frameworks.md": "frameworks",
-       "garbage.md": None,
-       "hashes.md": None,
-       "meta.md": "package-metadata",
-       "oem.md": "oem",
-       "package-names.md": None,
-       "security.md": "security-policy"}
+MAP = {u"autopilot.md": None,
+       u"config.md": u"config-command",
+       u"cross-build.md": None,
+       u"frameworks.md": u"frameworks",
+       u"garbage.md": None,
+       u"hashes.md": None,
+       u"meta.md": u"package-metadata",
+       u"oem.md": u"oem",
+       u"package-names.md": None,
+       u"security.md": u"security-policy"}
 
 
 def get_branch_from_lp(origin, alias):
@@ -58,14 +58,14 @@ class LocalBranch():
             html = self.md_to_html(doc_fn)
             html = self.replace_links(html)
             html_fn = doc_fn.replace('.md', '.html')
-            with open(html_fn, "w") as t:
+            with codecs.open(html_fn, "w", encoding='utf-8') as t:
                 t.write(html)
 
     def replace_links(self, doc):
         for t in self.titles:
             url = u"https://developer.ubuntu.com/en/snappy/guides/%s" % MAP[t]
             link = u"<a href=\"%s\">%s</a>" % (url, self.titles[t])
-            doc = unicode(doc.encode('utf-8'))
+            doc = unicode(doc)
             doc = doc.replace(t, link)
         doc = re.sub(r"<html>\n\s<body>\n", "", doc, flags=re.MULTILINE)
         doc = re.sub(r"\s<\/body>\n<\/html>", "", doc, flags=re.MULTILINE)
@@ -74,8 +74,8 @@ class LocalBranch():
     def md_to_html(self, doc_fn):
         with codecs.open(doc_fn, 'r', encoding='utf-8') as f:
             html = markdown.markdown(f.read(), output_format="html5")
-        begin = "<div class=\"row no-border\">\n<div class=\"eight-col\">\n"
-        end = "</div>\n</div>"
+        begin = u"<div class=\"row no-border\">\n<div class=\"eight-col\">\n"
+        end = u"</div>\n</div>"
         html = begin + html + end
         html = html.replace("<pre><code>",
                             "</div><div class=\"twelve-col\"><pre><code>")
