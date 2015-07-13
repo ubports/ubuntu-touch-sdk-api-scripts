@@ -51,6 +51,14 @@ class MarkdownFile():
             "</code></pre>",
             "</code></pre></div><div class=\"eight-col\">")
 
+    def replace_links(self, titles):
+        for title in titles:
+            sluggified_fn = os.path.basename(title).replace('.md', '')
+            url = u"https://developer.ubuntu.com/snappy/guides/%s" % \
+                sluggified_fn
+            link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
+            self.html = self.html.replace(os.path.basename(title), link)
+
     def save(self):
         with codecs.open(self.html_fn, "w", encoding='utf-8') as t:
             t.write(self.html)
@@ -70,21 +78,13 @@ class LocalBranch():
         self.doc_fns = glob.glob(self.docs_path+'/*.md')
         self.md_files = []
 
-    def _replace_links(self):
-        for md_file in self.md_files:
-            for title in self.titles:
-                url = u"https://developer.ubuntu.com/en/snappy/guides/%s" % \
-                    os.path.basename(md_file.html_fn).replace('.html', '')
-                link = u"<a href=\"%s\">%s</a>" % (url, self.titles[md_file.fn])
-                md_file.html = md_file.html.replace(os.path.basename(md_file.fn), link)
-
     def import_markdown(self):
         for doc_fn in self.doc_fns:
             md_file = MarkdownFile(doc_fn)
             self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
-        self._replace_links()
         for md_file in self.md_files:
+            md_file.replace_links(self.titles)
             md_file.save()
 
 
