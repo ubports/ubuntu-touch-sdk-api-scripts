@@ -47,7 +47,7 @@ collectstatic.done:
 
 collectstatic.debug:
 	@echo "Debugging output from collectstatic"
-	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings
+	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 1 --noinput --settings charm_settings
 
 update-pip-cache:
 	@echo "Updating pip-cache"
