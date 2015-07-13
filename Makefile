@@ -5,7 +5,7 @@ SOURCE_DIR := $(PWD)
 update-instance:
 	@echo "Nothing to do for the app";
 	
-update-common: collectstatic
+update-common:
 	@echo "Updating database"
 	if [ $(DATABASE_URL) ]; then $(MAKE) initdb; fi
 	if [ $(DATABASE_URL) ]; then $(MAKE) crontab; fi
@@ -45,6 +45,10 @@ collectstatic.done:
 	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
 	@touch collectstatic.done
 
+collectstatic.debug:
+	@echo "Debugging output from collectstatic"
+	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings
+
 update-pip-cache:
 	@echo "Updating pip-cache"
 	rm -rf pip-cache
@@ -65,6 +69,6 @@ translations:
 	@echo "Updating translations"
 	@python manage.py translations
 
-tarball: pip-cache translations
+tarball: pip-cache
 	@echo "Creating tarball in ../developer_portal.tar.gz"
 	cd ..; tar -C $(SOURCE_DIR) --exclude-vcs --exclude=./media --exclude=./env --exclude=./db.sqlite3 --exclude=*.pyc -czf developer_portal.tar.gz .
