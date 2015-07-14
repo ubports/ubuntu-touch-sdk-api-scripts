@@ -16,6 +16,7 @@ from developer_portal.models import SnappyDocsBranch
 
 class MarkdownFile():
     html = None
+    cms_path = None
 
     def __init__(self, fn):
         self.fn = fn
@@ -25,6 +26,21 @@ class MarkdownFile():
         self.title = self._read_title()
         self._remove_body_and_html_tags()
         self._use_developer_site_style()
+        self._construct_cms_path()
+
+    def _construct_cms_path(self):
+        # /tmp/tmpnkFy7S/rolling/docs/hashes.html
+        # ->
+        # snappy/guides/rolling/hashes
+        #
+        # /tmp/tmpnkFy7S/current/docs/autopilot.html
+        # ->
+        # snappy/guides/autopilot
+        self.cms_path = 'snappy/guides/'
+        alias = re.findall(r'/tmp/tmp\S+?/(\S+?)/docs/\S+?.html', self.html_fn)
+        if alias and alias != ['current']:
+            self.cms_path += alias[0] + '/'
+        self.cms_path += os.path.basename(self.html_fn).replace('.html', '')
 
     def _read_title(self):
         soup = BeautifulSoup(self.html, 'html5lib')
@@ -60,6 +76,8 @@ class MarkdownFile():
             self.html = self.html.replace(os.path.basename(title), link)
 
     def save(self):
+        # XXX: can likely be dropped - we don't want to write HTML files
+        #      we want the HTML to be in the database
         with codecs.open(self.html_fn, "w", encoding='utf-8') as t:
             t.write(self.html)
 
