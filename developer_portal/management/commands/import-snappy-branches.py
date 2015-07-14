@@ -27,7 +27,7 @@ class MarkdownFile():
         self._use_developer_site_style()
 
     def _read_title(self):
-        soup = BeautifulSoup(self.html)
+        soup = BeautifulSoup(self.html, 'html5lib')
         if soup.title:
             return soup.title.text
         if soup.h1:
