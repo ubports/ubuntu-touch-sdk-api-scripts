@@ -26,6 +26,6 @@ admin.site.register(Version, VersionAdmin)
 
 class SnappyDocsBranchAdmin(admin.ModelAdmin):
     list_display = ('branch_origin', 'path_alias')
-    list_filter = ('path_alias')
+    list_filter = ('branch_origin', 'path_alias')
 
 admin.site.register(SnappyDocsBranch, SnappyDocsBranchAdmin)
