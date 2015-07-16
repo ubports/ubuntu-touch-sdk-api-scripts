@@ -13,34 +13,26 @@ import tempfile
 
 from developer_portal.models import SnappyDocsBranch
 
+RELEASE_PAGES = {}
+
 
 class MarkdownFile():
     html = None
-    cms_path = None
+    cms_path = ''
 
     def __init__(self, fn):
         self.fn = fn
-        self.html_fn = self.fn.replace('.md', '.html')
+        self.slug = slugify(self.fn)
         with codecs.open(self.fn, 'r', encoding='utf-8') as f:
             self.html = markdown.markdown(f.read(), output_format="html5")
+        self.release_alias = self._get_release_alias()
         self.title = self._read_title()
         self._remove_body_and_html_tags()
         self._use_developer_site_style()
-        self._construct_cms_path()
 
-    def _construct_cms_path(self):
-        # /tmp/tmpnkFy7S/rolling/docs/hashes.html
-        # ->
-        # snappy/guides/rolling/hashes
-        #
-        # /tmp/tmpnkFy7S/current/docs/autopilot.html
-        # ->
-        # snappy/guides/autopilot
-        self.cms_path = 'snappy/guides/'
-        alias = re.findall(r'/tmp/tmp\S+?/(\S+?)/docs/\S+?.html', self.html_fn)
-        if alias and alias != ['current']:
-            self.cms_path += alias[0] + '/'
-        self.cms_path += os.path.basename(self.html_fn).replace('.html', '')
+    def _get_release_alias(self):
+        alias = re.findall(r'/tmp/tmp\S+?/(\S+?)/docs/\S+?', self.fn)
+        return alias[0]
 
     def _read_title(self):
         soup = BeautifulSoup(self.html, 'html5lib')
@@ -48,7 +40,7 @@ class MarkdownFile():
             return soup.title.text
         if soup.h1:
             return soup.h1.text
-        return os.path.basename(self.fn).replace('-', ' ').title()
+        return slugify(self.fn).replace('-', ' ').title()
 
     def _remove_body_and_html_tags(self):
         self.html = re.sub(r"<html>\n\s<body>\n", "", self.html,
@@ -57,7 +49,20 @@ class MarkdownFile():
                            flags=re.MULTILINE)
 
     def _use_developer_site_style(self):
-        begin = u"<div class=\"row no-border\">\n<div class=\"eight-col\">\n"
+        # Make sure the reader knows which documentation she is browsing
+        if self.release_alias != "current":
+            begin = (u"<div class=\"row no-border\">\n"
+                     "<div class=\"box pull-three three-col\">"
+                     "<p>You are browsing the Snappy <code>%s</code> "
+                     "documentation.</p>"
+                     "<p><a href=\"/snappy/guides/current/%s\">"
+                     "Back to the latest stable release &rsaquo;"
+                     "</a></p></div>\n"
+                     "<div class=\"eight-col\">\n") % (self.release_alias,
+                                                       self.slug, )
+        else:
+            begin = (u"<div class=\"row no-border\">"
+                     "\n<div class=\"eight-col\">\n")
         end = u"</div>\n</div>"
         self.html = begin + self.html + end
         self.html = self.html.replace(
@@ -69,17 +74,39 @@ class MarkdownFile():
 
     def replace_links(self, titles):
         for title in titles:
-            sluggified_fn = os.path.basename(title).replace('.md', '')
-            url = u"https://developer.ubuntu.com/snappy/guides/%s" % \
-                sluggified_fn
+            url = u"/snappy/guides/%s/%s" % (
+                self.release_alias, slugify(title))
             link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
             self.html = self.html.replace(os.path.basename(title), link)
 
-    def save(self):
-        # XXX: can likely be dropped - we don't want to write HTML files
-        #      we want the HTML to be in the database
-        with codecs.open(self.html_fn, "w", encoding='utf-8') as t:
-            t.write(self.html)
+    def publish(self):
+        '''Publishes pages in their branch alias namespace.'''
+        from cms.api import create_page, add_plugin
+
+        page_title = self.title
+
+        if self.release_alias == "current":
+            # Add a guides/<page> redirect to guides/current/<page>
+            page = create_page(
+                self.title, "default.html", "en",
+                slug=self.slug, parent=RELEASE_PAGES['guides_page'],
+                in_navigation=True, position="last-child",
+                redirect="/snappy/guides/current/%s" % (self.slug))
+            page.publish('en')
+        else:
+            page_title += " (%s)" % (self.release_alias,)
+
+        page = create_page(
+            page_title, "default.html", "en", slug=self.slug,
+            menu_title=self.title, parent=RELEASE_PAGES[self.release_alias],
+            in_navigation=True, position="last-child")
+        placeholder = page.placeholders.get()
+        add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=self.html)
+        page.publish('en')
+
+
+def slugify(filename):
+    return os.path.basename(filename).replace('.md', '')
 
 
 def get_branch_from_lp(origin, alias):
@@ -103,7 +130,43 @@ class LocalBranch():
             self.titles[md_file.fn] = md_file.title
         for md_file in self.md_files:
             md_file.replace_links(self.titles)
-            md_file.save()
+            md_file.publish()
+
+
+def remove_old_pages():
+    '''Removes all pages in snappy/guides, created by the importer.'''
+    from cms.models import Title, Page
+
+    pages_to_remove = []
+    for g in Title.objects.select_related('page__id').filter(
+            path__regex="snappy/guides/.*"):
+        pages_to_remove.append(g.page.id)
+    Page.objects.filter(id__in=pages_to_remove, created_by="script").delete()
+
+
+def refresh_landing_page(release_alias):
+    '''Creates a branch page at snappy/guides/<branch alias>.'''
+    from cms.api import create_page
+    from cms.models import Title
+
+    guides_page = Title.objects.filter(
+        path="snappy/guides", published=True,
+        language="en", publisher_is_draft=True)[0]
+    RELEASE_PAGES['guides_page'] = guides_page.page
+
+    if release_alias == "current":
+        redirect = "/snappy/guides"
+    else:
+        redirect = None
+    new_release_page = create_page(
+        release_alias, "default.html", "en", slug=release_alias,
+        parent=RELEASE_PAGES['guides_page'], in_navigation=False,
+        position="last-child", redirect=redirect)
+    # FIXME Page needs content
+    #placeholder = new_release_page.placeholders.get()
+    #add_plugin(placeholder, 'RawHtmlPlugin', 'en', body="<html goes here>")
+    new_release_page.publish('en')
+    RELEASE_PAGES[release_alias] = new_release_page
 
 
 def import_branches():
@@ -111,6 +174,7 @@ def import_branches():
         logging.error('No Snappy branches registered in the '
                       'SnappyDocsBranch table yet.')
         return
+    remove_old_pages()
     tempdir = tempfile.mkdtemp()
     pwd = os.getcwd()
     os.chdir(tempdir)
@@ -120,6 +184,7 @@ def import_branches():
                 'Could not check out branch "%s".' % branch.branch_origin)
             shutil.rmtree(os.path.join(tempdir, branch.path_alias))
             break
+        refresh_landing_page(branch.path_alias)
     os.chdir(pwd)
     for local_branch in [a for a in glob.glob(tempdir+'/*')
                          if os.path.isdir(a)]:
