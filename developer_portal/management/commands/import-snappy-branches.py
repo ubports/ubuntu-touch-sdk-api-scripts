@@ -73,7 +73,7 @@ class MarkdownFile():
             "</code></pre></div><div class=\"eight-col\">")
 
     def _slugify(self, filename):
-        return filename.split('/')[-1].replace('.md', '')
+        return os.path.basename(filename).replace('.md', '')
 
     def replace_links(self, titles):
         for title in titles:
