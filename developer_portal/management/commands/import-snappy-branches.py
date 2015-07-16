@@ -86,18 +86,22 @@ class MarkdownFile():
         '''Publishes pages in their branch alias namespace.'''
         from cms.api import create_page, add_plugin
 
-        # Add a guides/<page> redirect to guides/current/<page>
+        page_title = self.title
+
         if self.release_alias == "current":
+            # Add a guides/<page> redirect to guides/current/<page>
             page = create_page(
                 self.title, "default.html", "en",
                 slug=self.slug, parent=RELEASE_PAGES['guides_page'],
                 in_navigation=True, position="last-child",
                 redirect="/snappy/guides/current/%s" % (self.slug))
             page.publish('en')
-
+        else:
+            page_title += " (%s)" % (self.release_alias,)
+        
         page = create_page(
-            self.title, "default.html", "en",
-            slug=self.slug, parent=RELEASE_PAGES[self.release_alias],
+            page_title, "default.html", "en", slug=self.slug,
+            menu_title=self.title, parent=RELEASE_PAGES[self.release_alias],
             in_navigation=True, position="last-child")
         placeholder = page.placeholders.get()
         add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=self.html)
@@ -157,6 +161,9 @@ def refresh_landing_page(release_alias):
         release_alias, "default.html", "en", slug=release_alias,
         parent=RELEASE_PAGES['guides_page'], in_navigation=False,
         position="last-child", redirect=redirect)
+    # FIXME Page needs content
+    #placeholder = new_release_page.placeholders.get()
+    #add_plugin(placeholder, 'RawHtmlPlugin', 'en', body="<html goes here>")
     new_release_page.publish('en')
     RELEASE_PAGES[release_alias] = new_release_page
 
