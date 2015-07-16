@@ -133,6 +133,14 @@ class LocalBranch():
             md_file.publish()
 
 
+# FIXME: 
+# - we retrieve the old article somehow
+# - then find the Raw HTML plugin and 
+# - replace the html in there
+# - also: remove pages we don't need anymore
+# - add new ones
+# - make sure we can do that for different sets of docs with different pages
+#
 def remove_old_pages():
     '''Removes all pages in snappy/guides, created by the importer.'''
     from cms.models import Title, Page
@@ -163,8 +171,8 @@ def refresh_landing_page(release_alias):
         parent=RELEASE_PAGES['guides_page'], in_navigation=False,
         position="last-child", redirect=redirect)
     # FIXME Page needs content
-    #placeholder = new_release_page.placeholders.get()
-    #add_plugin(placeholder, 'RawHtmlPlugin', 'en', body="<html goes here>")
+    # placeholder = new_release_page.placeholders.get()
+    # add_plugin(placeholder, 'RawHtmlPlugin', 'en', body="<html goes here>")
     new_release_page.publish('en')
     RELEASE_PAGES[release_alias] = new_release_page
 
@@ -174,6 +182,8 @@ def import_branches():
         logging.error('No Snappy branches registered in the '
                       'SnappyDocsBranch table yet.')
         return
+    # FIXME: Do the removal part last. Else we might end up in situations 
+    # where some code breaks and we stay in a state without articles.
     remove_old_pages()
     tempdir = tempfile.mkdtemp()
     pwd = os.getcwd()
