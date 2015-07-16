@@ -22,7 +22,7 @@ class MarkdownFile():
 
     def __init__(self, fn):
         self.fn = fn
-        self.slug = self._slugify(self.fn)
+        self.slug = slugify(self.fn)
         with codecs.open(self.fn, 'r', encoding='utf-8') as f:
             self.html = markdown.markdown(f.read(), output_format="html5")
         self.release_alias = self._get_release_alias()
@@ -40,7 +40,7 @@ class MarkdownFile():
             return soup.title.text
         if soup.h1:
             return soup.h1.text
-        return os.path.basename(self.fn).replace('-', ' ').title()
+        return slugify(self.fn).replace('-', ' ').title()
 
     def _remove_body_and_html_tags(self):
         self.html = re.sub(r"<html>\n\s<body>\n", "", self.html,
@@ -72,13 +72,10 @@ class MarkdownFile():
             "</code></pre>",
             "</code></pre></div><div class=\"eight-col\">")
 
-    def _slugify(self, filename):
-        return os.path.basename(filename).replace('.md', '')
-
     def replace_links(self, titles):
         for title in titles:
             url = u"/snappy/guides/%s/%s" % (
-                self.release_alias, self._slugify(title))
+                self.release_alias, slugify(title))
             link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
             self.html = self.html.replace(os.path.basename(title), link)
 
@@ -98,7 +95,7 @@ class MarkdownFile():
             page.publish('en')
         else:
             page_title += " (%s)" % (self.release_alias,)
-        
+
         page = create_page(
             page_title, "default.html", "en", slug=self.slug,
             menu_title=self.title, parent=RELEASE_PAGES[self.release_alias],
@@ -106,6 +103,10 @@ class MarkdownFile():
         placeholder = page.placeholders.get()
         add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=self.html)
         page.publish('en')
+
+
+def slugify(filename):
+    return os.path.basename(filename).replace('.md', '')
 
 
 def get_branch_from_lp(origin, alias):
