@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-26 07:59+0000\n"
+"POT-Creation-Date: 2015-07-24 08:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,10 +22,12 @@ msgid "Raw HTML"
 msgstr ""
 
 #: developer_portal/settings.py:187 developer_portal/settings.py:195
+#: templates/translations_dashboard.html:12
 msgid "English"
 msgstr ""
 
 #: developer_portal/settings.py:188 developer_portal/settings.py:202
+#: templates/translations_dashboard.html:13
 msgid "Simplified Chinese"
 msgstr ""
 
@@ -188,6 +190,19 @@ msgstr ""
 
 #: templates/translations_dashboard.html:6
 msgid "Translations dashboard"
+msgstr ""
+
+#: templates/translations_dashboard.html:7
+msgid "A simple dashboard to keep track of updates between languages."
+msgstr ""
+
+#: templates/translations_dashboard.html:11
+#: templates/zinnia/entry_list.html:23
+msgid "Page"
+msgstr ""
+
+#: templates/translations_dashboard.html:30
+msgid "Not available"
 msgstr ""
 
 #: templates/webapp.html:6
@@ -402,10 +417,6 @@ msgstr ""
 
 #: templates/zinnia/entry_list.html:21
 msgid "Author"
-msgstr ""
-
-#: templates/zinnia/entry_list.html:23
-msgid "Page"
 msgstr ""
 
 #: templates/zinnia/entry_list.html:32

@@ -4,13 +4,13 @@
 {% block content %}
 <div class="row">
     <h2>{% trans "Translations dashboard" %}</h2>
-    <p>A simple dashboard to keep track of page updates between languages.</p>
+    <p>{% trans "A simple dashboard to keep track of updates between languages." %}</p>
     <table>
         <thead>
             <tr>
-                <th>Page</th>
-                <th>English</th>
-                <th>Simplified Chinese</th>
+                <th>{% trans "Page" %}</th>
+                <th>{% trans "English" %}</th>
+                <th>{% trans "Simplified Chinese" %}</th>
             </tr>
         </thead>
         <tbody
@@ -27,7 +27,7 @@
                         {% if page.zh_cn %}
                             {{ page.zh_cn }}
                         {% else %}
-                            <span style="color:lightgrey">Not available</span>
+                            <span style="color:lightgrey">{% trans "Not available" %}</span>
                         {% endif %}
                     </td>
                 </tr>
