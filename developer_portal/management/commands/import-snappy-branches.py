@@ -24,7 +24,10 @@ class MarkdownFile():
         self.fn = fn
         self.slug = slugify(self.fn)
         with codecs.open(self.fn, 'r', encoding='utf-8') as f:
-            self.html = markdown.markdown(f.read(), output_format="html5")
+            self.html = markdown.markdown(
+                f.read(),
+                output_format="html5",
+                extensions=['markdown.extensions.tables'])
         self.release_alias = self._get_release_alias()
         self.title = self._read_title()
         self._remove_body_and_html_tags()
@@ -134,6 +137,14 @@ class LocalBranch():
 
 
 def remove_old_pages(selection):
+    # FIXME: 
+    # - we retrieve the old article somehow
+    # - then find the Raw HTML plugin and 
+    # - replace the html in there
+    # - also: remove pages we don't need anymore
+    # - add new ones
+    # - make sure we can do that for different sets of docs with different pages
+
     '''Removes all pages in snappy/guides, created by the importer.'''
     from cms.models import Title, Page
 
@@ -190,6 +201,8 @@ def import_branches(selection):
         logging.error('No Snappy branches registered in the '
                       'SnappyDocsBranch table yet.')
         return
+    # FIXME: Do the removal part last. Else we might end up in situations 
+    # where some code breaks and we stay in a state without articles.
     remove_old_pages(selection)
     tempdir = tempfile.mkdtemp()
     pwd = os.getcwd()
