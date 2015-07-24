@@ -1,4 +1,4 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 
 from bs4 import BeautifulSoup
 import codecs
@@ -133,20 +133,31 @@ class LocalBranch():
             md_file.publish()
 
 
-def remove_old_pages():
+def remove_old_pages(selection):
     '''Removes all pages in snappy/guides, created by the importer.'''
     from cms.models import Title, Page
 
     pages_to_remove = []
+    aliases = "|".join(
+        SnappyDocsBranch.objects.values_list('path_alias', flat=True))
+    if selection == "current":
+        # Select all pages that are not in other aliases paths, this allows
+        # removing existing redirections to current and current itself
+        regex = "snappy/guides/(?!%s|.*/.*)|snappy/guides/current.*" % (aliases)
+    else:
+        # Select pages that are in the selected alias path
+        regex = "snappy/guides/%s.*" % (selection,)
+
     for g in Title.objects.select_related('page__id').filter(
-            path__regex="snappy/guides/.*"):
+            path__regex=regex):
         pages_to_remove.append(g.page.id)
+    # Only remove pages created by a script!
     Page.objects.filter(id__in=pages_to_remove, created_by="script").delete()
 
 
-def refresh_landing_page(release_alias):
+def refresh_landing_page(release_alias, lp_origin):
     '''Creates a branch page at snappy/guides/<branch alias>.'''
-    from cms.api import create_page
+    from cms.api import create_page, add_plugin
     from cms.models import Title
 
     guides_page = Title.objects.filter(
@@ -162,29 +173,34 @@ def refresh_landing_page(release_alias):
         release_alias, "default.html", "en", slug=release_alias,
         parent=RELEASE_PAGES['guides_page'], in_navigation=False,
         position="last-child", redirect=redirect)
-    # FIXME Page needs content
-    #placeholder = new_release_page.placeholders.get()
-    #add_plugin(placeholder, 'RawHtmlPlugin', 'en', body="<html goes here>")
+    placeholder = new_release_page.placeholders.get()
+    landing = (u"<div class=\"row\"><div class=\"eight-col\">\n"
+               "<p>This section contains documentation for the "
+               "<code>%s</code> Snappy branch.</p>"
+               "<p>Auto-imported from "
+               "<a href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
+               "</div></div>") % (release_alias, lp_origin)
+    add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=landing)
     new_release_page.publish('en')
     RELEASE_PAGES[release_alias] = new_release_page
 
 
-def import_branches():
+def import_branches(selection):
     if not SnappyDocsBranch.objects.count():
         logging.error('No Snappy branches registered in the '
                       'SnappyDocsBranch table yet.')
         return
-    remove_old_pages()
+    remove_old_pages(selection)
     tempdir = tempfile.mkdtemp()
     pwd = os.getcwd()
     os.chdir(tempdir)
-    for branch in SnappyDocsBranch.objects.all():
+    for branch in SnappyDocsBranch.objects.filter(path_alias__regex=selection):
         if get_branch_from_lp(branch.branch_origin, branch.path_alias) != 0:
             logging.error(
                 'Could not check out branch "%s".' % branch.branch_origin)
             shutil.rmtree(os.path.join(tempdir, branch.path_alias))
             break
-        refresh_landing_page(branch.path_alias)
+        refresh_landing_page(branch.path_alias, branch.branch_origin)
     os.chdir(pwd)
     for local_branch in [a for a in glob.glob(tempdir+'/*')
                          if os.path.isdir(a)]:
@@ -193,12 +209,16 @@ def import_branches():
     shutil.rmtree(tempdir)
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Import Snappy branches for documentation."
 
-    def handle_noargs(self, **options):
+    def handle(*args, **options):
         logging.basicConfig(
             level=logging.DEBUG,
             format='%(asctime)s %(levelname)-8s %(message)s',
             datefmt='%F %T')
-        import_branches()
+        if len(args) < 2 or args[1] == "all":
+            selection = '.*'
+        else:
+            selection = args[1]
+        import_branches(selection)

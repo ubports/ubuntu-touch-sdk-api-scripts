@@ -4,9 +4,15 @@ from reversion.models import Revision, Version
 from reversion.admin import VersionAdmin
 
 from .models import SnappyDocsBranch
+from django.core.management import call_command
 
 __all__ = (
 )
+
+def manual_snappy_doc_import(modeladmin, request, queryset):
+    for branch in queryset:
+        call_command('import-snappy-branches', branch.path_alias)
+    manual_snappy_doc_import.short_description = "Import selected branches"
 
 
 class RevisionAdmin(admin.ModelAdmin):
@@ -27,5 +33,6 @@ admin.site.register(Version, VersionAdmin)
 class SnappyDocsBranchAdmin(admin.ModelAdmin):
     list_display = ('branch_origin', 'path_alias')
     list_filter = ('branch_origin', 'path_alias')
+    actions = [manual_snappy_doc_import]
 
 admin.site.register(SnappyDocsBranch, SnappyDocsBranchAdmin)
