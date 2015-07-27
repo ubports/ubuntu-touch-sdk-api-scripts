@@ -9,6 +9,7 @@ from django.core.management import call_command
 __all__ = (
 )
 
+
 def manual_snappy_doc_import(modeladmin, request, queryset):
     for branch in queryset:
         call_command('import-snappy-branches', branch.path_alias)
@@ -23,12 +24,14 @@ class RevisionAdmin(admin.ModelAdmin):
 
 admin.site.register(Revision, RevisionAdmin)
 
+
 class VersionAdmin(admin.ModelAdmin):
     list_display = ('content_type', 'object_id')
     list_display_links = ('object_id', )
     list_filter = ('content_type', )
 
 admin.site.register(Version, VersionAdmin)
+
 
 class SnappyDocsBranchAdmin(admin.ModelAdmin):
     list_display = ('branch_origin', 'path_alias')

@@ -137,13 +137,14 @@ class LocalBranch():
 
 
 def remove_old_pages(selection):
-    # FIXME: 
+    # FIXME:
     # - we retrieve the old article somehow
-    # - then find the Raw HTML plugin and 
+    # - then find the Raw HTML plugin and
     # - replace the html in there
     # - also: remove pages we don't need anymore
     # - add new ones
-    # - make sure we can do that for different sets of docs with different pages
+    # - make sure we can do that for different sets of docs with
+    #   different pages
 
     '''Removes all pages in snappy/guides, created by the importer.'''
     from cms.models import Title, Page
@@ -154,7 +155,8 @@ def remove_old_pages(selection):
     if selection == "current":
         # Select all pages that are not in other aliases paths, this allows
         # removing existing redirections to current and current itself
-        regex = "snappy/guides/(?!%s|.*/.*)|snappy/guides/current.*" % (aliases)
+        regex = "snappy/guides/(?!%s|.*/.*)|snappy/guides/current.*" % \
+            (aliases)
     else:
         # Select pages that are in the selected alias path
         regex = "snappy/guides/%s.*" % (selection,)
@@ -201,7 +203,7 @@ def import_branches(selection):
         logging.error('No Snappy branches registered in the '
                       'SnappyDocsBranch table yet.')
         return
-    # FIXME: Do the removal part last. Else we might end up in situations 
+    # FIXME: Do the removal part last. Else we might end up in situations
     # where some code breaks and we stay in a state without articles.
     remove_old_pages(selection)
     tempdir = tempfile.mkdtemp()
