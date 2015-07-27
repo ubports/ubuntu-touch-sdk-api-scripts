@@ -151,7 +151,7 @@ def remove_old_pages(selection):
 
     pages_to_remove = []
     aliases = "|".join(
-        SnappyDocsBranch.objects.values_list('path_alias', flat=True))
+        SnappyDocsBranch.objects.values_list('docs_namespace', flat=True))
     if selection == "current":
         # Select all pages that are not in other aliases paths, this allows
         # removing existing redirections to current and current itself
@@ -209,13 +209,14 @@ def import_branches(selection):
     tempdir = tempfile.mkdtemp()
     pwd = os.getcwd()
     os.chdir(tempdir)
-    for branch in SnappyDocsBranch.objects.filter(path_alias__regex=selection):
-        if get_branch_from_lp(branch.branch_origin, branch.path_alias) != 0:
+    for branch in SnappyDocsBranch.objects.filter(
+            docs_namespace__regex=selection):
+        if get_branch_from_lp(branch.lp_origin, branch.docs_namespace) != 0:
             logging.error(
-                'Could not check out branch "%s".' % branch.branch_origin)
-            shutil.rmtree(os.path.join(tempdir, branch.path_alias))
+                'Could not check out branch "%s".' % branch.lp_origin)
+            shutil.rmtree(os.path.join(tempdir, branch.docs_namespace))
             break
-        refresh_landing_page(branch.path_alias, branch.branch_origin)
+        refresh_landing_page(branch.docs_namespace, branch.lp_origin)
     os.chdir(pwd)
     for local_branch in [a for a in glob.glob(tempdir+'/*')
                          if os.path.isdir(a)]:
