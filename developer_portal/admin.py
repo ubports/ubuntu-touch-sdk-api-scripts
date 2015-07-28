@@ -3,7 +3,7 @@ from django.contrib import admin
 from reversion.models import Revision, Version
 from reversion.admin import VersionAdmin
 
-from .models import SnappyDocsBranch
+from .models import ExternalDocsBranch
 from django.core.management import call_command
 
 __all__ = (
@@ -33,9 +33,9 @@ class VersionAdmin(admin.ModelAdmin):
 admin.site.register(Version, VersionAdmin)
 
 
-class SnappyDocsBranchAdmin(admin.ModelAdmin):
-    list_display = ('branch_origin', 'path_alias')
-    list_filter = ('branch_origin', 'path_alias')
+class ExternalDocsBranchAdmin(admin.ModelAdmin):
+    list_display = ('lp_origin', 'docs_namespace')
+    list_filter = ('lp_origin', 'docs_namespace')
     actions = [manual_snappy_doc_import]
 
-admin.site.register(SnappyDocsBranch, SnappyDocsBranchAdmin)
+admin.site.register(ExternalDocsBranch, ExternalDocsBranchAdmin)
