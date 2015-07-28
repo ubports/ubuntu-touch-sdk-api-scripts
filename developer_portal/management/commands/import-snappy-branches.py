@@ -129,7 +129,7 @@ class LocalBranch():
         self.doc_fns = glob.glob(self.docs_path+'/*.md')
         self.md_files = []
         self.is_part_of_snappy = os.path.exists(
-            os.path.join(self.docs_path, SNAPPY_MARKER))
+            os.path.join(self.dirname, SNAPPY_MARKER))
 
     def import_markdown(self):
         for doc_fn in self.doc_fns:
@@ -239,7 +239,7 @@ class Command(BaseCommand):
 
     def handle(*args, **options):
         logging.basicConfig(
-            level=logging.DEBUG,
+            level=logging.ERROR,
             format='%(asctime)s %(levelname)-8s %(message)s',
             datefmt='%F %T')
         if len(args) < 2 or args[1] == "all":
