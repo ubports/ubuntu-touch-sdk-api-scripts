@@ -11,7 +11,7 @@ import shutil
 import subprocess
 import tempfile
 
-from developer_portal.models import SnappyDocsBranch
+from developer_portal.models import ExternalDocsBranch
 
 RELEASE_PAGES = {}
 
@@ -151,7 +151,7 @@ def remove_old_pages(selection):
 
     pages_to_remove = []
     aliases = "|".join(
-        SnappyDocsBranch.objects.values_list('docs_namespace', flat=True))
+        ExternalDocsBranch.objects.values_list('docs_namespace', flat=True))
     if selection == "current":
         # Select all pages that are not in other aliases paths, this allows
         # removing existing redirections to current and current itself
@@ -199,9 +199,9 @@ def refresh_landing_page(release_alias, lp_origin):
 
 
 def import_branches(selection):
-    if not SnappyDocsBranch.objects.count():
+    if not ExternalDocsBranch.objects.count():
         logging.error('No Snappy branches registered in the '
-                      'SnappyDocsBranch table yet.')
+                      'ExternalDocsBranch table yet.')
         return
     # FIXME: Do the removal part last. Else we might end up in situations
     # where some code breaks and we stay in a state without articles.
@@ -209,7 +209,7 @@ def import_branches(selection):
     tempdir = tempfile.mkdtemp()
     pwd = os.getcwd()
     os.chdir(tempdir)
-    for branch in SnappyDocsBranch.objects.filter(
+    for branch in ExternalDocsBranch.objects.filter(
             docs_namespace__regex=selection):
         if get_branch_from_lp(branch.lp_origin, branch.docs_namespace) != 0:
             logging.error(
