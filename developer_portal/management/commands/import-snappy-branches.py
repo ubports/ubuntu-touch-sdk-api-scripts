@@ -14,8 +14,8 @@ import tempfile
 from developer_portal.models import ExternalDocsBranch
 
 DOCS_DIRNAME = 'docs'
-RELEASE_PAGES = {}
 SNAPPY_MARKER = 'is_snappy_branch'
+RELEASE_PAGES = {}
 
 
 class MarkdownFile():
@@ -133,7 +133,7 @@ class LocalBranch():
 
     def import_markdown(self):
         for doc_fn in self.doc_fns:
-            md_file = MarkdownFile(doc_fn)
+            md_file = MarkdownFile(doc_fn, self.is_part_of_snappy)
             self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
         for md_file in self.md_files:
