@@ -13,6 +13,7 @@ import tempfile
 
 from developer_portal.models import ExternalDocsBranch
 
+DOCS_DIRNAME = 'docs'
 RELEASE_PAGES = {}
 
 
@@ -34,7 +35,7 @@ class MarkdownFile():
         self._use_developer_site_style()
 
     def _get_release_alias(self):
-        alias = re.findall(r'/tmp/tmp\S+?/(\S+?)/docs/\S+?', self.fn)
+        alias = re.findall(r'/tmp/tmp\S+?/(\S+?)/%s/\S+?' % DOCS_DIRNAME, self.fn)
         return alias[0]
 
     def _read_title(self):
@@ -122,7 +123,7 @@ class LocalBranch():
 
     def __init__(self, dirname):
         self.dirname = dirname
-        self.docs_path = os.path.join(self.dirname, 'docs')
+        self.docs_path = os.path.join(self.dirname, DOCS_DIRNAME)
         self.doc_fns = glob.glob(self.docs_path+'/*.md')
         self.md_files = []
 
@@ -211,10 +212,12 @@ def import_branches(selection):
     os.chdir(tempdir)
     for branch in ExternalDocsBranch.objects.filter(
             docs_namespace__regex=selection):
-        if get_branch_from_lp(branch.lp_origin, branch.docs_namespace) != 0:
+        checkout_location = os.path.join(
+            tempdir, os.path.basename(branch.docs_namespace))
+        if get_branch_from_lp(branch.lp_origin, checkout_location) != 0:
             logging.error(
                 'Could not check out branch "%s".' % branch.lp_origin)
-            shutil.rmtree(os.path.join(tempdir, branch.docs_namespace))
+            shutil.rmtree(checkout_location)
             break
         refresh_landing_page(branch.docs_namespace, branch.lp_origin)
     os.chdir(pwd)
