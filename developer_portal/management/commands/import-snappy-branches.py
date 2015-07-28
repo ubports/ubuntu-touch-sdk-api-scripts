@@ -15,15 +15,16 @@ from developer_portal.models import ExternalDocsBranch
 
 DOCS_DIRNAME = 'docs'
 RELEASE_PAGES = {}
+SNAPPY_MARKER = 'is_snappy_branch'
 
 
 class MarkdownFile():
     html = None
-    cms_path = ''
 
-    def __init__(self, fn):
+    def __init__(self, fn, is_part_of_snappy=False):
         self.fn = fn
         self.slug = slugify(self.fn)
+        self.is_part_of_snappy = is_part_of_snappy
         with codecs.open(self.fn, 'r', encoding='utf-8') as f:
             self.html = markdown.markdown(
                 f.read(),
@@ -35,7 +36,8 @@ class MarkdownFile():
         self._use_developer_site_style()
 
     def _get_release_alias(self):
-        alias = re.findall(r'/tmp/tmp\S+?/(\S+?)/%s/\S+?' % DOCS_DIRNAME, self.fn)
+        alias = re.findall(r'/tmp/tmp\S+?/(\S+?)/%s/\S+?' % DOCS_DIRNAME,
+                           self.fn)
         return alias[0]
 
     def _read_title(self):
@@ -54,7 +56,7 @@ class MarkdownFile():
 
     def _use_developer_site_style(self):
         # Make sure the reader knows which documentation she is browsing
-        if self.release_alias != "current":
+        if self.release_alias != "current" and self.is_part_of_snappy:
             begin = (u"<div class=\"row no-border\">\n"
                      "<div class=\"box pull-three three-col\">"
                      "<p>You are browsing the Snappy <code>%s</code> "
@@ -89,7 +91,7 @@ class MarkdownFile():
 
         page_title = self.title
 
-        if self.release_alias == "current":
+        if self.is_part_of_snappy and self.release_alias == "current":
             # Add a guides/<page> redirect to guides/current/<page>
             page = create_page(
                 self.title, "default.html", "en",
@@ -126,6 +128,8 @@ class LocalBranch():
         self.docs_path = os.path.join(self.dirname, DOCS_DIRNAME)
         self.doc_fns = glob.glob(self.docs_path+'/*.md')
         self.md_files = []
+        self.is_part_of_snappy = os.path.exists(
+            os.path.join(self.docs_path, SNAPPY_MARKER))
 
     def import_markdown(self):
         for doc_fn in self.doc_fns:
@@ -201,7 +205,7 @@ def refresh_landing_page(release_alias, lp_origin):
 
 def import_branches(selection):
     if not ExternalDocsBranch.objects.count():
-        logging.error('No Snappy branches registered in the '
+        logging.error('No branches registered in the '
                       'ExternalDocsBranch table yet.')
         return
     # FIXME: Do the removal part last. Else we might end up in situations
@@ -219,6 +223,8 @@ def import_branches(selection):
                 'Could not check out branch "%s".' % branch.lp_origin)
             shutil.rmtree(checkout_location)
             break
+        if branch.lp_origin.startswith('lp:snappy'):
+            open(os.path.join(checkout_location, SNAPPY_MARKER), 'a').close()
         refresh_landing_page(branch.docs_namespace, branch.lp_origin)
     os.chdir(pwd)
     for local_branch in [a for a in glob.glob(tempdir+'/*')
