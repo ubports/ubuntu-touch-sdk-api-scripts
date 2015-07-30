@@ -78,12 +78,11 @@ class MarkdownFile():
             "</code></pre></div><div class=\"eight-col\">")
 
     def replace_links(self, titles):
-        if self.is_snappy_branch:
-            for title in titles:
-                url = u"/snappy/guides/%s/%s" % (
-                    self.release_alias, slugify(title))
-                link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
-                self.html = self.html.replace(os.path.basename(title), link)
+        for title in titles:
+            url = u"/snappy/guides/%s/%s" % (
+                self.release_alias, slugify(title))
+            link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
+            self.html = self.html.replace(os.path.basename(title), link)
 
     def publish(self):
         '''Publishes pages in their branch alias namespace.'''
@@ -148,7 +147,8 @@ class LocalBranch():
             self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
         for md_file in self.md_files:
-            md_file.replace_links(self.titles)
+            if md_file.is_snappy_branch:
+                md_file.replace_links(self.titles)
             md_file.publish()
 
     def refresh_landing_page(self):
