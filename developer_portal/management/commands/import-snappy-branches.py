@@ -14,7 +14,6 @@ import tempfile
 from developer_portal.models import ExternalDocsBranch
 
 DOCS_DIRNAME = 'docs'
-SNAPPY_MARKER = 'is_snappy_branch'
 RELEASE_PAGES = {}
 
 
@@ -79,11 +78,12 @@ class MarkdownFile():
             "</code></pre></div><div class=\"eight-col\">")
 
     def replace_links(self, titles):
-        for title in titles:
-            url = u"/snappy/guides/%s/%s" % (
-                self.release_alias, slugify(title))
-            link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
-            self.html = self.html.replace(os.path.basename(title), link)
+        if self.is_snappy_branch:
+            for title in titles:
+                url = u"/snappy/guides/%s/%s" % (
+                    self.release_alias, slugify(title))
+                link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
+                self.html = self.html.replace(os.path.basename(title), link)
 
     def publish(self):
         '''Publishes pages in their branch alias namespace.'''
@@ -132,6 +132,15 @@ class LocalBranch():
         self.docs_namespace = self.external_branch.docs_namespace
         self.is_snappy_branch = self.external_branch.lp_origin.startswith(
             'lp:snappy')
+        self.release_alias = os.path.basename(self.docs_namespace)
+        self.overview_page_title = self._get_overview_page_title()
+
+    def _get_overview_page_title(self):
+        if not self.is_snappy_branch:
+            return self.release_alias.title()
+        if self.release_alias == 'current':
+            return 'Snappy'
+        return 'Snappy (%s)' % self.release_alias
 
     def import_markdown(self):
         for doc_fn in self.doc_fns:
@@ -157,7 +166,7 @@ class LocalBranch():
         else:
             redirect = None
         new_release_page = create_page(
-            self.docs_namespace, "default.html", "en",
+            self.overview_page_title, "default.html", "en",
             slug=self.docs_namespace, parent=RELEASE_PAGES['guides_page'],
             in_navigation=False, position="last-child", redirect=redirect)
         placeholder = new_release_page.placeholders.get()
@@ -170,7 +179,7 @@ class LocalBranch():
                                       self.external_branch.lp_origin)
         add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=landing)
         new_release_page.publish('en')
-        RELEASE_PAGES[self.docs_namespace] = new_release_page
+        RELEASE_PAGES[self.release_alias] = new_release_page
 
 
 def remove_old_pages(selection):
