@@ -188,7 +188,7 @@ class SnappyLocalBranch(LocalBranch):
         LocalBranch.__init__(self, dirname, external_branch)
         self.markdown_class = SnappyMarkdownFile
         self.overview_page_title = 'Snappy'
-        if self.release_alias == 'current':
+        if self.release_alias != 'current':
             self.overview_page_title += ' (%s)' % self.release_alias
 
     def import_markdown(self):
