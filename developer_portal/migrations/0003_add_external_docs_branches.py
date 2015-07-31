@@ -8,18 +8,18 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'SnappyDocsBranch'
-        db.create_table(u'developer_portal_snappydocsbranch', (
+        # Adding model 'ExternalDocsBranch'
+        db.create_table(u'developer_portal_externaldocsbranch', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('branch_origin', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('path_alias', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('lp_origin', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('docs_namespace', self.gf('django.db.models.fields.CharField')(max_length=120)),
         ))
-        db.send_create_signal(u'developer_portal', ['SnappyDocsBranch'])
+        db.send_create_signal(u'developer_portal', ['ExternalDocsBranch'])
 
 
     def backwards(self, orm):
-        # Deleting model 'SnappyDocsBranch'
-        db.delete_table(u'developer_portal_snappydocsbranch')
+        # Deleting model 'ExternalDocsBranch'
+        db.delete_table(u'developer_portal_externaldocsbranch')
 
 
     models = {
@@ -44,16 +44,16 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'slot': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'})
         },
+        u'developer_portal.externaldocsbranch': {
+            'Meta': {'object_name': 'ExternalDocsBranch'},
+            'docs_namespace': ('django.db.models.fields.CharField', [], {'max_length': '120'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'lp_origin': ('django.db.models.fields.CharField', [], {'max_length': '200'})
+        },
         u'developer_portal.rawhtml': {
             'Meta': {'object_name': 'RawHtml'},
             'body': ('django.db.models.fields.TextField', [], {}),
             u'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        u'developer_portal.snappydocsbranch': {
-            'Meta': {'object_name': 'SnappyDocsBranch'},
-            'branch_origin': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'path_alias': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         }
     }
 

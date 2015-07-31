@@ -5,8 +5,9 @@ from cms.models import CMSPlugin
 from djangocms_text_ckeditor.html import extract_images
 from djangocms_text_ckeditor.models import AbstractText
 
+
 class RawHtml(AbstractText):
-    
+
     class Meta:
         abstract = False
 
@@ -17,9 +18,11 @@ class RawHtml(AbstractText):
         AbstractText.save(self, *args, **kwargs)
 
 
-class SnappyDocsBranch(models.Model):
-    branch_origin = models.CharField(max_length=200,
+class ExternalDocsBranch(models.Model):
+    lp_origin = models.CharField(
+        max_length=200,
         help_text=_('Launchpad branch location, ie: lp:snappy/15.04'))
-    path_alias = models.CharField(max_length=20,
+    docs_namespace = models.CharField(
+        max_length=120,
         help_text=_('Path alias we want to use for the docs, '
-                    'ie "15.04" or "latest", etc.'))
+                    'ie "snappy/guides/15.04" or "snappy/guides/latest", etc.'))
