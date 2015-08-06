@@ -257,7 +257,7 @@ def import_branches(selection):
 
 
 class Command(BaseCommand):
-    help = "Import Snappy branches for documentation."
+    help = "Import external branches for documentation."
 
     def handle(*args, **options):
         logging.basicConfig(
