@@ -142,7 +142,7 @@ class LocalBranch:
         self.external_branch = external_branch
         self.docs_namespace = self.external_branch.docs_namespace
         self.release_alias = os.path.basename(self.docs_namespace)
-        self.overview_page_title = self.release_alias.title()
+        self.index_doc_title = self.release_alias.title()
         self.markdown_class = MarkdownFile
 
     def import_markdown(self):
@@ -168,7 +168,7 @@ class LocalBranch:
         else:
             redirect = None
         new_release_page = create_page(
-            self.overview_page_title, "default.html", "en",
+            self.index_doc_title, "default.html", "en",
             slug=self.docs_namespace, parent=RELEASE_PAGES['guides_page'],
             in_navigation=False, position="last-child", redirect=redirect)
         placeholder = new_release_page.placeholders.get()
@@ -187,9 +187,9 @@ class SnappyLocalBranch(LocalBranch):
     def __init__(self, dirname, external_branch):
         LocalBranch.__init__(self, dirname, external_branch)
         self.markdown_class = SnappyMarkdownFile
-        self.overview_page_title = 'Snappy'
+        self.index_doc_title = 'Snappy'
         if self.release_alias != 'current':
-            self.overview_page_title += ' (%s)' % self.release_alias
+            self.index_doc_title += ' (%s)' % self.release_alias
 
     def import_markdown(self):
         LocalBranch.import_markdown(self)
