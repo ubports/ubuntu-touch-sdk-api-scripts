@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from cms.api import create_page, add_plugin
+from cms.models import Page
 from cms.utils import page_resolver
 
 from bs4 import BeautifulSoup
@@ -148,6 +149,24 @@ class LocalBranch:
             self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
 
+    def remove_old_pages(self):
+        imported_page_urls = set([md_file.full_url
+                                  for md_file in self.md_files])
+        index_doc = page_resolver.get_page_queryset_from_path(
+            self.docs_namespace)[0]
+        # All pages in this namespace currently in the database
+        db_pages = index_doc.get_descendants().all()
+        delete_pages = []
+        for db_page in db_pages:
+            for url in imported_page_urls:
+                if url in db_page.get_absolute_url():
+                    break
+            # At this point we know that there's no match and the page
+            # can be deleted.
+            delete_pages += [db_page.id]
+        # Only remove pages created by a script!
+        Page.objects.filter(id__in=delete_pages, created_by="script").delete()
+
     def publish(self):
         for md_file in self.md_files:
             md_file.publish()
@@ -159,10 +178,6 @@ class LocalBranch:
             redirect = "/snappy/guides"
         else:
             redirect = None
-        new_release_page = get_or_create_page(
-            self.index_doc_title, full_url=self.docs_namespace,
-            redirect=redirect)
-        placeholder = new_release_page.placeholders.get()
         landing = (u"<div class=\"row\"><div class=\"eight-col\">\n"
                    "<p>This section contains documentation for the "
                    "<code>%s</code> Snappy branch.</p>"
@@ -170,7 +185,9 @@ class LocalBranch:
                    "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
                    "</div></div>") % (self.docs_namespace,
                                       self.external_branch.lp_origin)
-        add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=landing)
+        new_release_page = get_or_create_page(
+            self.index_doc_title, full_url=self.docs_namespace,
+            redirect=redirect, html=landing)
         new_release_page.publish('en')
 
 
@@ -201,7 +218,7 @@ def get_or_create_page(title, full_url, menu_title=None,
         if html:
             # We create the page, so we know there's just one placeholder
             placeholder = page.placeholders.all()[0]
-            plugin = page.get_plugins()[0].get_plugin_instance()[0]
+            plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
             plugin.body = html
             plugin.save()
     else:
@@ -225,40 +242,11 @@ def get_or_create_page(title, full_url, menu_title=None,
     return page
 
 
-def remove_old_pages(selection):
-    # FIXME:
-    # - remove pages we don't need anymore
-
-    '''Removes all pages in snappy/guides, created by the importer.'''
-    from cms.models import Title, Page
-
-    pages_to_remove = []
-    aliases = "|".join(
-        ExternalDocsBranch.objects.values_list('docs_namespace', flat=True))
-    if selection == "current":
-        # Select all pages that are not in other aliases paths, this allows
-        # removing existing redirections to current and current itself
-        regex = "snappy/guides/(?!%s|.*/.*)|snappy/guides/current.*" % \
-            (aliases)
-    else:
-        # Select pages that are in the selected alias path
-        regex = "snappy/guides/%s.*" % (selection,)
-
-    for g in Title.objects.select_related('page__id').filter(
-            path__regex=regex):
-        pages_to_remove.append(g.page.id)
-    # Only remove pages created by a script!
-    Page.objects.filter(id__in=pages_to_remove, created_by="script").delete()
-
-
 def import_branches(selection):
     if not ExternalDocsBranch.objects.count():
         logging.error('No branches registered in the '
                       'ExternalDocsBranch table yet.')
         return
-    # FIXME: Do the removal part last. Else we might end up in situations
-    # where some code breaks and we stay in a state without articles.
-    # remove_old_pages(selection)
     tempdir = tempfile.mkdtemp()
     for branch in ExternalDocsBranch.objects.filter(
             docs_namespace__regex=selection):
@@ -276,6 +264,7 @@ def import_branches(selection):
         local_branch.refresh_index_doc()
         local_branch.import_markdown()
         local_branch.publish()
+        local_branch.remove_old_pages()
     shutil.rmtree(tempdir)
 
 
