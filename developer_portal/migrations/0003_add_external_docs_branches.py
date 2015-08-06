@@ -13,6 +13,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('lp_origin', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('docs_namespace', self.gf('django.db.models.fields.CharField')(max_length=120)),
+            ('index_doc', self.gf('django.db.models.fields.CharField')(max_length=120, blank=True)),
         ))
         db.send_create_signal(u'developer_portal', ['ExternalDocsBranch'])
 
@@ -48,6 +49,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'ExternalDocsBranch'},
             'docs_namespace': ('django.db.models.fields.CharField', [], {'max_length': '120'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'index_doc': ('django.db.models.fields.CharField', [], {'max_length': '120', 'blank': 'True'}),
             'lp_origin': ('django.db.models.fields.CharField', [], {'max_length': '200'})
         },
         u'developer_portal.rawhtml': {
