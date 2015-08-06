@@ -155,7 +155,7 @@ class LocalBranch:
         for md_file in self.md_files:
             md_file.publish()
 
-    def refresh_landing_page(self):
+    def refresh_index_doc(self):
         '''Creates a branch page at snappy/guides/<branch alias>.'''
 
         guides_page = Title.objects.filter(
@@ -250,7 +250,7 @@ def import_branches(selection):
             local_branch = SnappyLocalBranch(checkout_location, branch)
         else:
             local_branch = LocalBranch(checkout_location, branch)
-        local_branch.refresh_landing_page()
+        local_branch.refresh_index_doc()
         local_branch.import_markdown()
         local_branch.publish()
     shutil.rmtree(tempdir)
