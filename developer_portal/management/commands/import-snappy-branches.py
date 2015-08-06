@@ -219,13 +219,9 @@ def get_or_create_page(title, full_url, menu_title=None,
 
 def remove_old_pages(selection):
     # FIXME:
-    # - we retrieve the old article somehow
-    # - then find the Raw HTML plugin and
+    # - we find the Raw HTML plugin and
     # - replace the html in there
     # - also: remove pages we don't need anymore
-    # - add new ones
-    # - make sure we can do that for different sets of docs with
-    #   different pages
 
     '''Removes all pages in snappy/guides, created by the importer.'''
     from cms.models import Title, Page
