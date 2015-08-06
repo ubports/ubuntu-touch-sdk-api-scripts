@@ -25,4 +25,10 @@ class ExternalDocsBranch(models.Model):
     docs_namespace = models.CharField(
         max_length=120,
         help_text=_('Path alias we want to use for the docs, '
-                    'ie "snappy/guides/15.04" or "snappy/guides/latest", etc.'))
+                    'ie "snappy/guides/15.04" or '
+                    '"snappy/guides/latest", etc.'))
+    index_doc = models.CharField(
+        max_length=120,
+        help_text=_('File name of doc to be used as index document, '
+                    'ie "intro.md"'),
+        blank=True)
