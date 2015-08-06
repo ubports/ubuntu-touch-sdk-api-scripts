@@ -81,9 +81,8 @@ class MarkdownFile:
         from cms.api import create_page, add_plugin
 
         page = get_or_create_page(
-            self.title, full_url=self.full_url, menu_title=self.title)
-        placeholder = page.placeholders.get()
-        add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=self.html)
+            self.title, full_url=self.full_url, menu_title=self.title,
+            html=self.html)
         page.publish('en')
 
 
@@ -190,7 +189,7 @@ class SnappyLocalBranch(LocalBranch):
 
 
 def get_or_create_page(title, full_url, menu_title=None,
-                       in_navigation=True, redirect=None):
+                       in_navigation=True, redirect=None, html=None):
     pages = page_resolver.get_page_queryset_from_path(full_url)
     if pages:
         page = pages[0]
@@ -199,6 +198,12 @@ def get_or_create_page(title, full_url, menu_title=None,
         page.menu_title = menu_title
         page.in_navigation = in_navigation
         page.redirect = redirect
+        if html:
+            # We create the page, so we know there's just one placeholder
+            placeholder = page.placeholders.all()[0]
+            plugin = page.get_plugins()[0].get_plugin_instance()[0]
+            plugin.body = html
+            plugin.save()
     else:
         if redirect:
             parent = None
@@ -214,14 +219,15 @@ def get_or_create_page(title, full_url, menu_title=None,
             title, "default.html", "en", slug=slug, parent=parent,
             menu_title=menu_title, in_navigation=in_navigation,
             position="last-child", redirect=redirect)
+        if html:
+            placeholder = page.placeholders.get()
+            add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=html)
     return page
 
 
 def remove_old_pages(selection):
     # FIXME:
-    # - we find the Raw HTML plugin and
-    # - replace the html in there
-    # - also: remove pages we don't need anymore
+    # - remove pages we don't need anymore
 
     '''Removes all pages in snappy/guides, created by the importer.'''
     from cms.models import Title, Page
@@ -252,7 +258,7 @@ def import_branches(selection):
         return
     # FIXME: Do the removal part last. Else we might end up in situations
     # where some code breaks and we stay in a state without articles.
-    remove_old_pages(selection)
+    # remove_old_pages(selection)
     tempdir = tempfile.mkdtemp()
     for branch in ExternalDocsBranch.objects.filter(
             docs_namespace__regex=selection):
