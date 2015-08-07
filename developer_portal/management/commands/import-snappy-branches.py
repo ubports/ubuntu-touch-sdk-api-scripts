@@ -141,6 +141,7 @@ class LocalBranch:
         self.docs_namespace = self.external_branch.docs_namespace
         self.release_alias = os.path.basename(self.docs_namespace)
         self.index_doc_title = self.release_alias.title()
+        self.index_doc = self.external_branch.index_doc
         self.markdown_class = MarkdownFile
 
     def import_markdown(self):
@@ -148,6 +149,7 @@ class LocalBranch:
             md_file = self.markdown_class(doc_fn, self.docs_namespace)
             self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
+        self._refresh_index_doc()
 
     def remove_old_pages(self):
         imported_page_urls = set([md_file.full_url
@@ -169,25 +171,40 @@ class LocalBranch:
 
     def publish(self):
         for md_file in self.md_files:
-            md_file.publish()
+            if self.index_doc and \
+               os.path.basename(md_file.fn) != self.index_doc:
+                md_file.publish()
 
-    def refresh_index_doc(self):
+    def _refresh_index_doc(self):
         '''Creates a index page at the top of the branches docs namespace.'''
 
         if self.docs_namespace == "current":
             redirect = "/snappy/guides"
         else:
             redirect = None
-        landing = (u"<div class=\"row\"><div class=\"eight-col\">\n"
-                   "<p>This section contains documentation for the "
-                   "<code>%s</code> Snappy branch.</p>"
-                   "<p>Auto-imported from <a "
-                   "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
-                   "</div></div>") % (self.docs_namespace,
-                                      self.external_branch.lp_origin)
+
+        if self.index_doc:
+            in_navigation = True
+            index_doc_md_file = \
+                [a for a in self.md_files
+                 if os.path.basename(a.fn) == self.index_doc][0]
+            menu_title = index_doc_md_file.title
+            landing = index_doc_md_file.html
+        else:
+            in_navigation = False
+            menu_title = None
+            landing = (
+                u"<div class=\"row\"><div class=\"eight-col\">\n"
+                "<p>This section contains documentation for the "
+                "<code>%s</code> Snappy branch.</p>"
+                "<p>Auto-imported from <a "
+                "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
+                "</div></div>") % (self.docs_namespace,
+                                   self.external_branch.lp_origin)
         new_release_page = get_or_create_page(
             self.index_doc_title, full_url=self.docs_namespace,
-            redirect=redirect, html=landing)
+            in_navigation=in_navigation, redirect=redirect, html=landing,
+            menu_title=menu_title)
         new_release_page.publish('en')
 
 
@@ -222,15 +239,13 @@ def get_or_create_page(title, full_url, menu_title=None,
             plugin.body = html
             plugin.save()
     else:
-        if redirect:
-            parent = None
-        else:
-            parent_pages = page_resolver.get_page_queryset_from_path(
-                os.path.dirname(full_url))
-            if not parent_pages:
-                print('Parent %s not found.' % os.path.dirname(full_url))
-                sys.exit(1)
-            parent = parent_pages[0]
+        parent_pages = page_resolver.get_page_queryset_from_path(
+            os.path.dirname(full_url))
+        if not parent_pages:
+            print('Parent %s not found.' % os.path.dirname(full_url))
+            sys.exit(1)
+        parent = parent_pages[0]
+
         slug = os.path.basename(full_url)
         page = create_page(
             title, "default.html", "en", slug=slug, parent=parent,
@@ -261,7 +276,6 @@ def import_branches(selection):
             local_branch = SnappyLocalBranch(checkout_location, branch)
         else:
             local_branch = LocalBranch(checkout_location, branch)
-        local_branch.refresh_index_doc()
         local_branch.import_markdown()
         local_branch.publish()
         local_branch.remove_old_pages()
