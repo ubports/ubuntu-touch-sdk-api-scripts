@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from cms.api import create_page, add_plugin
-from cms.models import Page
+from cms.models import Page, Title
 from cms.utils import page_resolver
 
 from bs4 import BeautifulSoup
@@ -112,7 +112,7 @@ class SnappyMarkdownFile(MarkdownFile):
         if self.release_alias == "current":
             # Add a guides/<page> redirect to guides/current/<page>
             page = get_or_create_page(
-                self.title, full_url=self.full_url,
+                self.title, full_url=self.full_url.replace('/current', ''),
                 redirect="/snappy/guides/current/%s" % (self.slug))
             page.publish('en')
         else:
@@ -165,12 +165,15 @@ class LocalBranch:
         db_pages = index_doc.get_descendants().all()
         delete_pages = []
         for db_page in db_pages:
+            still_relevant = False
             for url in imported_page_urls:
                 if url in db_page.get_absolute_url():
+                    still_relevant = True
                     break
             # At this point we know that there's no match and the page
             # can be deleted.
-            delete_pages += [db_page.id]
+            if not still_relevant:
+                delete_pages += [db_page.id]
         # Only remove pages created by a script!
         Page.objects.filter(id__in=delete_pages, created_by="script").delete()
 
@@ -224,9 +227,9 @@ class SnappyLocalBranch(LocalBranch):
 def get_or_create_page(title, full_url, menu_title=None,
                        in_navigation=True, redirect=None, html=None):
     # First check if pages already exist.
-    pages = page_resolver.get_page_queryset_from_path(full_url)
+    pages = Title.objects.select_related('page').filter(path__regex=full_url)
     if pages:
-        page = pages[0]
+        page = pages[0].page
         page.title = title
         page.publisher_is_draft = True
         page.menu_title = menu_title
@@ -238,16 +241,16 @@ def get_or_create_page(title, full_url, menu_title=None,
             if placeholder.get_plugins():
                 plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
                 plugin.body = html
+                plugin.save()
             else:
                 add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=html)
-            plugin.save()
     else:
-        parent_pages = page_resolver.get_page_queryset_from_path(
-            os.path.dirname(full_url))
+        parent_pages = Title.objects.select_related('page').filter(
+            path__regex=os.path.dirname(full_url))
         if not parent_pages:
             print('Parent %s not found.' % os.path.dirname(full_url))
             sys.exit(1)
-        parent = parent_pages[0]
+        parent = parent_pages[0].page
 
         slug = os.path.basename(full_url)
         page = create_page(
