@@ -12,7 +12,7 @@ __all__ = (
 
 def manual_snappy_doc_import(modeladmin, request, queryset):
     for branch in queryset:
-        call_command('import-snappy-branches', branch.path_alias)
+        call_command('import-snappy-branches', branch.docs_namespace)
     manual_snappy_doc_import.short_description = "Import selected branches"
 
 
