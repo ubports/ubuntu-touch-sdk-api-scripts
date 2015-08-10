@@ -171,8 +171,9 @@ class LocalBranch:
 
     def publish(self):
         for md_file in self.md_files:
-            if self.index_doc and \
-               os.path.basename(md_file.fn) != self.index_doc:
+            if not self.index_doc:
+                md_file.publish()
+            elif os.path.basename(md_file.fn) != self.index_doc:
                 md_file.publish()
 
     def _refresh_index_doc(self):
