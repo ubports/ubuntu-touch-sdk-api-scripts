@@ -79,8 +79,6 @@ class MarkdownFile:
 
     def publish(self):
         '''Publishes pages in their branch alias namespace.'''
-        from cms.api import create_page, add_plugin
-        # FIXME: some pages are put in the wrong place!
         page = get_or_create_page(
             self.title, full_url=self.full_url, menu_title=self.title,
             html=self.html)
