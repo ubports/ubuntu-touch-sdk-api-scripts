@@ -24,10 +24,13 @@ DOCS_DIRNAME = 'docs'
 class MarkdownFile:
     html = None
 
-    def __init__(self, fn, docs_namespace):
+    def __init__(self, fn, docs_namespace, slug_override=None):
         self.fn = fn
         self.docs_namespace = docs_namespace
-        self.slug = slugify(self.fn)
+        if slug_override:
+            self.slug = slug_override
+        else:
+            self.slug = slugify(self.fn)
         self.full_url = os.path.join(self.docs_namespace, self.slug)
         with codecs.open(self.fn, 'r', encoding='utf-8') as f:
             self.html = markdown.markdown(
@@ -146,13 +149,15 @@ class LocalBranch:
         for doc_fn in self.doc_fns:
             if self.index_doc and os.path.basename(doc_fn) == self.index_doc:
                 md_file = self.markdown_class(
-                    os.path.basename(self.docs_namespace),
-                    os.path.dirname(self.docs_namespace))
+                    doc_fn,
+                    os.path.dirname(self.docs_namespace),
+                    slug_override=os.path.basename(self.docs_namespace))
             else:
                 md_file = self.markdown_class(doc_fn, self.docs_namespace)
             self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
-        self._create_fake_index_doc()
+        if not self.index_doc:
+            self._create_fake_index_doc()
 
     def remove_old_pages(self):
         imported_page_urls = set([md_file.full_url
@@ -177,10 +182,7 @@ class LocalBranch:
 
     def publish(self):
         for md_file in self.md_files:
-            if not self.index_doc:
-                md_file.publish()
-            elif os.path.basename(md_file.fn) != self.index_doc:
-                md_file.publish()
+            md_file.publish()
 
     def _create_fake_index_doc(self):
         '''Creates a fake index page at the top of the branches
@@ -191,17 +193,16 @@ class LocalBranch:
         else:
             redirect = None
 
-        if not self.index_doc:
-            in_navigation = False
-            menu_title = None
-            landing = (
-                u"<div class=\"row\"><div class=\"eight-col\">\n"
-                "<p>This section contains documentation for the "
-                "<code>%s</code> Snappy branch.</p>"
-                "<p>Auto-imported from <a "
-                "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
-                "</div></div>") % (self.docs_namespace,
-                                   self.external_branch.lp_origin)
+        in_navigation = False
+        menu_title = None
+        landing = (
+            u"<div class=\"row\"><div class=\"eight-col\">\n"
+            "<p>This section contains documentation for the "
+            "<code>%s</code> Snappy branch.</p>"
+            "<p>Auto-imported from <a "
+            "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
+            "</div></div>") % (self.docs_namespace,
+                               self.external_branch.lp_origin)
         new_release_page = get_or_create_page(
             self.index_doc_title, full_url=self.docs_namespace,
             in_navigation=in_navigation, redirect=redirect, html=landing,
