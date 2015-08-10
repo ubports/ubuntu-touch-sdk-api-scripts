@@ -146,10 +146,15 @@ class LocalBranch:
 
     def import_markdown(self):
         for doc_fn in self.doc_fns:
-            md_file = self.markdown_class(doc_fn, self.docs_namespace)
+            if self.index_doc and os.path.basename(doc_fn) == self.index_doc:
+                md_file = self.markdown_class(
+                    os.path.basename(self.docs_namespace),
+                    os.path.dirname(self.docs_namespace))
+            else:
+                md_file = self.markdown_class(doc_fn, self.docs_namespace)
             self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
-        self._refresh_index_doc()
+        self._create_fake_index_doc()
 
     def remove_old_pages(self):
         imported_page_urls = set([md_file.full_url
@@ -176,22 +181,15 @@ class LocalBranch:
             elif os.path.basename(md_file.fn) != self.index_doc:
                 md_file.publish()
 
-    def _refresh_index_doc(self):
-        '''Creates a index page at the top of the branches docs namespace.'''
+    def _create_fake_index_doc(self):
+        '''Creates a fake index page at the top of the branches docs namespace.'''
 
         if self.docs_namespace == "current":
             redirect = "/snappy/guides"
         else:
             redirect = None
 
-        if self.index_doc:
-            in_navigation = True
-            index_doc_md_file = \
-                [a for a in self.md_files
-                 if os.path.basename(a.fn) == self.index_doc][0]
-            menu_title = index_doc_md_file.title
-            landing = index_doc_md_file.html
-        else:
+        if not self.index_doc:
             in_navigation = False
             menu_title = None
             landing = (
