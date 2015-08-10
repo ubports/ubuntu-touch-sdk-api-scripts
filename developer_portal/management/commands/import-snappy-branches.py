@@ -185,7 +185,8 @@ class LocalBranch:
                 md_file.publish()
 
     def _create_fake_index_doc(self):
-        '''Creates a fake index page at the top of the branches docs namespace.'''
+        '''Creates a fake index page at the top of the branches
+           docs namespace.'''
 
         if self.docs_namespace == "current":
             redirect = "/snappy/guides"
