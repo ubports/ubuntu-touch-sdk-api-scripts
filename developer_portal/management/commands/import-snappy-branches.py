@@ -225,6 +225,7 @@ class SnappyLocalBranch(LocalBranch):
 
 def get_or_create_page(title, full_url, menu_title=None,
                        in_navigation=True, redirect=None, html=None):
+    # First check if pages already exist.
     pages = page_resolver.get_page_queryset_from_path(full_url)
     if pages:
         page = pages[0]
@@ -236,8 +237,11 @@ def get_or_create_page(title, full_url, menu_title=None,
         if html:
             # We create the page, so we know there's just one placeholder
             placeholder = page.placeholders.all()[0]
-            plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
-            plugin.body = html
+            if placeholder.get_plugins():
+                plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
+                plugin.body = html
+            else:
+                add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=html)
             plugin.save()
     else:
         parent_pages = page_resolver.get_page_queryset_from_path(
