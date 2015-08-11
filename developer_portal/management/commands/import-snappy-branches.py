@@ -96,8 +96,8 @@ class SnappyMarkdownFile(MarkdownFile):
     def _make_snappy_mods(self):
         # Make sure the reader knows which documentation she is browsing
         if self.release_alias != 'current':
-            before = (u"<div class=\"row no-border\">"
-                      "\n<div class=\"eight-col\">\n")
+            before = (u"<div class=\"row no-border\">\n"
+                      "<div class=\"eight-col\">\n")
             after = (u"<div class=\"row no-border\">\n"
                      "<div class=\"box pull-three three-col\">"
                      "<p>You are browsing the Snappy <code>%s</code> "
@@ -107,7 +107,7 @@ class SnappyMarkdownFile(MarkdownFile):
                      "</a></p></div>\n"
                      "<div class=\"eight-col\">\n") % (self.release_alias,
                                                        self.slug, )
-            self.html.replace(before, after)
+            self.html = self.html.replace(before, after)
 
     def publish(self):
         if self.release_alias == "current":
@@ -152,9 +152,10 @@ class LocalBranch:
                     doc_fn,
                     os.path.dirname(self.docs_namespace),
                     slug_override=os.path.basename(self.docs_namespace))
+                self.md_files.insert(0, md_file)
             else:
                 md_file = self.markdown_class(doc_fn, self.docs_namespace)
-            self.md_files += [md_file]
+                self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
         if not self.index_doc:
             self._create_fake_index_doc()
@@ -195,13 +196,18 @@ class LocalBranch:
 
         in_navigation = False
         menu_title = None
+        list_pages = ""
+        for page in self.md_files:
+            list_pages += "<li><a href=\"%s\">%s</a></li>" \
+                % (os.path.basename(page.full_url), page.title)
         landing = (
             u"<div class=\"row\"><div class=\"eight-col\">\n"
             "<p>This section contains documentation for the "
             "<code>%s</code> Snappy branch.</p>"
+            "<p><ul class=\"list-ubuntu\">%s</ul></p>\n"
             "<p>Auto-imported from <a "
             "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
-            "</div></div>") % (self.docs_namespace,
+            "</div></div>") % (self.release_alias, list_pages,
                                self.external_branch.lp_origin)
         new_release_page = get_or_create_page(
             self.index_doc_title, full_url=self.docs_namespace,
@@ -214,7 +220,7 @@ class SnappyLocalBranch(LocalBranch):
     def __init__(self, dirname, external_branch):
         LocalBranch.__init__(self, dirname, external_branch)
         self.markdown_class = SnappyMarkdownFile
-        self.index_doc_title = 'Snappy'
+        self.index_doc_title = 'Snappy documentation'
         if self.release_alias != 'current':
             self.index_doc_title += ' (%s)' % self.release_alias
 

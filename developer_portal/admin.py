@@ -10,10 +10,11 @@ __all__ = (
 )
 
 
-def manual_snappy_doc_import(modeladmin, request, queryset):
+def import_selected_external_docs_branches(modeladmin, request, queryset):
     for branch in queryset:
         call_command('import-snappy-branches', branch.docs_namespace)
-    manual_snappy_doc_import.short_description = "Import selected branches"
+    import_selected_external_docs_branches.short_description = \
+        "Import selected branches"
 
 
 class RevisionAdmin(admin.ModelAdmin):
@@ -36,6 +37,6 @@ admin.site.register(Version, VersionAdmin)
 class ExternalDocsBranchAdmin(admin.ModelAdmin):
     list_display = ('lp_origin', 'docs_namespace')
     list_filter = ('lp_origin', 'docs_namespace')
-    actions = [manual_snappy_doc_import]
+    actions = [import_selected_external_docs_branches]
 
 admin.site.register(ExternalDocsBranch, ExternalDocsBranchAdmin)
