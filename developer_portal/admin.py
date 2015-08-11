@@ -12,7 +12,7 @@ __all__ = (
 
 def import_selected_external_docs_branches(modeladmin, request, queryset):
     for branch in queryset:
-        call_command('import-snappy-branches', branch.docs_namespace)
+        call_command('import-external-docs-branches', branch.docs_namespace)
     import_selected_external_docs_branches.short_description = \
         "Import selected branches"
 
