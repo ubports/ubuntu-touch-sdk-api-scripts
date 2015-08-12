@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-04-24 09:17+0000\n"
+"POT-Creation-Date: 2015-07-27 14:41+0000\n"
 "PO-Revision-Date: 2015-03-05 13:55+0000\n"
 "Last-Translator: Andi Chandler <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
@@ -15,11 +15,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-07-22 05:50+0000\n"
-"X-Generator: Launchpad (build 17628)\n"
+"X-Launchpad-Export-Date: 2015-08-12 06:35+0000\n"
+"X-Generator: Launchpad (build 17686)\n"
 
 #: developer_portal/cms_plugins.py:10
 msgid "Raw HTML"
+msgstr ""
+
+#: developer_portal/models.py:24
+msgid "Launchpad branch location, ie: lp:snappy/15.04"
+msgstr ""
+
+#: developer_portal/models.py:27
+msgid ""
+"Path alias we want to use for the docs, ie \"snappy/guides/15.04\" or "
+"\"snappy/guides/latest\", etc."
 msgstr ""
 
 #: developer_portal/settings.py:187 developer_portal/settings.py:195
