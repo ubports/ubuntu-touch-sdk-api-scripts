@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-27 14:41+0000\n"
+"POT-Creation-Date: 2015-08-13 09:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,6 +29,10 @@ msgstr ""
 msgid ""
 "Path alias we want to use for the docs, ie \"snappy/guides/15.04\" or "
 "\"snappy/guides/latest\", etc."
+msgstr ""
+
+#: developer_portal/models.py:32
+msgid "File name of doc to be used as index document, ie \"intro.md\""
 msgstr ""
 
 #: developer_portal/settings.py:187 developer_portal/settings.py:195
