@@ -315,3 +315,11 @@ REST_FRAMEWORK = {
     
     #'PAGINATE_BY': 10,
 }
+
+MIGRATION_MODULES = {
+    'djangocms_link': 'djangocms_link.migrations_django',
+    'djangocms_video': 'djangocms_video.migrations_django',
+    'djangocms_picture': 'djangocms_picture.migrations_django',
+    'djangocms_snippet': 'djangocms_snippet.migrations_django',
+    'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations_django',
+}
