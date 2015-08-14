@@ -51,7 +51,6 @@ INSTALLED_APPS = [
 
     'mptt', #utilities for implementing a modified pre-order traversal tree
     'menus', #helper for model independent hierarchical website navigation
-    'south', #intelligent schema and data migrations
     'sekizai', #for javascript and css management
     'reversion', #content versioning
     'django_pygments',
@@ -66,6 +65,7 @@ INSTALLED_APPS = [
     'djangocms_picture',
     'djangocms_video',
     'djangocms_snippet',
+    'treebeard', #required by django CMS
 
     'cmsplugin_zinnia',
     'zinnia',
@@ -105,24 +105,29 @@ MIDDLEWARE_CLASSES = (
 #CACHE_MIDDLEWARE_SECONDS = 3600
 #CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.request',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
 
-    'sekizai.context_processors.sekizai',
-    'cms.context_processors.cms_settings',
-    'django.contrib.messages.context_processors.messages',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(PROJECT_PATH, "templates"),
+            ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.core.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.core.context_processors.i18n',
+                'django.core.context_processors.media',
+                'django.core.context_processors.static',
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_PATH, "templates"),
-)
+                'sekizai.context_processors.sekizai',
+                'cms.context_processors.cms_settings',
+                'django.contrib.messages.context_processors.messages',
+            ]
+        }
+    }
+]
 
 ROOT_URLCONF = 'developer_portal.urls'
 
