@@ -324,4 +324,10 @@ MIGRATION_MODULES = {
     'djangocms_picture': 'djangocms_picture.migrations_django',
     'djangocms_snippet': 'djangocms_snippet.migrations_django',
     'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations',
+    'zinnia': 'zinnia.migrations',
+    'taggit': 'taggit.migrations',
+    'tagging': 'tagging.migrations',
+    'reversion': 'reversion.migrations',
+    'cmsplugin_zinnia': 'cmsplugin_zinnia.migrations',
+    'django_comments': 'django_comments.migrations',
 }
