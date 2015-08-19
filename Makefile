@@ -27,6 +27,7 @@ crontab:
 	@echo DJANGO_SETTINGS_MODULE=\"charm_settings\" >> crontab
 	@echo internal_proxy=\"${internal_proxy}\" >> crontab
 	@echo "0 4 * * * cd ${PWD}; ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log" >> crontab
+	@echo "15 */2 * * * cd ${PWD}; ${PYTHON} manage.py import-external-docs-branches > ${PWD}/../../logs/import-external-docs-branches.log 2>${PWD}/../../logs/import-external-docs-branches_errors.log" >> crontab
 	@crontab ./crontab
 	@rm ./crontab
 
@@ -52,18 +53,18 @@ collectstatic.debug:
 update-pip-cache:
 	@echo "Updating pip-cache"
 	rm -rf pip-cache
-	bzr branch lp:~mhall119/developer-ubuntu-com/dependencies pip-cache
+	bzr branch lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies pip-cache
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
 	bzr add pip-cache/* 
 	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
-	bzr push --directory pip-cache lp:~mhall119/developer-ubuntu-com/dependencies
+	bzr push --directory pip-cache lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies
 	bzr revno pip-cache > pip-cache-revno.txt
 	rm -rf pip-cache
 	@echo "** Remember to commit pip-cache-revno.txt"
 
 pip-cache:
 	@echo "Downloading pip-cache"
-	bzr branch -r `cat pip-cache-revno.txt` lp:~mhall119/developer-ubuntu-com/dependencies pip-cache
+	bzr branch -r `cat pip-cache-revno.txt` lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies pip-cache
 
 translations:
 	@echo "Updating translations"
