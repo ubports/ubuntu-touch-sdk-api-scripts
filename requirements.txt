@@ -1,6 +1,6 @@
 Django==1.8.3
 Pillow==2.9.0
-cmsplugin-zinnia==0.7
+cmsplugin-zinnia==0.8
 dj-database-url==0.3.0
 django-admin-enhancer==1.0.0
 django-appconf==1.0.1

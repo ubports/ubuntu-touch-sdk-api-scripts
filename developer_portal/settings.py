@@ -317,6 +317,7 @@ REST_FRAMEWORK = {
 }
 
 MIGRATION_MODULES = {
+    'cms': 'cms.migrations',
     'djangocms_link': 'djangocms_link.migrations_django',
     'djangocms_video': 'djangocms_video.migrations_django',
     'djangocms_picture': 'djangocms_picture.migrations_django',
