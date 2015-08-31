@@ -1,3 +1,7 @@
+oslo.config==1.6.0
+oslo.i18n==1.2.0
+oslo.serialization==1.2.0
+oslo.utils==1.2.0
 Django==1.6.8
 Markdown==2.6.2
 South==1.0.1
