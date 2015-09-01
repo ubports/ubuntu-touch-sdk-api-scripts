@@ -13,8 +13,8 @@ update-common:
 
 swift-perms:
 	@echo "Setting up Swift bucket permissions"
-	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; swift post --read-acl '.r:*' devportal_uploaded; else swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
-	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; swift post --read-acl '.r:*' devportal_static; else swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
+	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' devportal_uploaded; else http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
+	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' devportal_static; else http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
 
 update-apidocs:
 	if [ $(DATABASE_URL) ]; then DJANGO_SETTINGS_MODULE=charm_settings ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log; fi
