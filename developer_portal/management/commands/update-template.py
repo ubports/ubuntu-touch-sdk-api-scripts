@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #!/usr/bin/python
 
 from django.core.management.base import NoArgsCommand
@@ -13,12 +12,13 @@ APP_NAME = "developer_portal"
 
 DUMMY_LOCALE = "xx"
 
+
 def update_template():
     pwd = os.getcwd()
     os.chdir(settings.PROJECT_PATH)
-    subprocess.call([sys.executable, "manage.py", "makemessages", 
-        "--keep-pot", "--all", "-i", "env/*", "-i", "urls.py",
-        "-l", DUMMY_LOCALE])
+    subprocess.call([sys.executable, "manage.py", "makemessages",
+                     "--keep-pot", "--all", "-i", "env/*", "-i", "urls.py",
+                     "-l", DUMMY_LOCALE])
     project_locale_path = os.path.join(settings.PROJECT_PATH, "locale")
     os.rename(os.path.join(project_locale_path,
                            "%s/LC_MESSAGES/django.po" % DUMMY_LOCALE),
