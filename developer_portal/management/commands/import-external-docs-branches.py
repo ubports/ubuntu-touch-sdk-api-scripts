@@ -192,7 +192,6 @@ class LocalBranch:
             self.docs_namespace)[0]
         # All pages in this namespace currently in the database
         db_pages = index_doc.get_descendants().all()
-        delete_pages = []
         for db_page in db_pages:
             still_relevant = False
             for url in imported_page_urls:
@@ -202,7 +201,7 @@ class LocalBranch:
             # At this point we know that there's no match and the page
             # can be deleted.
             if not still_relevant:
-                delete_pages += [db_page.id]
+                self.db_actions.remove_page(db_page.id)
 
     def publish(self):
         for md_file in self.md_files:
