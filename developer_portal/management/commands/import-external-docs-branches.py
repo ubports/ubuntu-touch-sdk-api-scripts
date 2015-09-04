@@ -203,8 +203,6 @@ class LocalBranch:
             # can be deleted.
             if not still_relevant:
                 delete_pages += [db_page.id]
-        # Only remove pages created by a script!
-        Page.objects.filter(id__in=delete_pages, created_by="script").delete()
 
     def publish(self):
         for md_file in self.md_files:
