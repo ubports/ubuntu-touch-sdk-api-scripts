@@ -14,6 +14,9 @@ SECTIONS = {
     'autopilot.gestures': 'Input and Display',
     'autopilot.input': 'Input and Display',
 
+    'scope_harness': 'Scopes',
+    'scope_harness.testing': 'Scopes',
+
     'tutorial/': 'Tutorials',
     'guides/': 'Guides',
     'faq/': 'Frequently Asked Questions',

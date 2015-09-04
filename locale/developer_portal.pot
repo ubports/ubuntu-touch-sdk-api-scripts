@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-31 13:33+0000\n"
+"POT-Creation-Date: 2015-09-04 12:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,26 +35,28 @@ msgstr ""
 msgid "File name of doc to be used as index document, ie \"intro.md\""
 msgstr ""
 
-#: developer_portal/settings.py:187 developer_portal/settings.py:195
+#: developer_portal/settings.py:189 developer_portal/settings.py:197
+#: templates/translations_dashboard.html:12
 msgid "English"
 msgstr ""
 
-#: developer_portal/settings.py:188 developer_portal/settings.py:202
+#: developer_portal/settings.py:190 developer_portal/settings.py:204
+#: templates/translations_dashboard.html:13
 msgid "Simplified Chinese"
 msgstr ""
 
-#: developer_portal/settings.py:210
+#: developer_portal/settings.py:212
 msgid "Spanish"
 msgstr ""
 
-#: developer_portal/settings.py:250
+#: developer_portal/settings.py:252
 msgid "Page content"
 msgstr ""
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
-#: developer_portal/settings.py:258
+#: developer_portal/settings.py:260
 msgid "<p>Add content here...</p>"
 msgstr ""
 
@@ -62,6 +64,10 @@ msgstr ""
 msgid ""
 "You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
 "profile</a> to use the developer site"
+msgstr ""
+
+#: store_data/cms_plugins.py:9
+msgid "Gadget Snap List Plugin"
 msgstr ""
 
 #: templates/404.html:4
@@ -182,6 +188,10 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+#: templates/gadget_snap_list.html:27
+msgid "Install Snappy on this device"
+msgstr ""
+
 #: templates/login_failure.html:21
 msgid ""
 "If you continue to experience problems with the developer site, please <a "
@@ -198,6 +208,23 @@ msgstr ""
 
 #: templates/search_results.html:27
 msgid "API Docs:"
+msgstr ""
+
+#: templates/translations_dashboard.html:6
+msgid "Translations dashboard"
+msgstr ""
+
+#: templates/translations_dashboard.html:7
+msgid "A simple dashboard to keep track of updates between languages."
+msgstr ""
+
+#: templates/translations_dashboard.html:11
+#: templates/zinnia/entry_list.html:23
+msgid "Page"
+msgstr ""
+
+#: templates/translations_dashboard.html:30
+msgid "Not available"
 msgstr ""
 
 #: templates/webapp.html:6
@@ -412,10 +439,6 @@ msgstr ""
 
 #: templates/zinnia/entry_list.html:21
 msgid "Author"
-msgstr ""
-
-#: templates/zinnia/entry_list.html:23
-msgid "Page"
 msgstr ""
 
 #: templates/zinnia/entry_list.html:32

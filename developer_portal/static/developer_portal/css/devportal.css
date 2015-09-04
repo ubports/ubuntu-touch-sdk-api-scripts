@@ -208,6 +208,9 @@ header.banner .logo-ubuntu span {
 	padding: 0.695652em 0.869565em;
 }
 
+.row-step.step-one .step::after {
+	content: none;
+}
 
 /* Used in Webapp-generator */
 

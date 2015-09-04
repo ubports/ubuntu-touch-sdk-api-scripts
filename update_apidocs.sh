@@ -90,6 +90,10 @@ ARCH=i386 ./get_package.sh ubuntu-ui-toolkit-autopilot
 find /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
 python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/objects.inv
 
+SERIES=wily ARCH=i386 ./get_package.sh python3-scope-harness
+find /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/ -name "*.gz" -print0 |xargs -0 gunzip
+python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/objects.inv
+
 #### Scopes/C++ 
 ## unity.scopes
 ./get_package.sh libunity-scopes-doc
