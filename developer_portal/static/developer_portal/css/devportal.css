@@ -212,6 +212,12 @@ header.banner .logo-ubuntu span {
 	content: none;
 }
 
+@media only screen and (min-width: 769px) {
+    .nav-secondary ul.breadcrumb li {
+        margin-bottom: 80px;
+    }
+}
+
 /* Used in Webapp-generator */
 
 form#webappform input[type="url"] {
