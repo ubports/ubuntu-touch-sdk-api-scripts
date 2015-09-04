@@ -39,3 +39,7 @@ urlpatterns += i18n_patterns('',
 urlpatterns += patterns('webapp_creator.views',
                        url(r'^webapp-generator/$', 'webapp', name='webapp'),
 )
+
+urlpatterns += patterns('translations_dashboard.views',
+                       url(r'^translations-dashboard/$', 'translations_dashboard', name='translations_dashboard'),
+)

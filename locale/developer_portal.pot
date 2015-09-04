@@ -36,10 +36,12 @@ msgid "File name of doc to be used as index document, ie \"intro.md\""
 msgstr ""
 
 #: developer_portal/settings.py:189 developer_portal/settings.py:197
+#: templates/translations_dashboard.html:12
 msgid "English"
 msgstr ""
 
 #: developer_portal/settings.py:190 developer_portal/settings.py:204
+#: templates/translations_dashboard.html:13
 msgid "Simplified Chinese"
 msgstr ""
 
@@ -206,6 +208,23 @@ msgstr ""
 
 #: templates/search_results.html:27
 msgid "API Docs:"
+msgstr ""
+
+#: templates/translations_dashboard.html:6
+msgid "Translations dashboard"
+msgstr ""
+
+#: templates/translations_dashboard.html:7
+msgid "A simple dashboard to keep track of updates between languages."
+msgstr ""
+
+#: templates/translations_dashboard.html:11
+#: templates/zinnia/entry_list.html:23
+msgid "Page"
+msgstr ""
+
+#: templates/translations_dashboard.html:30
+msgid "Not available"
 msgstr ""
 
 #: templates/webapp.html:6
@@ -420,10 +439,6 @@ msgstr ""
 
 #: templates/zinnia/entry_list.html:21
 msgid "Author"
-msgstr ""
-
-#: templates/zinnia/entry_list.html:23
-msgid "Page"
 msgstr ""
 
 #: templates/zinnia/entry_list.html:32

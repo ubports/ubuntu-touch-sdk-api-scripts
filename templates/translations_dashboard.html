@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block content %}
+<div class="row">
+    <h2>{% trans "Translations dashboard" %}</h2>
+    <p>{% trans "A simple dashboard to keep track of updates between languages." %}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>{% trans "Page" %}</th>
+                <th>{% trans "English" %}</th>
+                <th>{% trans "Simplified Chinese" %}</th>
+            </tr>
+        </thead>
+        <tbody
+            {% for page in cms_pages %}
+                 <tr>
+
+                    <td style="text-align:left;width:40%;"><a href="/{{ page.path }}">{{ page.title }}</a></td>
+                    <td style="text-align:left;">{{ page.en }}</td>
+                        {% if page.zh_cn > page.en %}
+                            <td style="text-align:left;background-color:#60ab5d;color:#fff;">
+                        {% else %}
+                            <td style="text-align:left;background-color:#f95e5d;color:#fff;">
+                        {% endif %}
+                        {% if page.zh_cn %}
+                            {{ page.zh_cn }}
+                        {% else %}
+                            <span style="color:lightgrey">{% trans "Not available" %}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
