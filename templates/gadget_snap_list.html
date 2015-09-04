@@ -1,0 +1,32 @@
+{% load i18n static text_extras %}
+
+<div class="row equal-height no-border">
+	{% for snap in gadget_snap_list %}
+	    {% if gadget_snap_list|index:snap|divisibleby:3 %}
+	        <div class="left four-col last-col box">
+        {% else %}
+            <div class="left four-col box">
+        {% endif %}
+        {% if snap.screenshot_url.0.url %}
+	        <p><img src="{{ snap.screenshot_url.0.url }}"/></p>
+        {% else %}
+            {% with 0|randint:10|string as rand %} 
+                {% with "img/boards/noboard-"|add:rand|add:".png" as noboard %}
+                    <p><img src="{% static noboard %}"/></p>
+                {% endwith %}
+            {% endwith %}
+        {% endif %}
+            <h3>{{ snap.alias|default_if_none:snap.name }}</h3>
+            {% if snap.description|length > 180 %}
+                <p>{{ snap.description|truncatechars:180 }}</p>
+            {% else %}
+                <p>{% autoescape off %}{{ snap.description|html_links }}{% endautoescape %}</p>
+            {% endif %}
+	        <ul class="list-ubuntu">
+	            <li>
+		        <a href="https://developer.ubuntu.com/en/snappy/start/">{% trans "Install Snappy on this device" %}</a>
+                </li>
+            </ul>
+        </div>
+    {% endfor %}
+</div>
