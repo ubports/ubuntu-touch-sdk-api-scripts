@@ -189,9 +189,11 @@ class LocalBranch:
         imported_page_urls = set([md_file.full_url
                                   for md_file in self.md_files])
         index_doc = page_resolver.get_page_queryset_from_path(
-            self.docs_namespace)[0]
-        # All pages in this namespace currently in the database
-        db_pages = index_doc.get_descendants().all()
+            self.docs_namespace)
+        db_pages = []
+        if len(index_doc):
+            # All pages in this namespace currently in the database
+            db_pages = index_doc.get_descendants().all()
         for db_page in db_pages:
             still_relevant = False
             for url in imported_page_urls:
