@@ -193,7 +193,7 @@ class LocalBranch:
         db_pages = []
         if len(index_doc):
             # All pages in this namespace currently in the database
-            db_pages = index_doc.get_descendants().all()
+            db_pages = index_doc[0].get_descendants().all()
         for db_page in db_pages:
             still_relevant = False
             for url in imported_page_urls:
