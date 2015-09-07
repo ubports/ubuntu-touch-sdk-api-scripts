@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
 from cms.api import create_page, add_plugin
 from cms.models import Page, Title
@@ -21,12 +22,34 @@ from developer_portal.models import ExternalDocsBranch
 DOCS_DIRNAME = 'docs'
 
 
+class DBActions:
+    added_pages = []
+    removed_pages = []
+
+    def add_page(self, **kwargs):
+        self.added_pages += [kwargs]
+
+    def remove_page(self, page_id):
+        self.removed_pages += [page_id]
+
+    @transaction.commit_on_success()  # XXX: using=database
+    def run(self):
+        for added_page in self.added_pages:
+            page = get_or_create_page(**added_page)
+            page.publish('en')
+
+        # Only remove pages created by a script!
+        Page.objects.filter(id__in=self.removed_pages,
+                            created_by="script").delete()
+
+
 class MarkdownFile:
     html = None
 
-    def __init__(self, fn, docs_namespace, slug_override=None):
+    def __init__(self, fn, docs_namespace, db_actions, slug_override=None):
         self.fn = fn
         self.docs_namespace = docs_namespace
+        self.db_actions = db_actions
         if slug_override:
             self.slug = slug_override
         else:
@@ -82,15 +105,14 @@ class MarkdownFile:
 
     def publish(self):
         '''Publishes pages in their branch alias namespace.'''
-        page = get_or_create_page(
-            self.title, full_url=self.full_url, menu_title=self.title,
+        self.db_actions.add_page(
+            title=self.title, full_url=self.full_url, menu_title=self.title,
             html=self.html)
-        page.publish('en')
 
 
 class SnappyMarkdownFile(MarkdownFile):
-    def __init__(self, fn, docs_namespace):
-        MarkdownFile.__init__(self, fn, docs_namespace)
+    def __init__(self, fn, docs_namespace, db_actions):
+        MarkdownFile.__init__(self, fn, docs_namespace, db_actions)
         self._make_snappy_mods()
 
     def _make_snappy_mods(self):
@@ -112,10 +134,10 @@ class SnappyMarkdownFile(MarkdownFile):
     def publish(self):
         if self.release_alias == "current":
             # Add a guides/<page> redirect to guides/current/<page>
-            page = get_or_create_page(
-                self.title, full_url=self.full_url.replace('/current', ''),
+            self.db_actions.add_page(
+                title=self.title,
+                full_url=self.full_url.replace('/current', ''),
                 redirect="/snappy/guides/current/%s" % (self.slug))
-            page.publish('en')
         else:
             self.title += " (%s)" % (self.release_alias,)
         MarkdownFile.publish(self)
@@ -133,7 +155,7 @@ def get_branch_from_lp(origin, alias):
 class LocalBranch:
     titles = {}
 
-    def __init__(self, dirname, external_branch):
+    def __init__(self, dirname, external_branch, db_actions):
         self.dirname = dirname
         self.docs_path = os.path.join(self.dirname, DOCS_DIRNAME)
         self.doc_fns = glob.glob(self.docs_path+'/*.md')
@@ -143,6 +165,7 @@ class LocalBranch:
         self.release_alias = os.path.basename(self.docs_namespace)
         self.index_doc_title = self.release_alias.title()
         self.index_doc = self.external_branch.index_doc
+        self.db_actions = db_actions
         self.markdown_class = MarkdownFile
 
     def import_markdown(self):
@@ -151,10 +174,12 @@ class LocalBranch:
                 md_file = self.markdown_class(
                     doc_fn,
                     os.path.dirname(self.docs_namespace),
+                    self.db_actions,
                     slug_override=os.path.basename(self.docs_namespace))
                 self.md_files.insert(0, md_file)
             else:
-                md_file = self.markdown_class(doc_fn, self.docs_namespace)
+                md_file = self.markdown_class(doc_fn, self.docs_namespace,
+                                              self.db_actions)
                 self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
         if not self.index_doc:
@@ -164,10 +189,11 @@ class LocalBranch:
         imported_page_urls = set([md_file.full_url
                                   for md_file in self.md_files])
         index_doc = page_resolver.get_page_queryset_from_path(
-            self.docs_namespace)[0]
-        # All pages in this namespace currently in the database
-        db_pages = index_doc.get_descendants().all()
-        delete_pages = []
+            self.docs_namespace)
+        db_pages = []
+        if len(index_doc):
+            # All pages in this namespace currently in the database
+            db_pages = index_doc.get_descendants().all()
         for db_page in db_pages:
             still_relevant = False
             for url in imported_page_urls:
@@ -177,9 +203,7 @@ class LocalBranch:
             # At this point we know that there's no match and the page
             # can be deleted.
             if not still_relevant:
-                delete_pages += [db_page.id]
-        # Only remove pages created by a script!
-        Page.objects.filter(id__in=delete_pages, created_by="script").delete()
+                self.db_actions.remove_page(db_page.id)
 
     def publish(self):
         for md_file in self.md_files:
@@ -209,16 +233,15 @@ class LocalBranch:
             "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
             "</div></div>") % (self.release_alias, list_pages,
                                self.external_branch.lp_origin)
-        new_release_page = get_or_create_page(
-            self.index_doc_title, full_url=self.docs_namespace,
+        self.db_actions.add_page(
+            title=self.index_doc_title, full_url=self.docs_namespace,
             in_navigation=in_navigation, redirect=redirect, html=landing,
             menu_title=menu_title)
-        new_release_page.publish('en')
 
 
 class SnappyLocalBranch(LocalBranch):
-    def __init__(self, dirname, external_branch):
-        LocalBranch.__init__(self, dirname, external_branch)
+    def __init__(self, dirname, external_branch, db_actions):
+        LocalBranch.__init__(self, dirname, external_branch, db_actions)
         self.markdown_class = SnappyMarkdownFile
         self.index_doc_title = 'Snappy documentation'
         if self.release_alias != 'current':
@@ -275,6 +298,7 @@ def import_branches(selection):
                       'ExternalDocsBranch table yet.')
         return
     tempdir = tempfile.mkdtemp()
+    db_actions = DBActions()
     for branch in ExternalDocsBranch.objects.filter(
             docs_namespace__regex=selection):
         checkout_location = os.path.join(
@@ -285,13 +309,15 @@ def import_branches(selection):
             shutil.rmtree(checkout_location)
             break
         if branch.lp_origin.startswith('lp:snappy'):
-            local_branch = SnappyLocalBranch(checkout_location, branch)
+            local_branch = SnappyLocalBranch(checkout_location, branch,
+                                             db_actions)
         else:
-            local_branch = LocalBranch(checkout_location, branch)
+            local_branch = LocalBranch(checkout_location, branch, db_actions)
         local_branch.import_markdown()
         local_branch.publish()
         local_branch.remove_old_pages()
     shutil.rmtree(tempdir)
+    db_actions.run()
 
 
 class Command(BaseCommand):
