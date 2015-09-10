@@ -59,6 +59,10 @@ python manage.py import_qdoc -Pp -t apps -l qml -r sdk-15.04 -s "Platform Servic
 gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index.gz
 python manage.py import_qdoc -Pp -t apps -l qml -r sdk-15.04 -s "Graphical Interface" -N Ubuntu.Web -i /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index
 
+## Ubuntu.Connectivity
+./get_package.sh connectivity-doc
+python manage.py import_qdoc -Pp -t apps -l qml -r sdk-15.04 -s "Platform Services" -N Ubuntu.Connectivity -i /tmp/apidoc_sources/usr/share/doc/connectivity-api/qml/html/connectivity.index
+
 #### Aps/HTML5
 ## UbuntuUI
 ./get_package.sh ubuntu-html5-ui-toolkit-doc
