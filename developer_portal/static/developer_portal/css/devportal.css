@@ -208,6 +208,15 @@ header.banner .logo-ubuntu span {
 	padding: 0.695652em 0.869565em;
 }
 
+.row-step.step-one .step::after {
+	content: none;
+}
+
+@media only screen and (min-width: 769px) {
+    .nav-secondary ul.breadcrumb li {
+        margin-bottom: 80px;
+    }
+}
 
 /* Used in Webapp-generator */
 

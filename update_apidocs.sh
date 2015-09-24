@@ -59,6 +59,10 @@ python manage.py import_qdoc -Pp -t apps -l qml -r sdk-15.04 -s "Platform Servic
 gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index.gz
 python manage.py import_qdoc -Pp -t apps -l qml -r sdk-15.04 -s "Graphical Interface" -N Ubuntu.Web -i /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index
 
+## Ubuntu.Connectivity
+./get_package.sh connectivity-doc
+python manage.py import_qdoc -Pp -t apps -l qml -r sdk-15.04 -s "Platform Services" -N Ubuntu.Connectivity -i /tmp/apidoc_sources/usr/share/doc/connectivity-api/qml/html/connectivity.index
+
 #### Aps/HTML5
 ## UbuntuUI
 ./get_package.sh ubuntu-html5-ui-toolkit-doc
@@ -89,6 +93,10 @@ python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/imp
 ARCH=i386 ./get_package.sh ubuntu-ui-toolkit-autopilot
 find /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
 python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/objects.inv
+
+SERIES=wily ARCH=i386 ./get_package.sh python3-scope-harness
+find /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/ -name "*.gz" -print0 |xargs -0 gunzip
+python manage.py import_sphinx -t autopilot -l python -r 1.5.0 -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/objects.inv
 
 #### Scopes/C++ 
 ## unity.scopes
