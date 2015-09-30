@@ -30,8 +30,6 @@ SECRET_KEY = 'we3w67a1=2e384asi&f_fcp8meje#)n@lyoys21izkwo)%eknh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = ['127.0.0.1', 'developer.ubuntu.com']
 
 
@@ -56,6 +54,7 @@ INSTALLED_APPS = [
     'django_pygments',
     'django_comments',
     'tagging',
+    'template_debug',
 
     'ckeditor',
     'djangocms_text_ckeditor',
