@@ -1,6 +1,7 @@
 #!/usr/bin/make
 PYTHON := /usr/bin/env python
 SOURCE_DIR := $(PWD)
+REVNO := `bzr revno`
 
 update-instance:
 	@echo "Nothing to do for the app";
@@ -71,12 +72,43 @@ update-pip-cache:
 
 pip-cache:
 	@echo "Downloading pip-cache"
-	bzr branch -r `cat pip-cache-revno.txt` lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies pip-cache
+	@bzr branch -r `cat pip-cache-revno.txt` lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies pip-cache
 
-translations:
+env: pip-cache
+	@echo "Creating virtualenv"
+	@virtualenv ./env
+	@echo "Installing python dependencies, this may take several minutes"
+	@./env/bin/pip install -r requirements.txt -f ./pip-cache/ --no-index
+
+db.sqlite3: env
+	@echo "Initializing database"
+	@./env/bin/python manage.py syncdb --noinput --migrate
+	@./env/bin/python manage.py initdb
+	@./env/bin/python manage.py init_apidocs
+
+dev: env db.sqlite3
+	@echo "Development environment ready"
+
+static: env
+	@echo "Collecting static files (this may take a while)"
+	@./env/bin/python manage.py collectstatic -v 1 --noinput
+
+run: dev static
+	./env/bin/python manage.py runserver
+
+translations: env
 	@echo "Updating translations"
-	@python manage.py translations
+	@./env/bin/python manage.py translations
 
 tarball: pip-cache
 	@echo "Creating tarball in ../developer_portal.tar.gz"
-	cd ..; tar -C $(SOURCE_DIR) --exclude-vcs --exclude=./media --exclude=./env --exclude=./db.sqlite3 --exclude=*.pyc -czf developer_portal.tar.gz .
+	@cd ..; tar -C $(SOURCE_DIR) --exclude-vcs --exclude=./media --exclude=./env --exclude=./db.sqlite3 --exclude=*.pyc -czf developer_portal.tar.gz .
+
+release: pip-cache
+	@bzr merge lp:developer-ubuntu-com
+	@$(MAKE) translations;
+	@bzr commit -m "New release"
+	@rm ../developer_portal.tar.gz
+	@$(MAKE) tarball;
+	@echo build_label=`bzr revno`
+
