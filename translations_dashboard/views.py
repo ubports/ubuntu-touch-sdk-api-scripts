@@ -26,7 +26,7 @@ def get_pages():
                 else:
                     p[lang] = date
     dashboard_data = list(reversed(sorted(
-        dashboard_data, key=lambda k: k['en'])))
+        dashboard_data, key=lambda k: k.get('en', None))))
     return dashboard_data
 
 
