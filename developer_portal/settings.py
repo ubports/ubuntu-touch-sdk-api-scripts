@@ -312,3 +312,22 @@ REST_FRAMEWORK = {
     
     #'PAGINATE_BY': 10,
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': './error.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
