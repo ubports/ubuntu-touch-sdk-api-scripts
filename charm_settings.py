@@ -34,3 +34,22 @@ ASSETS_URL = os.environ.get('ASSETS_URL_BASE', '//assets.ubuntu.com/')
 
 CACHE_MIDDLEWARE_SECONDS = 3600
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': '../../logs/django_errors.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}

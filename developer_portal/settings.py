@@ -333,3 +333,22 @@ MIGRATION_MODULES = {
     'taggit': 'taggit.migrations',
     'zinnia': 'zinnia.migrations',
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': './error.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}

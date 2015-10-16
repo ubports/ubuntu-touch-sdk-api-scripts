@@ -2,18 +2,17 @@
 
 1. Check out the branch
 2. Change directory to the branch location
-3. Install the apt requirements and set up a virtual env
+3. Install the apt requirements:
 
     sudo apt install python-dev python-django python-django-south python-psycopg2 pwgen virtualenv
-    virtualenv ./env
-    ./env/bin/pip install -r requirements.txt
-    ./env/bin/python manage.py syncdb --noinput --migrate
-    ./env/bin/python manage.py initdb
-    ./env/bin/python manage.py collectstatic --noinput
 
-To run the site:
+4. Setup your local dev environment:
 
-    ./env/bin/python manage.py runserver
+    make dev
+
+5. To run the site:
+
+    make run
 
 At the time of writing, we don't have a button to log in. To be able to do so, go to this URL
 in development mode:
@@ -34,7 +33,7 @@ If you want to populate the database with sample content, you can follow these i
 # Managing translations
 
 To manage translations, run
-    ./env/bin/python manage.py translations
+    make translations
 
 To simply update the .pot file (included in the command above), run:
     ./env/bin/python manage.py update-template
