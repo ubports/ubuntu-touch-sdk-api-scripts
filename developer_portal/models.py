@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from cms.models import CMSPlugin
+from cms.extensions import TitleExtension
+from cms.extensions.extension_pool import extension_pool
 from djangocms_text_ckeditor.html import extract_images
 from djangocms_text_ckeditor.models import AbstractText
 
@@ -32,3 +34,8 @@ class ExternalDocsBranch(models.Model):
         help_text=_('File name of doc to be used as index document, '
                     'ie "intro.md"'),
         blank=True)
+
+class SEOExtension(TitleExtension):
+    keywords = models.CharField(max_length=256)
+
+extension_pool.register(SEOExtension)

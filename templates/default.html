@@ -1,10 +1,4 @@
-{% extends "base.html" %}
+{% extends "cms_page_base.html" %}
 {% load cms_tags %}
 
-{% block title %}{{ current_page.get_page_title }} | {{ block.super }}{% endblock title%}
-
 {% block with_hero %}{% endblock with_hero %}
-
-{% block content %}
-  {% placeholder page_content %}
-{% endblock %}
