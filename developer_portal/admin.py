@@ -3,7 +3,8 @@ from django.contrib import admin
 from reversion.models import Revision, Version
 from reversion.admin import VersionAdmin
 
-from .models import ExternalDocsBranch
+from cms.extensions import TitleExtensionAdmin
+from .models import ExternalDocsBranch, SEOExtension
 from django.core.management import call_command
 
 __all__ = (
@@ -40,3 +41,8 @@ class ExternalDocsBranchAdmin(admin.ModelAdmin):
     actions = [import_selected_external_docs_branches]
 
 admin.site.register(ExternalDocsBranch, ExternalDocsBranchAdmin)
+
+class SEOExtensionAdmin(TitleExtensionAdmin):
+    pass
+
+admin.site.register(SEOExtension, SEOExtensionAdmin)
