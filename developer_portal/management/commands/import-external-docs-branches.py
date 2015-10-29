@@ -33,10 +33,6 @@ class DBActions:
     def remove_page(self, page_id):
         self.removed_pages += [page_id]
 
-    def __del__(self):
-        # https://stackoverflow.com/questions/33284171/
-        call_command('cms', 'fix-mptt')
-
     @transaction.commit_on_success()
     def run(self):
         for added_page in self.added_pages:
@@ -46,6 +42,9 @@ class DBActions:
         # Only remove pages created by a script!
         Page.objects.filter(id__in=self.removed_pages,
                             created_by="script").delete()
+
+        # https://stackoverflow.com/questions/33284171/
+        call_command('cms', 'fix-mptt')
 
 
 class MarkdownFile:
