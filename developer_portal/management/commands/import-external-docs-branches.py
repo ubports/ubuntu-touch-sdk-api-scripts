@@ -147,11 +147,6 @@ def slugify(filename):
     return os.path.basename(filename).replace('.md', '')
 
 
-def get_branch_from_lp(origin, alias):
-    return subprocess.call([
-        'bzr', 'checkout', '--lightweight', origin, alias])
-
-
 class LocalBranch:
     titles = {}
 
@@ -303,7 +298,8 @@ def import_branches(selection):
             docs_namespace__regex=selection):
         checkout_location = os.path.join(
             tempdir, os.path.basename(branch.docs_namespace))
-        if get_branch_from_lp(branch.lp_origin, checkout_location) != 0:
+        sourcecode = SourceCode(branch.lp_origin, checkout_location)
+        if sourcecode.get() != 0:
             logging.error(
                 'Could not check out branch "%s".' % branch.lp_origin)
             shutil.rmtree(checkout_location)
@@ -318,6 +314,25 @@ def import_branches(selection):
         local_branch.remove_old_pages()
     shutil.rmtree(tempdir)
     db_actions.run()
+
+
+class SourceCode():
+    def __init__(self, branch_origin, checkout_location):
+        self.branch_origin = branch_origin
+        self.checkout_location = checkout_location
+
+    def get(self):
+        if self.branch_origin.startswith('lp:'):
+            return subprocess.call([
+                'bzr', 'checkout', '--lightweight', self.branch_origin,
+                self.checkout_location])
+        if self.branch_origin.startswith('git://'):
+            return subprocess.call([
+                'git', 'clone', '-q', self.branch_origin,
+                self.checkout_location])
+        logging.error(
+            'Branch format "{}" not understood.'.format(self.branch_origin))
+        return 1
 
 
 class Command(BaseCommand):
