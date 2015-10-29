@@ -302,7 +302,8 @@ def import_branches(selection):
         if sourcecode.get() != 0:
             logging.error(
                 'Could not check out branch "%s".' % branch.lp_origin)
-            shutil.rmtree(checkout_location)
+            if os.path.exists(checkout_location):
+                shutil.rmtree(checkout_location)
             break
         if branch.lp_origin.startswith('lp:snappy'):
             local_branch = SnappyLocalBranch(checkout_location, branch,
@@ -322,11 +323,13 @@ class SourceCode():
         self.checkout_location = checkout_location
 
     def get(self):
-        if self.branch_origin.startswith('lp:'):
+        if self.branch_origin.startswith('lp:') and \
+           os.path.exists('/usr/bin/bzr'):
             return subprocess.call([
                 'bzr', 'checkout', '--lightweight', self.branch_origin,
                 self.checkout_location])
-        if self.branch_origin.startswith('git://'):
+        if self.branch_origin.startswith('git://') and \
+           os.path.exists('/usr/bin/git'):
             return subprocess.call([
                 'git', 'clone', '-q', self.branch_origin,
                 self.checkout_location])
