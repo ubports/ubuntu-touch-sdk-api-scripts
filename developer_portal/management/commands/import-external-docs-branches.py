@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.core.management import call_command
 from django.db import transaction
 
 from cms.api import create_page, add_plugin
@@ -32,7 +33,7 @@ class DBActions:
     def remove_page(self, page_id):
         self.removed_pages += [page_id]
 
-    @transaction.commit_on_success()  # XXX: using=database
+    @transaction.commit_on_success()
     def run(self):
         for added_page in self.added_pages:
             page = get_or_create_page(**added_page)
@@ -41,6 +42,9 @@ class DBActions:
         # Only remove pages created by a script!
         Page.objects.filter(id__in=self.removed_pages,
                             created_by="script").delete()
+
+        # https://stackoverflow.com/questions/33284171/
+        call_command('cms', 'fix-mptt')
 
 
 class MarkdownFile:
