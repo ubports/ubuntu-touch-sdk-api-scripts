@@ -20,7 +20,7 @@ django-contrib-comments==1.5
 django-meta==0.2.0
 django-meta-mixin==0.1.1
 django-missing==0.1.13
-django-mptt==0.6.1
+django-mptt==0.7.4
 django-parler==1.1.1
 django-polymorphic==0.6
 django-reversion==1.8.4
