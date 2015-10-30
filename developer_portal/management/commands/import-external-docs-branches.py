@@ -100,12 +100,19 @@ class MarkdownFile:
             "</code></pre>",
             "</code></pre></div><div class=\"eight-col\">")
 
-    def replace_links(self, titles):
+    def replace_links(self, titles, url_map):
         for title in titles:
-            url = u"/snappy/guides/%s/%s" % (
-                self.release_alias, slugify(title))
-            link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
-            self.html = self.html.replace(os.path.basename(title), link)
+            local_md_fn = os.path.basename(title)
+            url = u'/'+url_map[title]
+            # Replace links of the form <a href="/path/somefile.md"> first
+            href = u"<a href=\"{}\">".format(url)
+            md_href = u"<a href=\"{}\">".format(local_md_fn)
+            self.html = self.html.replace(md_href, href)
+
+            # Now we can replace free-standing "somefile.md" references in
+            # the HTML
+            link = href + u"{}</a>".format(titles[title])
+            self.html = self.html.replace(local_md_fn, link)
 
     def publish(self):
         '''Publishes pages in their branch alias namespace.'''
@@ -158,6 +165,7 @@ def get_branch_from_lp(origin, alias):
 
 class LocalBranch:
     titles = {}
+    url_map = {}
 
     def __init__(self, dirname, external_branch, db_actions):
         self.dirname = dirname
@@ -186,8 +194,11 @@ class LocalBranch:
                                               self.db_actions)
                 self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
+            self.url_map[md_file.fn] = md_file.full_url
         if not self.index_doc:
             self._create_fake_index_doc()
+        for md_file in self.md_files:
+            md_file.replace_links(self.titles, self.url_map)
 
     def remove_old_pages(self):
         imported_page_urls = set([md_file.full_url
@@ -250,11 +261,6 @@ class SnappyLocalBranch(LocalBranch):
         self.index_doc_title = 'Snappy documentation'
         if self.release_alias != 'current':
             self.index_doc_title += ' (%s)' % self.release_alias
-
-    def import_markdown(self):
-        LocalBranch.import_markdown(self)
-        for md_file in self.md_files:
-            md_file.replace_links(self.titles)
 
 
 def get_or_create_page(title, full_url, menu_title=None,
