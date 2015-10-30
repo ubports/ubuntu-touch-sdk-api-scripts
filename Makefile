@@ -35,7 +35,7 @@ crontab:
 	@echo internal_proxy=\"${internal_proxy}\" >> crontab
 	@echo "0 4 * * * cd ${PWD}; ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log" >> crontab
 	@echo "15 4 * * * cd ${PWD}; ${PYTHON} manage.py update-gadget-snaps > ${PWD}/../../logs/update_gadgetsnaps.log 2>${PWD}/../../logs/update_gadgetsnaps_errors.log" >> crontab
-	@echo "15 */2 * * * cd ${PWD}; ${PYTHON} manage.py import-external-docs-branches > ${PWD}/../../logs/import-external-docs-branches.log 2>${PWD}/../../logs/import-external-docs-branches_errors.log" >> crontab
+	@echo "20 4 * * * cd ${PWD}; ${PYTHON} manage.py import-external-docs-branches > ${PWD}/../../logs/import-external-docs-branches.log 2>${PWD}/../../logs/import-external-docs-branches_errors.log" >> crontab
 	@crontab ./crontab
 	@rm ./crontab
 
