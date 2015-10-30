@@ -4,7 +4,7 @@
 2. Change directory to the branch location
 3. Install the apt requirements:
 
-    sudo apt install python-dev python-django python-django-south python-psycopg2 pwgen virtualenv
+    sudo apt install python-dev python-django python-psycopg2 pwgen virtualenv
 
 4. Setup your local dev environment:
 
