@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.core.management import call_command
 from django.db import transaction
 
 from cms.api import create_page, add_plugin
@@ -32,7 +33,7 @@ class DBActions:
     def remove_page(self, page_id):
         self.removed_pages += [page_id]
 
-    @transaction.commit_on_success()  # XXX: using=database
+    @transaction.commit_on_success()
     def run(self):
         for added_page in self.added_pages:
             page = get_or_create_page(**added_page)
@@ -41,6 +42,9 @@ class DBActions:
         # Only remove pages created by a script!
         Page.objects.filter(id__in=self.removed_pages,
                             created_by="script").delete()
+
+        # https://stackoverflow.com/questions/33284171/
+        call_command('cms', 'fix-mptt')
 
 
 class MarkdownFile:
@@ -145,11 +149,6 @@ class SnappyMarkdownFile(MarkdownFile):
 
 def slugify(filename):
     return os.path.basename(filename).replace('.md', '')
-
-
-def get_branch_from_lp(origin, alias):
-    return subprocess.call([
-        'bzr', 'checkout', '--lightweight', origin, alias])
 
 
 class LocalBranch:
@@ -303,10 +302,12 @@ def import_branches(selection):
             docs_namespace__regex=selection):
         checkout_location = os.path.join(
             tempdir, os.path.basename(branch.docs_namespace))
-        if get_branch_from_lp(branch.lp_origin, checkout_location) != 0:
+        sourcecode = SourceCode(branch.lp_origin, checkout_location)
+        if sourcecode.get() != 0:
             logging.error(
                 'Could not check out branch "%s".' % branch.lp_origin)
-            shutil.rmtree(checkout_location)
+            if os.path.exists(checkout_location):
+                shutil.rmtree(checkout_location)
             break
         if branch.lp_origin.startswith('lp:snappy'):
             local_branch = SnappyLocalBranch(checkout_location, branch,
@@ -318,6 +319,27 @@ def import_branches(selection):
         local_branch.remove_old_pages()
     shutil.rmtree(tempdir)
     db_actions.run()
+
+
+class SourceCode():
+    def __init__(self, branch_origin, checkout_location):
+        self.branch_origin = branch_origin
+        self.checkout_location = checkout_location
+
+    def get(self):
+        if self.branch_origin.startswith('lp:') and \
+           os.path.exists('/usr/bin/bzr'):
+            return subprocess.call([
+                'bzr', 'checkout', '--lightweight', self.branch_origin,
+                self.checkout_location])
+        if self.branch_origin.startswith('git://') and \
+           os.path.exists('/usr/bin/git'):
+            return subprocess.call([
+                'git', 'clone', '-q', self.branch_origin,
+                self.checkout_location])
+        logging.error(
+            'Branch format "{}" not understood.'.format(self.branch_origin))
+        return 1
 
 
 class Command(BaseCommand):
