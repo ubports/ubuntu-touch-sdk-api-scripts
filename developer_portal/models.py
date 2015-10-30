@@ -21,9 +21,13 @@ class RawHtml(AbstractText):
 
 
 class ExternalDocsBranch(models.Model):
+    # We originally assumed that branches would also live in LP,
+    # well, we were wrong, but let's keep the name around. It's
+    # no use having a schema/data migration just for this.
     lp_origin = models.CharField(
         max_length=200,
-        help_text=_('Launchpad branch location, ie: lp:snappy/15.04'))
+        help_text=_('External branch location, ie: lp:snappy/15.04 or '
+                    'git://github.com/ubuntu-core/snappy'))
     docs_namespace = models.CharField(
         max_length=120,
         help_text=_('Path alias we want to use for the docs, '
