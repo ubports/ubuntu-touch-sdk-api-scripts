@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     # Allow login from Ubuntu SSO
     'django_openid_auth',
 
-    'mptt', #utilities for implementing a modified pre-order traversal tree
     'menus', #helper for model independent hierarchical website navigation
     'sekizai', #for javascript and css management
     'reversion', #content versioning
