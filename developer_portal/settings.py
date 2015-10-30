@@ -318,6 +318,8 @@ REST_FRAMEWORK = {
 }
 
 MIGRATION_MODULES = {
+    'auth': 'auth.migrations',
+    'contenttypes': 'contenttypes.migrations',
     'cms': 'cms.migrations',
     'cmsplugin_zinnia': 'cmsplugin_zinnia.migrations',
     'djangocms_link': 'djangocms_link.migrations_django',
