@@ -33,7 +33,7 @@ class DBActions:
     def remove_page(self, page_id):
         self.removed_pages += [page_id]
 
-#    @transaction.commit_on_success()
+    @transaction.atomic()
     def run(self):
         for added_page in self.added_pages:
             page = get_or_create_page(**added_page)
