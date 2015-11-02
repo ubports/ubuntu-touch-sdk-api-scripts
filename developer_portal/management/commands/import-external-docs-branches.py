@@ -310,7 +310,7 @@ def import_branches(selection):
                 shutil.rmtree(checkout_location)
             break
         if branch.lp_origin.startswith('lp:snappy') or \
-           branch.lp_origin.startswith('https://github.com/ubuntu-core/'):
+           'snappy' in branch.lp_origin.split(':')[1].split('.git')[0].split('/'):
             local_branch = SnappyLocalBranch(checkout_location, branch,
                                              db_actions)
         else:
