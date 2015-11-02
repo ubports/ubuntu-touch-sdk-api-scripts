@@ -319,7 +319,7 @@ REST_FRAMEWORK = {
 MIGRATION_MODULES = {
     'cms': 'cms.migrations',
     'cmsplugin_zinnia': 'cmsplugin_zinnia.migrations',
-    'djangocms_link': 'djangocms_link.migrations_django',
+    'djangocms_link': 'djangocms_link.migrations',
     'djangocms_picture': 'djangocms_picture.migrations_django',
     'djangocms_snippet': 'djangocms_snippet.migrations_django',
     'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations',
