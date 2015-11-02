@@ -1,4 +1,4 @@
-Django==1.8.6
+Django==1.8.5
 django-template-debug==0.3.5
 oslo.config==2.4.0
 oslo.i18n==2.7.0
