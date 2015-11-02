@@ -229,7 +229,7 @@ class LocalBranch:
             "<code>%s</code> Snappy branch.</p>"
             "<p><ul class=\"list-ubuntu\">%s</ul></p>\n"
             "<p>Auto-imported from <a "
-            "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
+            "href=\"https://github.com/ubuntu-core/snappy\">%s</a>.</p>\n"
             "</div></div>") % (self.release_alias, list_pages,
                                self.external_branch.lp_origin)
         self.db_actions.add_page(
@@ -309,7 +309,8 @@ def import_branches(selection):
             if os.path.exists(checkout_location):
                 shutil.rmtree(checkout_location)
             break
-        if branch.lp_origin.startswith('lp:snappy'):
+        if branch.lp_origin.startswith('lp:snappy') or \
+           branch.lp_origin.startswith('https://github.com/ubuntu-core/'):
             local_branch = SnappyLocalBranch(checkout_location, branch,
                                              db_actions)
         else:
@@ -332,7 +333,8 @@ class SourceCode():
             return subprocess.call([
                 'bzr', 'checkout', '--lightweight', self.branch_origin,
                 self.checkout_location])
-        if self.branch_origin.startswith('git://') and \
+        if self.branch_origin.startswith('https://github.com') and \
+           self.branch_origin.endswith('.git') and \
            os.path.exists('/usr/bin/git'):
             return subprocess.call([
                 'git', 'clone', '-q', self.branch_origin,

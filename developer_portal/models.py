@@ -27,12 +27,12 @@ class ExternalDocsBranch(models.Model):
     lp_origin = models.CharField(
         max_length=200,
         help_text=_('External branch location, ie: lp:snappy/15.04 or '
-                    'git://github.com/ubuntu-core/snappy'))
+                    'https://github.com/ubuntu-core/snappy.git'))
     docs_namespace = models.CharField(
         max_length=120,
         help_text=_('Path alias we want to use for the docs, '
                     'ie "snappy/guides/15.04" or '
-                    '"snappy/guides/latest", etc.'))
+                    '"snappy/guides/current", etc.'))
     index_doc = models.CharField(
         max_length=120,
         help_text=_('File name of doc to be used as index document, '
