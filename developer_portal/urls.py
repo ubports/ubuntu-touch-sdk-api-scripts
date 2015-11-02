@@ -32,7 +32,7 @@ urlpatterns += i18n_patterns('',
 
 urlpatterns += i18n_patterns('',
     url(r'^search/', 'developer_portal.views.search', name='search'),
-    url(r'^ckeditor/', include('ckeditor.urls')),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^', include('cms.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
