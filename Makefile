@@ -45,8 +45,8 @@ initdb: syncdb
 	@python manage.py init_apidocs --settings charm_settings
 
 syncdb:
-	@echo "Syncing database"
-	@python manage.py syncdb --noinput --migrate --settings charm_settings
+	@echo "Syncing/migrating database"
+	@python manage.py migrate --noinput --settings charm_settings
 
 collectstatic: collectstatic.done
 collectstatic.done:
@@ -82,7 +82,7 @@ env: pip-cache
 
 db.sqlite3: env
 	@echo "Initializing database"
-	@./env/bin/python manage.py syncdb --noinput --migrate
+	@./env/bin/python manage.py migrate --noinput
 	@./env/bin/python manage.py initdb
 	@./env/bin/python manage.py init_apidocs
 
