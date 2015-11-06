@@ -53,7 +53,7 @@ class Command(BaseCommand):
         if hasattr(settings, 'EDITOR_GROUP') and settings.EDITOR_GROUP != "":
             print "Configuring "+settings.EDITOR_GROUP+" group."
             editors, created = PageUserGroup.objects.get_or_create(name=settings.EDITOR_GROUP, defaults={'created_by': admin})
-            page_perms = Permission.objects.filter(content_type__app_label='cms', content_type__name='page')
+            page_perms = Permission.objects.filter(content_type__app_label='cms', content_type__model='page')
             editors.permissions.add(*list(page_perms))
 
             print "Configuring global permissions for group."
