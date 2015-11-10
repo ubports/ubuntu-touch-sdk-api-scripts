@@ -16,7 +16,16 @@
                 {% endwith %}
             {% endwith %}
         {% endif %}
-            <h3>{{ snap.alias|default_if_none:snap.name }}</h3>
+            <h3>
+		{% with snap_name=snap.alias|default_if_none:snap.name %}
+		    {% if "generic-" in snap_name %}
+		    {{ snap_name }}
+		    {% else %}
+		    {{ snap_name|first_part:"."|capfirst }}
+		    {% endif %}
+		{% endwith %}
+
+	    </h3>
             {% if snap.description|length > 180 %}
                 <p>{{ snap.description|truncatechars:180 }}</p>
             {% else %}

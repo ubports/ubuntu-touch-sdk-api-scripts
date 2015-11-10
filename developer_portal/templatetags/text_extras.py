@@ -24,3 +24,7 @@ def randint(mini, maxi):
 @register.filter
 def string(integer):
     return str(integer)
+
+@register.filter
+def first_part(text, delimiter):
+    return text.split(delimiter)[0]
