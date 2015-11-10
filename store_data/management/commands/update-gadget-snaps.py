@@ -21,7 +21,8 @@ def update_gadget_snaps():
                 'alias': entry['alias'], 'price': entry['price'],
                 'publisher': entry['publisher'], 'version': entry['version'],
                 'last_updated': now, 'description': entry['description'],
-                'title': entry['title']})
+                'title': entry['title'], 'website': entry.get('website', ''),
+            })
         if not created:
             gadget_snap.last_updated = now
             gadget_snap.icon_url = entry['icon_url']
@@ -32,6 +33,7 @@ def update_gadget_snaps():
             gadget_snap.version = entry['version']
             gadget_snap.description = entry['description']
             gadget_snap.title = entry['title']
+            gadget_snap.website = entry.get('website', '')
             gadget_snap.save()
         for arch in entry['architecture']:
             arch_ob, created = Architecture.objects.get_or_create(name=arch)

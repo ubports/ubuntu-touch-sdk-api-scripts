@@ -28,3 +28,4 @@ class GadgetSnap(models.Model):
     last_updated = models.DateTimeField()
     description = models.TextField(max_length=5000)
     screenshot_url = models.ManyToManyField(ScreenshotURL)
+    website = models.URLField(blank=True)
