@@ -5,8 +5,10 @@ from django.utils.translation import ugettext_lazy as _
 from .models import GadgetSnap
 
 
-class GadgetSnapListPlugin(CMSPluginBase):
-    name = _("Gadget Snap List Plugin")
+class GadgetSnapListPluginLarge(CMSPluginBase):
+    # Keeping the name short to be able to differentiate them 
+    # in the editor dropdown
+    name = _("Snap list - Gadget")
     render_template = "gadget_snap_list.html"
     text_enabled = True
 
@@ -16,4 +18,19 @@ class GadgetSnapListPlugin(CMSPluginBase):
         })
         return context
 
-plugin_pool.register_plugin(GadgetSnapListPlugin)
+plugin_pool.register_plugin(GadgetSnapListPluginLarge)
+
+class GadgetSnapListPluginSmall(CMSPluginBase):
+    # Keeping the name short to be able to differentiate them 
+    # in the editor dropdown
+    name = _("Snap shortlist - Gadget")
+    render_template = "gadget_snap_shortlist.html"
+    text_enabled = True
+
+    def render(self, context, instance, placeholder):
+        context.update({
+            'gadget_snap_list': GadgetSnap.objects.all(),
+        })
+        return context
+
+plugin_pool.register_plugin(GadgetSnapListPluginSmall)

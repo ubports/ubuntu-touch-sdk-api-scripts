@@ -1,0 +1,36 @@
+{% load i18n static text_extras %}
+
+<div class="equal-height no-border">
+    {% for snap in gadget_snap_list|slice:"6" %}
+        {% if gadget_snap_list|index:snap|divisibleby:6 %}
+            <div class="two-col last-col box">
+        {% else %}
+            <div class="two-col box">
+        {% endif %}
+        {% if snap.icon_url %}
+            <div class="two-col">
+                <img src="{{ snap.icon_url }}"/>
+            </div>
+        {% else %}
+            {% with 0|randint:10|string as rand %} 
+                {% with "img/boards/noboard-"|add:rand|add:".png" as noboard %}
+                    <div class="two-col">
+                        <img src="{% static noboard %}"/>
+                    </div>
+                {% endwith %}
+            {% endwith %}
+        {% endif %}
+        <div class="two-col no-margin-bottom">
+            <h4>
+            {% with snap_name=snap.alias|default_if_none:snap.name %}
+                {% if "generic-" in snap_name %}
+                {{ snap_name }}
+                {% else %}
+                {{ snap_name|first_part:"."|capfirst }}
+                {% endif %}
+            {% endwith %}
+            </h4>
+        </div>
+        </div>
+    {% endfor %}
+</div>
