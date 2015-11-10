@@ -24,7 +24,6 @@
 		    {{ snap_name|first_part:"."|capfirst }}
 		    {% endif %}
 		{% endwith %}
-
 	    </h3>
             {% if snap.description|length > 180 %}
                 <p>{{ snap.description|truncatechars:180 }}</p>
