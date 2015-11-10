@@ -23,11 +23,7 @@
         <div class="two-col no-margin-bottom">
             <h4>
             {% with snap_name=snap.alias|default_if_none:snap.name %}
-                {% if "generic-" in snap_name %}
-                {{ snap_name }}
-                {% else %}
-                {{ snap_name|first_part:"."|capfirst }}
-                {% endif %}
+	        {{ snap_name|style_snap_name }}
             {% endwith %}
             </h4>
         </div>

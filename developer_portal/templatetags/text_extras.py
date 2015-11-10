@@ -26,5 +26,7 @@ def string(integer):
     return str(integer)
 
 @register.filter
-def first_part(text, delimiter):
-    return text.split(delimiter)[0]
+def style_snap_name(snap_name):
+    if snap_name.startswith('generic-'):
+        return 'Generic {}'.format(snap_name.split('-')[1])
+    return snap_name.split('.')[0].title()
