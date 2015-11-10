@@ -29,4 +29,6 @@ def string(integer):
 def style_snap_name(snap_name):
     if snap_name.startswith('generic-'):
         return 'Generic {}'.format(snap_name.split('-')[1])
+    if snap_name.endswith('-community'):
+        return snap_name.replace('-community', '').title()
     return snap_name.split('.')[0].title()
