@@ -2,32 +2,21 @@
 
 1. Follow the instructions in README.md to create a working environment
 2. Merge and commit any approved code branches
-3. Enter your virtualenv 
-
-    source ./env/bin/activate
-    
-4. Create the tarball
-
-    make tarball
-
-4. Create a new release in Launchpad, use the bzr revno for the milestone
-
-    https://launchpad.net/developer-ubuntu-com/trunk/+addrelease
-
-5. Create a new download in Launchpad, uploaded the built tarball
-   Use "website source" as the file description
+3. Run `make update-pip-cache` if there have been pip packages changes.
+   Don't forget to commit the new dependencies branch revno to trunk.
+4. Merge lp:developer-ubuntu-com on lp:developer-ubuntu-com/production
+5. Note the revno of lp:developer-ubuntu-com/production commit you want
+   to deploy
 
 
-# Requesting a deployment
+# Doing a staging deployment
 
-We do not deploy this directly, instead we provide Canonical Sysadmins
-with a tarball of the code which is deployed with a juju charm
+1. Connect to the staging server and switch to the correct user.
+2. run `juju set devportal-app build_label="<production revno>"`.
+
+
+# Requesting a production deployment
 
 1. Email ubuntu-platform@rt.canonical.com requesting a deployment
-2. Inform them of the location of the new tarball (on Launchpad)
-3. Instruct them to update build_label according to the new release number
-
-They will first deploy to the staging environment, where you will need
-to verify the changes. If everything looks good, reply to the RT email
-letting them know that it's ready to go to production. Repeat the checks
-in production.
+2. Instruct them to run 
+   `juju set devportal-app build_label="<production revno>"`

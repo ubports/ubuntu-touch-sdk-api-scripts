@@ -100,12 +100,19 @@ class MarkdownFile:
             "</code></pre>",
             "</code></pre></div><div class=\"eight-col\">")
 
-    def replace_links(self, titles):
+    def replace_links(self, titles, url_map):
         for title in titles:
-            url = u"/snappy/guides/%s/%s" % (
-                self.release_alias, slugify(title))
-            link = u"<a href=\"%s\">%s</a>" % (url, titles[title])
-            self.html = self.html.replace(os.path.basename(title), link)
+            local_md_fn = os.path.basename(title)
+            url = u'/'+url_map[title]
+            # Replace links of the form <a href="/path/somefile.md"> first
+            href = u"<a href=\"{}\">".format(url)
+            md_href = u"<a href=\"{}\">".format(local_md_fn)
+            self.html = self.html.replace(md_href, href)
+
+            # Now we can replace free-standing "somefile.md" references in
+            # the HTML
+            link = href + u"{}</a>".format(titles[title])
+            self.html = self.html.replace(local_md_fn, link)
 
     def publish(self):
         '''Publishes pages in their branch alias namespace.'''
@@ -153,6 +160,7 @@ def slugify(filename):
 
 class LocalBranch:
     titles = {}
+    url_map = {}
 
     def __init__(self, dirname, external_branch, db_actions):
         self.dirname = dirname
@@ -181,8 +189,11 @@ class LocalBranch:
                                               self.db_actions)
                 self.md_files += [md_file]
             self.titles[md_file.fn] = md_file.title
+            self.url_map[md_file.fn] = md_file.full_url
         if not self.index_doc:
             self._create_fake_index_doc()
+        for md_file in self.md_files:
+            md_file.replace_links(self.titles, self.url_map)
 
     def remove_old_pages(self):
         imported_page_urls = set([md_file.full_url
@@ -229,7 +240,7 @@ class LocalBranch:
             "<code>%s</code> Snappy branch.</p>"
             "<p><ul class=\"list-ubuntu\">%s</ul></p>\n"
             "<p>Auto-imported from <a "
-            "href=\"https://code.launchpad.net/snappy\">%s</a>.</p>\n"
+            "href=\"https://github.com/ubuntu-core/snappy\">%s</a>.</p>\n"
             "</div></div>") % (self.release_alias, list_pages,
                                self.external_branch.lp_origin)
         self.db_actions.add_page(
@@ -245,11 +256,6 @@ class SnappyLocalBranch(LocalBranch):
         self.index_doc_title = 'Snappy documentation'
         if self.release_alias != 'current':
             self.index_doc_title += ' (%s)' % self.release_alias
-
-    def import_markdown(self):
-        LocalBranch.import_markdown(self)
-        for md_file in self.md_files:
-            md_file.replace_links(self.titles)
 
 
 def get_or_create_page(title, full_url, menu_title=None,
@@ -309,7 +315,8 @@ def import_branches(selection):
             if os.path.exists(checkout_location):
                 shutil.rmtree(checkout_location)
             break
-        if branch.lp_origin.startswith('lp:snappy'):
+        if branch.lp_origin.startswith('lp:snappy') or \
+           'snappy' in branch.lp_origin.split(':')[1].split('.git')[0].split('/'):
             local_branch = SnappyLocalBranch(checkout_location, branch,
                                              db_actions)
         else:
@@ -332,7 +339,8 @@ class SourceCode():
             return subprocess.call([
                 'bzr', 'checkout', '--lightweight', self.branch_origin,
                 self.checkout_location])
-        if self.branch_origin.startswith('git://') and \
+        if self.branch_origin.startswith('https://github.com') and \
+           self.branch_origin.endswith('.git') and \
            os.path.exists('/usr/bin/git'):
             return subprocess.call([
                 'git', 'clone', '-q', self.branch_origin,
