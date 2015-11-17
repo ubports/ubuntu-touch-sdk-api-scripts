@@ -12,6 +12,9 @@ update-1470715:
 	./env/bin/python manage.py migrate --fake sites
 	./env/bin/python manage.py migrate --fake cms 0001_initial
 	./env/bin/python manage.py migrate --fake cms 0002_auto_20140816_1918
+	./env/bin/python manage.py migrate --fake cms 0005_auto_20140924_1039
+	./env/bin/python manage.py migrate --fake cms 0010_migrate_use_structure
+	./env/bin/python manage.py migrate --fake cms 0011_auto_20150419_1006
 	./env/bin/python manage.py migrate --fake cmsplugin_zinnia
 	./env/bin/python manage.py migrate --fake djangocms_link 0001_initial
 	./env/bin/python manage.py migrate --fake djangocms_picture
