@@ -5,6 +5,8 @@ from cms.api import create_page, add_plugin
 from cms.models import Page, Title
 from cms.utils import page_resolver
 
+from ..importer.source import SourceCode
+
 from bs4 import BeautifulSoup
 import codecs
 import glob
@@ -13,7 +15,6 @@ import markdown
 import os
 import re
 import shutil
-import subprocess
 import sys
 import tempfile
 
@@ -304,28 +305,6 @@ def import_branches(selection):
 
     # https://stackoverflow.com/questions/33284171/
     call_command('cms', 'fix-tree')
-
-
-class SourceCode():
-    def __init__(self, branch_origin, checkout_location):
-        self.branch_origin = branch_origin
-        self.checkout_location = checkout_location
-
-    def get(self):
-        if self.branch_origin.startswith('lp:') and \
-           os.path.exists('/usr/bin/bzr'):
-            return subprocess.call([
-                'bzr', 'checkout', '--lightweight', self.branch_origin,
-                self.checkout_location])
-        if self.branch_origin.startswith('https://github.com') and \
-           self.branch_origin.endswith('.git') and \
-           os.path.exists('/usr/bin/git'):
-            return subprocess.call([
-                'git', 'clone', '-q', self.branch_origin,
-                self.checkout_location])
-        logging.error(
-            'Branch format "{}" not understood.'.format(self.branch_origin))
-        return 1
 
 
 class Command(BaseCommand):
