@@ -3,9 +3,34 @@ PYTHON := /usr/bin/env python
 SOURCE_DIR := $(PWD)
 REVNO := `bzr revno`
 
+update-1470715:
+	./env/bin/pip install -r requirements.txt --upgrade
+	./env/bin/pip uninstall -yq South
+	./env/bin/pip uninstall -yq python-keystoneclient
+	./env/bin/python manage.py migrate --fake admin
+	./env/bin/python manage.py migrate --fake sessions
+	./env/bin/python manage.py migrate --fake sites
+	./env/bin/python manage.py migrate --fake cms 0001_initial
+	./env/bin/python manage.py migrate --fake cms 0002_auto_20140816_1918
+	./env/bin/python manage.py migrate --fake cmsplugin_zinnia
+	./env/bin/python manage.py migrate --fake djangocms_link 0001_initial
+	./env/bin/python manage.py migrate --fake djangocms_picture
+	./env/bin/python manage.py migrate --fake djangocms_snippet 0001_initial
+	./env/bin/python manage.py migrate --fake djangocms_text_ckeditor
+	./env/bin/python manage.py migrate --fake djangocms_video
+	./env/bin/python manage.py migrate --fake django_comments 0001_initial
+	./env/bin/python manage.py migrate --fake menus
+	./env/bin/python manage.py migrate --fake reversion 0001_initial
+	./env/bin/python manage.py migrate cms
+	./env/bin/python manage.py migrate --fake developer_portal
+	./env/bin/python manage.py migrate --fake api_docs
+	./env/bin/python manage.py migrate --fake django_openid_auth 0001_initial
+	./env/bin/python manage.py migrate --fake store_data 0001_initial
+	./env/bin/python manage.py migrate
+
 update-instance:
 	@echo "Nothing to do for the app";
-	
+
 update-common:
 	@echo "Updating database"
 	if [ $(DATABASE_URL) ]; then $(MAKE) initdb; fi
@@ -63,7 +88,7 @@ update-pip-cache:
 	rm -rf pip-cache
 	bzr branch lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies pip-cache
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
-	bzr add pip-cache/* 
+	bzr add pip-cache/*
 	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
 	bzr push --directory pip-cache lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies
 	bzr revno pip-cache > pip-cache-revno.txt
@@ -111,4 +136,3 @@ release: pip-cache
 	@rm ../developer_portal.tar.gz
 	@$(MAKE) tarball;
 	@echo build_label=`bzr revno`
-
