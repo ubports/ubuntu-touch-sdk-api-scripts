@@ -4,7 +4,10 @@ from reversion.models import Revision, Version
 from reversion.admin import VersionAdmin
 
 from cms.extensions import TitleExtensionAdmin
-from .models import ExternalDocsBranch, SEOExtension
+from .models import (
+    ExternalDocsBranch, ExternalDocsBranchImportDirective,
+    SEOExtension
+)
 from django.core.management import call_command
 
 __all__ = (
@@ -38,11 +41,20 @@ admin.site.register(Version, VersionAdmin)
 
 
 class ExternalDocsBranchAdmin(admin.ModelAdmin):
-    list_display = ('lp_origin', 'docs_namespace')
-    list_filter = ('lp_origin', 'docs_namespace')
+    list_display = ('branch_origin',)
+    list_filter = ('branch_origin',)
     actions = [import_selected_external_docs_branches]
 
 admin.site.register(ExternalDocsBranch, ExternalDocsBranchAdmin)
+
+
+class ExternalDocsBranchImportDirectiveAdmin(admin.ModelAdmin):
+    list_display = ('external_docs_branch', 'import_from', 'write_to')
+    list_filter = ('external_docs_branch', 'import_from', 'write_to')
+
+admin.site.register(ExternalDocsBranchImportDirective,
+                    ExternalDocsBranchImportDirectiveAdmin)
+
 
 class SEOExtensionAdmin(TitleExtensionAdmin):
     pass

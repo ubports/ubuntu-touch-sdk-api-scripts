@@ -220,7 +220,7 @@ class LocalBranch:
             "<p>Auto-imported from <a "
             "href=\"https://github.com/ubuntu-core/snappy\">%s</a>.</p>\n"
             "</div></div>") % (self.release_alias, list_pages,
-                               self.external_branch.lp_origin)
+                               self.external_branch.branch_origin)
         page = get_or_create_page(
             title=self.index_doc_title, full_url=self.docs_namespace,
             in_navigation=in_navigation, redirect=redirect, html=landing,
@@ -283,18 +283,19 @@ def import_branches(selection):
         return
     tempdir = tempfile.mkdtemp()
     for branch in ExternalDocsBranch.objects.filter(
-            docs_namespace__regex=selection):
+            docs_namespace__regex=selection, active=True):
         checkout_location = os.path.join(
             tempdir, os.path.basename(branch.docs_namespace))
-        sourcecode = SourceCode(branch.lp_origin, checkout_location)
+        sourcecode = SourceCode(branch.branch_origin, checkout_location,
+                                branch.post_checkout_command)
         if sourcecode.get() != 0:
             logging.error(
-                'Could not check out branch "%s".' % branch.lp_origin)
+                'Could not check out branch "%s".' % branch.branch_origin)
             if os.path.exists(checkout_location):
                 shutil.rmtree(checkout_location)
             break
-        if branch.lp_origin.startswith('lp:snappy') or \
-           'snappy' in branch.lp_origin.split(':')[1].split('.git')[0].split('/'):
+        if branch.branch_origin.startswith('lp:snappy') or \
+           'snappy' in branch.branch_origin.split(':')[1].split('.git')[0].split('/'):
             local_branch = SnappyLocalBranch(checkout_location, branch)
         else:
             local_branch = LocalBranch(checkout_location, branch)
