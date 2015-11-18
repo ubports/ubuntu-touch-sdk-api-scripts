@@ -30,8 +30,6 @@ SECRET_KEY = 'we3w67a1=2e384asi&f_fcp8meje#)n@lyoys21izkwo)%eknh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = ['127.0.0.1', 'developer.ubuntu.com']
 
 
@@ -49,14 +47,13 @@ INSTALLED_APPS = [
     # Allow login from Ubuntu SSO
     'django_openid_auth',
 
-    'mptt', #utilities for implementing a modified pre-order traversal tree
     'menus', #helper for model independent hierarchical website navigation
-    'south', #intelligent schema and data migrations
     'sekizai', #for javascript and css management
     'reversion', #content versioning
     'django_pygments',
     'django_comments',
     'tagging',
+    'template_debug',
 
     'ckeditor',
     'djangocms_text_ckeditor',
@@ -66,6 +63,7 @@ INSTALLED_APPS = [
     'djangocms_picture',
     'djangocms_video',
     'djangocms_snippet',
+    'treebeard', #required by django CMS
 
     'cmsplugin_zinnia',
     'zinnia',
@@ -107,24 +105,29 @@ MIDDLEWARE_CLASSES = (
 #CACHE_MIDDLEWARE_SECONDS = 3600
 #CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.request',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
 
-    'sekizai.context_processors.sekizai',
-    'cms.context_processors.cms_settings',
-    'django.contrib.messages.context_processors.messages',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(PROJECT_PATH, "templates"),
+            ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.core.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.core.context_processors.i18n',
+                'django.core.context_processors.media',
+                'django.core.context_processors.static',
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_PATH, "templates"),
-)
+                'sekizai.context_processors.sekizai',
+                'cms.context_processors.cms_settings',
+                'django.contrib.messages.context_processors.messages',
+            ]
+        }
+    }
+]
 
 ROOT_URLCONF = 'developer_portal.urls'
 
@@ -311,6 +314,23 @@ REST_FRAMEWORK = {
     ),
     
     #'PAGINATE_BY': 10,
+}
+
+MIGRATION_MODULES = {
+    'cms': 'cms.migrations',
+    'cmsplugin_zinnia': 'cmsplugin_zinnia.migrations',
+    'djangocms_link': 'djangocms_link.migrations',
+    'djangocms_picture': 'djangocms_picture.migrations_django',
+    'djangocms_snippet': 'djangocms_snippet.migrations_django',
+    'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations',
+    'djangocms_video': 'djangocms_video.migrations_django',
+    'django_comments': 'django_comments.migrations',
+    'menus': 'menus.migrations',
+    'rest_framework.authtoken': 'rest_framework.authtoken.migrations',
+    'reversion': 'reversion.migrations',
+    'tagging': 'tagging.migrations',
+    'taggit': 'taggit.migrations',
+    'zinnia': 'zinnia.migrations',
 }
 
 LOGGING = {
