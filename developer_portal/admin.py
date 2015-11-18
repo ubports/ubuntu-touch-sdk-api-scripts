@@ -40,20 +40,16 @@ class VersionAdmin(admin.ModelAdmin):
 admin.site.register(Version, VersionAdmin)
 
 
+@admin.register(ExternalDocsBranch)
 class ExternalDocsBranchAdmin(admin.ModelAdmin):
-    list_display = ('branch_origin',)
-    list_filter = ('branch_origin',)
+    list_display = ('branch_origin', 'post_checkout_command',)
+    list_filter = ('branch_origin', 'post_checkout_command',)
     actions = [import_selected_external_docs_branches]
 
-admin.site.register(ExternalDocsBranch, ExternalDocsBranchAdmin)
 
-
+@admin.register(ExternalDocsBranchImportDirective)
 class ExternalDocsBranchImportDirectiveAdmin(admin.ModelAdmin):
-    list_display = ('external_docs_branch', 'import_from', 'write_to')
-    list_filter = ('external_docs_branch', 'import_from', 'write_to')
-
-admin.site.register(ExternalDocsBranchImportDirective,
-                    ExternalDocsBranchImportDirectiveAdmin)
+    pass
 
 
 class SEOExtensionAdmin(TitleExtensionAdmin):

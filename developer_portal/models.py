@@ -30,6 +30,9 @@ class ExternalDocsBranch(models.Model):
         blank=True)
     active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.branch_origin
+
     class Meta:
         verbose_name = "external docs branch"
         verbose_name_plural = "external docs branches"
@@ -47,6 +50,10 @@ class ExternalDocsBranchImportDirective(models.Model):
         max_length=150,
         help_text=_('Article URL (for a specific file) or article namespace '
                     'for a directory or a set of files.'))
+
+    def __str__(self):
+        return "{} -- {}".format(self.external_docs_branch.branch_origin,
+                                 self.import_from)
 
 
 class SEOExtension(TitleExtension):
