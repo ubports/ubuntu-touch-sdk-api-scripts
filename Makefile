@@ -6,7 +6,6 @@ REVNO := `bzr revno`
 update-1470715:
 	./env/bin/pip install -r requirements.txt --upgrade
 	./env/bin/pip uninstall -yq South
-	./env/bin/pip uninstall -yq python-keystoneclient
 	./env/bin/python manage.py migrate --fake admin
 	./env/bin/python manage.py migrate --fake sessions
 	./env/bin/python manage.py migrate --fake sites
