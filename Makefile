@@ -4,7 +4,6 @@ SOURCE_DIR := $(PWD)
 REVNO := `bzr revno`
 
 update-1470715:
-	@python manage.py migrate cms
 	@python manage.py migrate
 
 update-instance:
