@@ -43,9 +43,8 @@ class ExternalDocsBranchImportDirective(models.Model):
     import_from = models.CharField(
         max_length=150,
         help_text=_('File or directory to import from the branch. '
-                    'Feel free to use globs, ie: "docs/intro.md" (file) or '
-                    '"docs" (complete directory), '
-                    '"docs/a*" (some select files), etc.'))
+                    'Ie: "docs/intro.md" (file) or '
+                    '"docs" (complete directory), etc.'))
     write_to = models.CharField(
         max_length=150,
         help_text=_('Article URL (for a specific file) or article namespace '

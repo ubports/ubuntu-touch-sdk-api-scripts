@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='ExternalDocsBranchImportDirective',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('import_from', models.CharField(help_text='File or directory to import from the branch. Feel free to use globs, ie: "docs/intro.md" (file) or "docs" (complete directory), "docs/a*" (some select files), etc.', max_length=150)),
+                ('import_from', models.CharField(help_text='File or directory to import from the branch. Ie: "docs/intro.md" (file) or "docs" (complete directory), etc.', max_length=150)),
                 ('write_to', models.CharField(help_text='Article URL (for a specific file) or article namespace for a directory or a set of files.', max_length=150)),
             ],
         ),
