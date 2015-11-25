@@ -38,8 +38,8 @@ djangocms-snippet==1.5
 djangocms-text-ckeditor==2.7.0
 djangocms-utils==0.9.5
 djangocms-video==0.1
-python-keystoneclient==0.11.2
-python-swiftclient==2.3.1
+python-keystoneclient==1.3.3
+python-swiftclient==2.6.0
 pytz==2015.7
 simple-translation==0.8.6
 simplejson==3.8.1
