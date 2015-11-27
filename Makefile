@@ -54,7 +54,7 @@ syncdb:
 collectstatic: collectstatic.done
 collectstatic.done:
 	@echo "Collecting static files"
-	@http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
+	@python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
 	@touch collectstatic.done
 
 collectstatic.debug:
