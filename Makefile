@@ -4,29 +4,7 @@ SOURCE_DIR := $(PWD)
 REVNO := `bzr revno`
 
 update-1470715:
-	./env/bin/pip install -r requirements.txt --upgrade
-	./env/bin/pip uninstall -yq South
-	./env/bin/pip uninstall -yq python-keystoneclient
-	./env/bin/python manage.py migrate --fake admin
-	./env/bin/python manage.py migrate --fake sessions
-	./env/bin/python manage.py migrate --fake sites
-	./env/bin/python manage.py migrate --fake cms 0001_initial
-	./env/bin/python manage.py migrate --fake cms 0002_auto_20140816_1918
-	./env/bin/python manage.py migrate --fake cmsplugin_zinnia
-	./env/bin/python manage.py migrate --fake djangocms_link 0001_initial
-	./env/bin/python manage.py migrate --fake djangocms_picture
-	./env/bin/python manage.py migrate --fake djangocms_snippet 0001_initial
-	./env/bin/python manage.py migrate --fake djangocms_text_ckeditor
-	./env/bin/python manage.py migrate --fake djangocms_video
-	./env/bin/python manage.py migrate --fake django_comments 0001_initial
-	./env/bin/python manage.py migrate --fake menus
-	./env/bin/python manage.py migrate --fake reversion 0001_initial
-	./env/bin/python manage.py migrate cms
-	./env/bin/python manage.py migrate --fake developer_portal
-	./env/bin/python manage.py migrate --fake api_docs
-	./env/bin/python manage.py migrate --fake django_openid_auth 0001_initial
-	./env/bin/python manage.py migrate --fake store_data 0001_initial
-	./env/bin/python manage.py migrate
+	@python manage.py migrate
 
 update-instance:
 	@echo "Nothing to do for the app";
@@ -39,8 +17,8 @@ update-common:
 
 swift-perms:
 	@echo "Setting up Swift bucket permissions"
-	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' devportal_uploaded; else http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
-	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' devportal_static; else http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
+	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' devportal_uploaded; else http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
+	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' devportal_static; else http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
 
 update-apidocs:
 	if [ $(DATABASE_URL) ]; then DJANGO_SETTINGS_MODULE=charm_settings ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log; fi
@@ -76,12 +54,12 @@ syncdb:
 collectstatic: collectstatic.done
 collectstatic.done:
 	@echo "Collecting static files"
-	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
+	@http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
 	@touch collectstatic.done
 
 collectstatic.debug:
 	@echo "Debugging output from collectstatic"
-	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 1 --noinput --settings charm_settings
+	@http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" python manage.py collectstatic -v 1 --noinput --settings charm_settings
 
 update-pip-cache:
 	@echo "Updating pip-cache"
