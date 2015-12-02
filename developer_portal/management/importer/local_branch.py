@@ -84,30 +84,6 @@ class LocalBranch:
             return article
         return None
 
-    def remove_old_pages(self):
-        imported_page_urls = set([md_file.full_url
-                                  for md_file in self.md_files])
-        index_doc = page_resolver.get_page_queryset_from_path(
-            self.docs_namespace)
-        db_pages = []
-        pages_for_removal = []
-        if len(index_doc):
-            # All pages in this namespace currently in the database
-            db_pages = index_doc[0].get_descendants().all()
-        for db_page in db_pages:
-            still_relevant = False
-            for url in imported_page_urls:
-                if url in db_page.get_absolute_url():
-                    still_relevant = True
-                    break
-            # At this point we know that there's no match and the page
-            # can be deleted.
-            if not still_relevant:
-                pages_for_removal += [db_page.id]
-        # Only remove pages created by a script!
-        Page.objects.filter(id__in=pages_for_removal,
-                            created_by="script").delete()
-
     def publish(self):
         for article in self.imported_articles:
             article.publish()

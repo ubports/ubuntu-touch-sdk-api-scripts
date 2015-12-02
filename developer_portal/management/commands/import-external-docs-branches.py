@@ -37,7 +37,7 @@ def import_branches(selection):
                                        directive.write_to)
         local_branch.execute_import_directives()
         local_branch.publish()
-        #local_branch.remove_old_pages()
+        local_branch.remove_old_pages()
     shutil.rmtree(tempdir)
 
     # https://stackoverflow.com/questions/33284171/
