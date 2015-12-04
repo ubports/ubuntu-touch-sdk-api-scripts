@@ -22,7 +22,7 @@ django-meta-mixin==0.2.1
 django-missing==0.1.15
 django-parler==1.5.1
 django-polymorphic==0.7.2
-django-reversion==1.10.0
+django-reversion==1.9.3
 django-sekizai==0.8.2
 django-swiftstorage==1.1.0
 django-tagging==0.4
