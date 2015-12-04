@@ -36,7 +36,9 @@ class ExternalDocsBranch(models.Model):
     active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.origin
+        if self.branch_name:
+            return "{} {}".format(self.origin, self.branch_name)
+        return "{}".format(self.origin)
 
     class Meta:
         verbose_name = "external docs branch"
