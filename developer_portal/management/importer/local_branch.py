@@ -120,8 +120,8 @@ class LocalBranch:
 
 
 class SnappyLocalBranch(LocalBranch):
-    def __init__(self, tempdir, origin, post_checkout_command):
-        LocalBranch.__init__(self, tempdir, origin,
+    def __init__(self, tempdir, origin, branch_name, post_checkout_command):
+        LocalBranch.__init__(self, tempdir, origin, branch_name,
                              post_checkout_command)
         self.article_class = SnappyArticle
         self.index_doc_title = 'Snappy documentation'
