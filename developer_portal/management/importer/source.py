@@ -31,8 +31,11 @@ class SourceCode():
                 'git', 'clone', '-q', self.origin,
                 self.checkout_location])
             if retcode == 0 and self.branch_name:
+                pwd = os.getcwd()
+                os.chdir(self.checkout_location)
                 retcode = subprocess.call(['git', 'checkout',
                     self.branch_name])
+                os.chdir(pwd)
             return retcode
         logging.error(
             'Branch format "{}" not understood.'.format(self.origin))
