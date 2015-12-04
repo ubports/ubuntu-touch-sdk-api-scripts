@@ -1,4 +1,4 @@
-Django==1.8.5
+Django==1.8.7
 django-template-debug==0.3.5
 oslo.config==2.7.0
 oslo.i18n==2.7.0
@@ -6,7 +6,7 @@ oslo.serialization==1.11.0
 oslo.utils==2.8.0
 Pillow==2.9.0
 cmsplugin-zinnia==0.8
-Markdown==2.6.4
+Markdown==2.6.5
 beautifulsoup4==4.4.1
 dj-database-url==0.3.0
 django-admin-enhancer==1.0.0
@@ -15,7 +15,7 @@ django-blog-zinnia==0.15.2
 django-ckeditor==5.0.2
 django-ckeditor-updated==4.4.4
 django-classy-tags==0.6.2
-django-cms==3.1.2
+django-cms==3.2.0
 django-contrib-comments==1.6.1
 django-meta==0.3.1
 django-meta-mixin==0.2.1
