@@ -31,9 +31,11 @@
             {% else %}
                 <p>{% autoescape off %}{{ snap.description|html_links }}{% endautoescape %}</p>
             {% endif %}
-                <p>
-                    <a href="https://developer.ubuntu.com/en/snappy/start/">{% trans "Install Snappy on this device" %} &rsaquo;</a>
-                </p>
+                <ul class="list-ubuntu">
+                    <li>
+                    <a href="https://developer.ubuntu.com/en/snappy/start/">{% trans "Install Snappy on this device" %}</a>
+                    </li>
+                </ul>
             </div>
         </div>
     {% endfor %}

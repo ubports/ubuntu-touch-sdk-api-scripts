@@ -35,9 +35,7 @@ class MultiLangEntryIndex(MultiLangMixin, EntryIndex):
         return super(MultiLangEntryIndex, self).get(request, *args, **kwargs)
 
     def get_dated_queryset(self, ordering=None, **lookup):
-        if ordering:
-            return super(MultiLangEntryIndex, self).get_dated_queryset(**lookup).filter(categories__slug=self.language).order_by(ordering)
-        return super(MultiLangEntryIndex, self).get_dated_queryset(**lookup).filter(categories__slug=self.language)
+        return super(MultiLangEntryIndex, self).get_dated_queryset(ordering, **lookup).filter(categories__slug=self.language)
 
 class MultiLangEntryYear(MultiLangMixin, EntryYear):
     def get(self, request, *args, **kwargs):

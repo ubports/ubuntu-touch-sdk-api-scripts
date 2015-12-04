@@ -1,45 +1,20 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from south.utils import datetime_utils as datetime
+from south.db import db
+from south.v2 import SchemaMigration
+from django.db import models
 
-from django.db import migrations, models
 
+class Migration(SchemaMigration):
 
-class Migration(migrations.Migration):
+    def forwards(self, orm):
+        pass
 
-    dependencies = [
-    ]
+    def backwards(self, orm):
+        pass
 
-    operations = [
-        migrations.CreateModel(
-            name='ExternalDocsBranch',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('lp_origin', models.CharField(help_text='External branch location, ie: lp:snappy/15.04 or https://github.com/ubuntu-core/snappy.git', max_length=200)),
-                ('docs_namespace', models.CharField(help_text='Path alias we want to use for the docs, ie "snappy/guides/15.04" or "snappy/guides/latest", etc.', max_length=120)),
-                ('index_doc', models.CharField(help_text='File name of doc to be used as index document, ie "intro.md"', max_length=120, blank=True)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='RawHtml',
-            fields=[
-                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
-                ('body', models.TextField(verbose_name='body')),
-            ],
-            options={
-                'abstract': False,
-            },
-            bases=('cms.cmsplugin',),
-        ),
-        migrations.CreateModel(
-            name='SEOExtension',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('keywords', models.CharField(max_length=256)),
-                ('extended_object', models.OneToOneField(editable=False, to='cms.Title')),
-                ('public_extension', models.OneToOneField(related_name='draft_extension', null=True, editable=False, to='developer_portal.SEOExtension')),
-            ],
-            options={
-                'abstract': False,
-            },
-        ),
-    ]
+    models = {
+        
+    }
+
+    complete_apps = ['developer_portal']

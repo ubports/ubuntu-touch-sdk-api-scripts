@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load zinnia i18n %}
+{% load zinnia_tags i18n %}
 {% load cms_tags sekizai_tags menu_tags static %}
 
 {% block meta-keywords %}{% get_tags as entry_tags %}{{ entry_tags|join:", "}}{% endblock meta-keywords %}
