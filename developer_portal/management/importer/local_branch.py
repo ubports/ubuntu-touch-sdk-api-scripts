@@ -18,22 +18,23 @@ class LocalBranch:
     index_doc = None
     release_alias = None
 
-    def __init__(self, tempdir, branch_origin, post_checkout_command):
-        self.branch_origin = branch_origin
+    def __init__(self, tempdir, origin, branch_name, post_checkout_command):
+        self.origin = origin
+        self.branch_name = branch_name
         self.post_checkout_command = post_checkout_command
         self.checkout_location = os.path.join(
             tempdir,
-            os.path.basename(self.branch_origin.replace('.git', '')))
+            os.path.basename(self.origin.replace('.git', '')))
         self.article_class = Article
         self.directives = []
         self.imported_articles = []
 
     def get(self):
-        sourcecode = SourceCode(self.branch_origin, self.checkout_location,
-                                self.post_checkout_command)
+        sourcecode = SourceCode(self.origin, self.checkout_location,
+                                self.branch_name, self.post_checkout_command)
         if sourcecode.get() != 0:
             logging.error(
-                'Could not check out branch "{}".'.format(self.branch_origin))
+                'Could not check out branch "{}".'.format(self.origin))
             shutil.rmtree(self.checkout_location)
             return 1
         return 0
@@ -110,7 +111,7 @@ class LocalBranch:
             '<p>Auto-imported from <a '
             'href=\"https://github.com/ubuntu-core/snappy\">%s</a>.</p>\n'
             '</div></div>'.format(self.release_alias, list_pages,
-                                  self.branch_origin))
+                                  self.origin))
         page = get_or_create_page(
             title=self.index_doc_title, full_url=self.index_doc,
             in_navigation=False, redirect=redirect, html=landing,
@@ -119,8 +120,8 @@ class LocalBranch:
 
 
 class SnappyLocalBranch(LocalBranch):
-    def __init__(self, tempdir, branch_origin, post_checkout_command):
-        LocalBranch.__init__(self, tempdir, branch_origin,
+    def __init__(self, tempdir, origin, post_checkout_command):
+        LocalBranch.__init__(self, tempdir, origin,
                              post_checkout_command)
         self.article_class = SnappyArticle
         self.index_doc_title = 'Snappy documentation'

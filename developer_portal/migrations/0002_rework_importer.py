@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name='externaldocsbranch',
             old_name='lp_origin',
-            new_name='branch_origin',
+            new_name='origin',
         ),
         migrations.RemoveField(
             model_name='externaldocsbranch',
@@ -40,6 +40,11 @@ class Migration(migrations.Migration):
             model_name='externaldocsbranch',
             name='active',
             field=models.BooleanField(default=True),
+        ),
+        migrations.AddField(
+            model_name='externaldocsbranch',
+            name='branch_name',
+            field=models.CharField(help_text='For use with git branches, ie: "master" or "15.04" or "1.x".', max_length=200, blank=True),
         ),
         migrations.AddField(
             model_name='externaldocsbranch',

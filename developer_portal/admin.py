@@ -42,8 +42,8 @@ admin.site.register(Version, VersionAdmin)
 
 @admin.register(ExternalDocsBranch)
 class ExternalDocsBranchAdmin(admin.ModelAdmin):
-    list_display = ('branch_origin', 'post_checkout_command',)
-    list_filter = ('branch_origin', 'post_checkout_command',)
+    list_display = ('origin', 'post_checkout_command', 'branch_name',)
+    list_filter = ('origin', 'post_checkout_command', 'branch_name',)
     actions = [import_selected_external_docs_branches]
 
 

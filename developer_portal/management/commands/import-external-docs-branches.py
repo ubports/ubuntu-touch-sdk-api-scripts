@@ -20,14 +20,14 @@ def import_branches(selection):
         return
     tempdir = tempfile.mkdtemp()
     for branch in ExternalDocsBranch.objects.filter(
-            branch_origin__regex=selection, active=True):
-        url = branch.branch_origin
+            origin__regex=selection, active=True):
+        url = branch.origin
         if url.startswith('lp:snappy') or \
            'snappy' in url.split(':')[1].split('.git')[0].split('/'):
             branch_class = SnappyLocalBranch
         else:
             branch_class = LocalBranch
-        local_branch = branch_class(tempdir, branch.branch_origin,
+        local_branch = branch_class(tempdir, branch.origin, branch.branch_name,
                                     branch.post_checkout_command)
         if local_branch.get() != 0:
             break

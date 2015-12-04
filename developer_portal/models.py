@@ -20,10 +20,15 @@ class RawHtml(AbstractText):
 
 
 class ExternalDocsBranch(models.Model):
-    branch_origin = models.CharField(
+    origin = models.CharField(
         max_length=200,
         help_text=_('External branch location, ie: lp:snappy/15.04 or '
                     'https://github.com/ubuntu-core/snappy.git'))
+    branch_name = models.CharField(
+        max_length=200,
+        help_text=_('For use with git branches, ie: "master" or "15.04" '
+                    'or "1.x".'),
+        blank=True)
     post_checkout_command = models.CharField(
         max_length=100,
         help_text=_('Command to run after checkout of the branch.'),
@@ -31,7 +36,7 @@ class ExternalDocsBranch(models.Model):
     active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.branch_origin
+        return self.origin
 
     class Meta:
         verbose_name = "external docs branch"
@@ -51,7 +56,7 @@ class ExternalDocsBranchImportDirective(models.Model):
                     'for a directory or a set of files.'))
 
     def __str__(self):
-        return "{} -- {}".format(self.external_docs_branch.branch_origin,
+        return "{} -- {}".format(self.external_docs_branch.origin,
                                  self.import_from)
 
 
