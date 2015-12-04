@@ -290,6 +290,11 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'Zinnia',
     },
 }
+
+# Allow iframes in ckeditor
+TEXT_ADDITIONAL_TAGS = ('iframe',)
+TEXT_ADDITIONAL_ATTRIBUTES = ('scrolling', 'allowfullscreen', 'frameborder')
+
 CMSPLUGIN_ZINNIA_APP_URLS = ['developer_portal.blog.urls']
 
 REST_FRAMEWORK = {
