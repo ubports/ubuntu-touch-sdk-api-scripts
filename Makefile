@@ -3,12 +3,9 @@ PYTHON := /usr/bin/env python
 SOURCE_DIR := $(PWD)
 REVNO := `bzr revno`
 
-update-1470715:
-	@python manage.py migrate
-
 update-instance:
 	@echo "Nothing to do for the app";
-
+	
 update-common:
 	@echo "Updating database"
 	if [ $(DATABASE_URL) ]; then $(MAKE) initdb; fi
@@ -17,8 +14,8 @@ update-common:
 
 swift-perms:
 	@echo "Setting up Swift bucket permissions"
-	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' devportal_uploaded; else http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
-	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' devportal_static; else http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
+	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' devportal_uploaded; else http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
+	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' devportal_static; else http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
 
 update-apidocs:
 	if [ $(DATABASE_URL) ]; then DJANGO_SETTINGS_MODULE=charm_settings ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log; fi
@@ -48,25 +45,25 @@ initdb: syncdb
 	@python manage.py init_apidocs --settings charm_settings
 
 syncdb:
-	@echo "Syncing/migrating database"
-	@python manage.py migrate --noinput --settings charm_settings
+	@echo "Syncing database"
+	@python manage.py syncdb --noinput --migrate --settings charm_settings
 
 collectstatic: collectstatic.done
 collectstatic.done:
 	@echo "Collecting static files"
-	@http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
+	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
 	@touch collectstatic.done
 
 collectstatic.debug:
 	@echo "Debugging output from collectstatic"
-	@http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" python manage.py collectstatic -v 1 --noinput --settings charm_settings
+	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 1 --noinput --settings charm_settings
 
 update-pip-cache:
 	@echo "Updating pip-cache"
 	rm -rf pip-cache
 	bzr branch lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies pip-cache
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
-	bzr add pip-cache/*
+	bzr add pip-cache/* 
 	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
 	bzr push --directory pip-cache lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies
 	bzr revno pip-cache > pip-cache-revno.txt
@@ -85,7 +82,7 @@ env: pip-cache
 
 db.sqlite3: env
 	@echo "Initializing database"
-	@./env/bin/python manage.py migrate --noinput
+	@./env/bin/python manage.py syncdb --noinput --migrate
 	@./env/bin/python manage.py initdb
 	@./env/bin/python manage.py init_apidocs
 
@@ -114,3 +111,4 @@ release: pip-cache
 	@rm ../developer_portal.tar.gz
 	@$(MAKE) tarball;
 	@echo build_label=`bzr revno`
+

@@ -33,7 +33,7 @@ class DBActions:
     def remove_page(self, page_id):
         self.removed_pages += [page_id]
 
-    @transaction.atomic()
+    @transaction.commit_on_success()
     def run(self):
         for added_page in self.added_pages:
             page = get_or_create_page(**added_page)
@@ -44,7 +44,7 @@ class DBActions:
                             created_by="script").delete()
 
         # https://stackoverflow.com/questions/33284171/
-        call_command('cms', 'fix-tree')
+        call_command('cms', 'fix-mptt')
 
 
 class MarkdownFile:
@@ -353,17 +353,13 @@ class SourceCode():
 class Command(BaseCommand):
     help = "Import external branches for documentation."
 
-    def add_arguments(self, parser):
-        parser.add_argument('branches', nargs='*')
-
     def handle(*args, **options):
         logging.basicConfig(
             level=logging.ERROR,
             format='%(asctime)s %(levelname)-8s %(message)s',
             datefmt='%F %T')
-        branches = options['branches']
-        if not branches:
-            import_branches('.*')
+        if len(args) < 2 or args[1] == "all":
+            selection = '.*'
         else:
-            for b in branches:
-                import_branches(b)
+            selection = args[1]
+        import_branches(selection)
