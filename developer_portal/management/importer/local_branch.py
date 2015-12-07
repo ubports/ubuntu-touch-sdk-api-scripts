@@ -1,6 +1,3 @@
-from cms.models import Page
-from cms.utils import page_resolver
-
 from .article import Article, SnappyArticle
 from .publish import get_or_create_page, slugify
 from .source import SourceCode
@@ -88,6 +85,7 @@ class LocalBranch:
     def publish(self):
         for article in self.imported_articles:
             article.publish()
+        return self.imported_articles
 
     def _create_fake_index_docs(self):
         '''Creates a fake index page at the top of the branches

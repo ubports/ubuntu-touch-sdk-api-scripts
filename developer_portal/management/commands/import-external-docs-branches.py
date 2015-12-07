@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.core.management import call_command
 
 from ..importer.local_branch import LocalBranch, SnappyLocalBranch
+from ..importer import publish
 
 import logging
 import shutil
@@ -36,8 +37,8 @@ def import_branches(selection):
             local_branch.add_directive(directive.import_from,
                                        directive.write_to)
         local_branch.execute_import_directives()
-        local_branch.publish()
-        local_branch.remove_old_pages()
+        imported_articles = local_branch.publish()
+        publish.remove_old_pages(imported_articles)
     shutil.rmtree(tempdir)
 
     # https://stackoverflow.com/questions/33284171/

@@ -1,5 +1,6 @@
 from cms.api import create_page, add_plugin
-from cms.models import Title
+from cms.models import Page, Title
+from cms.utils import page_resolver
 
 import logging
 import os
@@ -49,9 +50,10 @@ def get_or_create_page(title, full_url, menu_title=None,
             add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=html)
     return page
 
-def remove_old_pages(self):
-    imported_page_urls = set([md_file.full_url
-                              for md_file in self.md_files])
+
+def remove_old_pages(imported_articles):
+    imported_page_urls = set([article.full_url
+                              for article in imported_articles])
     index_doc = page_resolver.get_page_queryset_from_path(
         self.docs_namespace)
     db_pages = []
