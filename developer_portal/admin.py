@@ -17,7 +17,7 @@ __all__ = (
 def import_selected_external_docs_branches(modeladmin, request, queryset):
     branches = []
     for branch in queryset:
-        branches.append(branch.docs_namespace)
+        branches.append(branch.origin)
     call_command('import-external-docs-branches', *branches)
     import_selected_external_docs_branches.short_description = \
         "Import selected branches"
