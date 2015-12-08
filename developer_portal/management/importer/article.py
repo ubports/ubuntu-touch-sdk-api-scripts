@@ -117,7 +117,7 @@ class SnappyArticle(Article):
             page = get_or_create_page(
                 title=self.title,
                 full_url=self.full_url.replace('/current', ''),
-                redirect="/snappy/guides/current/%s" % (self.slug))
+                redirect="/snappy/guides/current/{}".format(self.slug))
             page.publish('en')
         else:
             self.title += " (%s)" % (self.release_alias,)

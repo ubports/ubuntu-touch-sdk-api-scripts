@@ -34,7 +34,7 @@ class SourceCode():
                 pwd = os.getcwd()
                 os.chdir(self.checkout_location)
                 retcode = subprocess.call(['git', 'checkout',
-                    self.branch_name])
+                                           self.branch_name])
                 os.chdir(pwd)
             return retcode
         logging.error(
