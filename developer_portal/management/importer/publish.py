@@ -1,10 +1,19 @@
 from cms.api import create_page, add_plugin
-from cms.models import Page, Title
-from cms.utils import page_resolver
+from cms.models import Title
 
 import logging
 import os
 import sys
+
+# XXX: use this once we RawHTML plugins don't strip comments (LP: #1523925)
+START_TEXT = """
+<!--
+branch id: {}
+
+THIS PAGE IS AUTOMATICALLY UPDATED.
+DON'T EDIT IT - CHANGES WILL BE OVERWRITTEN.
+-->
+"""
 
 
 def slugify(filename):
@@ -35,7 +44,7 @@ def get_or_create_page(title, full_url, menu_title=None,
         parent_pages = Title.objects.select_related('page').filter(
             path__regex=os.path.dirname(full_url))
         if not parent_pages:
-            logging.error('Parent %s not found.'.format(
+            logging.error('Parent {} not found.'.format(
                 os.path.dirname(full_url)))
             sys.exit(1)
         parent = parent_pages[0].page
@@ -49,28 +58,3 @@ def get_or_create_page(title, full_url, menu_title=None,
             placeholder = page.placeholders.get()
             add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=html)
     return page
-
-
-def remove_old_pages(imported_articles):
-    imported_page_urls = set([article.full_url
-                              for article in imported_articles])
-    index_doc = page_resolver.get_page_queryset_from_path(
-        self.docs_namespace)
-    db_pages = []
-    pages_for_removal = []
-    if len(index_doc):
-        # All pages in this namespace currently in the database
-        db_pages = index_doc[0].get_descendants().all()
-    for db_page in db_pages:
-        still_relevant = False
-        for url in imported_page_urls:
-            if url in db_page.get_absolute_url():
-                still_relevant = True
-                break
-        # At this point we know that there's no match and the page
-        # can be deleted.
-        if not still_relevant:
-            pages_for_removal += [db_page.id]
-    # Only remove pages created by a script!
-    Page.objects.filter(id__in=pages_for_removal,
-                        created_by="script").delete()

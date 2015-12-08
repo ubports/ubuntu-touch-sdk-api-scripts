@@ -11,6 +11,7 @@ import tempfile
 from developer_portal.models import (
     ExternalDocsBranch,
     ExternalDocsBranchImportDirective,
+    ImportedArticle,
 )
 
 
@@ -37,8 +38,16 @@ def import_branches(selection):
             local_branch.add_directive(directive.import_from,
                                        directive.write_to)
         local_branch.execute_import_directives()
-        imported_articles = local_branch.publish()
-        publish.remove_old_pages(imported_articles)
+        for imported_article in local_branch.publish():
+            ImportedArticle.objects.get_or_create(
+                branch=branch,
+                page=imported_article.page)
+
+        # The import is done, now let's clean up.
+        for old_article in ImportedArticle.objects.filter(
+                branch=branch).exclude(page__in=imported_articles):
+            # XXX: check if last revision was made by 'python-api'?
+            old_article.page.delete()
     shutil.rmtree(tempdir)
 
     # https://stackoverflow.com/questions/33284171/

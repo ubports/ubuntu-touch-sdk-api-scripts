@@ -10,6 +10,7 @@ from .publish import get_or_create_page, slugify
 
 class Article:
     html = None
+    page = None
     title = ""
 
     def __init__(self, fn, write_to):
@@ -81,7 +82,8 @@ class Article:
         page = get_or_create_page(
             title=self.title, full_url=self.full_url, menu_title=self.title,
             html=self.html)
-        page.publish('en')
+        self.page = page
+        self.page.publish('en')
 
 
 class SnappyArticle(Article):
