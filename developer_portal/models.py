@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from cms.extensions import TitleExtension
 from cms.extensions.extension_pool import extension_pool
+from cms.models import Page
 from djangocms_text_ckeditor.html import extract_images
 from djangocms_text_ckeditor.models import AbstractText
 
@@ -60,6 +61,13 @@ class ExternalDocsBranchImportDirective(models.Model):
     def __str__(self):
         return "{} -- {}".format(self.external_docs_branch.origin,
                                  self.import_from)
+
+
+class ImportedArticle(models.Model):
+    page = models.ForeignKey(Page)
+    branch = models.ForeignKey(ExternalDocsBranch)
+    last_import = models.DateTimeField(_('Datetime'),
+        help_text=_('Datetime of last import.'))
 
 
 class SEOExtension(TitleExtension):

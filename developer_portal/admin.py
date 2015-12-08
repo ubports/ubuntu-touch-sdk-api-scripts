@@ -6,7 +6,7 @@ from reversion.admin import VersionAdmin
 from cms.extensions import TitleExtensionAdmin
 from .models import (
     ExternalDocsBranch, ExternalDocsBranchImportDirective,
-    SEOExtension
+    ImportedArticle, SEOExtension
 )
 from django.core.management import call_command
 
@@ -51,6 +51,9 @@ class ExternalDocsBranchAdmin(admin.ModelAdmin):
 class ExternalDocsBranchImportDirectiveAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(ImportedArticle)
+class ImportedArticleAdmin(admin.ModelAdmin):
+    pass
 
 class SEOExtensionAdmin(TitleExtensionAdmin):
     pass
