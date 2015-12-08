@@ -51,9 +51,11 @@ class ExternalDocsBranchAdmin(admin.ModelAdmin):
 class ExternalDocsBranchImportDirectiveAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(ImportedArticle)
 class ImportedArticleAdmin(admin.ModelAdmin):
     pass
+
 
 class SEOExtensionAdmin(TitleExtensionAdmin):
     pass

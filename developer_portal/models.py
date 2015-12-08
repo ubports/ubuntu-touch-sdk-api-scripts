@@ -66,8 +66,8 @@ class ExternalDocsBranchImportDirective(models.Model):
 class ImportedArticle(models.Model):
     page = models.ForeignKey(Page)
     branch = models.ForeignKey(ExternalDocsBranch)
-    last_import = models.DateTimeField(_('Datetime'),
-        help_text=_('Datetime of last import.'))
+    last_import = models.DateTimeField(
+        _('Datetime'), help_text=_('Datetime of last import.'))
 
 
 class SEOExtension(TitleExtension):
