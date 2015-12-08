@@ -212,9 +212,10 @@ header.banner .logo-ubuntu span {
 	content: none;
 }
 
+/* Secondary nav margin fix */
 @media only screen and (min-width: 769px) {
-    .nav-secondary ul.breadcrumb li {
-        margin-bottom: 80px;
+    .nav-secondary ul {
+	    display:table-cell;
     }
 }
 
