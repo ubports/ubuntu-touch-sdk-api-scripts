@@ -57,9 +57,10 @@ class LocalBranch:
         for directive in [d for d in self.directives
                           if os.path.isdir(d['import_from'])]:
             for fn in glob.glob('{}/*'.format(directive['import_from'])):
-                import_list += [
-                    (fn, os.path.join(directive['write_to'], slugify(fn)))
-                ]
+                if fn not in [a[0] for a in import_list]:
+                    import_list += [
+                        (fn, os.path.join(directive['write_to'], slugify(fn)))
+                    ]
             # If we import into a namespace and don't have an index doc,
             # we need to write one.
             if directive['write_to'] not in [x[1] for x in import_list]:

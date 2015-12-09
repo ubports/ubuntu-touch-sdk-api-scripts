@@ -1,5 +1,4 @@
 - import pictures (LP: #1511677)
-- debug problem where import of a directory also imports already-imported files
 - unpublished docs
 - add comment at top of RawHTML plugins, so users know not to edit them,
   currently blocked on LP: #1523925
