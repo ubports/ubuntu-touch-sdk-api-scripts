@@ -4,6 +4,7 @@ from django.core.management import call_command
 from ..importer.local_branch import LocalBranch, SnappyLocalBranch
 from ..importer import publish
 
+import datetime
 import logging
 import shutil
 import tempfile
@@ -38,16 +39,18 @@ def import_branches(selection):
             local_branch.add_directive(directive.import_from,
                                        directive.write_to)
         local_branch.execute_import_directives()
-        for imported_article in local_branch.publish():
+        imported_articles = local_branch.publish()
+        for imported_article in imported_articles:
             ImportedArticle.objects.get_or_create(
                 branch=branch,
-                page=imported_article.page)
+                page=imported_article.page,
+                last_import=datetime.datetime.now())
 
         # The import is done, now let's clean up.
-        for old_article in ImportedArticle.objects.filter(
-                branch=branch).exclude(page__in=imported_articles):
-            # XXX: check if last revision was made by 'python-api'?
-            old_article.page.delete()
+        for old_article in ImportedArticle.objects.filter(branch=branch):
+            if old_article.page not in [a.page for a in imported_articles]:
+                # XXX: check if last revision was made by 'python-api'?
+                old_article.page.delete()
     shutil.rmtree(tempdir)
 
     # https://stackoverflow.com/questions/33284171/
