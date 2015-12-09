@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 from django.core.management import call_command
 
 from ..importer.local_branch import LocalBranch, SnappyLocalBranch
-from ..importer import publish
 
 import datetime
 import logging
