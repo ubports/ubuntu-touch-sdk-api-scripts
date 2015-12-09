@@ -17,8 +17,8 @@ update-common:
 
 swift-perms:
 	@echo "Setting up Swift bucket permissions"
-	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' devportal_uploaded; else http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
-	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' devportal_static; else http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
+	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; swift post --read-acl '.r:*' devportal_uploaded; else swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
+	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; swift post --read-acl '.r:*' devportal_static; else swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
 
 update-apidocs:
 	if [ $(DATABASE_URL) ]; then DJANGO_SETTINGS_MODULE=charm_settings ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log; fi
@@ -54,28 +54,28 @@ syncdb:
 collectstatic: collectstatic.done
 collectstatic.done:
 	@echo "Collecting static files"
-	@http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
+	@python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
 	@touch collectstatic.done
 
 collectstatic.debug:
 	@echo "Debugging output from collectstatic"
-	@http_proxy=http://"${swift_proxy}" https_proxy=https://"${swift_proxy}" python manage.py collectstatic -v 1 --noinput --settings charm_settings
+	@python manage.py collectstatic -v 1 --noinput --settings charm_settings
 
 update-pip-cache:
 	@echo "Updating pip-cache"
 	rm -rf pip-cache
-	bzr branch lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies pip-cache
+	bzr branch lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies-staging
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
 	bzr add pip-cache/*
 	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
-	bzr push --directory pip-cache lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies
+	bzr push --directory pip-cache lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies-staging
 	bzr revno pip-cache > pip-cache-revno.txt
 	rm -rf pip-cache
 	@echo "** Remember to commit pip-cache-revno.txt"
 
 pip-cache:
 	@echo "Downloading pip-cache"
-	@bzr branch -r `cat pip-cache-revno.txt` lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies pip-cache
+	@bzr branch -r `cat pip-cache-revno.txt` lp:~developer-ubuntu-com-dev/developer-ubuntu-com/dependencies-staging
 
 env: pip-cache
 	@echo "Creating virtualenv"

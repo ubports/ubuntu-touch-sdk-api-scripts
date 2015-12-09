@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-04 12:56+0000\n"
+"POT-Creation-Date: 2015-10-24 03:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,17 +21,17 @@ msgstr ""
 msgid "Raw HTML"
 msgstr ""
 
-#: developer_portal/models.py:24
+#: developer_portal/models.py:26
 msgid "Launchpad branch location, ie: lp:snappy/15.04"
 msgstr ""
 
-#: developer_portal/models.py:27
+#: developer_portal/models.py:29
 msgid ""
 "Path alias we want to use for the docs, ie \"snappy/guides/15.04\" or "
 "\"snappy/guides/latest\", etc."
 msgstr ""
 
-#: developer_portal/models.py:32
+#: developer_portal/models.py:34
 msgid "File name of doc to be used as index document, ie \"intro.md\""
 msgstr ""
 
