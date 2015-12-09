@@ -47,8 +47,8 @@ def import_branches(selection):
 
         # The import is done, now let's clean up.
         for old_article in ImportedArticle.objects.filter(branch=branch):
-            if old_article.page not in [a.page for a in imported_articles]:
-                # XXX: check if last revision was made by 'python-api'?
+            if old_article.page not in [a.page for a in imported_articles] and
+               old_article.page.changed_by == 'python-api':
                 old_article.page.delete()
     shutil.rmtree(tempdir)
 
