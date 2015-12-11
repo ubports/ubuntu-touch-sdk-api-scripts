@@ -1,16 +1,9 @@
 #!/usr/bin/python
 
 from django.core.management.base import BaseCommand
-from optparse import make_option
-
 from django.conf import settings
 
-import subprocess
-import os
-import sys
-
-from django.contrib.auth.models import User, Group, Permission
-from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User, Permission
 from cms.models.permissionmodels import PageUserGroup, GlobalPagePermission
 from zinnia.models import Category
 
