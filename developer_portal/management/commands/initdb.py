@@ -14,6 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 from cms.models.permissionmodels import PageUserGroup, GlobalPagePermission
 from zinnia.models import Category
 
+
 class Command(BaseCommand):
     help = "Make sure the Developer Portal database is set up properly."
 
@@ -28,17 +29,18 @@ class Command(BaseCommand):
         admin.save()
 
         if hasattr(settings, 'ADMIN_GROUP') and settings.ADMIN_GROUP != "":
-            print "Configuring "+settings.ADMIN_GROUP+" group."
-            admins, created = PageUserGroup.objects.get_or_create(name=settings.ADMIN_GROUP, defaults={'created_by': admin})
+            print("Configuring {} group.".format(settings.ADMIN_GROUP))
+            admins, created = PageUserGroup.objects.get_or_create(
+                name=settings.ADMIN_GROUP, defaults={'created_by': admin})
             admins.permissions.add(*list(all_perms))
 
             print "Configuring global permissions for group."
             adminperms, created = GlobalPagePermission.objects.get_or_create(
                 # who:
-                group = admins,
+                group=admins,
 
                 # what:
-                defaults = {
+                defaults={
                     'can_change': True,
                     'can_add': True,
                     'can_delete': True,
@@ -53,17 +55,19 @@ class Command(BaseCommand):
 
         if hasattr(settings, 'EDITOR_GROUP') and settings.EDITOR_GROUP != "":
             print "Configuring "+settings.EDITOR_GROUP+" group."
-            editors, created = PageUserGroup.objects.get_or_create(name=settings.EDITOR_GROUP, defaults={'created_by': admin})
-            page_perms = Permission.objects.filter(content_type__app_label='cms', content_type__model='page')
+            editors, created = PageUserGroup.objects.get_or_create(
+                name=settings.EDITOR_GROUP, defaults={'created_by': admin})
+            page_perms = Permission.objects.filter(
+                content_type__app_label='cms', content_type__model='page')
             editors.permissions.add(*list(page_perms))
 
             print "Configuring global permissions for group."
             editorsperms, created = GlobalPagePermission.objects.get_or_create(
                 # who:
-                group = editors,
+                group=editors,
 
                 # what:
-                defaults = {
+                defaults={
                     'can_change': True,
                     'can_add': True,
                     'can_delete': True,
@@ -83,4 +87,3 @@ class Command(BaseCommand):
                 Category.objects.get_or_create(title='Chinese', slug=lang[0])
             else:
                 Category.objects.get_or_create(title=lang[1], slug=lang[0])
-
