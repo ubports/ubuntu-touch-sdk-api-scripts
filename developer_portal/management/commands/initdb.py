@@ -12,6 +12,7 @@ import sys
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from cms.models.permissionmodels import PageUserGroup, GlobalPagePermission
+from zinnia.models import Category
 
 class Command(BaseCommand):
     help = "Make sure the Developer Portal database is set up properly."
@@ -74,3 +75,12 @@ class Command(BaseCommand):
                 }
             )
             editorsperms.sites.add(settings.SITE_ID)
+
+        print('Adding zinnia categories for the following: {}.'.format(
+            ', '.join([a[0] for a in settings.LANGUAGES])))
+        for lang in settings.LANGUAGES:
+            if lang[1] == 'Simplified Chinese':
+                Category.objects.get_or_create(title='Chinese', slug=lang[0])
+            else:
+                Category.objects.get_or_create(title=lang[1], slug=lang[0])
+
