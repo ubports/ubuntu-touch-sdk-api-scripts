@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
         all_perms = Permission.objects.filter()
 
-        print "Creating admin user."
+        print("Creating admin user.")
         admin, created = User.objects.get_or_create(username='system')
         admin.is_staff = True
         admin.is_superuser = True
@@ -27,7 +27,7 @@ class Command(BaseCommand):
                 name=settings.ADMIN_GROUP, defaults={'created_by': admin})
             admins.permissions.add(*list(all_perms))
 
-            print "Configuring global permissions for group."
+            print("Configuring global permissions for group.")
             adminperms, created = GlobalPagePermission.objects.get_or_create(
                 # who:
                 group=admins,
@@ -47,14 +47,14 @@ class Command(BaseCommand):
             adminperms.sites.add(settings.SITE_ID)
 
         if hasattr(settings, 'EDITOR_GROUP') and settings.EDITOR_GROUP != "":
-            print "Configuring "+settings.EDITOR_GROUP+" group."
+            print("Configuring {} group.".format(settings.EDITOR_GROUP))
             editors, created = PageUserGroup.objects.get_or_create(
                 name=settings.EDITOR_GROUP, defaults={'created_by': admin})
             page_perms = Permission.objects.filter(
                 content_type__app_label='cms', content_type__model='page')
             editors.permissions.add(*list(page_perms))
 
-            print "Configuring global permissions for group."
+            print("Configuring global permissions for group.")
             editorsperms, created = GlobalPagePermission.objects.get_or_create(
                 # who:
                 group=editors,
