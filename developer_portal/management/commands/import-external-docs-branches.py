@@ -20,9 +20,9 @@ def import_branches(selection):
         logging.error('No branches registered in the '
                       'ExternalDocsBranch table yet.')
         return
-    tempdir = tempfile.mkdtemp()
     for branch in ExternalDocsBranch.objects.filter(
             origin__regex=selection, active=True):
+        tempdir = tempfile.mkdtemp()
         url = branch.origin
         if url.startswith('lp:snappy') or \
            'snappy' in url.split(':')[1].split('.git')[0].split('/'):
