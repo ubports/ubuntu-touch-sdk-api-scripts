@@ -25,10 +25,7 @@ class Article:
                 self.html = markdown.markdown(
                     f.read(),
                     output_format='html5',
-                    extensions=[
-                        'markdown.extensions.tables',
-                        'markdown.extensions.fenced_code',
-                    ])
+                    extensions=['pymdownx.github'])
             elif self.fn.endswith('.html'):
                 self.html = f.read()
             else:

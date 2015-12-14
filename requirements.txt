@@ -7,6 +7,7 @@ oslo.utils==2.8.0
 Pillow==2.9.0
 cmsplugin-zinnia==0.8
 Markdown==2.6.5
+pymdown-extensions==1.0.1
 beautifulsoup4==4.4.1
 dj-database-url==0.3.0
 django-admin-enhancer==1.0.0
