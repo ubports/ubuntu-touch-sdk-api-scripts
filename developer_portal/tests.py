@@ -32,3 +32,24 @@ class TestBranchFetch(TestCase):
         l.publish()
         pages = Page.objects.all()
         self.assertGreater(len(pages), 3)
+
+    def test_less_simple_import(self):
+        home = create_page('Test import', 'default.html', 'en', slug='home')
+        home.publish('en')
+        tempdir = tempfile.mkdtemp()
+        l = LocalBranch(
+            tempdir,
+            'https://github.com/ubuntu-core/snapcraft.git',
+            'master',
+            '')
+        l.get()
+        l.add_directive('docs', '/')
+        l.add_directive('README.md', '/')
+        l.add_directive('HACKING.md', '/hacking')
+        l.execute_import_directives()
+        l.publish()
+
+        pages = Page.objects.all()
+        self.assertGreater(len(pages), 5)
+        self.assertIn(u'/en/', [p.get_absolute_url() for p in pages])
+        self.assertIn(u'/en/hacking/', [p.get_absolute_url() for p in pages])
