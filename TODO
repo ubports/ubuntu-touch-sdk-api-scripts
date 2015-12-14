@@ -1,6 +1,7 @@
 - fix branch indicator (devel vs. stable, 1.x vs devel, etc.)
 - fix links
 - import pictures (LP: #1511677)
-- unpublished docs
+- unpublished docs: some articles show up with a blue circle, so 
+  unpublished although they're accessible(?)
 - add comment at top of RawHTML plugins, so users know not to edit them,
   currently blocked on LP: #1523925
