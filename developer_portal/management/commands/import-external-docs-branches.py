@@ -50,7 +50,7 @@ def import_branches(selection):
             if old_article.page not in [a.page for a in imported_articles] and \
                old_article.page.changed_by == 'python-api':
                 old_article.page.delete()
-    shutil.rmtree(tempdir)
+        shutil.rmtree(tempdir)
 
     # https://stackoverflow.com/questions/33284171/
     call_command('cms', 'fix-tree')
