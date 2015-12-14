@@ -31,7 +31,7 @@ class LocalBranch:
                                 self.branch_name, self.post_checkout_command)
         if sourcecode.get() != 0:
             logging.error(
-                'Could not check out branch "{}".'.format(self.origin))
+                    'Could not check out branch "{}".'.format(self.origin))
             shutil.rmtree(self.checkout_location)
             return 1
         return 0
