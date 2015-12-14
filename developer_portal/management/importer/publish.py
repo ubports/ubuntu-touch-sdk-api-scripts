@@ -23,6 +23,8 @@ def slugify(filename):
 def get_or_create_page(title, full_url, menu_title=None,
                        in_navigation=True, redirect=None, html=None):
     # First check if pages already exist.
+    if full_url.startswith('/'):
+        full_url = full_url[1:]
     pages = Title.objects.select_related('page').filter(path__regex=full_url)
     if pages:
         page = pages[0].page
