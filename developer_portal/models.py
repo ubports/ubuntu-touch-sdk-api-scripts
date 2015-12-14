@@ -38,7 +38,7 @@ class ExternalDocsBranch(models.Model):
 
     def __str__(self):
         if self.branch_name:
-            return "{} {}".format(self.origin, self.branch_name)
+            return "{} - {}".format(self.origin, self.branch_name)
         return "{}".format(self.origin)
 
     class Meta:
@@ -59,7 +59,7 @@ class ExternalDocsBranchImportDirective(models.Model):
                     'for a directory or a set of files.'))
 
     def __str__(self):
-        return "{} -- {}".format(self.external_docs_branch.origin,
+        return "{} -- {}".format(self.external_docs_branch,
                                  self.import_from)
 
 
