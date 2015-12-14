@@ -70,14 +70,12 @@ class Article:
             # Replace links of the form <a href="/path/somefile.md"> first
             href = u"<a href=\"{}\">".format(url)
             md_href = u"<a href=\"{}\">".format(local_md_fn)
-            if u'/{}'.format(local_md_fn) in url_map.keys():
-                self.html = self.html.replace(md_href, href)
+            self.html = self.html.replace(md_href, href)
 
             # Now we can replace free-standing "somefile.md" references in
             # the HTML
             link = href + u"{}</a>".format(titles[title])
-            if u'/{}'.format(local_md_fn) in url_map.keys():
-                self.html = self.html.replace(local_md_fn, link)
+            self.html = self.html.replace(local_md_fn, link)
 
     def publish(self):
         '''Publishes pages in their branch alias namespace.'''
