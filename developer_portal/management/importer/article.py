@@ -25,7 +25,10 @@ class Article:
                 self.html = markdown.markdown(
                     f.read(),
                     output_format='html5',
-                    extensions=['markdown.extensions.tables'])
+                    extensions=[
+                        'markdown.extensions.tables',
+                        'markdown.extensions.fenced_code',
+                    ])
             elif self.fn.endswith('.html'):
                 self.html = f.read()
             else:
@@ -70,12 +73,14 @@ class Article:
             # Replace links of the form <a href="/path/somefile.md"> first
             href = u"<a href=\"{}\">".format(url)
             md_href = u"<a href=\"{}\">".format(local_md_fn)
-            self.html = self.html.replace(md_href, href)
+            if u'/{}'.format(local_md_fn) in url_map.keys():
+                self.html = self.html.replace(md_href, href)
 
             # Now we can replace free-standing "somefile.md" references in
             # the HTML
             link = href + u"{}</a>".format(titles[title])
-            self.html = self.html.replace(local_md_fn, link)
+            if u'/{}'.format(local_md_fn) in url_map.keys():
+                self.html = self.html.replace(local_md_fn, link)
 
     def publish(self):
         '''Publishes pages in their branch alias namespace.'''

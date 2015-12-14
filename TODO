@@ -1,3 +1,5 @@
+- fix branch indicator (devel vs. stable, 1.x vs devel, etc.)
+- fix links
 - import pictures (LP: #1511677)
 - unpublished docs
 - add comment at top of RawHTML plugins, so users know not to edit them,
