@@ -19,6 +19,8 @@ class SourceCode():
         return res
 
     def _get_branch(self):
+        if os.path.exists(self.checkout_location):
+            return 0
         if self.origin.startswith('lp:') and \
            os.path.exists('/usr/bin/bzr'):
             return subprocess.call([
