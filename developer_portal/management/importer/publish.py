@@ -25,7 +25,8 @@ def get_or_create_page(title, full_url, menu_title=None,
     # First check if pages already exist.
     if full_url.startswith('/'):
         full_url = full_url[1:]
-    pages = Title.objects.select_related('page').filter(path__regex=full_url)
+    pages = Title.objects.select_related('page').filter(
+        path__regex=full_url).filter(publisher_is_draft=True)
     if pages:
         page = pages[0].page
         page.title = title
@@ -44,7 +45,8 @@ def get_or_create_page(title, full_url, menu_title=None,
                 add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=html)
     else:
         parent_pages = Title.objects.select_related('page').filter(
-            path__regex=os.path.dirname(full_url))
+            path__regex=os.path.dirname(full_url)).filter(
+            publisher_is_draft=True)
         if not parent_pages:
             logging.error('Parent {} not found.'.format(
                 os.path.dirname(full_url)))
