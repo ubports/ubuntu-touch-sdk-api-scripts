@@ -56,7 +56,7 @@ class PageDBActivities(TestCase):
         db_empty_page_list()
         home = db_create_home_page()
         self.assertNotEqual(home, None)
-        self.assertEqual(Page.objects.count(), 2) # one page, one draft
+        self.assertEqual(Page.objects.count(), 2)  # one page, one draft
 
 
 class TestBranchFetch(TestCase):
@@ -115,6 +115,7 @@ class TestBranchImport(TestCase):
         self.assertIn(u'/en/', [p.get_absolute_url() for p in pages])
         self.assertIn(u'/en/hacking/', [p.get_absolute_url() for p in pages])
 
+    # Check if all imported articles have 'home' as parent
     def test_articletree_1dir_import(self):
         db_empty_page_list()
         home = db_create_home_page()
@@ -123,5 +124,5 @@ class TestBranchImport(TestCase):
         git_repo.repo.execute_import_directives()
         git_repo.repo.publish()
         for page in Page.objects.filter(publisher_is_draft=True):
-            if page.parent != None:
+            if page.parent is not None:
                 self.assertEqual(page.parent_id, home.id)
