@@ -5,7 +5,7 @@ from django.test import TestCase
 from cms.api import create_page
 from cms.models import Page
 
-from management.importer.local_branch import LocalBranch
+from management.importer.repo import Repo
 
 class Singleton(type):
     _instances = {}
@@ -22,7 +22,7 @@ class GitTestRepo():
 
     def __init__(self):
         self.tempdir = tempfile.mkdtemp()
-        self.repo = LocalBranch(
+        self.repo = Repo(
             self.tempdir,
             'https://github.com/ubuntu-core/snapcraft.git',
             'master',
@@ -48,7 +48,7 @@ class TestBranchFetch(TestCase):
 
     def test_bzr_fetch(self):
         tempdir = tempfile.mkdtemp()
-        l = LocalBranch(
+        l = Repo(
             tempdir,
             'lp:snapcraft',  # outdated, but should work for testing
             '',

@@ -8,7 +8,7 @@ import os
 import shutil
 
 
-class LocalBranch:
+class Repo:
     titles = {}
     url_map = {}
     index_doc_title = None
@@ -118,9 +118,9 @@ class LocalBranch:
         page.publish('en')
 
 
-class SnappyLocalBranch(LocalBranch):
+class SnappyRepo(Repo):
     def __init__(self, tempdir, origin, branch_name, post_checkout_command):
-        LocalBranch.__init__(self, tempdir, origin, branch_name,
+        Repo.__init__(self, tempdir, origin, branch_name,
                              post_checkout_command)
         self.article_class = SnappyArticle
         self.index_doc_title = 'Snappy documentation'
@@ -129,4 +129,4 @@ class SnappyLocalBranch(LocalBranch):
         self.release_alias = os.path.basename(self.index_doc)
         if not self.index_doc.endswith('current'):
             self.index_doc_title += ' ({})'.format(self.release_alias)
-        LocalBranch._create_fake_index_docs(self)
+        Repo._create_fake_index_docs(self)
