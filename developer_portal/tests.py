@@ -44,6 +44,19 @@ def db_empty_page_list():
 def db_create_home_page():
     home = create_page('Test import', 'default.html', 'en', slug='home')
     home.publish('en')
+    return home
+
+
+class PageDBActivities(TestCase):
+    def test_empty_page_list(self):
+        db_empty_page_list()
+        self.assertEqual(Page.objects.count(), 0)
+
+    def test_create_home_page(self):
+        db_empty_page_list()
+        home = db_create_home_page()
+        self.assertNotEqual(home, None)
+        self.assertEqual(Page.objects.count(), 2) # one page, one draft
 
 
 class TestBranchFetch(TestCase):
