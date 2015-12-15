@@ -26,6 +26,12 @@ class Repo:
         self.directives = []
         self.imported_articles = []
 
+    # Only used to speed up tests
+    def reset(self):
+        self.article_class = Article
+        self.directives = []
+        self.imported_articles = []
+
     def get(self):
         sourcecode = SourceCode(self.origin, self.checkout_location,
                                 self.branch_name, self.post_checkout_command)

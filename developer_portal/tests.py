@@ -33,8 +33,9 @@ class GitTestRepo():
             '')
         self.fetch_retcode = self.repo.get()
 
-    def __del__(self):
-        shutil.rmtree(self.tempdir)
+
+def tearDownModule():
+    shutil.rmtree(GitTestRepo().tempdir)
 
 
 def db_empty_page_list():
@@ -62,6 +63,7 @@ class PageDBActivities(TestCase):
 class TestBranchFetch(TestCase):
     def test_git_fetch(self):
         git_repo = GitTestRepo()
+        git_repo.repo.reset()
         self.assertEqual(git_repo.fetch_retcode, 0)
 
     def test_bzr_fetch(self):
@@ -94,6 +96,7 @@ class TestBranchImport(TestCase):
         db_empty_page_list()
         db_create_home_page()
         git_repo = GitTestRepo()
+        git_repo.repo.reset()
         git_repo.repo.add_directive('docs', '/')
         git_repo.repo.execute_import_directives()
         git_repo.repo.publish()
@@ -104,22 +107,37 @@ class TestBranchImport(TestCase):
         db_empty_page_list()
         db_create_home_page()
         git_repo = GitTestRepo()
+        git_repo.repo.reset()
         git_repo.repo.add_directive('docs', '/')
         git_repo.repo.add_directive('README.md', '/')
         git_repo.repo.add_directive('HACKING.md', '/hacking')
         git_repo.repo.execute_import_directives()
         git_repo.repo.publish()
-
         pages = Page.objects.all()
         self.assertGreater(len(pages), 5)
         self.assertIn(u'/en/', [p.get_absolute_url() for p in pages])
         self.assertIn(u'/en/hacking/', [p.get_absolute_url() for p in pages])
+
+    # Check if all importe article has 'home' as parent
+    def test_articletree_1file_import(self):
+        db_empty_page_list()
+        home = db_create_home_page()
+        git_repo = GitTestRepo()
+        git_repo.repo.reset()
+        git_repo.repo.add_directive('README.md', '/readme')
+        git_repo.repo.execute_import_directives()
+        git_repo.repo.publish()
+        published_pages = Page.objects.filter(publisher_is_draft=True)
+        imported_pages = published_pages.exclude(id=home.id)
+        self.assertEqual(imported_pages.count(), 1)
+        self.assertTrue(imported_pages[0].parent == home)
 
     # Check if all imported articles have 'home' as parent
     def test_articletree_1dir_import(self):
         db_empty_page_list()
         home = db_create_home_page()
         git_repo = GitTestRepo()
+        git_repo.repo.reset()
         git_repo.repo.add_directive('docs', '/')
         git_repo.repo.execute_import_directives()
         git_repo.repo.publish()
