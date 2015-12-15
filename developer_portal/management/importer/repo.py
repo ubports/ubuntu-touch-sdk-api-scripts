@@ -121,7 +121,7 @@ class Repo:
 class SnappyRepo(Repo):
     def __init__(self, tempdir, origin, branch_name, post_checkout_command):
         Repo.__init__(self, tempdir, origin, branch_name,
-                             post_checkout_command)
+                      post_checkout_command)
         self.article_class = SnappyArticle
         self.index_doc_title = 'Snappy documentation'
 

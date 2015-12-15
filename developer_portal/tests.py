@@ -1,5 +1,6 @@
-import tempfile
+import os
 import shutil
+import tempfile
 
 from django.test import TestCase
 from cms.api import create_page
@@ -7,11 +8,14 @@ from cms.models import Page
 
 from management.importer.repo import Repo
 
+
 class Singleton(type):
     _instances = {}
+
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super(Singleton, cls).__call__(*args,
+                                                                 **kwargs)
         return cls._instances[cls]
 
 
@@ -36,6 +40,7 @@ class GitTestRepo():
 def db_empty_page_list():
     Page.objects.all().delete()
 
+
 def db_create_home_page():
     home = create_page('Test import', 'default.html', 'en', slug='home')
     home.publish('en')
@@ -57,10 +62,24 @@ class TestBranchFetch(TestCase):
         shutil.rmtree(tempdir)
         self.assertEqual(ret, 0)
 
+    def test_post_checkout_command(self):
+        tempdir = tempfile.mkdtemp()
+        l = Repo(
+            tempdir,
+            'lp:snapcraft',
+            '',
+            'touch something.html'
+        )
+        ret = l.get()
+        self.assertEqual(ret, 0)
+        self.assertTrue(os.path.exists(
+            os.path.join(l.checkout_location, 'something.html')))
+
+
 class TestBranchImport(TestCase):
     def test_1dir_import(self):
         db_empty_page_list()
-        home = db_create_home_page()
+        db_create_home_page()
         git_repo = GitTestRepo()
         git_repo.repo.add_directive('docs', '/')
         git_repo.repo.execute_import_directives()
@@ -70,7 +89,7 @@ class TestBranchImport(TestCase):
 
     def test_1dir_and_2files_import(self):
         db_empty_page_list()
-        home = db_create_home_page()
+        db_create_home_page()
         git_repo = GitTestRepo()
         git_repo.repo.add_directive('docs', '/')
         git_repo.repo.add_directive('README.md', '/')

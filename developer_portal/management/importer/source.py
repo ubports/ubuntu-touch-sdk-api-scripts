@@ -44,10 +44,13 @@ class SourceCode():
         return 1
 
     def _post_checkout(self):
+        pwd = os.getcwd()
+        os.chdir(self.checkout_location)
         process = subprocess.Popen(self.post_checkout_command.split(),
                                    stdout=subprocess.PIPE)
         (out, err) = process.communicate()
         retcode = process.wait()
+        os.chdir(pwd)
         if retcode != 0:
             logging.error(out)
         return retcode

@@ -30,13 +30,13 @@ def import_branches(selection):
         else:
             branch_class = Repo
         repo = branch_class(tempdir, branch.origin, branch.branch_name,
-                                    branch.post_checkout_command)
+                            branch.post_checkout_command)
         if repo.get() != 0:
             break
         for directive in ExternalDocsBranchImportDirective.objects.filter(
                 external_docs_branch=branch):
             repo.add_directive(directive.import_from,
-                                       directive.write_to)
+                               directive.write_to)
         repo.execute_import_directives()
         imported_articles = repo.publish()
         for imported_article in imported_articles:
@@ -47,7 +47,8 @@ def import_branches(selection):
 
         # The import is done, now let's clean up.
         for old_article in ImportedArticle.objects.filter(branch=branch):
-            if old_article.page not in [a.page for a in imported_articles] and \
+            page_list = [a.page for a in imported_articles]
+            if old_article.page not in page_list and \
                old_article.page.changed_by == 'python-api':
                 old_article.page.delete()
         shutil.rmtree(tempdir)
