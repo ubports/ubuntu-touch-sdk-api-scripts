@@ -1,4 +1,5 @@
 import tempfile
+import shutil
 
 from django.test import TestCase
 from cms.api import create_page
@@ -6,48 +7,76 @@ from cms.models import Page
 
 from management.importer.local_branch import LocalBranch
 
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+# We are going to re-use this one, so we don't have to checkout the git
+# repo all the time.
+class GitTestRepo():
+    __metaclass__ = Singleton
+
+    def __init__(self):
+        self.tempdir = tempfile.mkdtemp()
+        self.repo = LocalBranch(
+            self.tempdir,
+            'https://github.com/ubuntu-core/snapcraft.git',
+            'master',
+            '')
+        self.fetch_retcode = self.repo.get()
+
+    def __del__(self):
+        shutil.rmtree(self.tempdir)
+
+
+def db_empty_page_list():
+    Page.objects.all().delete()
+
+def db_create_home_page():
+    home = create_page('Test import', 'default.html', 'en', slug='home')
+    home.publish('en')
+
 
 class TestBranchFetch(TestCase):
-    def test_fetch(self):
-        tempdir = tempfile.mkdtemp()
-        l = LocalBranch(
-            tempdir,
-            'https://github.com/ubuntu-core/snapcraft.git',
-            'master',
-            '')
-        self.assertEqual(l.get(), 0)
+    def test_git_fetch(self):
+        git_repo = GitTestRepo()
+        self.assertEqual(git_repo.fetch_retcode, 0)
 
-    def test_simple_import(self):
-        home = create_page('Test import', 'default.html', 'en', slug='home')
-        home.publish('en')
+    def test_bzr_fetch(self):
         tempdir = tempfile.mkdtemp()
         l = LocalBranch(
             tempdir,
-            'https://github.com/ubuntu-core/snapcraft.git',
-            'master',
+            'lp:snapcraft',  # outdated, but should work for testing
+            '',
             '')
-        l.get()
-        l.add_directive('docs', '/')
-        l.execute_import_directives()
-        l.publish()
+        ret = l.get()
+        shutil.rmtree(tempdir)
+        self.assertEqual(ret, 0)
+
+class TestBranchImport(TestCase):
+    def test_1dir_import(self):
+        db_empty_page_list()
+        home = db_create_home_page()
+        git_repo = GitTestRepo()
+        git_repo.repo.add_directive('docs', '/')
+        git_repo.repo.execute_import_directives()
+        git_repo.repo.publish()
         pages = Page.objects.all()
         self.assertGreater(len(pages), 3)
 
-    def test_less_simple_import(self):
-        home = create_page('Test import', 'default.html', 'en', slug='home')
-        home.publish('en')
-        tempdir = tempfile.mkdtemp()
-        l = LocalBranch(
-            tempdir,
-            'https://github.com/ubuntu-core/snapcraft.git',
-            'master',
-            '')
-        l.get()
-        l.add_directive('docs', '/')
-        l.add_directive('README.md', '/')
-        l.add_directive('HACKING.md', '/hacking')
-        l.execute_import_directives()
-        l.publish()
+    def test_1dir_and_2files_import(self):
+        db_empty_page_list()
+        home = db_create_home_page()
+        git_repo = GitTestRepo()
+        git_repo.repo.add_directive('docs', '/')
+        git_repo.repo.add_directive('README.md', '/')
+        git_repo.repo.add_directive('HACKING.md', '/hacking')
+        git_repo.repo.execute_import_directives()
+        git_repo.repo.publish()
 
         pages = Page.objects.all()
         self.assertGreater(len(pages), 5)
