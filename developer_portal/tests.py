@@ -114,3 +114,14 @@ class TestBranchImport(TestCase):
         self.assertGreater(len(pages), 5)
         self.assertIn(u'/en/', [p.get_absolute_url() for p in pages])
         self.assertIn(u'/en/hacking/', [p.get_absolute_url() for p in pages])
+
+    def test_articletree_1dir_import(self):
+        db_empty_page_list()
+        home = db_create_home_page()
+        git_repo = GitTestRepo()
+        git_repo.repo.add_directive('docs', '/')
+        git_repo.repo.execute_import_directives()
+        git_repo.repo.publish()
+        for page in Page.objects.filter(publisher_is_draft=True):
+            if page.parent != None:
+                self.assertEqual(page.parent_id, home.id)
