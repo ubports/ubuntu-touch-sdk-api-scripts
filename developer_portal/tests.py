@@ -89,7 +89,7 @@ class TestBranchFetch(TestCase):
         self.assertEqual(ret, 0)
         self.assertTrue(os.path.exists(
             os.path.join(l.checkout_location, 'something.html')))
-
+        shutil.rmtree(tempdir)
 
 class TestBranchImport(TestCase):
     def test_1dir_import(self):
