@@ -11,7 +11,6 @@ import shutil
 class Repo:
     titles = {}
     url_map = {}
-    index_doc_title = None
     index_doc = None
     release_alias = None
 
@@ -19,9 +18,10 @@ class Repo:
         self.origin = origin
         self.branch_name = branch_name
         self.post_checkout_command = post_checkout_command
+        branch_nick = os.path.basename(self.origin.replace('.git', ''))
         self.checkout_location = os.path.join(
-            tempdir,
-            os.path.basename(self.origin.replace('.git', '')))
+            tempdir, branch_nick)
+        self.index_doc_title = branch_nick
         self.article_class = Article
         self.directives = []
         self.imported_articles = []
