@@ -30,12 +30,12 @@ class SourceCode():
            self.origin.endswith('.git') and \
            os.path.exists('/usr/bin/git'):
             retcode = subprocess.call([
-                'git', 'clone', '-q', self.origin,
+                'git', 'clone', '--quiet', self.origin,
                 self.checkout_location])
             if retcode == 0 and self.branch_name:
                 pwd = os.getcwd()
                 os.chdir(self.checkout_location)
-                retcode = subprocess.call(['git', 'checkout',
+                retcode = subprocess.call(['git', 'checkout', '--quiet',
                                            self.branch_name])
                 os.chdir(pwd)
             return retcode
