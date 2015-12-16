@@ -8,6 +8,15 @@ import os
 import shutil
 
 
+def create_repo(tempdir, origin, branch_name, post_checkout_command):
+    if origin.startswith('lp:snappy') or \
+       'snappy' in origin.split(':')[1].split('.git')[0].split('/'):
+        repo_class = SnappyRepo
+    else:
+        repo_class = Repo
+    return repo_class(tempdir, origin, branch_name, post_checkout_command)
+
+
 class Repo:
     titles = {}
     url_map = {}

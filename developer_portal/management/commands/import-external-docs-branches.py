@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
 
-from ..importer.repo import Repo, SnappyRepo
+from ..importer.repo import create_repo
 
 import datetime
 import logging
@@ -23,14 +23,8 @@ def import_branches(selection):
     for branch in ExternalDocsBranch.objects.filter(
             origin__regex=selection, active=True):
         tempdir = tempfile.mkdtemp()
-        url = branch.origin
-        if url.startswith('lp:snappy') or \
-           'snappy' in url.split(':')[1].split('.git')[0].split('/'):
-            branch_class = SnappyRepo
-        else:
-            branch_class = Repo
-        repo = branch_class(tempdir, branch.origin, branch.branch_name,
-                            branch.post_checkout_command)
+        repo = create_repo(tempdir, branch.origin, branch.branch_name,
+                           branch.post_checkout_command)
         if repo.get() != 0:
             break
         for directive in ExternalDocsBranchImportDirective.objects.filter(
