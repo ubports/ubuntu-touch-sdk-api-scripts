@@ -3,6 +3,8 @@ import shutil
 import tempfile
 
 from django.test import TestCase
+from django.utils.text import slugify
+
 from cms.api import create_page
 from cms.models import Page
 
@@ -48,6 +50,13 @@ def db_create_home_page():
     return home
 
 
+def db_add_empty_page(title, parent):
+    page = create_page(title, 'default.html', 'en', slug=slugify(title),
+                       parent=parent)
+    page.publish('en')
+    return page
+
+
 class PageDBActivities(TestCase):
     def test_empty_page_list(self):
         db_empty_page_list()
@@ -57,7 +66,16 @@ class PageDBActivities(TestCase):
         db_empty_page_list()
         home = db_create_home_page()
         self.assertNotEqual(home, None)
-        self.assertEqual(Page.objects.count(), 2)  # one page, one draft
+        self.assertEqual(Page.objects.count(), 1*2)  # one page, one draft
+
+    def test_simple_articletree(self):
+        db_empty_page_list()
+        home = db_create_home_page()
+        snappy = db_add_empty_page('Snappy', home)
+        guides = db_add_empty_page('Guides', snappy)
+        self.assertEqual(Page.objects.count(), 3*2)  # one page, one draft
+        self.assertEqual(guides.parent, snappy)
+        self.assertEqual(snappy.parent, home)
 
 
 class TestBranchFetch(TestCase):
@@ -90,6 +108,7 @@ class TestBranchFetch(TestCase):
         self.assertTrue(os.path.exists(
             os.path.join(l.checkout_location, 'something.html')))
         shutil.rmtree(tempdir)
+
 
 class TestBranchImport(TestCase):
     def test_1dir_import(self):
@@ -144,3 +163,27 @@ class TestBranchImport(TestCase):
         for page in Page.objects.filter(publisher_is_draft=True):
             if page.parent is not None:
                 self.assertEqual(page.parent_id, home.id)
+
+    def test_snappy_devel_import(self):
+        db_empty_page_list()
+        home = db_create_home_page()
+        snappy = db_add_empty_page('Snappy', home)
+        guides = db_add_empty_page('Guides', snappy)
+        tempdir = tempfile.mkdtemp()
+        repo = Repo(
+            tempdir,
+            'https://github.com/ubuntu-core/snappy.git',
+            'master',
+            '')
+        ret = repo.get()
+        self.assertEqual(ret, 0)
+        repo.add_directive('docs', '/snappy/guides/devel')
+        repo.execute_import_directives()
+        repo.publish()
+        self.assertGreater(len(repo.imported_articles), 0)
+        pages = Page.objects.filter(publisher_is_draft=True)
+        self.assertNotEqual(pages.filter(parent=guides).count(), 0)
+        devel = pages.filter(parent=guides)[0]
+        for page in Page.objects.filter(publisher_is_draft=True):
+            if page not in [home, snappy, guides, devel]:
+                self.assertEqual(page.parent, devel)
