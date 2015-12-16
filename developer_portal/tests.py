@@ -8,7 +8,7 @@ from django.utils.text import slugify
 from cms.api import create_page
 from cms.models import Page
 
-from management.importer.repo import Repo
+from management.importer.repo import create_repo, Repo, SnappyRepo
 
 
 class Singleton(type):
@@ -28,7 +28,7 @@ class GitTestRepo():
 
     def __init__(self):
         self.tempdir = tempfile.mkdtemp()
-        self.repo = Repo(
+        self.repo = create_repo(
             self.tempdir,
             'https://github.com/ubuntu-core/snapcraft.git',
             'master',
@@ -83,10 +83,11 @@ class TestBranchFetch(TestCase):
         git_repo = GitTestRepo()
         git_repo.repo.reset()
         self.assertEqual(git_repo.fetch_retcode, 0)
+        self.assertTrue(isinstance(git_repo.repo, Repo))
 
     def test_bzr_fetch(self):
         tempdir = tempfile.mkdtemp()
-        l = Repo(
+        l = create_repo(
             tempdir,
             'lp:snapcraft',  # outdated, but should work for testing
             '',
@@ -94,10 +95,11 @@ class TestBranchFetch(TestCase):
         ret = l.get()
         shutil.rmtree(tempdir)
         self.assertEqual(ret, 0)
+        self.assertTrue(isinstance(l, Repo))
 
     def test_post_checkout_command(self):
         tempdir = tempfile.mkdtemp()
-        l = Repo(
+        l = create_repo(
             tempdir,
             'lp:snapcraft',
             '',
@@ -170,11 +172,12 @@ class TestBranchImport(TestCase):
         snappy = db_add_empty_page('Snappy', home)
         guides = db_add_empty_page('Guides', snappy)
         tempdir = tempfile.mkdtemp()
-        repo = Repo(
+        repo = create_repo(
             tempdir,
             'https://github.com/ubuntu-core/snappy.git',
             'master',
             '')
+        self.assertTrue(isinstance(repo, SnappyRepo))
         ret = repo.get()
         self.assertEqual(ret, 0)
         repo.add_directive('docs', '/snappy/guides/devel')
@@ -182,7 +185,7 @@ class TestBranchImport(TestCase):
         repo.publish()
         self.assertGreater(len(repo.imported_articles), 0)
         pages = Page.objects.filter(publisher_is_draft=True)
-        self.assertNotEqual(pages.filter(parent=guides).count(), 0)
+        self.assertEqual(pages.filter(parent=guides).count(), 1)
         devel = pages.filter(parent=guides)[0]
         for page in Page.objects.filter(publisher_is_draft=True):
             if page not in [home, snappy, guides, devel]:
