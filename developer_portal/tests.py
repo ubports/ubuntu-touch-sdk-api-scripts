@@ -183,6 +183,8 @@ class TestBranchImport(TestCase):
             if page.parent is not None:
                 self.assertEqual(page.parent_id, home.id)
 
+
+class TestSnappyImport(TestCase):
     def test_snappy_devel_import(self):
         db_empty_page_list()
         home = db_create_home_page()
