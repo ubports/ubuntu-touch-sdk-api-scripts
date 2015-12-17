@@ -9,6 +9,7 @@ from cms.api import create_page
 from cms.models import Page
 
 from management.importer.repo import create_repo, Repo, SnappyRepo
+from management.importer.article import Article, SnappyArticle
 
 
 class Singleton(type):
@@ -34,6 +35,7 @@ class SnapcraftTestRepo():
             'master',
             '')
         self.fetch_retcode = self.repo.get()
+
 
 class SnappyTestRepo():
     __metaclass__ = Singleton
@@ -136,6 +138,8 @@ class TestBranchImport(TestCase):
         snapcraft.repo.publish()
         pages = Page.objects.all()
         self.assertGreater(len(pages), 3)
+        for article in snapcraft.repo.imported_articles:
+            self.assertTrue(isinstance(article, Article))
 
     def test_1dir_and_2files_import(self):
         db_empty_page_list()
@@ -184,7 +188,6 @@ class TestBranchImport(TestCase):
         home = db_create_home_page()
         snappy_page = db_add_empty_page('Snappy', home)
         guides = db_add_empty_page('Guides', snappy_page)
-        tempdir = tempfile.mkdtemp()
         snappy = SnappyTestRepo()
         self.assertTrue(isinstance(snappy.repo, SnappyRepo))
         ret = snappy.repo.get()
@@ -193,6 +196,8 @@ class TestBranchImport(TestCase):
         snappy.repo.execute_import_directives()
         snappy.repo.publish()
         self.assertGreater(len(snappy.repo.imported_articles), 0)
+        for article in snappy.repo.imported_articles:
+            self.assertTrue(isinstance(article, SnappyArticle))
         pages = Page.objects.filter(publisher_is_draft=True)
         self.assertEqual(pages.filter(parent=guides).count(), 1)
         devel = pages.filter(parent=guides)[0]
