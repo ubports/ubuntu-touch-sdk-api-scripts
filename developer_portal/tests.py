@@ -204,3 +204,34 @@ class TestBranchImport(TestCase):
         for page in Page.objects.filter(publisher_is_draft=True):
             if page not in [home, snappy_page, guides, devel]:
                 self.assertEqual(page.parent, devel)
+
+    def test_snappy_current_import(self):
+        db_empty_page_list()
+        home = db_create_home_page()
+        snappy_page = db_add_empty_page('Snappy', home)
+        guides = db_add_empty_page('Guides', snappy_page)
+        snappy = SnappyTestRepo()
+        self.assertTrue(isinstance(snappy.repo, SnappyRepo))
+        ret = snappy.repo.get()
+        self.assertEqual(ret, 0)
+        snappy.repo.add_directive('docs', '/snappy/guides/current')
+        snappy.repo.execute_import_directives()
+        snappy.repo.publish()
+        number_of_articles = len(snappy.repo.imported_articles)
+        self.assertGreater(number_of_articles, 0)
+        pages = Page.objects.filter(publisher_is_draft=True)
+        current_search = [
+            a for a in pages.filter(parent=guides)
+            if a.get_slug('current') and
+            a.get_absolute_url().endswith('snappy/guides/current/')]
+        self.assertEqual(len(current_search), 1)
+        current = current_search[0]
+        nav_pages = [home, snappy_page, guides, current]
+        # 1 imported article, 1 redirect
+        self.assertEqual(
+            number_of_articles*2, pages.count()-len(nav_pages))
+        for page in [a for a in pages if a not in nav_pages]:
+            if page.get_redirect('en'):
+                self.assertEqual(page.parent, guides)
+            else:
+                self.assertEqual(page.parent, current)
