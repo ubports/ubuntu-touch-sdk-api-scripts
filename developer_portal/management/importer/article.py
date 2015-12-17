@@ -89,8 +89,8 @@ class Article:
 class SnappyArticle(Article):
     release_alias = None
 
-    def get(self):
-        if not Article.get(self):
+    def read(self):
+        if not Article.read(self):
             return False
         self.release_alias = re.findall(r'snappy/guides/(\S+?)/\S+?',
                                         self.full_url)[0]
