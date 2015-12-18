@@ -20,7 +20,8 @@ def create_repo(tempdir, origin, branch_name, post_checkout_command):
 class Repo:
     titles = {}
     url_map = {}
-    index_doc = None
+    index_doc_url = None
+    index_page = None
     release_alias = None
 
     def __init__(self, tempdir, origin, branch_name, post_checkout_command):
@@ -79,7 +80,9 @@ class Repo:
             # If we import into a namespace and don't have an index doc,
             # we need to write one.
             if directive['write_to'] not in [x[1] for x in import_list]:
-                self.index_doc = directive['write_to']
+                self.index_doc_url = directive['write_to']
+        if self.index_doc_url:
+            self._create_fake_index_page()
         # The actual import
         for entry in import_list:
             article = self._read_article(entry[0], entry[1])
@@ -89,8 +92,8 @@ class Repo:
                 self.url_map[article.fn] = article.full_url
         for article in self.imported_articles:
             article.replace_links(self.titles, self.url_map)
-        if self.index_doc:
-            self._create_fake_index_docs()
+        if self.index_doc_url:
+            self._write_fake_index_doc()
 
     def _read_article(self, fn, write_to):
         article = self.article_class(fn, write_to)
@@ -103,34 +106,37 @@ class Repo:
             article.publish()
         return self.imported_articles
 
-    def _create_fake_index_docs(self):
+    def _create_fake_index_page(self):
         '''Creates a fake index page at the top of the branches
            docs namespace.'''
 
-        if self.index_doc.endswith('current'):
+        if self.index_doc_url.endswith('current'):
             redirect = '/snappy/guides'
         else:
             redirect = None
+        self.index_page = get_or_create_page(
+            title=self.index_doc_title, full_url=self.index_doc_url,
+            in_navigation=False, redirect=redirect, html='',
+            menu_title=None)
+        self.index_page.publish('en')
+
+    def _write_fake_index_doc(self):
         list_pages = ''
         for article in [a for a
                         in self.imported_articles
-                        if a.full_url.startswith(self.index_doc)]:
+                        if a.full_url.startswith(self.index_doc_url)]:
             list_pages += '<li><a href=\"{}\">{}</a></li>'.format(
                 os.path.basename(article.full_url), article.title)
-        landing = (
+        self.index_page.html = (
             u'<div class=\"row\"><div class=\"eight-col\">\n'
             '<p>This section contains documentation for the '
             '<code>{}</code> Snappy branch.</p>'
             '<p><ul class=\"list-ubuntu\">{}</ul></p>\n'
             '<p>Auto-imported from <a '
-            'href=\"https://github.com/ubuntu-core/snappy\">%s</a>.</p>\n'
+            'href=\"{}\">{}</a>.</p>\n'
             '</div></div>'.format(self.release_alias, list_pages,
-                                  self.origin))
-        page = get_or_create_page(
-            title=self.index_doc_title, full_url=self.index_doc,
-            in_navigation=False, redirect=redirect, html=landing,
-            menu_title=None)
-        page.publish('en')
+                                  self.origin, self.origin))
+        self.index_page.publish('en')
 
 
 class SnappyRepo(Repo):
@@ -140,8 +146,12 @@ class SnappyRepo(Repo):
         self.article_class = SnappyArticle
         self.index_doc_title = 'Snappy documentation'
 
-    def _create_fake_index_docs(self):
-        self.release_alias = os.path.basename(self.index_doc)
-        if not self.index_doc.endswith('current'):
+    def _create_fake_index_page(self):
+        self.release_alias = os.path.basename(self.index_doc_url)
+        if not self.index_doc_url.endswith('current'):
             self.index_doc_title += ' ({})'.format(self.release_alias)
-        Repo._create_fake_index_docs(self)
+        Repo._create_fake_index_page(self)
+
+    def reset(self):
+        Repo.reset(self)
+        self.article_class = SnappyArticle
