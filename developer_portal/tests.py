@@ -219,6 +219,8 @@ class TestSnappyImport(TestCase):
         snappy.repo.execute_import_directives()
         snappy.repo.publish()
         number_of_articles = len(snappy.repo.imported_articles)
+        for article in snappy.repo.imported_articles:
+            self.assertTrue(isinstance(article, SnappyArticle))
         self.assertGreater(number_of_articles, 0)
         pages = Page.objects.filter(publisher_is_draft=True)
         current_search = [
