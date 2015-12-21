@@ -167,7 +167,7 @@ class TestBranchImport(TestCase):
         snapcraft.repo.execute_import_directives()
         snapcraft.repo.publish()
         self.assertEqual(Page.objects.count(), 1+1)  # readme + home
-        self.assertTrue(snapcraft.repo.imported_articles[0].page.parent == home)
+        self.assertTrue(snapcraft.repo.pages[0].parent == home)
 
     # Check if all imported articles have 'home' as parent
     def test_articletree_1dir_import(self):
@@ -189,6 +189,7 @@ class TestSnappyImport(TestCase):
         home = db_create_home_page()
         snappy_page = db_add_empty_page('Snappy', home)
         guides = db_add_empty_page('Guides', snappy_page)
+        publish_pages([home, snappy_page, guides])
         snappy = SnappyTestRepo()
         snappy.repo.reset()
         self.assertEqual(snappy.fetch_retcode, 0)
@@ -196,21 +197,21 @@ class TestSnappyImport(TestCase):
         snappy.repo.add_directive('docs', '/snappy/guides/devel')
         snappy.repo.execute_import_directives()
         snappy.repo.publish()
-        self.assertGreater(len(snappy.repo.imported_articles), 0)
         for article in snappy.repo.imported_articles:
             self.assertTrue(isinstance(article, SnappyArticle))
-        pages = Page.objects.filter(publisher_is_draft=True)
-        self.assertEqual(pages.filter(parent=guides).count(), 1)
-        devel = pages.filter(parent=guides)[0]
-        for page in Page.objects.filter(publisher_is_draft=True):
-            if page not in [home, snappy_page, guides, devel]:
-                self.assertEqual(page.parent, devel)
+        self.assertGreater(len(snappy.repo.pages), 0)
+        devel = Page.objects.filter(parent=guides.get_public_object())
+        self.assertEqual(devel.count(), 1)
+        for page in Page.objects.filter(publisher_is_draft=False):
+            if page not in [home, snappy_page, guides, devel[0]]:
+                self.assertEqual(page.parent, devel[0])
 
     def test_snappy_current_import(self):
         db_empty_page_list()
         home = db_create_home_page()
         snappy_page = db_add_empty_page('Snappy', home)
         guides = db_add_empty_page('Guides', snappy_page)
+        publish_pages([home, snappy_page, guides])
         snappy = SnappyTestRepo()
         snappy.repo.reset()
         self.assertTrue(isinstance(snappy.repo, SnappyRepo))
@@ -221,9 +222,9 @@ class TestSnappyImport(TestCase):
         for article in snappy.repo.imported_articles:
             self.assertTrue(isinstance(article, SnappyArticle))
         self.assertGreater(number_of_articles, 0)
-        pages = Page.objects.filter(publisher_is_draft=True)
+        pages = Page.objects.all()
         current_search = [
-            a for a in pages.filter(parent=guides)
+            a for a in pages
             if a.get_slug('current') and
             a.get_absolute_url().endswith('snappy/guides/current/')]
         self.assertEqual(len(current_search), 1)

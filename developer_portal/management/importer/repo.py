@@ -25,6 +25,10 @@ class Repo:
     index_doc_url = None
     index_page = None
     release_alias = None
+    directives = []
+    imported_articles = []
+    # On top of the pages in imported_articles this also includes index_page
+    pages = []
 
     def __init__(self, tempdir, origin, branch_name, post_checkout_command):
         self.origin = origin
@@ -35,8 +39,6 @@ class Repo:
             tempdir, branch_nick)
         self.index_doc_title = branch_nick
         self.article_class = Article
-        self.directives = []
-        self.imported_articles = []
 
     # Only used to speed up tests - allows reusing same object without
     # having to redownload the source again
@@ -107,11 +109,10 @@ class Repo:
     def publish(self):
         for article in self.imported_articles:
             article.add_to_db()
-        to_publish = [article.page for article in self.imported_articles]
+        self.pages = [article.page for article in self.imported_articles]
         if self.index_page:
-            to_publish.extend([self.index_page])
-        publish_pages(to_publish)
-        return to_publish
+            self.pages.extend([self.index_page])
+        publish_pages(self.pages)
 
     def _create_fake_index_page(self):
         '''Creates a fake index page at the top of the branches
