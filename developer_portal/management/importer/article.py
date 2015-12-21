@@ -79,10 +79,9 @@ class Article:
 
     def add_to_db(self):
         '''Publishes pages in their branch alias namespace.'''
-        page = get_or_create_page(
+        self.page = get_or_create_page(
             title=self.title, full_url=self.full_url, menu_title=self.title,
             html=self.html)
-        self.page = page
 
 
 class SnappyArticle(Article):
@@ -115,7 +114,7 @@ class SnappyArticle(Article):
     def add_to_db(self):
         if self.release_alias == "current":
             # Add a guides/<page> redirect to guides/current/<page>
-            page = get_or_create_page(
+            get_or_create_page(
                 title=self.title,
                 full_url=self.full_url.replace('/current', ''),
                 redirect="/snappy/guides/current/{}".format(self.slug))
