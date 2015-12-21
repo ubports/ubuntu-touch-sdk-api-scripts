@@ -77,13 +77,12 @@ class Article:
             link = href + u"{}</a>".format(titles[title])
             self.html = self.html.replace(local_md_fn, link)
 
-    def publish(self):
+    def add_to_db(self):
         '''Publishes pages in their branch alias namespace.'''
         page = get_or_create_page(
             title=self.title, full_url=self.full_url, menu_title=self.title,
             html=self.html)
         self.page = page
-        self.page.publish('en')
 
 
 class SnappyArticle(Article):
@@ -113,14 +112,13 @@ class SnappyArticle(Article):
                                                        self.slug, )
             self.html = self.html.replace(before, after)
 
-    def publish(self):
+    def add_to_db(self):
         if self.release_alias == "current":
             # Add a guides/<page> redirect to guides/current/<page>
             page = get_or_create_page(
                 title=self.title,
                 full_url=self.full_url.replace('/current', ''),
                 redirect="/snappy/guides/current/{}".format(self.slug))
-            page.publish('en')
         else:
             self.title += " (%s)" % (self.release_alias,)
-        Article.publish(self)
+        Article.add_to_db(self)

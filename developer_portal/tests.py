@@ -5,7 +5,7 @@ import tempfile
 from django.test import TestCase
 from django.utils.text import slugify
 
-from cms.api import create_page
+from cms.api import create_page, publish_pages
 from cms.models import Page
 
 from management.importer.repo import create_repo, Repo, SnappyRepo
@@ -61,14 +61,12 @@ def db_empty_page_list():
 
 def db_create_home_page():
     home = create_page('Test import', 'default.html', 'en', slug='home')
-    home.publish('en')
     return home
 
 
 def db_add_empty_page(title, parent):
     page = create_page(title, 'default.html', 'en', slug=slugify(title),
                        parent=parent)
-    page.publish('en')
     return page
 
 
@@ -80,15 +78,17 @@ class PageDBActivities(TestCase):
     def test_create_home_page(self):
         db_empty_page_list()
         home = db_create_home_page()
+        publish_pages([home])
         self.assertNotEqual(home, None)
-        self.assertEqual(Page.objects.count(), 1*2)  # one page, one draft
+        self.assertEqual(Page.objects.count(), 1)
 
     def test_simple_articletree(self):
         db_empty_page_list()
         home = db_create_home_page()
         snappy = db_add_empty_page('Snappy', home)
         guides = db_add_empty_page('Guides', snappy)
-        self.assertEqual(Page.objects.count(), 3*2)  # one page, one draft
+        publish_pages([home, snappy, guides])
+        self.assertEqual(Page.objects.count(), 3)
         self.assertEqual(guides.parent, snappy)
         self.assertEqual(snappy.parent, home)
 
@@ -160,15 +160,14 @@ class TestBranchImport(TestCase):
     def test_articletree_1file_import(self):
         db_empty_page_list()
         home = db_create_home_page()
+        publish_pages([[home]])
         snapcraft = SnapcraftTestRepo()
         snapcraft.repo.reset()
         snapcraft.repo.add_directive('README.md', '/readme')
         snapcraft.repo.execute_import_directives()
         snapcraft.repo.publish()
-        published_pages = Page.objects.filter(publisher_is_draft=True)
-        imported_pages = published_pages.exclude(id=home.id)
-        self.assertEqual(imported_pages.count(), 1)
-        self.assertTrue(imported_pages[0].parent == home)
+        self.assertEqual(Page.objects.count(), 1+1)  # readme + home
+        self.assertTrue(snapcraft.repo.imported_articles[0].page.parent == home)
 
     # Check if all imported articles have 'home' as parent
     def test_articletree_1dir_import(self):
@@ -179,7 +178,7 @@ class TestBranchImport(TestCase):
         snapcraft.repo.add_directive('docs', '/')
         snapcraft.repo.execute_import_directives()
         snapcraft.repo.publish()
-        for page in Page.objects.filter(publisher_is_draft=True):
+        for page in Page.objects.filter(publisher_is_draft=False):
             if page.parent is not None:
                 self.assertEqual(page.parent_id, home.id)
 

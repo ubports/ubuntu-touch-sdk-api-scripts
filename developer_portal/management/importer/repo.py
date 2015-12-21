@@ -2,6 +2,8 @@ from .article import Article, SnappyArticle
 from .publish import get_or_create_page, slugify
 from .source import SourceCode
 
+from cms.api import publish_pages
+
 import glob
 import logging
 import os
@@ -36,7 +38,8 @@ class Repo:
         self.directives = []
         self.imported_articles = []
 
-    # Only used to speed up tests
+    # Only used to speed up tests - allows reusing same object without
+    # having to redownload the source again
     def reset(self):
         self.article_class = Article
         self.directives = []
@@ -103,8 +106,12 @@ class Repo:
 
     def publish(self):
         for article in self.imported_articles:
-            article.publish()
-        return self.imported_articles
+            article.add_to_db()
+        to_publish = [article.page for article in self.imported_articles]
+        if self.index_page:
+            to_publish.extend([self.index_page])
+        publish_pages(to_publish)
+        return to_publish
 
     def _create_fake_index_page(self):
         '''Creates a fake index page at the top of the branches
@@ -118,7 +125,6 @@ class Repo:
             title=self.index_doc_title, full_url=self.index_doc_url,
             in_navigation=False, redirect=redirect, html='',
             menu_title=None)
-        self.index_page.publish('en')
 
     def _write_fake_index_doc(self):
         list_pages = ''
@@ -136,7 +142,6 @@ class Repo:
             'href=\"{}\">{}</a>.</p>\n'
             '</div></div>'.format(self.release_alias, list_pages,
                                   self.origin, self.origin))
-        self.index_page.publish('en')
 
 
 class SnappyRepo(Repo):
