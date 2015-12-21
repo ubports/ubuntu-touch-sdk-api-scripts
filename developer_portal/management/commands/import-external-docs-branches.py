@@ -32,17 +32,16 @@ def import_branches(selection):
             repo.add_directive(directive.import_from,
                                directive.write_to)
         repo.execute_import_directives()
-        imported_articles = repo.publish()
-        for imported_article in imported_articles:
+        repo.publish()
+        for page in repo.pages:
             ImportedArticle.objects.get_or_create(
                 branch=branch,
-                page=imported_article.page,
+                page=page,
                 last_import=datetime.datetime.now())
 
         # The import is done, now let's clean up.
         for old_article in ImportedArticle.objects.filter(branch=branch):
-            page_list = [a.page for a in imported_articles]
-            if old_article.page not in page_list and \
+            if old_article.page not in repo.pages and \
                old_article.page.changed_by == 'python-api':
                 old_article.page.delete()
         shutil.rmtree(tempdir)
