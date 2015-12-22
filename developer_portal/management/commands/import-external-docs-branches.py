@@ -42,7 +42,7 @@ def import_branches(selection):
         # The import is done, now let's clean up.
         for old_article in ImportedArticle.objects.filter(branch=branch):
             if old_article.page not in repo.pages and \
-               old_article.page.changed_by == 'python-api':
+               old_article.page.changed_by in ['python-api', 'script']:
                 old_article.page.delete()
         shutil.rmtree(tempdir)
 
