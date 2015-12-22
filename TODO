@@ -5,3 +5,4 @@
   unpublished although they're accessible(?)
 - add comment at top of RawHTML plugins, so users know not to edit them,
   currently blocked on LP: #1523925
+- if article already exists, check if HTML actually changed, if not, don't update.
