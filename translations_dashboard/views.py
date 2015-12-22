@@ -15,7 +15,7 @@ def get_pages():
         date = plugin_change.changed_date
         lang = plugin_change.language.replace('-', '_')
         page = plugin_change.placeholder.page
-        if not page:
+        if not page or page.publisher_is_draft:
             continue
         path = page.get_path()
         if path not in known_paths:
