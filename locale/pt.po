@@ -1,0 +1,587 @@
+# Portuguese translation for developer-ubuntu-com
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
+# This file is distributed under the same license as the developer-ubuntu-com package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: developer-ubuntu-com\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2015-09-04 12:56+0000\n"
+"PO-Revision-Date: 2015-12-23 11:13+0000\n"
+"Last-Translator: Ivo Xavier <ivofernandes12@gmail.com>\n"
+"Language-Team: Portuguese <pt@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2015-12-24 05:39+0000\n"
+"X-Generator: Launchpad (build 17865)\n"
+
+#: developer_portal/cms_plugins.py:10
+msgid "Raw HTML"
+msgstr "Raw HTML"
+
+#: developer_portal/models.py:24
+msgid "Launchpad branch location, ie: lp:snappy/15.04"
+msgstr "Localização Launchpad branch, ex: lp:snappy/15.04"
+
+#: developer_portal/models.py:27
+msgid ""
+"Path alias we want to use for the docs, ie \"snappy/guides/15.04\" or "
+"\"snappy/guides/latest\", etc."
+msgstr ""
+"Caminho que queremos usar para dos docs, ex \"snappy/guides/15.04\" ou "
+"\"snappy/guides/latest\", etc."
+
+#: developer_portal/models.py:32
+msgid "File name of doc to be used as index document, ie \"intro.md\""
+msgstr ""
+"Nome do ficheiro para ser usado como documento de index, ex \"intro.md\""
+
+#: developer_portal/settings.py:189 developer_portal/settings.py:197
+#: templates/translations_dashboard.html:12
+msgid "English"
+msgstr "Inglês"
+
+#: developer_portal/settings.py:190 developer_portal/settings.py:204
+#: templates/translations_dashboard.html:13
+msgid "Simplified Chinese"
+msgstr "Chinês simplificado"
+
+#: developer_portal/settings.py:212
+msgid "Spanish"
+msgstr "Espanhol"
+
+#: developer_portal/settings.py:252
+msgid "Page content"
+msgstr "Conteúdo da página"
+
+#. Translators: this is the default text that will be shown
+#. to editors when editing a page. You can use some HTML,
+#. but don't go wild :)
+#: developer_portal/settings.py:260
+msgid "<p>Add content here...</p>"
+msgstr "<p>Adicione conteúdo aqui...</p>"
+
+#: developer_portal/views.py:50
+msgid ""
+"You will need to create a <a href=\"https://launchpad.net/+login\">Launchpad "
+"profile</a> to use the developer site"
+msgstr ""
+"Precisa de criar uma conta no <a "
+"href=\"https://launchpad.net/+login\">Launchpad</a> para utilizar a página "
+"de programador"
+
+#: store_data/cms_plugins.py:9
+msgid "Gadget Snap List Plugin"
+msgstr "Plugin de lista do Gadget Snap"
+
+#: templates/404.html:4
+msgid "This page does not exist"
+msgstr "Esta página não existe"
+
+#: templates/404.html:9
+msgid ""
+"This page does not exist. If you feel that this is an error, please <a "
+"href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>file a "
+"bug</a>."
+msgstr ""
+"Esta página não existe. Se entender que isto é um erro, por favor <a "
+"href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>reporte-"
+"o</a>."
+
+#: templates/base.html:4
+msgid "Ubuntu developer portal"
+msgstr "Ubuntu developer portal"
+
+#: templates/base.html:5
+msgid "developer"
+msgstr "programador"
+
+#: templates/base.html:32
+msgid "Download"
+msgstr "Transferir"
+
+#: templates/base.html:34 templates/base.html.py:51
+#: templates/menu/menu_footer_first_level.html:8
+#: templates/menu/menu_header_first_level.html:8
+#: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
+#: templates/menu/sub_menu.html:25
+msgid "Overview"
+msgstr "Vista geral"
+
+#: templates/base.html:36
+msgid "Cloud"
+msgstr "Cloud"
+
+#: templates/base.html:38
+msgid "Server"
+msgstr "Servidor"
+
+#: templates/base.html:40
+msgid "Desktop"
+msgstr "Desktop"
+
+#: templates/base.html:42
+msgid "Ubuntu Kylin"
+msgstr "Ubuntu Kylin"
+
+#: templates/base.html:44
+msgid "Alternative downloads"
+msgstr "Transferências alternativas"
+
+#: templates/base.html:49
+msgid "Support"
+msgstr "Suporte"
+
+#: templates/base.html:53
+msgid "Security notices"
+msgstr "Notificações de segurança"
+
+#: templates/base.html:58
+msgid "About"
+msgstr "Acerca"
+
+#: templates/base.html:60
+msgid "About Ubuntu"
+msgstr "Acerca do Ubuntu"
+
+#: templates/base.html:62
+msgid "Careers"
+msgstr "Carreiras"
+
+#: templates/base.html:64
+msgid "Canonical and Ubuntu"
+msgstr "Canonical e Ubuntu"
+
+#: templates/base.html:66
+msgid "Contact us"
+msgstr "Contacte-nos"
+
+#: templates/base.html:68
+msgid "Canonical news feed"
+msgstr "Fonte de notícias da Canonical"
+
+#: templates/base.html:74
+msgid "Ubuntu and Canonical are registered trademarks of Canonical Ltd."
+msgstr "Ubuntu e Canonical são marcas registadas da Canonical Ltd."
+
+#: templates/base.html:76
+msgid "Legal information"
+msgstr "Informaçoes legais"
+
+#: templates/base.html:78
+msgid "Report a bug on this site"
+msgstr "Comunicar erro nesta página"
+
+#: templates/base.html:81
+msgid "Go to the top of the page"
+msgstr "Ir para o topo da página"
+
+#: templates/error_base.html:54 templates/website_base.html:55
+msgid "Jump to content"
+msgstr "Ir para o conteúdo"
+
+#: templates/error_base.html:63 templates/website_base.html:65
+#: templates/comments/zinnia/entry/form.html:25
+msgid "Log out"
+msgstr "Terminar sessão"
+
+#: templates/error_base.html:69 templates/website_base.html:71
+msgid "Log in"
+msgstr "Iniciar sessão"
+
+#: templates/error_base.html:76 templates/error_base.html.py:77
+#: templates/error_base.html:78 templates/website_base.html:83
+#: templates/website_base.html.py:84 templates/website_base.html:85
+msgid "Search"
+msgstr "Procurar"
+
+#: templates/gadget_snap_list.html:27
+msgid "Install Snappy on this device"
+msgstr "Instalar o Snappy neste dispositivo"
+
+#: templates/login_failure.html:21
+msgid ""
+"If you continue to experience problems with the developer site, please <a "
+"href='https://bugs.launchpad.net/ubuntudeveloperportal'>report it"
+msgstr ""
+"Se continuar a ter problemas com a página do programador, por favor <a "
+"href='https://bugs.launchpad.net/ubuntudeveloperportal'>reporte-o"
+
+#: templates/search_results.html:4 templates/search_results.html.py:11
+msgid "Search results for:"
+msgstr "Resultados da pesquisa para:"
+
+#: templates/search_results.html:16
+msgid "Pages:"
+msgstr "Páginas:"
+
+#: templates/search_results.html:27
+msgid "API Docs:"
+msgstr "API Docs:"
+
+#: templates/translations_dashboard.html:6
+msgid "Translations dashboard"
+msgstr "Quadro de traduções"
+
+#: templates/translations_dashboard.html:7
+msgid "A simple dashboard to keep track of updates between languages."
+msgstr "Um simples quadro para ficar a par das atualizações entre idiomas."
+
+#: templates/translations_dashboard.html:11
+#: templates/zinnia/entry_list.html:23
+msgid "Page"
+msgstr "Página"
+
+#: templates/translations_dashboard.html:30
+msgid "Not available"
+msgstr "Indisponível"
+
+#: templates/webapp.html:6
+msgid "Create your Webapp package"
+msgstr "Crie o seu pacote Webapp"
+
+#: templates/webapp.html:10
+msgid "Submit"
+msgstr "Submeter"
+
+#: templates/webapp.html:14
+msgid "A first step into your Ubuntu developer adventure"
+msgstr "Primeiro passo na sua aventura como programador Ubuntu"
+
+#: templates/webapp.html:15
+msgid ""
+"This form generates simple Webapps packages ready to test on your device and "
+"upload to the Ubuntu store."
+msgstr ""
+"Isto cria um simples pacote de Webapp pronto para testar no seu dispositivo "
+"e enviar para a Ubuntu Store."
+
+#: templates/webapp.html:26
+msgid "How to test a click package on your device ›"
+msgstr "Como testar um pacote click no seu dispositivo ›"
+
+#: templates/webapp.html:27
+msgid "How to publish an app to the store ›"
+msgstr "Como publicar uma app na Store ›"
+
+#: templates/webapp.html:31
+msgid "Embrace QML native apps"
+msgstr "Abrace as apps nativas de QML"
+
+#: templates/webapp.html:32
+msgid ""
+"For your next project, learn how to create stylish, powerful and content-"
+"heavy applications with the Ubuntu SDK."
+msgstr ""
+"Para o seu próximo projeto, aprenda como criar apps intuitivas, poderosas e "
+"forte em conteúdo com o Ubuntu SDK."
+
+#: templates/webapp.html:43
+msgid "Get started with the Ubuntu SDK ›"
+msgstr "Começar com o Ubuntu SDK ›"
+
+#: templates/website_base.html:117
+msgid "Back to top"
+msgstr "Voltar para o topo"
+
+#: templates/comments/zinnia/entry/form.html:25
+msgid "Comment as"
+msgstr "Comentar como"
+
+#: templates/comments/zinnia/entry/form.html:28
+msgid "Post"
+msgstr "Publicar"
+
+#: templates/menu/menu_language_chooser.html:6
+msgid "View in:"
+msgstr "Ver em:"
+
+#: templates/menu/menu_language_chooser.html:10
+msgid "Change to language:"
+msgstr "Mudar idioma:"
+
+#: templates/zinnia/_entry_detail_base.html:33
+#, python-format
+msgid "%(percent)s%% of %(object)s still remains to read."
+msgstr "%(percent)s%% de %(object)s ainda por ler."
+
+#: templates/zinnia/_entry_detail_base.html:33
+msgid "Continue reading"
+msgstr "Continuar a ler"
+
+#: templates/zinnia/_entry_detail_base.html:47
+#: templates/zinnia/author_list.html:19
+#, python-format
+msgid "Show all %(author)s's entries"
+msgstr "Mostrar todas as entradas de %(author)s"
+
+#: templates/zinnia/_entry_detail_base.html:50
+msgid "Written on"
+msgstr "Escrito em"
+
+#: templates/zinnia/_entry_detail_base.html:62
+msgid "Filed under:"
+msgstr "Arquivado em:"
+
+#: templates/zinnia/_entry_detail_base.html:64
+#: templates/zinnia/tag_list.html:19
+#, python-format
+msgid "Show all entries tagged by %(tag)s"
+msgstr "Mostrar todas as entradas marcadas por %(tag)s"
+
+#: templates/zinnia/_entry_detail_base.html:66
+msgid "No tags"
+msgstr "Sem tags"
+
+#: templates/zinnia/author_list.html:4 templates/zinnia/author_list.html:12
+msgid "Author list"
+msgstr "Lista de autores"
+
+#: templates/zinnia/author_list.html:6
+msgid "Authors"
+msgstr "Autores"
+
+#: templates/zinnia/author_list.html:21 templates/zinnia/category_list.html:19
+#: templates/zinnia/tag_list.html:20
+#, python-format
+msgid "%(entry_count)s entry"
+msgid_plural "%(entry_count)s entries"
+msgstr[0] "%(entry_count)s entrada"
+msgstr[1] "%(entry_count)s entradas"
+
+#: templates/zinnia/author_list.html:25
+msgid "No authors yet."
+msgstr "Sem autores ainda."
+
+#: templates/zinnia/base.html:17
+msgid "RSS Feed of latest entries"
+msgstr "Fonte RSS das últimas entradas"
+
+#: templates/zinnia/base.html:18
+msgid "RSS Feed of latest discussions"
+msgstr "Fonte RSS das últimas discussões"
+
+#: templates/zinnia/category_list.html:4
+#: templates/zinnia/category_list.html:12
+msgid "Category list"
+msgstr "Lista de categorias"
+
+#: templates/zinnia/category_list.html:6
+msgid "Categories"
+msgstr "Categorias"
+
+#: templates/zinnia/category_list.html:18
+#, python-format
+msgid "Show all entries in %(category)s"
+msgstr "Mostrar todas as entradas em %(category)s"
+
+#: templates/zinnia/category_list.html:24
+msgid "No categories yet."
+msgstr "Sem categorias ainda."
+
+#: templates/zinnia/entry_detail_base.html:22
+msgid "RSS Feed of discussions on"
+msgstr "Fonte RSS de discussões sobre"
+
+#: templates/zinnia/entry_detail_base.html:24
+msgid "RSS Feed of comments on"
+msgstr "Fonte RSS de comentários sobre"
+
+#: templates/zinnia/entry_detail_base.html:26
+msgid "RSS Feed of pingbacks on"
+msgstr "Fonte RSS de pingbacks sobre"
+
+#: templates/zinnia/entry_detail_base.html:28
+msgid "RSS Feed of trackbacks on"
+msgstr "Fonte RSS de trackbacks sobre"
+
+#: templates/zinnia/entry_detail_base.html:43
+msgid "Comments"
+msgstr "Comentários"
+
+#: templates/zinnia/entry_detail_base.html:82
+#: templates/zinnia/entry_detail_base.html:88
+msgid "Comments are closed."
+msgstr "Comentários desativados."
+
+#: templates/zinnia/entry_detail_base.html:86
+msgid "No comments yet."
+msgstr "Sem comentários ainda."
+
+#: templates/zinnia/entry_detail_base.html:96
+msgid "Add your comment"
+msgstr "Adicionar o seu comentário"
+
+#: templates/zinnia/entry_detail_base.html:108
+#: templates/zinnia/entry_detail_base.html:109
+msgid "Edit the entry"
+msgstr "Editar entrada"
+
+#: templates/zinnia/entry_list.html:4
+msgid "Latest entries for"
+msgstr "Últimas entradas para"
+
+#: templates/zinnia/entry_list.html:4
+msgid "the category"
+msgstr "a categoria"
+
+#: templates/zinnia/entry_list.html:4
+msgid "the tag"
+msgstr "a tag"
+
+#: templates/zinnia/entry_list.html:4
+msgid "the author"
+msgstr "o autor"
+
+#: templates/zinnia/entry_list.html:6
+msgid "page"
+msgstr "página"
+
+#: templates/zinnia/entry_list.html:11 templates/zinnia/entry_list.html:14
+#: templates/zinnia/entry_list.html:17
+msgid "RSS Feed"
+msgstr "Fonte RSS"
+
+#: templates/zinnia/entry_list.html:21
+msgid "Category"
+msgstr "Categoria"
+
+#: templates/zinnia/entry_list.html:21
+msgid "Tag"
+msgstr "Tag"
+
+#: templates/zinnia/entry_list.html:21
+msgid "Author"
+msgstr "Autor"
+
+#: templates/zinnia/entry_list.html:32
+#, python-format
+msgid "Category archives: %(category)s"
+msgstr "Arquivo de categorias: %(category)s"
+
+#: templates/zinnia/entry_list.html:41
+#, python-format
+msgid "Tag archives: %(tag)s"
+msgstr "Arquivo de tags: %(tag)s"
+
+#: templates/zinnia/entry_list.html:47
+#, python-format
+msgid "Author archives: %(author)s"
+msgstr "Arquivo de autores: %(author)s"
+
+#: templates/zinnia/entry_list.html:58
+msgid "No entries yet."
+msgstr "Sem entradas ainda."
+
+#: templates/zinnia/entry_list.html:75 templates/zinnia/entry_list.html:76
+msgid "Edit the category"
+msgstr "Editar a categoria"
+
+#: templates/zinnia/entry_list.html:82 templates/zinnia/entry_list.html:83
+msgid "Edit the tag"
+msgstr "Editar a tag"
+
+#: templates/zinnia/entry_list.html:89 templates/zinnia/entry_list.html:90
+msgid "Edit the author"
+msgstr "Editar o autor"
+
+#: templates/zinnia/tag_list.html:4 templates/zinnia/tag_list.html.py:12
+msgid "Tag list"
+msgstr "Lista de tags"
+
+#: templates/zinnia/tag_list.html:6
+msgid "Tags"
+msgstr "Tags"
+
+#: templates/zinnia/tag_list.html:24
+msgid "No tags yet."
+msgstr "Sem tags ainda."
+
+#: webapp_creator/views.py:11
+msgid "Store cookies"
+msgstr "Guardar cookies"
+
+#: webapp_creator/views.py:12
+msgid "Show header"
+msgstr "Mostrar cabeçalho"
+
+#: webapp_creator/views.py:13
+msgid "Show back and forward buttons"
+msgstr "Mostar botões de navegação"
+
+#: webapp_creator/views.py:14
+msgid "Run fullscreen"
+msgstr "Abrir em ecrã completo"
+
+#: webapp_creator/views.py:20
+msgid "App name"
+msgstr "Nome da app"
+
+#: webapp_creator/views.py:21
+msgid "E.g. Duck Duck Go"
+msgstr "E.x. Duck Duck Go"
+
+#: webapp_creator/views.py:23
+msgid "Webapp URL"
+msgstr "Webapp URL"
+
+#: webapp_creator/views.py:24
+msgid "E.g. https://duckduckgo.com"
+msgstr "E.x. https://duckduckgo.com"
+
+#: webapp_creator/views.py:26
+msgid "App icon"
+msgstr "ícone da app"
+
+#: webapp_creator/views.py:27
+msgid "Recommended 256x256 px, PNG format"
+msgstr "Recomendado 256x256 px, formato PNG"
+
+#: webapp_creator/views.py:30
+msgid "App options"
+msgstr "Opções da app"
+
+#: webapp_creator/views.py:31
+msgid "Use CTRL to select multiple options"
+msgstr "Use CTRL para selecionar múltiplas opções"
+
+#: webapp_creator/views.py:34
+msgid "Version"
+msgstr "Versão"
+
+#: webapp_creator/views.py:35
+msgid "E.g. 0.1"
+msgstr "E.x. 0.1"
+
+#: webapp_creator/views.py:38
+msgid "Developer namespace"
+msgstr "Nome do programador"
+
+#: webapp_creator/views.py:39
+msgid ""
+"The namespace you picked for your <a "
+"href=\"https://myapps.developer.ubuntu.com/dev/account/\"> MyApps "
+"account</a>. E.g. miaotian"
+msgstr ""
+"O nome que utilizou para <a "
+"href=\"https://myapps.developer.ubuntu.com/dev/account/\"> Conta MyApps</a>. "
+"E.x. miaotian"
+
+#: webapp_creator/views.py:43
+msgid "Maintainer full name"
+msgstr "Nome completo do programador"
+
+#: webapp_creator/views.py:44
+msgid "E.g. Miao Tian"
+msgstr "E.x. Miao Tian"
+
+#: webapp_creator/views.py:46
+msgid "Maintainer e-mail"
+msgstr "Email do programador"
+
+#: webapp_creator/views.py:47
+msgid "E.g. miaotian@ubuntu.com"
+msgstr "E.x. miaotian@ubuntu.com"
