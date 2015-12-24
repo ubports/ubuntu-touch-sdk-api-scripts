@@ -4,7 +4,7 @@ mkdir -p /tmp/apidoc_sources/
 
 ##### SDK 15.04.1
 # Archives to download packages from
-export SERIES="wily"
+export SERIES="vivid"
 
 #### Apps/QML
 ## QtQML & QtQuick
