@@ -64,24 +64,19 @@ class Article:
             "</code></pre></div><div class=\"eight-col\">")
 
     def replace_links(self, titles, url_map):
-        for title in titles:
-            local_md_fn = os.path.basename(title)
-            url = u'/'+url_map[title]
-            # Replace links of the form <a href="/path/somefile.md"> first
-            href = u"<a href=\"{}\">".format(url)
-            md_href = u"<a href=\"{}\">".format(local_md_fn)
-            self.html = self.html.replace(md_href, href)
-
-            # Now we can replace free-standing "somefile.md" references in
-            # the HTML
-            link = href + u"{}</a>".format(titles[title])
-            self.html = self.html.replace(local_md_fn, link)
+        soup = BeautifulSoup(self.html, 'html5lib')
+        for link in soup.find_all('a'):
+            for title in titles:
+                if link.attrs['href'] == os.path.basename(title):
+                    link.attrs['href'] = url_map[title].full_url
+        self.html = soup.prettify()
 
     def add_to_db(self):
         '''Publishes pages in their branch alias namespace.'''
         self.page = get_or_create_page(
             title=self.title, full_url=self.full_url, menu_title=self.title,
             html=self.html)
+        self.full_url = self.page.get_absolute_url()
 
 
 class SnappyArticle(Article):

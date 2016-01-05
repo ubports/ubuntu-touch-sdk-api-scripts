@@ -100,9 +100,7 @@ class Repo:
             if article:
                 self.imported_articles += [article]
                 self.titles[article.fn] = article.title
-                self.url_map[article.fn] = article.full_url
-        for article in self.imported_articles:
-            article.replace_links(self.titles, self.url_map)
+                self.url_map[article.fn] = article
         if self.index_doc_url:
             self._write_fake_index_doc()
 
@@ -115,6 +113,7 @@ class Repo:
     def publish(self):
         for article in self.imported_articles:
             article.add_to_db()
+            article.replace_links(self.titles, self.url_map)
         self.pages = [article.page for article in self.imported_articles]
         if self.index_page:
             self.pages.extend([self.index_page])

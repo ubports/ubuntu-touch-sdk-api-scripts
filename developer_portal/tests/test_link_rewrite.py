@@ -1,8 +1,10 @@
+from bs4 import BeautifulSoup
 import os
 import shutil
 import tempfile
 
-from django.test import TestCase
+from django.http.response import HttpResponseNotFound
+from django.test import TestCase, Client
 
 from cms.models import Page
 
@@ -30,7 +32,13 @@ class TestLinkRewrite(TestCase):
         repo.publish()
         pages = Page.objects.all()
         self.assertEqual(pages.count(), 1+2)  # Home + 2 articles
+        c = Client()
         for article in repo.imported_articles:
             self.assertTrue(isinstance(article, Article))
-            print(article.html)
+            soup = BeautifulSoup(article.html, 'html5lib')
+            for link in soup.find_all('a'):
+                if not link.has_attr('class') or \
+                   'headeranchor-link' not in link.attrs['class']:
+                    res = c.get(link.attrs['href'])
+                    self.assertNotIsInstance(res, HttpResponseNotFound)
         shutil.rmtree(tempdir)
