@@ -154,10 +154,10 @@ class Importer(object):
                         print "Image in %s: %s" % (source_filename, img_match.group('url'))
                     if img_match.group('url').startswith('.'):
                         if source_filename.startswith('/'):
-                            src_filename = os.path.abspath(os.path.join(source_filename, img_match.group('url')))
+                            src_filename = os.path.abspath(os.path.join(os.path.dirname(source_filename), img_match.group('url')))
                             rel_filename = os.path.join('api', self.topic.slug, self.language.slug, self.version.slug, element_fullname, src_filename[len(self.DOC_ROOT)+1:])
                         else:
-                            src_filename = os.path.abspath(os.path.join(self.DOC_ROOT, source_filename, img_match.group('url')))
+                            src_filename = os.path.abspath(os.path.join(self.DOC_ROOT, os.path.dirname(source_filename), img_match.group('url')))
                             rel_filename = os.path.join('api', self.topic.slug, self.language.slug, self.version.slug, element_fullname, src_filename[len(self.DOC_ROOT)+1:])
                     else:
                         src_filename = os.path.join(self.DOC_ROOT, img_match.group('url'))

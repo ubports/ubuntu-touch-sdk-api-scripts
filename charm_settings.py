@@ -8,6 +8,9 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 SECRET_KEY=os.environ.get('SECRET_KEY', '')
 
+# Use original HOST header, so cn.developer.ubuntu.com redirects work
+#USE_X_FORWARDED_HOST=True
+
 # Database configs
 import dj_database_url
 DATABASES['default'].update(dj_database_url.config())
