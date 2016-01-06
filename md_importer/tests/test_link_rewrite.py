@@ -40,5 +40,7 @@ class TestLinkRewrite(TestCase):
                 if not link.has_attr('class') or \
                    'headeranchor-link' not in link.attrs['class']:
                     res = c.get(link.attrs['href'])
-                    self.assertNotIsInstance(res, HttpResponseNotFound)
+                    self.assertNotIsInstance(
+                        res, HttpResponseNotFound,
+                        msg='Link {} not found.'.format(link.attrs['href']))
         shutil.rmtree(tempdir)
