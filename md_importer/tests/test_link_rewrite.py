@@ -8,8 +8,8 @@ from django.test import TestCase, Client
 
 from cms.models import Page
 
-from ..management.importer.article import Article
-from ..management.importer.repo import create_repo
+from md_importer.importer.article import Article
+from md_importer.importer.repo import create_repo
 from .utils import (
     db_create_home_page,
     db_empty_page_list,

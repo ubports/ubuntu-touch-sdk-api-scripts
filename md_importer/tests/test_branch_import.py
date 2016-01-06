@@ -3,7 +3,7 @@ from django.test import TestCase
 from cms.api import publish_pages
 from cms.models import Page
 
-from ..management.importer.article import Article
+from md_importer.importer.article import Article
 from .utils import (
     db_create_home_page,
     db_empty_page_list,

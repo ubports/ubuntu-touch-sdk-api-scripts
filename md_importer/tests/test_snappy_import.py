@@ -3,8 +3,8 @@ from django.test import TestCase
 from cms.api import publish_pages
 from cms.models import Page
 
-from ..management.importer.repo import SnappyRepo
-from ..management.importer.article import SnappyArticle
+from md_importer.importer.repo import SnappyRepo
+from md_importer.importer.article import SnappyArticle
 from .utils import (
     db_add_empty_page,
     db_create_home_page,

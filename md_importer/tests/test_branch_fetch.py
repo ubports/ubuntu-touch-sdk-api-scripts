@@ -4,7 +4,7 @@ import tempfile
 
 from django.test import TestCase
 
-from ..management.importer.repo import create_repo, Repo
+from md_importer.importer.repo import create_repo, Repo
 from .utils import SnapcraftTestRepo
 
 

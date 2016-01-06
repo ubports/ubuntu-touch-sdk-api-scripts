@@ -6,7 +6,7 @@ from django.utils.text import slugify
 from cms.api import create_page
 from cms.models import Page
 
-from ..management.importer.repo import create_repo
+from md_importer.importer.repo import create_repo
 
 
 class Singleton(type):

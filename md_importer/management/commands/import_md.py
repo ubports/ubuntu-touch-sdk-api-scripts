@@ -1,14 +1,14 @@
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
 
-from ..importer.repo import create_repo
+from md_importer.importer.repo import create_repo
 
 import datetime
 import logging
 import shutil
 import tempfile
 
-from developer_portal.models import (
+from md_importer.models import (
     ExternalDocsBranch,
     ExternalDocsBranchImportDirective,
     ImportedArticle,
