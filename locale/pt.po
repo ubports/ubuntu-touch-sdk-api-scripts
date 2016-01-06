@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-09-04 12:56+0000\n"
+"POT-Creation-Date: 2015-12-14 13:22+0000\n"
 "PO-Revision-Date: 2015-12-23 11:13+0000\n"
 "Last-Translator: Ivo Xavier <ivofernandes12@gmail.com>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
@@ -15,18 +15,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2015-12-24 05:39+0000\n"
-"X-Generator: Launchpad (build 17865)\n"
+"X-Launchpad-Export-Date: 2016-01-06 06:06+0000\n"
+"X-Generator: Launchpad (build 17876)\n"
 
 #: developer_portal/cms_plugins.py:10
 msgid "Raw HTML"
 msgstr "Raw HTML"
 
-#: developer_portal/models.py:24
-msgid "Launchpad branch location, ie: lp:snappy/15.04"
-msgstr "Localização Launchpad branch, ex: lp:snappy/15.04"
+#: developer_portal/models.py:29
+msgid ""
+"External branch location, ie: lp:snappy/15.04 or https://github.com/ubuntu-"
+"core/snappy.git"
+msgstr ""
 
-#: developer_portal/models.py:27
+#: developer_portal/models.py:33
 msgid ""
 "Path alias we want to use for the docs, ie \"snappy/guides/15.04\" or "
 "\"snappy/guides/latest\", etc."
@@ -34,7 +36,7 @@ msgstr ""
 "Caminho que queremos usar para dos docs, ex \"snappy/guides/15.04\" ou "
 "\"snappy/guides/latest\", etc."
 
-#: developer_portal/models.py:32
+#: developer_portal/models.py:38
 msgid "File name of doc to be used as index document, ie \"intro.md\""
 msgstr ""
 "Nome do ficheiro para ser usado como documento de index, ex \"intro.md\""
@@ -73,9 +75,13 @@ msgstr ""
 "href=\"https://launchpad.net/+login\">Launchpad</a> para utilizar a página "
 "de programador"
 
-#: store_data/cms_plugins.py:9
-msgid "Gadget Snap List Plugin"
-msgstr "Plugin de lista do Gadget Snap"
+#: store_data/cms_plugins.py:11
+msgid "Snap list - Gadget"
+msgstr ""
+
+#: store_data/cms_plugins.py:26
+msgid "Snap shortlist - Gadget"
+msgstr ""
 
 #: templates/404.html:4
 msgid "This page does not exist"
@@ -179,26 +185,26 @@ msgstr "Comunicar erro nesta página"
 msgid "Go to the top of the page"
 msgstr "Ir para o topo da página"
 
-#: templates/error_base.html:54 templates/website_base.html:55
+#: templates/error_base.html:54 templates/website_base.html:74
 msgid "Jump to content"
 msgstr "Ir para o conteúdo"
 
-#: templates/error_base.html:63 templates/website_base.html:65
+#: templates/error_base.html:63 templates/website_base.html:84
 #: templates/comments/zinnia/entry/form.html:25
 msgid "Log out"
 msgstr "Terminar sessão"
 
-#: templates/error_base.html:69 templates/website_base.html:71
+#: templates/error_base.html:69 templates/website_base.html:90
 msgid "Log in"
 msgstr "Iniciar sessão"
 
 #: templates/error_base.html:76 templates/error_base.html.py:77
-#: templates/error_base.html:78 templates/website_base.html:83
-#: templates/website_base.html.py:84 templates/website_base.html:85
+#: templates/error_base.html:78 templates/website_base.html:102
+#: templates/website_base.html.py:103 templates/website_base.html:104
 msgid "Search"
 msgstr "Procurar"
 
-#: templates/gadget_snap_list.html:27
+#: templates/gadget_snap_list.html:36
 msgid "Install Snappy on this device"
 msgstr "Instalar o Snappy neste dispositivo"
 
@@ -283,7 +289,7 @@ msgstr ""
 msgid "Get started with the Ubuntu SDK ›"
 msgstr "Começar com o Ubuntu SDK ›"
 
-#: templates/website_base.html:117
+#: templates/website_base.html:136
 msgid "Back to top"
 msgstr "Voltar para o topo"
 
