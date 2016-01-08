@@ -1,55 +1,42 @@
+import os
 import shutil
 import tempfile
 
 from django.utils.text import slugify
 
-from cms.api import create_page
+from cms.api import create_page, publish_pages
 from cms.models import Page
 
-from md_importer.importer.repo import create_repo
+from ..importer import DEFAULT_LANG
+from ..importer.repo import create_repo
 
 
-class Singleton(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args,
-                                                                 **kwargs)
-        return cls._instances[cls]
-
-
-# We are going to re-use this one, so we don't have to checkout the git
-# repo all the time.
 class SnapcraftTestRepo():
-    __metaclass__ = Singleton
-
     def __init__(self):
         self.tempdir = tempfile.mkdtemp()
         self.repo = create_repo(
             self.tempdir,
-            'https://github.com/ubuntu-core/snapcraft.git',
-            'master',
+            os.path.join(os.path.dirname(__file__), 'data/snapcraft-test'),
+            '',
             '')
         self.fetch_retcode = self.repo.get()
+
+    def __del__(self):
+        shutil.rmtree(self.tempdir)
 
 
 class SnappyTestRepo():
-    __metaclass__ = Singleton
-
     def __init__(self):
         self.tempdir = tempfile.mkdtemp()
         self.repo = create_repo(
             self.tempdir,
-            'https://github.com/ubuntu-core/snappy.git',
-            'master',
+            os.path.join(os.path.dirname(__file__), 'data/snappy-test'),
+            '',
             '')
         self.fetch_retcode = self.repo.get()
 
-
-def tearDownModule():
-    shutil.rmtree(SnapcraftTestRepo().tempdir)
-    shutil.rmtree(SnappyTestRepo().tempdir)
+    def __del__(self):
+        shutil.rmtree(self.tempdir)
 
 
 def db_empty_page_list():
@@ -57,11 +44,14 @@ def db_empty_page_list():
 
 
 def db_create_home_page():
-    home = create_page('Test import', 'default.html', 'en', slug='home')
-    return home
+    home = create_page(
+        'Test import', 'default.html', DEFAULT_LANG, slug='home')
+    publish_pages([home])
+    return Page.objects.all()[0]
 
 
 def db_add_empty_page(title, parent):
-    page = create_page(title, 'default.html', 'en', slug=slugify(title),
-                       parent=parent)
+    page = create_page(
+        title, 'default.html', DEFAULT_LANG, slug=slugify(title),
+        parent=parent)
     return page

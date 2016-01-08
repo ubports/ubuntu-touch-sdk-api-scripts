@@ -76,7 +76,11 @@ class Article:
         self.page = get_or_create_page(
             title=self.title, full_url=self.full_url, menu_title=self.title,
             html=self.html)
+        if not self.page:
+            return False
+        logging.error('PUBLISHED ARTICLE: {}'.format(self.fn))
         self.full_url = self.page.get_absolute_url()
+        return True
 
 
 class SnappyArticle(Article):
@@ -109,10 +113,14 @@ class SnappyArticle(Article):
     def add_to_db(self):
         if self.release_alias == "current":
             # Add a guides/<page> redirect to guides/current/<page>
-            get_or_create_page(
+            page = get_or_create_page(
                 title=self.title,
                 full_url=self.full_url.replace('/current', ''),
                 redirect="/snappy/guides/current/{}".format(self.slug))
+            if not page:
+                return False
+            logging.error('PUBLISHED SNAPPY PAGE: {}'.format(
+                page.get_absolute_url()))
         else:
             self.title += " (%s)" % (self.release_alias,)
-        Article.add_to_db(self)
+        return Article.add_to_db(self)

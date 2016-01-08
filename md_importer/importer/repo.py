@@ -7,7 +7,6 @@ from cms.api import publish_pages
 import glob
 import logging
 import os
-import shutil
 
 
 def create_repo(tempdir, origin, branch_name, post_checkout_command):
@@ -46,20 +45,12 @@ class Repo:
         self.index_doc_title = branch_nick
         self.article_class = Article
 
-    # Only used to speed up tests - allows reusing same object without
-    # having to redownload the source again
-    def reset(self):
-        self.article_class = Article
-        self.directives = []
-        self.imported_articles = []
-
     def get(self):
         sourcecode = SourceCode(self.origin, self.checkout_location,
                                 self.branch_name, self.post_checkout_command)
         if sourcecode.get() != 0:
             logging.error(
                     'Could not check out branch "{}".'.format(self.origin))
-            shutil.rmtree(self.checkout_location)
             return 1
         return 0
 
@@ -84,6 +75,7 @@ class Repo:
         for directive in [d for d in self.directives
                           if os.path.isdir(d['import_from'])]:
             for fn in glob.glob('{}/*'.format(directive['import_from'])):
+                print(fn)
                 if fn not in [a[0] for a in import_list]:
                     import_list += [
                         (fn, os.path.join(directive['write_to'], slugify(fn)))
@@ -93,8 +85,11 @@ class Repo:
             if directive['write_to'] not in [x[1] for x in import_list]:
                 self.index_doc_url = directive['write_to']
         if self.index_doc_url:
-            self._create_fake_index_page()
+            if not self._create_fake_index_page():
+                logging.error('Importing of {} aborted.'.format(self.origin))
+                return False
         # The actual import
+        print(import_list)
         for entry in import_list:
             article = self._read_article(entry[0], entry[1])
             if article:
@@ -103,6 +98,7 @@ class Repo:
                 self.url_map[article.fn] = article
         if self.index_doc_url:
             self._write_fake_index_doc()
+        return True
 
     def _read_article(self, fn, write_to):
         article = self.article_class(fn, write_to)
@@ -112,12 +108,15 @@ class Repo:
 
     def publish(self):
         for article in self.imported_articles:
-            article.add_to_db()
+            if not article.add_to_db():
+                logging.error('Publishing of {} aborted.'.format(self.origin))
+                return False
             article.replace_links(self.titles, self.url_map)
         self.pages = [article.page for article in self.imported_articles]
         if self.index_page:
             self.pages.extend([self.index_page])
         publish_pages(self.pages)
+        return True
 
     def _create_fake_index_page(self):
         '''Creates a fake index page at the top of the branches
@@ -131,6 +130,10 @@ class Repo:
             title=self.index_doc_title, full_url=self.index_doc_url,
             in_navigation=False, redirect=redirect, html='',
             menu_title=None)
+        if not self.index_page:
+            return False
+        logging.error('PUBLISHED INDEX PAGE {}'.format(self.index_doc_url))
+        return True
 
     def _write_fake_index_doc(self):
         list_pages = ''
@@ -161,8 +164,4 @@ class SnappyRepo(Repo):
         self.release_alias = os.path.basename(self.index_doc_url)
         if not self.index_doc_url.endswith('current'):
             self.index_doc_title += ' ({})'.format(self.release_alias)
-        Repo._create_fake_index_page(self)
-
-    def reset(self):
-        Repo.reset(self)
-        self.article_class = SnappyArticle
+        return Repo._create_fake_index_page(self)

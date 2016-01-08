@@ -31,8 +31,10 @@ def import_branches(selection):
                 external_docs_branch=branch):
             repo.add_directive(directive.import_from,
                                directive.write_to)
-        repo.execute_import_directives()
-        repo.publish()
+        if not repo.execute_import_directives():
+            break
+        if not repo.publish():
+            break
         for page in repo.pages:
             ImportedArticle.objects.get_or_create(
                 branch=branch,

@@ -1,30 +1,49 @@
+from md_importer.importer import DEFAULT_LANG, HOME_PAGE_URL
+
 from cms.api import create_page, add_plugin
-from cms.models import Title
+from cms.models import Title, Page
 
 import logging
+import re
 import os
-import sys
-
-# XXX: use this once we RawHTML plugins don't strip comments (LP: #1523925)
-START_TEXT = """
-<!--
-branch id: {}
-
-THIS PAGE IS AUTOMATICALLY UPDATED.
-DON'T EDIT IT - CHANGES WILL BE OVERWRITTEN.
--->
-"""
 
 
 def slugify(filename):
     return os.path.basename(filename).replace('.md', '').replace('.html', '')
 
 
+def _find_parent(full_url):
+    if full_url == HOME_PAGE_URL:
+        return None
+    parent_url = re.sub(r'^\/en\/', '', os.path.dirname(full_url))
+    if parent_url and not parent_url.endswith('/'):
+        parent_url += '/'
+
+    parent_pages = Title.objects.select_related('page').filter(
+        path__regex=parent_url, language=DEFAULT_LANG).filter(
+        publisher_is_draft=True)
+    if not parent_pages:
+        logging.error('Trying to publish {}'.format(full_url))
+        logging.error('Parent {} not found.'.format(
+            parent_url))
+        logging.error('Available pages are: {}'.format(
+            ', '.join(
+                [a.get_absolute_url()
+                 for a in Page.objects.filter(publisher_is_draft=True)])
+        ))
+        return None
+    return parent_pages[0].page
+
+
 def get_or_create_page(title, full_url, menu_title=None,
                        in_navigation=True, redirect=None, html=None):
+    # Make URL explicit
+    # if not full_url.startswith('/{}/'.format(DEFAULT_LANG)):
+    #    full_url = os.path.join('/'+DEFAULT_LANG, full_url)
+    # if not full_url.endswith('/'):
+    #    full_url = full_url + '/'
+
     # First check if pages already exist.
-    if full_url.startswith('/'):
-        full_url = full_url[1:]
     pages = Title.objects.select_related('page').filter(
         path__regex=full_url).filter(publisher_is_draft=True)
     if pages:
@@ -42,23 +61,24 @@ def get_or_create_page(title, full_url, menu_title=None,
                 plugin.body = html
                 plugin.save()
             else:
-                add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=html)
+                add_plugin(
+                    placeholder, 'RawHtmlPlugin',
+                    DEFAULT_LANG, body=html)
     else:
-        parent_pages = Title.objects.select_related('page').filter(
-            path__regex=os.path.dirname(full_url)).filter(
-            publisher_is_draft=True)
-        if not parent_pages:
-            logging.error('Parent {} not found.'.format(
-                os.path.dirname(full_url)))
-            sys.exit(1)
-        parent = parent_pages[0].page
-
+        parent = _find_parent(full_url)
+        if not parent:
+            return None
         slug = os.path.basename(full_url)
         page = create_page(
-            title, "default.html", "en", slug=slug, parent=parent,
+            title, 'default.html', DEFAULT_LANG, slug=slug, parent=parent,
             menu_title=menu_title, in_navigation=in_navigation,
-            position="last-child", redirect=redirect)
+            position='last-child', redirect=redirect)
         if html:
             placeholder = page.placeholders.get()
-            add_plugin(placeholder, 'RawHtmlPlugin', 'en', body=html)
+            add_plugin(placeholder, 'RawHtmlPlugin', DEFAULT_LANG, body=html)
+    logging.error('PUBLISHED: '+full_url)
+    logging.error('Now available: {}'.format(
+        ', '.join(
+            [a.get_absolute_url()
+             for a in Page.objects.filter(publisher_is_draft=True)])))
     return page

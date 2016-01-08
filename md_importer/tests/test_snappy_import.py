@@ -3,6 +3,7 @@ from django.test import TestCase
 from cms.api import publish_pages
 from cms.models import Page
 
+from md_importer.importer import DEFAULT_LANG
 from md_importer.importer.repo import SnappyRepo
 from md_importer.importer.article import SnappyArticle
 from .utils import (
@@ -21,12 +22,11 @@ class TestSnappyImport(TestCase):
         guides = db_add_empty_page('Guides', snappy_page)
         publish_pages([home, snappy_page, guides])
         snappy = SnappyTestRepo()
-        snappy.repo.reset()
         self.assertEqual(snappy.fetch_retcode, 0)
         self.assertTrue(isinstance(snappy.repo, SnappyRepo))
         snappy.repo.add_directive('docs', '/snappy/guides/devel')
-        snappy.repo.execute_import_directives()
-        snappy.repo.publish()
+        self.assertTrue(snappy.repo.execute_import_directives())
+        self.assertTrue(snappy.repo.publish())
         for article in snappy.repo.imported_articles:
             self.assertTrue(isinstance(article, SnappyArticle))
         self.assertGreater(len(snappy.repo.pages), 0)
@@ -43,11 +43,10 @@ class TestSnappyImport(TestCase):
         guides = db_add_empty_page('Guides', snappy_page)
         publish_pages([home, snappy_page, guides])
         snappy = SnappyTestRepo()
-        snappy.repo.reset()
         self.assertTrue(isinstance(snappy.repo, SnappyRepo))
         snappy.repo.add_directive('docs', '/snappy/guides/current')
-        snappy.repo.execute_import_directives()
-        snappy.repo.publish()
+        self.assertTrue(snappy.repo.execute_import_directives())
+        self.assertTrue(snappy.repo.publish())
         number_of_articles = len(snappy.repo.imported_articles)
         for article in snappy.repo.imported_articles:
             self.assertTrue(isinstance(article, SnappyArticle))
@@ -64,7 +63,7 @@ class TestSnappyImport(TestCase):
         self.assertEqual(
             number_of_articles*2, pages.count()-len(nav_pages))
         for page in [a for a in pages if a not in nav_pages]:
-            if page.get_redirect('en'):
+            if page.get_redirect(DEFAULT_LANG):
                 self.assertEqual(page.parent, guides)
             else:
                 self.assertEqual(page.parent, current)

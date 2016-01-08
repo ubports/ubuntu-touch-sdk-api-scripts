@@ -28,8 +28,8 @@ class TestLinkRewrite(TestCase):
             '')
         self.assertEqual(repo.get(), 0)
         repo.add_directive('', '/')
-        repo.execute_import_directives()
-        repo.publish()
+        self.assertTrue(repo.execute_import_directives())
+        self.assertTrue(repo.publish())
         pages = Page.objects.all()
         self.assertEqual(pages.count(), 1+2)  # Home + 2 articles
         c = Client()
