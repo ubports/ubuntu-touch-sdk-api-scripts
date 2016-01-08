@@ -1,29 +1,12 @@
-from django.test import TestCase
-
 from cms.models import Page
 
 from md_importer.importer.article import Article
-from .utils import (
-    db_create_home_page,
-    db_empty_page_list,
-    SnapcraftTestRepo,
-)
+from .utils import TestLocalBranchImport
 
 
-class TestBranchImport(TestCase):
-    def setUp(self):
-        db_empty_page_list()
-        self.home = db_create_home_page()
-        self.assertEqual(len(Page.objects.filter(publisher_is_draft=False)), 0)
-        self.assertEqual(len(Page.objects.filter(publisher_is_draft=True)), 1)
-        self.assertEqual(Page.objects.all()[0].get_absolute_url(), '/en/')
-        self.snapcraft = SnapcraftTestRepo()
-        self.repo = self.snapcraft.repo
-        self.assertEqual(len(self.repo.directives), 0)
-
-
-class TestOneDirImport(TestBranchImport):
+class TestOneDirImport(TestLocalBranchImport):
     def runTest(self):
+        self.create_repo('data/snapcraft-test')
         self.repo.add_directive('docs', '')
         self.assertEqual(len(self.repo.directives), 1)
         self.assertTrue(self.repo.execute_import_directives())
@@ -35,8 +18,9 @@ class TestOneDirImport(TestBranchImport):
             self.assertTrue(isinstance(article, Article))
 
 
-class TestOneDirAndTwoFilesImport(TestBranchImport):
+class TestOneDirAndTwoFilesImport(TestLocalBranchImport):
     def runTest(self):
+        self.create_repo('data/snapcraft-test')
         self.repo.add_directive('docs', '')
         self.repo.add_directive('README.md', '')
         self.repo.add_directive('HACKING.md', 'hacking')
@@ -51,9 +35,10 @@ class TestOneDirAndTwoFilesImport(TestBranchImport):
         self.assertIn(u'/en/hacking/', [p.get_absolute_url() for p in pages])
 
 
-class TestArticletreeOneFileImport(TestBranchImport):
+class TestArticletreeOneFileImport(TestLocalBranchImport):
     '''Check if all importe article has 'home' as parent.'''
     def runTest(self):
+        self.create_repo('data/snapcraft-test')
         self.repo.add_directive('README.md', 'readme')
         self.assertEqual(len(self.repo.directives), 1)
         self.assertTrue(self.repo.execute_import_directives())
@@ -63,9 +48,10 @@ class TestArticletreeOneFileImport(TestBranchImport):
         self.assertEqual(self.repo.pages[0].parent, self.home)
 
 
-class TestArticletreeOneDirImport(TestBranchImport):
+class TestArticletreeOneDirImport(TestLocalBranchImport):
     '''Check if all imported articles have 'home' as parent.'''
     def runTest(self):
+        self.create_repo('data/snapcraft-test')
         self.repo.add_directive('docs', '')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())

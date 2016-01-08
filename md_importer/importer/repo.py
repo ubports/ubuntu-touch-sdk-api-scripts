@@ -33,7 +33,8 @@ class Repo:
         self.index_doc_url = None
         self.index_page = None
         self.release_alias = None
-        # On top of the pages in imported_articles this also includes index_page
+        # On top of the pages in imported_articles this also
+        # includes index_page
         self.pages = []
         self.origin = origin
         self.branch_name = branch_name

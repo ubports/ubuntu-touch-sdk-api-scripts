@@ -1,7 +1,7 @@
 from md_importer.importer import DEFAULT_LANG, HOME_PAGE_URL
 
 from cms.api import create_page, add_plugin
-from cms.models import Title, Page
+from cms.models import Title
 
 import logging
 import re

@@ -1,5 +1,3 @@
-from django.test import TestCase
-
 from cms.api import publish_pages
 from cms.models import Page
 
@@ -8,47 +6,42 @@ from md_importer.importer.repo import SnappyRepo
 from md_importer.importer.article import SnappyArticle
 from .utils import (
     db_add_empty_page,
-    db_create_home_page,
-    db_empty_page_list,
-    SnappyTestRepo,
+    TestLocalBranchImport,
 )
 
 
-class TestSnappyImport(TestCase):
-    def test_snappy_devel_import(self):
-        db_empty_page_list()
-        home = db_create_home_page()
-        snappy_page = db_add_empty_page('Snappy', home)
+class TestSnappyDevelImport(TestLocalBranchImport):
+    def runTest(self):
+        self.create_repo('data/snappy-test')
+        snappy_page = db_add_empty_page('Snappy', self.home)
         guides = db_add_empty_page('Guides', snappy_page)
-        publish_pages([home, snappy_page, guides])
-        snappy = SnappyTestRepo()
-        self.assertEqual(snappy.fetch_retcode, 0)
-        self.assertTrue(isinstance(snappy.repo, SnappyRepo))
-        snappy.repo.add_directive('docs', '/snappy/guides/devel')
-        self.assertTrue(snappy.repo.execute_import_directives())
-        self.assertTrue(snappy.repo.publish())
-        for article in snappy.repo.imported_articles:
+        publish_pages([self.home, snappy_page, guides])
+        self.assertTrue(isinstance(self.repo, SnappyRepo))
+        self.repo.add_directive('docs', '/snappy/guides/devel')
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertTrue(self.repo.publish())
+        for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, SnappyArticle))
-        self.assertGreater(len(snappy.repo.pages), 0)
+        self.assertGreater(len(self.repo.pages), 0)
         devel = Page.objects.filter(parent=guides.get_public_object())
         self.assertEqual(devel.count(), 1)
         for page in Page.objects.filter(publisher_is_draft=False):
-            if page not in [home, snappy_page, guides, devel[0]]:
+            if page not in [self.home, snappy_page, guides, devel[0]]:
                 self.assertEqual(page.parent, devel[0])
 
-    def test_snappy_current_import(self):
-        db_empty_page_list()
-        home = db_create_home_page()
-        snappy_page = db_add_empty_page('Snappy', home)
+
+class TestSnappyCurrentImport(TestLocalBranchImport):
+    def runTest(self):
+        self.create_repo('data/snappy-test')
+        snappy_page = db_add_empty_page('Snappy', self.home)
         guides = db_add_empty_page('Guides', snappy_page)
-        publish_pages([home, snappy_page, guides])
-        snappy = SnappyTestRepo()
-        self.assertTrue(isinstance(snappy.repo, SnappyRepo))
-        snappy.repo.add_directive('docs', '/snappy/guides/current')
-        self.assertTrue(snappy.repo.execute_import_directives())
-        self.assertTrue(snappy.repo.publish())
-        number_of_articles = len(snappy.repo.imported_articles)
-        for article in snappy.repo.imported_articles:
+        publish_pages([self.home, snappy_page, guides])
+        self.assertTrue(isinstance(self.repo, SnappyRepo))
+        self.repo.add_directive('docs', '/snappy/guides/current')
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertTrue(self.repo.publish())
+        number_of_articles = len(self.repo.imported_articles)
+        for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, SnappyArticle))
         self.assertGreater(number_of_articles, 0)
         pages = Page.objects.all()
@@ -58,7 +51,7 @@ class TestSnappyImport(TestCase):
             a.get_absolute_url().endswith('snappy/guides/current/')]
         self.assertEqual(len(current_search), 1)
         current = current_search[0]
-        nav_pages = [home, snappy_page, guides, current]
+        nav_pages = [self.home, snappy_page, guides, current]
         # 1 imported article, 1 redirect
         self.assertEqual(
             number_of_articles*2, pages.count()-len(nav_pages))
