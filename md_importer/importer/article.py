@@ -9,11 +9,10 @@ from .publish import get_or_create_page, slugify
 
 
 class Article:
-    html = None
-    page = None
-    title = ""
-
     def __init__(self, fn, write_to):
+        self.html = None
+        self.page = None
+        self.title = ""
         self.fn = fn
         self.write_to = slugify(self.fn)
         self.full_url = write_to
