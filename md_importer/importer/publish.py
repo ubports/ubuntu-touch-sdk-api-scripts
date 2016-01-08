@@ -14,10 +14,12 @@ def slugify(filename):
 
 def _find_parent(full_url):
     if full_url == HOME_PAGE_URL:
+        # If we set up the homepage, we don't need a parent.
         return None
-    parent_url = re.sub(r'^\/en\/', '', os.path.dirname(full_url))
-    if parent_url and not parent_url.endswith('/'):
-        parent_url += '/'
+    parent_url = re.sub(
+        r'^\/{}\/'.format(DEFAULT_LANG),
+        '',
+        os.path.dirname(full_url))
 
     parent_pages = Title.objects.select_related('page').filter(
         path__regex=parent_url, language=DEFAULT_LANG).filter(
@@ -31,12 +33,6 @@ def _find_parent(full_url):
 
 def get_or_create_page(title, full_url, menu_title=None,
                        in_navigation=True, redirect=None, html=None):
-    # Make URL explicit
-    # if not full_url.startswith('/{}/'.format(DEFAULT_LANG)):
-    #    full_url = os.path.join('/'+DEFAULT_LANG, full_url)
-    # if not full_url.endswith('/'):
-    #    full_url = full_url + '/'
-
     # First check if pages already exist.
     pages = Title.objects.select_related('page').filter(
         path__regex=full_url).filter(publisher_is_draft=True)

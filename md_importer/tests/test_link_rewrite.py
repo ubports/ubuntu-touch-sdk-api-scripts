@@ -12,7 +12,7 @@ from .utils import TestLocalBranchImport
 class TestLinkRewrite(TestLocalBranchImport):
     def runTest(self):
         self.create_repo('data/link-test')
-        self.repo.add_directive('', '/')
+        self.repo.add_directive('', '')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
         pages = Page.objects.all()
