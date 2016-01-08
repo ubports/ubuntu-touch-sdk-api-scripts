@@ -24,7 +24,7 @@ class TestLinkRewrite(TestLocalBranchImport):
             for link in soup.find_all('a'):
                 if not link.has_attr('class') or \
                    'headeranchor-link' not in link.attrs['class']:
-                    res = c.get(link.attrs['href'])
+                    res = c.get('/{}/'.format(link.attrs['href']))
                     self.assertNotIsInstance(
                         res, HttpResponseNotFound,
                         msg='Link {} not found.'.format(link.attrs['href']))
