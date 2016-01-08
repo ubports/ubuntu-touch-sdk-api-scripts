@@ -23,14 +23,8 @@ def _find_parent(full_url):
         path__regex=parent_url, language=DEFAULT_LANG).filter(
         publisher_is_draft=True)
     if not parent_pages:
-        logging.error('Trying to publish {}'.format(full_url))
         logging.error('Parent {} not found.'.format(
             parent_url))
-        logging.error('Available pages are: {}'.format(
-            ', '.join(
-                [a.get_absolute_url()
-                 for a in Page.objects.filter(publisher_is_draft=True)])
-        ))
         return None
     return parent_pages[0].page
 
@@ -76,9 +70,4 @@ def get_or_create_page(title, full_url, menu_title=None,
         if html:
             placeholder = page.placeholders.get()
             add_plugin(placeholder, 'RawHtmlPlugin', DEFAULT_LANG, body=html)
-    logging.error('PUBLISHED: '+full_url)
-    logging.error('Now available: {}'.format(
-        ', '.join(
-            [a.get_absolute_url()
-             for a in Page.objects.filter(publisher_is_draft=True)])))
     return page

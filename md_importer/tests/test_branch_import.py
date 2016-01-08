@@ -19,16 +19,12 @@ class TestBranchImport(TestCase):
         self.assertEqual(Page.objects.all()[0].get_absolute_url(), '/en/')
         self.snapcraft = SnapcraftTestRepo()
         self.repo = self.snapcraft.repo
-
-    def tearDown(self):
-        self.repo = None
-        self.snapcraft = None
+        self.assertEqual(len(self.repo.directives), 0)
 
 
 class TestOneDirImport(TestBranchImport):
     def runTest(self):
         self.repo.add_directive('docs', '')
-        print(('1dir', self.repo.directives))
         self.assertEqual(len(self.repo.directives), 1)
         self.assertTrue(self.repo.execute_import_directives())
         self.assertGreater(len(self.repo.imported_articles), 3)
@@ -50,8 +46,6 @@ class TestOneDirAndTwoFilesImport(TestBranchImport):
         self.assertTrue(self.repo.publish())
         pages = Page.objects.all()
         self.assertEqual(len(pages), len(self.repo.imported_articles))
-        print([p.get_absolute_url() for p in pages])
-        print(self.repo.imported_articles)
         self.assertGreater(len(pages), 5)
         self.assertIn(u'/en/', [p.get_absolute_url() for p in pages])
         self.assertIn(u'/en/hacking/', [p.get_absolute_url() for p in pages])
@@ -61,11 +55,9 @@ class TestArticletreeOneFileImport(TestBranchImport):
     '''Check if all importe article has 'home' as parent.'''
     def runTest(self):
         self.repo.add_directive('README.md', 'readme')
-        print(('TestArticletreeOneFileImport', self.repo.directives))
         self.assertEqual(len(self.repo.directives), 1)
         self.assertTrue(self.repo.execute_import_directives())
         self.assertEqual(len(self.repo.imported_articles), 1)
-        print(('TestArticletreeOneFileImport', repo.__dict__))
         self.assertTrue(self.repo.publish())
         self.assertEqual(Page.objects.count(), 1+1)  # readme + home
         self.assertEqual(self.repo.pages[0].parent, self.home)

@@ -78,7 +78,6 @@ class Article:
             html=self.html)
         if not self.page:
             return False
-        logging.error('PUBLISHED ARTICLE: {}'.format(self.fn))
         self.full_url = self.page.get_absolute_url()
         return True
 
@@ -119,8 +118,6 @@ class SnappyArticle(Article):
                 redirect="/snappy/guides/current/{}".format(self.slug))
             if not page:
                 return False
-            logging.error('PUBLISHED SNAPPY PAGE: {}'.format(
-                page.get_absolute_url()))
         else:
             self.title += " (%s)" % (self.release_alias,)
         return Article.add_to_db(self)

@@ -25,17 +25,16 @@ def create_repo(tempdir, origin, branch_name, post_checkout_command):
 
 
 class Repo:
-    titles = {}
-    url_map = {}
-    index_doc_url = None
-    index_page = None
-    release_alias = None
-    directives = []
-    imported_articles = []
-    # On top of the pages in imported_articles this also includes index_page
-    pages = []
-
     def __init__(self, tempdir, origin, branch_name, post_checkout_command):
+        self.directives = []
+        self.imported_articles = []
+        self.url_map = {}
+        self.titles = {}
+        self.index_doc_url = None
+        self.index_page = None
+        self.release_alias = None
+        # On top of the pages in imported_articles this also includes index_page
+        self.pages = []
         self.origin = origin
         self.branch_name = branch_name
         self.post_checkout_command = post_checkout_command
@@ -75,7 +74,6 @@ class Repo:
         for directive in [d for d in self.directives
                           if os.path.isdir(d['import_from'])]:
             for fn in glob.glob('{}/*'.format(directive['import_from'])):
-                print(fn)
                 if fn not in [a[0] for a in import_list]:
                     import_list += [
                         (fn, os.path.join(directive['write_to'], slugify(fn)))
@@ -89,7 +87,6 @@ class Repo:
                 logging.error('Importing of {} aborted.'.format(self.origin))
                 return False
         # The actual import
-        print(import_list)
         for entry in import_list:
             article = self._read_article(entry[0], entry[1])
             if article:
@@ -132,7 +129,6 @@ class Repo:
             menu_title=None)
         if not self.index_page:
             return False
-        logging.error('PUBLISHED INDEX PAGE {}'.format(self.index_doc_url))
         return True
 
     def _write_fake_index_doc(self):
