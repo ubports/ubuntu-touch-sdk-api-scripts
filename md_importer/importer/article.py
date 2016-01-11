@@ -5,6 +5,7 @@ import markdown
 import os
 import re
 
+from . import DEFAULT_LANG
 from .publish import get_or_create_page, slugify
 
 
@@ -79,6 +80,11 @@ class Article:
             return False
         self.full_url = self.page.get_absolute_url()
         return True
+
+    def publish(self):
+        self.page.publish(DEFAULT_LANG)
+        self.page = self.page.get_public_object()
+        return self.page
 
 
 class SnappyArticle(Article):

@@ -1,8 +1,7 @@
+from . import DEFAULT_LANG
 from .article import Article, SnappyArticle
 from .publish import get_or_create_page, slugify
 from .source import SourceCode
-
-from cms.api import publish_pages
 
 import glob
 import logging
@@ -110,10 +109,11 @@ class Repo:
                 logging.error('Publishing of {} aborted.'.format(self.origin))
                 return False
             article.replace_links(self.titles, self.url_map)
-        self.pages = [article.page for article in self.imported_articles]
+        self.pages = []
+        for article in self.imported_articles:
+            self.pages.extend([article.publish()])
         if self.index_page:
-            self.pages.extend([self.index_page])
-        publish_pages(self.pages)
+            self.pages.extend([self.index_page.publish(DEFAULT_LANG)])
         return True
 
     def _create_fake_index_page(self):
