@@ -66,9 +66,11 @@ class Article:
     def replace_links(self, titles, url_map):
         soup = BeautifulSoup(self.html, 'html5lib')
         for link in soup.find_all('a'):
-            for title in titles:
-                if link.attrs['href'] == os.path.basename(title):
-                    link.attrs['href'] = url_map[title].full_url
+            if not link.has_attr('class') or \
+               'headeranchor-link' not in link.attrs['class']:
+                for title in titles:
+                    if title.endswith(link.attrs['href']):
+                        link.attrs['href'] = url_map[title].full_url
         self.html = soup.prettify()
 
     def add_to_db(self):
