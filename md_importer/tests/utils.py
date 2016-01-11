@@ -60,7 +60,9 @@ class TestLocalBranchImport(CMSTestCase):
             # make external links pass
             self.assertTrue(True)
         else:
-            request = self.get_request('/en/'+url+'/')
+            if not url.startswith('/{}/'.format(DEFAULT_LANG)):
+                url = '/{}/{}/'.format(DEFAULT_LANG, url)
+            request = self.get_request(url)
             page = get_page_from_request(request)
             self.assertIsNotNone(
                 page,
