@@ -39,7 +39,6 @@ def get_or_create_page(title, full_url, menu_title=None,
     if pages:
         page = pages[0].page
         page.title = title
-        page.publisher_is_draft = True
         page.menu_title = menu_title
         page.in_navigation = in_navigation
         page.redirect = redirect
