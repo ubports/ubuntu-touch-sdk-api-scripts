@@ -108,7 +108,7 @@ python manage.py import_doxygen -t scopes -l cpp -r sdk-15.04.1 -s ./api_docs/im
 python manage.py import_qdoc -Pp -N U1db -t scopes -l cpp -r sdk-15.04.1 -s "Platform Services" -i /tmp/apidoc_sources/usr/share/u1db-qt/doc/html/u1db-qt.index
 
 #### Scopes/Javascript
-#SOURCE=http://ppa.launchpad.net/ubuntu-sdk-team/staging/ubuntu ./get_package.py unity-js-scopes-doc
-#python manage.py import_yuidoc -t scopes -l js -r sdk-15.04.1 -s "Platform Services" -d /tmp/apidoc_sources/usr/share/unity-js-scopes/doc/docbuild/data.json
+SOURCE=http://ppa.launchpad.net/ubuntu-sdk-team/ppa/ubuntu ./get_package.py unity-js-scopes-doc
+python manage.py import_yuidoc -t scopes -l js -r sdk-15.04.1 -s "Platform Services" -d /tmp/apidoc_sources/usr/share/unity-js-scopes/doc/docbuild/data.json
 
 rm -r /tmp/apidoc_sources/

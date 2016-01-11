@@ -43,19 +43,27 @@ class YUIDocImporter(Importer):
     def run(self):
 
         if not os.path.exists(self.source):
-            print "Source index file not found"
+            print "Error: Source index file not found"
             exit(1)
             
         datafile = open(self.source)
         tree = simplejson.load(datafile)
         datafile.close()
 
+        if 'modules' not in tree:
+            print "Error: No <modules> section in %s" % self.source
+            exit(2)
+            
         tree_modules = tree.get('modules').values()
         if 'namespaces' in tree_modules[0] and len(tree_modules[0].get('namespaces')) > 0:
             self.PRIMARY_NAMESPACE = tree_modules[0].get('namespaces').keys()[0]
         else:
             self.PRIMARY_NAMESPACE = tree_modules[0].get('name')
 
+        if 'classes' not in tree:
+            print "Error No <classes> section in %s" % self.source
+            exit(2)
+            
         # Map document filenames to QML class names
         self.class_map = {}
         for jsclass in tree['classes'].values():
@@ -110,7 +118,7 @@ class YUIDocImporter(Importer):
                 for line in doc_data[doc_start:doc_end]:
                     if line == '' or line == '\n':
                         continue
-                    line = self.parse_line(line, '../classes/'+jsclass.get('name')+'.html', fullname)
+                    line = self.parse_line(line, doc_file, fullname)
                     if isinstance(line, unicode):
                         line = line.encode('ascii', 'replace')
                     cleaned_data += line

@@ -2,6 +2,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.decorators.cache import never_cache
 from cms.models import CMSPlugin
+import datetime
+import pytz
 
 
 def get_pages():
@@ -13,6 +15,8 @@ def get_pages():
         date = plugin_change.changed_date
         lang = plugin_change.language.replace('-', '_')
         page = plugin_change.placeholder.page
+        if not page or page.publisher_is_draft:
+            continue
         path = page.get_path()
         if path not in known_paths:
             known_paths.append(path)
@@ -25,8 +29,10 @@ def get_pages():
                         p[lang] = date
                 else:
                     p[lang] = date
+    # When an english page is missing, we still need a time to sort pages
+    notime = datetime.datetime(1, 1, 1, tzinfo=pytz.timezone('UTC'))
     dashboard_data = list(reversed(sorted(
-        dashboard_data, key=lambda k: k.get('en', None))))
+        dashboard_data, key=lambda k: k.get('en', notime))))
     return dashboard_data
 
 
