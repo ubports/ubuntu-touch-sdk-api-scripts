@@ -36,11 +36,13 @@ class ExternalDocsBranchImportDirective(models.Model):
         max_length=150,
         help_text=_('File or directory to import from the branch. '
                     'Ie: "docs/intro.md" (file) or '
-                    '"docs" (complete directory), etc.'))
+                    '"docs" (complete directory), etc.'),
+        blank=True)
     write_to = models.CharField(
         max_length=150,
         help_text=_('Article URL (for a specific file) or article namespace '
-                    'for a directory or a set of files.'))
+                    'for a directory or a set of files.'),
+        blank=True)
 
     def __str__(self):
         return "{} -- {}".format(self.external_docs_branch,
