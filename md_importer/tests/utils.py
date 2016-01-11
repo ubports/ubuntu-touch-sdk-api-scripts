@@ -3,12 +3,12 @@ import shutil
 import sys
 import tempfile
 
-from django.http.response import HttpResponseNotFound
-from django.test import Client, TestCase
 from django.utils.text import slugify
 
-from cms.api import create_page, publish_pages
+from cms.api import create_page
 from cms.models import Page
+from cms.test_utils.testcases import CMSTestCase
+from cms.utils.page_resolver import get_page_from_request
 
 from ..importer import DEFAULT_LANG
 from ..importer.repo import create_repo
@@ -23,31 +23,31 @@ def db_empty_page_list():
     Page.objects.all().delete()
 
 
-def db_create_home_page():
-    home = create_page(
-        'Test import', 'default.html', DEFAULT_LANG, slug='home')
-    publish_pages([home])
-    return Page.objects.all()[0]
+def db_create_root_page():
+    return db_add_empty_page('root')
 
 
-def db_add_empty_page(title, parent):
+def db_add_empty_page(title, parent=None):
     page = create_page(
         title, 'default.html', DEFAULT_LANG, slug=slugify(title),
-        parent=parent)
-    return page
+        published=True, parent=parent)
+    page.reload()
+    page.publish(DEFAULT_LANG)
+    return page.get_public_object()
 
 
-class TestLocalBranchImport(TestCase):
+class TestLocalBranchImport(CMSTestCase):
     def setUp(self):
+        self.tempdir = tempfile.mkdtemp()
         db_empty_page_list()
-        self.home = db_create_home_page()
-        self.assertEqual(len(Page.objects.filter(publisher_is_draft=False)), 0)
-        self.assertEqual(len(Page.objects.filter(publisher_is_draft=True)), 1)
-        self.assertEqual(Page.objects.all()[0].get_absolute_url(), '/en/')
-        self.client = Client()
+        self.assertEqual(Page.objects.count(), 0)
+        self.root = db_create_root_page()
+        self.assertFalse(self.root.publisher_is_draft)
+        self.assertEqual(
+            self.root.get_absolute_url(),
+            '/{}/'.format(DEFAULT_LANG))
 
     def create_repo(self, docs_path):
-        self.tempdir = tempfile.mkdtemp()
         origin = os.path.join(os.path.dirname(__file__), docs_path)
         self.assertTrue(os.path.exists(origin))
         self.repo = create_repo(self.tempdir, origin, '', '')
@@ -60,15 +60,13 @@ class TestLocalBranchImport(TestCase):
             # make external links pass
             self.assertTrue(True)
         else:
-            url = '/{}/'.format(url)
-            res = self.client.get(url)
-            self.assertNotIsInstance(
-                res, HttpResponseNotFound,
+            request = self.get_request('/en/'+url+'/')
+            page = get_page_from_request(request)
+            self.assertIsNotNone(
+                page,
                 msg='Link {} not found. Available pages: {}'.format(
                     url, ', '.join([p.get_absolute_url() for p in pages])))
-            self.assertGreater(
-                len(res.content), 0,
-                msg='Page {} is empty.'.format(url))
+            self.assertIn(page, pages)
 
     def tearDown(self):
         shutil.rmtree(self.tempdir)
