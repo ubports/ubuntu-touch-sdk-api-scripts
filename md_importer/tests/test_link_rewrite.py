@@ -20,6 +20,7 @@ class TestLinkRewrite(TestLocalBranchImport):
         self.assertEqual(pages.count(), 1+2)  # Home + 2 articles
         for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, Article))
+            self.assertEqual(article.page.parent, self.home)
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
                 if not link.has_attr('class') or \
