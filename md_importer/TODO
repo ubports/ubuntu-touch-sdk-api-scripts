@@ -1,8 +1,5 @@
 - fix branch indicator (devel vs. stable, 1.x vs devel, etc.)
 
-- fix links
-- add tests for links
-
 - check if https://bugs.launchpad.net/developer-ubuntu-com/+bug/1531200 works
 
 - import pictures (LP: #1511677)
