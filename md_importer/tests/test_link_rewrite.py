@@ -5,6 +5,7 @@ from cms.models import Page
 from ..importer.article import Article
 from .utils import (
     db_add_empty_page,
+    is_local_link,
     TestLocalBranchImport,
 )
 
@@ -22,9 +23,34 @@ class TestLinkRewrite(TestLocalBranchImport):
             self.assertEqual(article.page.parent, self.root)
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
-                if not link.has_attr('class') or \
-                   'headeranchor-link' not in link.attrs['class']:
-                    self.check_local_link(link.attrs['href'], pages)
+                page = self.check_local_link(link.attrs['href'])
+                self.assertIsNotNone(
+                    page,
+                    msg='Link {} not found. Available pages: {}'.format(
+                        link.attrs['href'],
+                        ', '.join([p.get_absolute_url() for p in pages])))
+                self.assertIn(page, pages)
+
+
+class TestLinkBrokenRewrite(TestLocalBranchImport):
+    def runTest(self):
+        self.create_repo('data/link-broken-test')
+        self.repo.add_directive('', '')
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertTrue(self.repo.publish())
+        pages = Page.objects.filter(publisher_is_draft=False)
+        self.assertEqual(pages.count(), 1+2)  # root + 2 articles
+        for article in self.repo.imported_articles:
+            self.assertTrue(isinstance(article, Article))
+            self.assertEqual(article.page.parent, self.root)
+            soup = BeautifulSoup(article.html, 'html5lib')
+            for link in soup.find_all('a'):
+                if link.has_attr('class') and \
+                   'headeranchor-link' in link.attrs['class']:
+                    break
+                page = self.check_local_link(link.attrs['href'])
+                self.assertIsNone(page)
+                self.assertNotIn(page, pages)
 
 
 class TestSnapcraftLinkRewrite(TestLocalBranchImport):
@@ -49,6 +75,12 @@ class TestSnapcraftLinkRewrite(TestLocalBranchImport):
         for article in self.repo.imported_articles:
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
-                if not link.has_attr('class') or \
-                   'headeranchor-link' not in link.attrs['class']:
-                    self.check_local_link(link.attrs['href'], pages)
+                if not is_local_link(link):
+                    break
+                page = self.check_local_link(link.attrs['href'])
+                self.assertIsNotNone(
+                    page,
+                    msg='Link {} not found. Available pages: {}'.format(
+                        link.attrs['href'],
+                        ', '.join([p.get_absolute_url() for p in pages])))
+                self.assertIn(page, pages)

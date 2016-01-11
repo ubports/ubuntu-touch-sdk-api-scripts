@@ -54,21 +54,23 @@ class TestLocalBranchImport(CMSTestCase):
         self.fetch_retcode = self.repo.get()
         self.assertEqual(self.fetch_retcode, 0)
 
-    def check_local_link(self, url, pages):
-        (scheme, netloc, path, params, query, fragment) = urlparse(url)
-        if scheme in ['http', 'https', 'mailto']:
-            # make external links pass
-            self.assertTrue(True)
-        else:
-            if not url.startswith('/{}/'.format(DEFAULT_LANG)):
-                url = '/{}/{}/'.format(DEFAULT_LANG, url)
-            request = self.get_request(url)
-            page = get_page_from_request(request)
-            self.assertIsNotNone(
-                page,
-                msg='Link {} not found. Available pages: {}'.format(
-                    url, ', '.join([p.get_absolute_url() for p in pages])))
-            self.assertIn(page, pages)
+    def check_local_link(self, url):
+        if not url.startswith('/{}/'.format(DEFAULT_LANG)):
+            url = '/{}/{}/'.format(DEFAULT_LANG, url)
+        request = self.get_request(url)
+        page = get_page_from_request(request)
+        return page
 
     def tearDown(self):
         shutil.rmtree(self.tempdir)
+
+
+def is_local_link(link):
+    if link.has_attr('class') and \
+       'headeranchor-link' in link.attrs['class']:
+        return False
+    (scheme, netloc, path, params, query, fragment) = \
+        urlparse(link.attrs['href'])
+    if scheme in ['http', 'https', 'mailto']:
+        return False
+    return True
