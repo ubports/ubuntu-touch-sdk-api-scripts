@@ -13,9 +13,9 @@ class TestOneDirImport(TestLocalBranchImport):
         self.assertGreater(len(self.repo.imported_articles), 3)
         self.assertTrue(self.repo.publish())
         pages = Page.objects.all()
-        self.assertGreater(len(pages), len(self.repo.imported_articles))
+        self.assertGreater(pages.count(), len(self.repo.imported_articles))
         for article in self.repo.imported_articles:
-            self.assertTrue(isinstance(article, Article))
+            self.assertIsInstance(article, Article)
 
 
 class TestOneDirAndTwoFilesImport(TestLocalBranchImport):
@@ -28,15 +28,15 @@ class TestOneDirAndTwoFilesImport(TestLocalBranchImport):
         self.assertTrue(self.repo.execute_import_directives())
         self.assertGreater(len(self.repo.imported_articles), 5)
         self.assertTrue(self.repo.publish())
-        pages = Page.objects.all()
-        self.assertEqual(len(pages), len(self.repo.imported_articles))
-        self.assertGreater(len(pages), 5)
+        pages = Page.objects.filter(publisher_is_draft=False)
+        self.assertEqual(pages.count(), len(self.repo.imported_articles))
+        self.assertGreater(pages.count(), 5)
         self.assertIn(u'/en/', [p.get_absolute_url() for p in pages])
         self.assertIn(u'/en/hacking/', [p.get_absolute_url() for p in pages])
 
 
 class TestArticletreeOneFileImport(TestLocalBranchImport):
-    '''Check if all importe article has 'home' as parent.'''
+    '''Check if all importe article has 'root' as parent.'''
     def runTest(self):
         self.create_repo('data/snapcraft-test')
         self.repo.add_directive('README.md', 'readme')
@@ -44,12 +44,14 @@ class TestArticletreeOneFileImport(TestLocalBranchImport):
         self.assertTrue(self.repo.execute_import_directives())
         self.assertEqual(len(self.repo.imported_articles), 1)
         self.assertTrue(self.repo.publish())
-        self.assertEqual(Page.objects.count(), 1+1)  # readme + home
-        self.assertEqual(self.repo.pages[0].parent, self.home)
+        self.assertEqual(
+            1+1,  # readme + root
+            Page.objects.filter(publisher_is_draft=False).count())
+        self.assertEqual(self.repo.pages[0].parent, self.root)
 
 
 class TestArticletreeOneDirImport(TestLocalBranchImport):
-    '''Check if all imported articles have 'home' as parent.'''
+    '''Check if all imported articles have 'root' as parent.'''
     def runTest(self):
         self.create_repo('data/snapcraft-test')
         self.repo.add_directive('docs', '')
@@ -57,4 +59,4 @@ class TestArticletreeOneDirImport(TestLocalBranchImport):
         self.assertTrue(self.repo.publish())
         for page in Page.objects.filter(publisher_is_draft=False):
             if page.parent is not None:
-                self.assertEqual(page.parent_id, self.home.id)
+                self.assertEqual(page.parent_id, self.root.id)

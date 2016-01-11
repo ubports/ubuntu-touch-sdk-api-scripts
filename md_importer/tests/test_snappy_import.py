@@ -13,7 +13,7 @@ from .utils import (
 class TestSnappyDevelImport(TestLocalBranchImport):
     def runTest(self):
         self.create_repo('data/snappy-test')
-        snappy_page = db_add_empty_page('Snappy', self.home)
+        snappy_page = db_add_empty_page('Snappy', self.root)
         guides = db_add_empty_page('Guides', snappy_page)
         publish_pages([snappy_page, guides])
         self.assertTrue(isinstance(self.repo, SnappyRepo))
@@ -26,14 +26,14 @@ class TestSnappyDevelImport(TestLocalBranchImport):
         devel = Page.objects.filter(parent=guides.get_public_object())
         self.assertEqual(devel.count(), 1)
         for page in Page.objects.filter(publisher_is_draft=False):
-            if page not in [self.home, snappy_page, guides, devel[0]]:
+            if page not in [self.root, snappy_page, guides, devel[0]]:
                 self.assertEqual(page.parent, devel[0])
 
 
 class TestSnappyCurrentImport(TestLocalBranchImport):
     def runTest(self):
         self.create_repo('data/snappy-test')
-        snappy_page = db_add_empty_page('Snappy', self.home)
+        snappy_page = db_add_empty_page('Snappy', self.root)
         guides = db_add_empty_page('Guides', snappy_page)
         publish_pages([snappy_page, guides])
         self.assertTrue(isinstance(self.repo, SnappyRepo))
@@ -44,17 +44,16 @@ class TestSnappyCurrentImport(TestLocalBranchImport):
         for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, SnappyArticle))
         self.assertGreater(number_of_articles, 0)
-        pages = Page.objects.all()
+        pages = Page.objects.filter(publisher_is_draft=False)
         current_search = [
             a for a in pages
             if a.get_slug('current') and
             a.get_absolute_url().endswith('snappy/guides/current/')]
         self.assertEqual(len(current_search), 1)
         current = current_search[0]
-        nav_pages = [self.home, snappy_page, guides, current]
-        # 1 imported article, 1 redirect
+        nav_pages = [self.root, snappy_page, guides, current]
         self.assertEqual(
-            number_of_articles*2, pages.count()-len(nav_pages))
+            number_of_articles, pages.count()-len(nav_pages))
         for page in [a for a in pages if a not in nav_pages]:
             if page.get_redirect(DEFAULT_LANG):
                 self.assertEqual(page.parent, guides)
