@@ -1,7 +1,5 @@
 - fix branch indicator (devel vs. stable, 1.x vs devel, etc.)
 
-- check if https://bugs.launchpad.net/developer-ubuntu-com/+bug/1531200 works
-
 - import pictures (LP: #1511677)
 - unpublished docs: some articles show up with a blue circle, so
   unpublished although they're accessible(?)
