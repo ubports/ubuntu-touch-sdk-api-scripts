@@ -1,4 +1,7 @@
-from . import DEFAULT_LANG
+from . import (
+    DEFAULT_LANG,
+    SUPPORTED_ARTICLE_TYPES,
+)
 from .article import Article, SnappyArticle
 from .publish import get_or_create_page, slugify
 from .source import SourceCode
@@ -93,6 +96,12 @@ class Repo:
                 self.imported_articles += [article]
                 self.titles[article.fn] = article.title
                 self.url_map[article.fn] = article
+            elif os.path.splitext(entry[0])[1] in SUPPORTED_ARTICLE_TYPES:
+                # In this case the article was supported but still reading
+                # it failed, importing should be stopped here to avoid
+                # problems.
+                logging.error('Importing of {} aborted.'.format(self.origin))
+                return False
         if self.index_doc_url:
             self._write_fake_index_doc()
         return True

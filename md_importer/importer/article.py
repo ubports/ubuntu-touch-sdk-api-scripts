@@ -4,9 +4,18 @@ import logging
 import markdown
 import os
 import re
+import sys
 
-from . import DEFAULT_LANG
+from . import (
+    DEFAULT_LANG,
+    SUPPORTED_ARTICLE_TYPES,
+)
 from .publish import get_or_create_page, slugify
+
+if sys.version_info.major == 2:
+    from urlparse import urlparse
+else:
+    from urllib.parse import urlparse
 
 
 class Article:
@@ -19,7 +28,23 @@ class Article:
         self.full_url = write_to
         self.slug = os.path.basename(self.full_url)
 
+    def _find_local_images(self):
+        '''Local images are currently not supported.'''
+        soup = BeautifulSoup(self.html, 'html5lib')
+        local_images = []
+        for img in soup.find_all('img'):
+            if img.has_attr('src'):
+                (scheme, netloc, path, params, query, fragment) = \
+                    urlparse(img.attrs['src'])
+                if scheme not in ['http', 'https']:
+                    local_images.extend([img.attrs['src']])
+        return local_images
+
     def read(self):
+        if os.path.splitext(self.fn)[1] not in SUPPORTED_ARTICLE_TYPES:
+            logging.error("Don't know how to interpret '{}'.".format(
+                self.fn))
+            return False
         with codecs.open(self.fn, 'r', encoding='utf-8') as f:
             if self.fn.endswith('.md'):
                 self.html = markdown.markdown(
@@ -28,10 +53,12 @@ class Article:
                     extensions=['pymdownx.github'])
             elif self.fn.endswith('.html'):
                 self.html = f.read()
-            else:
-                logging.error("Don't know how to interpret '{}'.".format(
-                    self.fn))
-                return False
+        local_images = self._find_local_images()
+        if local_images:
+            logging.error('Found the following local image(s): {}'.format(
+                ', '.join(local_images)
+            ))
+            return False
         self.title = self._read_title()
         self._remove_body_and_html_tags()
         self._use_developer_site_style()
