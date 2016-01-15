@@ -92,13 +92,18 @@ class Article:
 
     def replace_links(self, titles, url_map):
         soup = BeautifulSoup(self.html, 'html5lib')
+        change = False
         for link in soup.find_all('a'):
             if not link.has_attr('class') or \
                'headeranchor-link' not in link.attrs['class']:
                 for title in titles:
-                    if title.endswith(link.attrs['href']):
+                    if title.endswith(link.attrs['href']) and \
+                       link.attrs['href'] != url_map[title].full_url:
                         link.attrs['href'] = url_map[title].full_url
-        self.html = soup.prettify()
+                        change = True
+        if change:
+            self.html = soup.prettify()
+        return change
 
     def add_to_db(self):
         '''Publishes pages in their branch alias namespace.'''
@@ -111,8 +116,9 @@ class Article:
         return True
 
     def publish(self):
-        self.page.publish(DEFAULT_LANG)
-        self.page = self.page.get_public_object()
+        if self.page.is_dirty(DEFAULT_LANG):
+            self.page.publish(DEFAULT_LANG)
+            self.page = self.page.get_public_object()
         return self.page
 
 
