@@ -5,6 +5,7 @@ from md_importer.importer.repo import create_repo
 
 import datetime
 import logging
+import pytz
 import shutil
 import tempfile
 
@@ -39,13 +40,13 @@ def import_branches(selection):
             ImportedArticle.objects.get_or_create(
                 branch=branch,
                 page=page,
-                last_import=datetime.datetime.now())
+                last_import=datetime.datetime.now(pytz.utc))
 
         # The import is done, now let's clean up.
-        for old_article in ImportedArticle.objects.filter(branch=branch):
-            if old_article.page not in repo.pages and \
-               old_article.page.changed_by in ['python-api', 'script']:
-                old_article.page.delete()
+        imported_page_ids = [p.id for p in repo.pages
+                             if p.changed_by in ['python-api', 'script']]
+        ImportedArticle.objects.filter(
+            branch=branch).filter(id__in=imported_page_ids).delete()
         shutil.rmtree(tempdir)
 
     # https://stackoverflow.com/questions/33284171/
