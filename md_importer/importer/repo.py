@@ -122,7 +122,8 @@ class Repo:
         for article in self.imported_articles:
             self.pages.extend([article.publish()])
         if self.index_page:
-            self.pages.extend([self.index_page.publish(DEFAULT_LANG)])
+            self.index_page.publish(DEFAULT_LANG)
+            self.pages.extend([self.index_page])
         return True
 
     def _create_fake_index_page(self):
