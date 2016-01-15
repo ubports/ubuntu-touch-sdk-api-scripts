@@ -1,15 +1,6 @@
 - fix branch indicator (devel vs. stable, 1.x vs devel, etc.)
-
 - unpublished docs: some articles show up with a blue circle, so
-  unpublished although they're accessible(?)
+  unpublished although they're accessible (not a real issue - content is
+  always updated correctly)
 - add comment at top of RawHTML plugins, so users know not to edit them,
-  currently blocked on LP: #1523925
-  # XXX: use this once we RawHTML plugins don't strip comments (LP: #1523925)
-  START_TEXT = """
-  <!--
-  branch id: {}
-
-  THIS PAGE IS AUTOMATICALLY UPDATED.
-  DON'T EDIT IT - CHANGES WILL BE OVERWRITTEN.
-  -->
-  """
+  currently blocked on LP: #1523925 (RawHTML plugin strips comments)
