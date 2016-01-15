@@ -13,5 +13,3 @@
   DON'T EDIT IT - CHANGES WILL BE OVERWRITTEN.
   -->
   """
-
-- if article already exists, check if HTML actually changed, if not, don't update.

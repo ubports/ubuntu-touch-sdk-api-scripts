@@ -1,6 +1,8 @@
+from datetime import datetime
+import pytz
 import shutil
 
-from cms.models import Page
+from cms.models import CMSPlugin, Page
 
 from md_importer.importer.article import Article
 from .utils import TestLocalBranchImport
@@ -86,3 +88,31 @@ class TestTwiceImport(TestLocalBranchImport):
         self.assertEqual(
             Page.objects.filter(publisher_is_draft=False).count(),
             len(self.repo.imported_articles)+1)  # articles + root
+
+
+class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
+    '''Run import on the same contents twice, make sure we don't
+       update the HTML in the pages over and over again.'''
+    def runTest(self):
+        self.create_repo('data/snapcraft-test')
+        self.repo.add_directive('docs', '')
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertTrue(self.repo.publish())
+        self.assertEqual(
+            Page.objects.filter(publisher_is_draft=False).count(),
+            len(self.repo.imported_articles)+1)  # articles + root
+        # Take the time before publishing the second import
+        now = datetime.now(pytz.utc)
+        shutil.rmtree(self.tempdir)
+        # Run second import
+        self.create_repo('data/snapcraft-test')
+        self.repo.add_directive('docs', '')
+        self.assertEqual(len(self.repo.directives), 1)
+        self.assertEqual(len(self.repo.imported_articles), 0)
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertTrue(self.repo.publish())
+        # Check the page's plugins
+        for plugin_change in CMSPlugin.objects.filter(
+            plugin_type='RawHtmlPlugin').order_by(
+                '-changed_date'):
+            self.assertGreater(now, plugin_change.changed_date)
