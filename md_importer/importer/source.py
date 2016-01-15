@@ -13,13 +13,13 @@ class SourceCode():
         self.post_checkout_command = post_checkout_command
 
     def get(self):
-        res = self._get_branch()
+        res = self._get_repo()
         if res == 0 and self.post_checkout_command:
             res = self._post_checkout()
             return res
         return res
 
-    def _get_branch(self):
+    def _get_repo(self):
         if os.path.exists(self.origin):
             shutil.copytree(
                 self.origin,
@@ -44,7 +44,7 @@ class SourceCode():
                 os.chdir(pwd)
             return retcode
         logging.error(
-            'Branch format "{}" not understood.'.format(self.origin))
+            'Repo format "{}" not understood.'.format(self.origin))
         return 1
 
     def _post_checkout(self):
