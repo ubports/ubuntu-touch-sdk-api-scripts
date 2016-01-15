@@ -2,6 +2,7 @@ from md_importer.importer import DEFAULT_LANG, HOME_PAGE_URL
 
 from cms.api import create_page, add_plugin
 from cms.models import Title
+from djangocms_text_ckeditor.html import clean_html
 
 import logging
 import re
@@ -38,17 +39,22 @@ def get_or_create_page(title, full_url, menu_title=None,
         path__regex=full_url).filter(publisher_is_draft=True)
     if pages:
         page = pages[0].page
-        page.title = title
-        page.menu_title = menu_title
-        page.in_navigation = in_navigation
-        page.redirect = redirect
+        if page.get_title() != title:
+            page.title = title
+        if page.get_menu_title() != menu_title:
+            page.menu_title = menu_title
+        if page.in_navigation != in_navigation:
+            page.in_navigation = in_navigation
+        if page.get_redirect() != redirect:
+            page.redirect = redirect
         if html:
             # We create the page, so we know there's just one placeholder
             placeholder = page.placeholders.all()[0]
             if placeholder.get_plugins():
                 plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
-                plugin.body = html
-                plugin.save()
+                if plugin.body != clean_html(html, full=False):
+                    plugin.body = html
+                    plugin.save()
             else:
                 add_plugin(
                     placeholder, 'RawHtmlPlugin',
@@ -62,7 +68,8 @@ def get_or_create_page(title, full_url, menu_title=None,
             title, 'default.html', DEFAULT_LANG, slug=slug, parent=parent,
             menu_title=menu_title, in_navigation=in_navigation,
             position='last-child', redirect=redirect)
-        if html:
-            placeholder = page.placeholders.get()
-            add_plugin(placeholder, 'RawHtmlPlugin', DEFAULT_LANG, body=html)
+        placeholder = page.placeholders.get()
+        add_plugin(placeholder, 'RawHtmlPlugin', DEFAULT_LANG, body=html)
+        placeholder = page.placeholders.all()[0]
+        plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
     return page
