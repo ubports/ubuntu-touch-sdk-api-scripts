@@ -27,11 +27,26 @@ def process_branch(branch):
         return False
     if not repo.publish():
         return False
+    timestamp = datetime.datetime.now(pytz.utc)
+
+    # Update data in ImportedArticle table
     for page in repo.pages:
-        ImportedArticle.objects.get_or_create(
-            branch=branch,
-            page=page,
-            last_import=datetime.datetime.now(pytz.utc))
+        if ImportedArticle.objects.filter(branch=branch, page=page).count():
+            imported_article = ImportedArticle.objects.filter(
+                branch=branch, page=page)[0]
+            imported_article.last_import = datetime.datetime.now(pytz.utc)
+            imported_article.save()
+        else:
+            ImportedArticle.objects.get_or_create(
+                branch=branch,
+                page=page,
+                last_import=datetime.datetime.now(pytz.utc))
+
+    # Remove old entries
+    for imported_article in ImportedArticle.objects.filter(
+            branch=branch, last_import__lt=timestamp):
+        imported_article.page.delete()
+        imported_article.delete()
 
     # The import is done, now let's clean up.
     imported_page_ids = [p.id for p in repo.pages
