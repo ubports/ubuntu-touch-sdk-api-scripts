@@ -43,7 +43,9 @@ class MultiLangEntryYear(MultiLangMixin, EntryYear):
         return super(MultiLangEntryYear, self).get(request, *args, **kwargs)
 
     def get_dated_queryset(self, ordering=None, **lookup):
-        return super(MultiLangEntryYear, self).get_dated_queryset(ordering, **lookup).filter(categories__slug=self.language)
+        if ordering:
+            return super(MultiLangEntryYear, self).get_dated_queryset(**lookup).filter(categories__slug=self.language).order_by(ordering)
+        return super(MultiLangEntryYear, self).get_dated_queryset(**lookup).filter(categories__slug=self.language)
 
 class MultiLangEntryMonth(MultiLangMixin, EntryMonth):
     def get(self, request, *args, **kwargs):
@@ -51,7 +53,9 @@ class MultiLangEntryMonth(MultiLangMixin, EntryMonth):
         return super(MultiLangEntryMonth, self).get(request, *args, **kwargs)
 
     def get_dated_queryset(self, ordering=None, **lookup):
-        return super(MultiLangEntryMonth, self).get_dated_queryset(ordering, **lookup).filter(categories__slug=self.language)
+        if ordering:
+            return super(MultiLangEntryMonth, self).get_dated_queryset(**lookup).filter(categories__slug=self.language).order_by(ordering)
+        return super(MultiLangEntryMonth, self).get_dated_queryset(**lookup).filter(categories__slug=self.language)
 
 class MultiLangEntryWeek(MultiLangMixin, EntryWeek):
     def get(self, request, *args, **kwargs):
@@ -59,7 +63,9 @@ class MultiLangEntryWeek(MultiLangMixin, EntryWeek):
         return super(MultiLangEntryWeek, self).get(request, *args, **kwargs)
 
     def get_dated_queryset(self, ordering=None, **lookup):
-        return super(MultiLangEntryWeek, self).get_dated_queryset(ordering, **lookup).filter(categories__slug=self.language)
+        if ordering:
+            return super(MultiLangEntryWeek, self).get_dated_queryset(**lookup).filter(categories__slug=self.language).order_by(ordering)
+        return super(MultiLangEntryWeek, self).get_dated_queryset(**lookup).filter(categories__slug=self.language)
 
 class MultiLangEntryDay(MultiLangMixin, EntryDay):
     def get(self, request, *args, **kwargs):
@@ -67,7 +73,9 @@ class MultiLangEntryDay(MultiLangMixin, EntryDay):
         return super(MultiLangEntryDay, self).get(request, *args, **kwargs)
 
     def get_dated_queryset(self, ordering=None, **lookup):
-        return super(MultiLangEntryDay, self).get_dated_queryset(ordering, **lookup).filter(categories__slug=self.language)
+        if ordering:
+            return super(MultiLangEntryDay, self).get_dated_queryset(**lookup).filter(categories__slug=self.language).order_by(ordering)
+        return super(MultiLangEntryDay, self).get_dated_queryset(**lookup).filter(categories__slug=self.language)
 
 class MultiLangEntryToday(MultiLangMixin, EntryToday):
     def get(self, request, *args, **kwargs):
@@ -75,4 +83,6 @@ class MultiLangEntryToday(MultiLangMixin, EntryToday):
         return super(MultiLangEntryToday, self).get(request, *args, **kwargs)
 
     def get_dated_queryset(self, ordering=None, **lookup):
-        return super(MultiLangEntryToday, self).get_dated_queryset(ordering, **lookup).filter(categories__slug=self.language)
+        if ordering:
+            return super(MultiLangEntryToday, self).get_dated_queryset(**lookup).filter(categories__slug=self.language).order_by(ordering)
+        return super(MultiLangEntryToday, self).get_dated_queryset(**lookup).filter(categories__slug=self.language)

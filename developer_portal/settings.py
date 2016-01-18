@@ -318,6 +318,23 @@ REST_FRAMEWORK = {
     #'PAGINATE_BY': 10,
 }
 
+MIGRATION_MODULES = {
+    'cms': 'cms.migrations',
+    'cmsplugin_zinnia': 'cmsplugin_zinnia.migrations',
+    'djangocms_link': 'djangocms_link.migrations',
+    'djangocms_picture': 'djangocms_picture.migrations',
+    'djangocms_snippet': 'djangocms_snippet.migrations',
+    'djangocms_text_ckeditor': 'djangocms_text_ckeditor.migrations',
+    'djangocms_video': 'djangocms_video.migrations',
+    'django_comments': 'django_comments.migrations',
+    'menus': 'menus.migrations',
+    'rest_framework.authtoken': 'rest_framework.authtoken.migrations',
+    'reversion': 'reversion.migrations',
+    'tagging': 'tagging.migrations',
+    'taggit': 'taggit.migrations',
+    'zinnia': 'zinnia.migrations',
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
