@@ -76,6 +76,8 @@ INSTALLED_APPS = [
     'store_data',
 
     'api_docs',
+
+    'md_importer',
 ]
 
 MIDDLEWARE_CLASSES = (
