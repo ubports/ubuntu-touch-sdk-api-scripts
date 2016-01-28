@@ -8,6 +8,7 @@ import sys
 
 from . import (
     DEFAULT_LANG,
+    MARKDOWN_EXTENSIONS,
     SUPPORTED_ARTICLE_TYPES,
 )
 from .publish import get_or_create_page, slugify
@@ -50,7 +51,7 @@ class Article:
                 self.html = markdown.markdown(
                     f.read(),
                     output_format='html5',
-                    extensions=['pymdownx.github'])
+                    extensions=MARKDOWN_EXTENSIONS)
             elif self.fn.endswith('.html'):
                 self.html = f.read()
         local_images = self._find_local_images()
