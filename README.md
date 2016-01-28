@@ -27,7 +27,7 @@ If you want to populate the database with sample content, you can follow these i
     ./env/bin/python manage.py flush --noinput
     echo "delete from auth_permission;" | ./env/bin/python manage.py dbshell
     ./env/bin/python manage.py loaddata ../dbbackup/dbdump.json
-    ./env/bin/python manage.py syncdb --noinput --all
+    ./env/bin/python manage.py migrate --noinput
     ./env/bin/python manage.py initdb
 
 # Managing translations

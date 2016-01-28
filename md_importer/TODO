@@ -1,0 +1,7 @@
+- fix branch indicator (devel vs. stable, 1.x vs devel, etc.)
+- unpublished docs: some articles show up with a blue circle, so
+  unpublished although they're accessible (not a real issue - content is
+  always updated correctly)
+- add comment at top of RawHTML plugins, so users know not to edit them,
+  currently blocked on LP: #1523925 (RawHTML plugin strips comments)
+- investigate what the api importer does (upload to swift)

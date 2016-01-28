@@ -4,13 +4,13 @@ from service.views import *
 
 # Routers provide an easy way of automatically determining the URL conf
 router = routers.DefaultRouter()
-router.register(r'elements', ElementViewSet)
-router.register(r'pages', PageViewSet)
-router.register(r'namespaces', NamespaceViewSet)
-router.register(r'sections', SectionViewSet)
-router.register(r'versions', VersionViewSet)
-router.register(r'languages', LanguageViewSet)
-router.register(r'topics', TopicViewSet)
+router.register(r'elements', ElementViewSet, base_name='element-list')
+router.register(r'pages', PageViewSet, base_name='page-list')
+router.register(r'namespaces', NamespaceViewSet, base_name='namespace-list')
+router.register(r'sections', SectionViewSet, base_name='section-list')
+router.register(r'versions', VersionViewSet, base_name='version-list')
+router.register(r'languages', LanguageViewSet, base_name='language-list')
+router.register(r'topics', TopicViewSet, base_name='topic-list')
 
 
 # Wire up our API using automatic URL routing.
