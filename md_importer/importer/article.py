@@ -119,7 +119,8 @@ class Article:
     def publish(self):
         if self.page.is_dirty(DEFAULT_LANG):
             self.page.publish(DEFAULT_LANG)
-            self.page = self.page.get_public_object()
+            if self.page.get_public_object():
+                self.page = self.page.get_public_object()
         return self.page
 
 
