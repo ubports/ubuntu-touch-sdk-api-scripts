@@ -4,18 +4,10 @@ from reversion.models import Revision, Version
 from reversion.admin import VersionAdmin
 
 from cms.extensions import TitleExtensionAdmin
-from .models import ExternalDocsBranch, SEOExtension
-from django.core.management import call_command
+from .models import SEOExtension
 
 __all__ = (
 )
-
-
-def import_selected_external_docs_branches(modeladmin, request, queryset):
-    for branch in queryset:
-        call_command('import-external-docs-branches', branch.docs_namespace)
-    import_selected_external_docs_branches.short_description = \
-        "Import selected branches"
 
 
 class RevisionAdmin(admin.ModelAdmin):
@@ -34,13 +26,6 @@ class VersionAdmin(admin.ModelAdmin):
 
 admin.site.register(Version, VersionAdmin)
 
-
-class ExternalDocsBranchAdmin(admin.ModelAdmin):
-    list_display = ('lp_origin', 'docs_namespace')
-    list_filter = ('lp_origin', 'docs_namespace')
-    actions = [import_selected_external_docs_branches]
-
-admin.site.register(ExternalDocsBranch, ExternalDocsBranchAdmin)
 
 class SEOExtensionAdmin(TitleExtensionAdmin):
     pass
