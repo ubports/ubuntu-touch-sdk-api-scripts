@@ -19,7 +19,7 @@ else:
 
 
 class Article:
-    def __init__(self, fn, write_to):
+    def __init__(self, fn, write_to, advertise):
         self.html = None
         self.page = None
         self.title = ""
@@ -27,6 +27,7 @@ class Article:
         self.write_to = slugify(self.fn)
         self.full_url = write_to
         self.slug = os.path.basename(self.full_url)
+        self.advertise = advertise
 
     def _find_local_images(self):
         '''Local images are currently not supported.'''
@@ -109,7 +110,7 @@ class Article:
         '''Publishes pages in their branch alias namespace.'''
         self.page = get_or_create_page(
             title=self.title, full_url=self.full_url, menu_title=self.title,
-            html=self.html)
+            html=self.html, in_navigation=self.advertise)
         if not self.page:
             return False
         self.full_url = self.page.get_absolute_url()

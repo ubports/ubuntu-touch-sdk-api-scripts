@@ -56,12 +56,13 @@ class Repo:
             return 1
         return 0
 
-    def add_directive(self, import_from, write_to):
+    def add_directive(self, import_from, write_to, advertise=True):
         self.directives += [
             {
                 'import_from': os.path.join(self.checkout_location,
                                             import_from),
-                'write_to': write_to
+                'write_to': write_to,
+                'advertise': advertise,
             }
         ]
 
@@ -71,7 +72,8 @@ class Repo:
         for directive in [d for d in self.directives
                           if os.path.isfile(d['import_from'])]:
             import_list += [
-                (directive['import_from'], directive['write_to'])
+                (directive['import_from'], directive['write_to'],
+                 directive['advertise'])
             ]
         # Import directories next
         for directive in [d for d in self.directives
@@ -79,7 +81,8 @@ class Repo:
             for fn in glob.glob('{}/*'.format(directive['import_from'])):
                 if fn not in [a[0] for a in import_list]:
                     import_list += [
-                        (fn, os.path.join(directive['write_to'], slugify(fn)))
+                        (fn, os.path.join(directive['write_to'], slugify(fn)),
+                         directive['advertise'])
                     ]
             # If we import into a namespace and don't have an index doc,
             # we need to write one.
@@ -91,7 +94,7 @@ class Repo:
                 return False
         # The actual import
         for entry in import_list:
-            article = self._read_article(entry[0], entry[1])
+            article = self._read_article(entry[0], entry[1], entry[2])
             if article:
                 self.imported_articles += [article]
                 self.titles[article.fn] = article.title
@@ -106,8 +109,8 @@ class Repo:
             self._write_fake_index_doc()
         return True
 
-    def _read_article(self, fn, write_to):
-        article = self.article_class(fn, write_to)
+    def _read_article(self, fn, write_to, advertise):
+        article = self.article_class(fn, write_to, advertise)
         if article.read():
             return article
         return None
