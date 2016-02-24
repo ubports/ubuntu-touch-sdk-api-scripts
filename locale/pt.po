@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-12-14 13:22+0000\n"
+"POT-Creation-Date: 2016-01-19 00:07+0000\n"
 "PO-Revision-Date: 2015-12-23 11:13+0000\n"
 "Last-Translator: Ivo Xavier <ivofernandes12@gmail.com>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
@@ -15,54 +15,35 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2016-01-19 05:53+0000\n"
-"X-Generator: Launchpad (build 17886)\n"
+"X-Launchpad-Export-Date: 2016-01-29 05:43+0000\n"
+"X-Generator: Launchpad (build 17902)\n"
 
 #: developer_portal/cms_plugins.py:10
 msgid "Raw HTML"
 msgstr "Raw HTML"
 
-#: developer_portal/models.py:29
-msgid ""
-"External branch location, ie: lp:snappy/15.04 or https://github.com/ubuntu-"
-"core/snappy.git"
-msgstr ""
-
-#: developer_portal/models.py:33
-msgid ""
-"Path alias we want to use for the docs, ie \"snappy/guides/15.04\" or "
-"\"snappy/guides/latest\", etc."
-msgstr ""
-"Caminho que queremos usar para dos docs, ex \"snappy/guides/15.04\" ou "
-"\"snappy/guides/latest\", etc."
-
-#: developer_portal/models.py:38
-msgid "File name of doc to be used as index document, ie \"intro.md\""
-msgstr ""
-"Nome do ficheiro para ser usado como documento de index, ex \"intro.md\""
-
-#: developer_portal/settings.py:189 developer_portal/settings.py:197
+#: developer_portal/settings.py:194 developer_portal/settings.py:202
 #: templates/translations_dashboard.html:12
 msgid "English"
 msgstr "Inglês"
 
-#: developer_portal/settings.py:190 developer_portal/settings.py:204
+#: developer_portal/settings.py:195 developer_portal/settings.py:209
 #: templates/translations_dashboard.html:13
 msgid "Simplified Chinese"
 msgstr "Chinês simplificado"
 
-#: developer_portal/settings.py:212
+#: developer_portal/settings.py:217
 msgid "Spanish"
 msgstr "Espanhol"
 
-#: developer_portal/settings.py:252
+#: developer_portal/settings.py:257
 msgid "Page content"
 msgstr "Conteúdo da página"
 
 #. Translators: this is the default text that will be shown
 #. to editors when editing a page. You can use some HTML,
 #. but don't go wild :)
-#: developer_portal/settings.py:260
+#: developer_portal/settings.py:265
 msgid "<p>Add content here...</p>"
 msgstr "<p>Adicione conteúdo aqui...</p>"
 
@@ -74,6 +55,40 @@ msgstr ""
 "Precisa de criar uma conta no <a "
 "href=\"https://launchpad.net/+login\">Launchpad</a> para utilizar a página "
 "de programador"
+
+#: md_importer/models.py:10
+msgid ""
+"External branch location, ie: lp:snappy/15.04 or https://github.com/ubuntu-"
+"core/snappy.git"
+msgstr ""
+
+#: md_importer/models.py:14
+msgid "For use with git branches, ie: \"master\" or \"15.04\" or \"1.x\"."
+msgstr ""
+
+#: md_importer/models.py:19
+msgid "Command to run after checkout of the branch."
+msgstr ""
+
+#: md_importer/models.py:37
+msgid ""
+"File or directory to import from the branch. Ie: \"docs/intro.md\" (file) or "
+"\"docs\" (complete directory), etc."
+msgstr ""
+
+#: md_importer/models.py:43
+msgid ""
+"Article URL (for a specific file) or article namespace for a directory or a "
+"set of files."
+msgstr ""
+
+#: md_importer/models.py:56
+msgid "Datetime"
+msgstr ""
+
+#: md_importer/models.py:56
+msgid "Datetime of last import."
+msgstr ""
 
 #: store_data/cms_plugins.py:11
 msgid "Snap list - Gadget"
@@ -111,9 +126,8 @@ msgstr "Transferir"
 
 #: templates/base.html:34 templates/base.html.py:51
 #: templates/menu/menu_footer_first_level.html:8
-#: templates/menu/menu_header_first_level.html:8
-#: templates/menu/sub_menu.html:8 templates/menu/sub_menu.html.py:22
-#: templates/menu/sub_menu.html:25
+#: templates/menu/menu_header_first_level.html:8 templates/menu/sub_menu.html:8
+#: templates/menu/sub_menu.html.py:22 templates/menu/sub_menu.html:25
 msgid "Overview"
 msgstr "Vista geral"
 
@@ -185,14 +199,22 @@ msgstr "Comunicar erro nesta página"
 msgid "Go to the top of the page"
 msgstr "Ir para o topo da página"
 
+#: templates/comments/zinnia/entry/form.html:25
+msgid "Comment as"
+msgstr "Comentar como"
+
+#: templates/comments/zinnia/entry/form.html:25 templates/error_base.html:63
+#: templates/website_base.html:84
+msgid "Log out"
+msgstr "Terminar sessão"
+
+#: templates/comments/zinnia/entry/form.html:28
+msgid "Post"
+msgstr "Publicar"
+
 #: templates/error_base.html:54 templates/website_base.html:74
 msgid "Jump to content"
 msgstr "Ir para o conteúdo"
-
-#: templates/error_base.html:63 templates/website_base.html:84
-#: templates/comments/zinnia/entry/form.html:25
-msgid "Log out"
-msgstr "Terminar sessão"
 
 #: templates/error_base.html:69 templates/website_base.html:90
 msgid "Log in"
@@ -216,6 +238,14 @@ msgstr ""
 "Se continuar a ter problemas com a página do programador, por favor <a "
 "href='https://bugs.launchpad.net/ubuntudeveloperportal'>reporte-o"
 
+#: templates/menu/menu_language_chooser.html:6
+msgid "View in:"
+msgstr "Ver em:"
+
+#: templates/menu/menu_language_chooser.html:10
+msgid "Change to language:"
+msgstr "Mudar idioma:"
+
 #: templates/search_results.html:4 templates/search_results.html.py:11
 msgid "Search results for:"
 msgstr "Resultados da pesquisa para:"
@@ -236,8 +266,7 @@ msgstr "Quadro de traduções"
 msgid "A simple dashboard to keep track of updates between languages."
 msgstr "Um simples quadro para ficar a par das atualizações entre idiomas."
 
-#: templates/translations_dashboard.html:11
-#: templates/zinnia/entry_list.html:23
+#: templates/translations_dashboard.html:11 templates/zinnia/entry_list.html:23
 msgid "Page"
 msgstr "Página"
 
@@ -293,22 +322,6 @@ msgstr "Começar com o Ubuntu SDK ›"
 msgid "Back to top"
 msgstr "Voltar para o topo"
 
-#: templates/comments/zinnia/entry/form.html:25
-msgid "Comment as"
-msgstr "Comentar como"
-
-#: templates/comments/zinnia/entry/form.html:28
-msgid "Post"
-msgstr "Publicar"
-
-#: templates/menu/menu_language_chooser.html:6
-msgid "View in:"
-msgstr "Ver em:"
-
-#: templates/menu/menu_language_chooser.html:10
-msgid "Change to language:"
-msgstr "Mudar idioma:"
-
 #: templates/zinnia/_entry_detail_base.html:33
 #, python-format
 msgid "%(percent)s%% of %(object)s still remains to read."
@@ -350,7 +363,7 @@ msgstr "Lista de autores"
 msgid "Authors"
 msgstr "Autores"
 
-#: templates/zinnia/author_list.html:21 templates/zinnia/category_list.html:19
+#: templates/zinnia/author_list.html:21 templates/zinnia/category_list.html:20
 #: templates/zinnia/tag_list.html:20
 #, python-format
 msgid "%(entry_count)s entry"
@@ -370,21 +383,20 @@ msgstr "Fonte RSS das últimas entradas"
 msgid "RSS Feed of latest discussions"
 msgstr "Fonte RSS das últimas discussões"
 
-#: templates/zinnia/category_list.html:4
-#: templates/zinnia/category_list.html:12
+#: templates/zinnia/category_list.html:5 templates/zinnia/category_list.html:13
 msgid "Category list"
 msgstr "Lista de categorias"
 
-#: templates/zinnia/category_list.html:6
+#: templates/zinnia/category_list.html:7
 msgid "Categories"
 msgstr "Categorias"
 
-#: templates/zinnia/category_list.html:18
+#: templates/zinnia/category_list.html:19
 #, python-format
 msgid "Show all entries in %(category)s"
 msgstr "Mostrar todas as entradas em %(category)s"
 
-#: templates/zinnia/category_list.html:24
+#: templates/zinnia/category_list.html:25
 msgid "No categories yet."
 msgstr "Sem categorias ainda."
 
@@ -591,3 +603,14 @@ msgstr "Email do programador"
 #: webapp_creator/views.py:47
 msgid "E.g. miaotian@ubuntu.com"
 msgstr "E.x. miaotian@ubuntu.com"
+
+#~ msgid ""
+#~ "Path alias we want to use for the docs, ie \"snappy/guides/15.04\" or "
+#~ "\"snappy/guides/latest\", etc."
+#~ msgstr ""
+#~ "Caminho que queremos usar para dos docs, ex \"snappy/guides/15.04\" ou "
+#~ "\"snappy/guides/latest\", etc."
+
+#~ msgid "File name of doc to be used as index document, ie \"intro.md\""
+#~ msgstr ""
+#~ "Nome do ficheiro para ser usado como documento de index, ex \"intro.md\""
