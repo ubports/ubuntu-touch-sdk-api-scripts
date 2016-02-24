@@ -75,7 +75,6 @@ class TestSnapcraftLinkRewrite(TestLocalBranchImport):
         for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, Article))
             self.assertGreater(len(article.html), 0)
-        for article in self.repo.imported_articles:
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
                 if is_local_link(link):
