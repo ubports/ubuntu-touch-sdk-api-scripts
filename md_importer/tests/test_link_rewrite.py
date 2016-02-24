@@ -67,10 +67,8 @@ class TestSnapcraftLinkRewrite(TestLocalBranchImport):
         self.assertFalse(build_apps.publisher_is_draft)
         self.assertEqual(
             3, Page.objects.filter(publisher_is_draft=False).count())
-        self.repo.add_directive('docs', 'snappy/build-apps/devel')
-        self.repo.add_directive('README.md', 'snappy/build-apps/devel')
-        self.repo.add_directive(
-            'HACKING.md', 'snappy/build-apps/devel/hacking')
+        self.repo.add_directive('docs/intro.md', 'snappy/build-apps/current')
+        self.repo.add_directive('docs', 'snappy/build-apps/current')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
         pages = Page.objects.all()
@@ -80,12 +78,11 @@ class TestSnapcraftLinkRewrite(TestLocalBranchImport):
         for article in self.repo.imported_articles:
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
-                if not is_local_link(link):
-                    break
-                page = self.check_local_link(link.attrs['href'])
-                self.assertIsNotNone(
-                    page,
-                    msg='Link {} not found. Available pages: {}'.format(
-                        link.attrs['href'],
-                        ', '.join([p.get_absolute_url() for p in pages])))
-                self.assertIn(page, pages)
+                if is_local_link(link):
+                    page = self.check_local_link(link.attrs['href'])
+                    self.assertIsNotNone(
+                        page,
+                        msg='Link {} not found. Available pages: {}'.format(
+                            link.attrs['href'],
+                            ', '.join([p.get_absolute_url() for p in pages])))
+                    self.assertIn(page, pages)
