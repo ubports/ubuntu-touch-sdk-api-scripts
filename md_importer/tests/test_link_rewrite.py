@@ -30,6 +30,12 @@ class TestLinkRewrite(TestLocalBranchImport):
                         link.attrs['href'],
                         ', '.join([p.get_absolute_url() for p in pages])))
                 self.assertIn(page, pages)
+            if article.slug == 'file1':
+                for link in soup.find_all('a'):
+                    if link.has_attr('class') and \
+                       'headeranchor-link' in link.attrs['class']:
+                        break
+                    self.assertEqual(link.attrs['href'], 'file2')
 
 
 class TestLinkBrokenRewrite(TestLocalBranchImport):
@@ -45,12 +51,11 @@ class TestLinkBrokenRewrite(TestLocalBranchImport):
             self.assertEqual(article.page.parent, self.root)
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
-                if link.has_attr('class') and \
-                   'headeranchor-link' in link.attrs['class']:
-                    break
-                page = self.check_local_link(link.attrs['href'])
-                self.assertIsNone(page)
-                self.assertNotIn(page, pages)
+                if not link.has_attr('class') or \
+                   'headeranchor-link' not in link.attrs['class']:
+                    page = self.check_local_link(link.attrs['href'])
+                    self.assertIsNone(page)
+                    self.assertNotIn(page, pages)
 
 
 class TestSnapcraftLinkRewrite(TestLocalBranchImport):
