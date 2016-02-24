@@ -52,6 +52,38 @@ def language_view(request, topic_name, language_name):
     }
     return render_to_response('api_docs/language.html', context, RequestContext(request))
 
+from django.forms import ModelForm
+class VersionForm(ModelForm):
+    class Meta:
+        model = Version
+        fields = ['name', 'slug']
+
+def release_version(request, topic_name, language_name):
+    language = get_object_or_404(Language, topic__slug=topic_name, slug=language_name)
+
+    version = Version(language=language)
+
+    if request.method == 'POST':
+        form = VersionForm(request.POST, instance=version)
+        if form.is_valid():
+            form.save()
+            language.current_version = language.development_version
+            language.development_version = version
+            language.save()
+            version.import_from(language.current_version)
+            version.save()
+            return HttpResponseRedirect(reverse('api_docs:version', args=[topic_name, language_name, version.slug]))
+    else:
+        form = VersionForm(instance=version)
+        
+    context = {
+        'form': form,
+        'topic': language.topic,
+        'language': language,
+        'version': version,
+        'previous': language.development_version,
+    }
+    return render_to_response('api_docs/version_edit.html', context, RequestContext(request))
 
 def version_view(request, topic_name, language_name, release_version):
     version = _get_release_version(topic_name, language_name, release_version)

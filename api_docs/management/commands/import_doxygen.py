@@ -90,7 +90,12 @@ class Command(BaseCommand):
         verbosity = int(options.get('verbosity', 0))
         topic = Topic.objects.get(slug=options.get('topic'))
         language = Language.objects.get(slug=options.get('lang'), topic=topic)
-        version = Version.objects.get(slug=options.get('version'), language=language)
+        if options.get('version') == 'development':
+            version = language.development_version
+        elif options.get('version') == 'current':
+            version = language.current_version
+        else:
+            version = Version.objects.get(slug=options.get('version'), language=language)
         section = None # Will be determined during import
         
         importer = DoxygenImporter(topic, language, version, section, options)
