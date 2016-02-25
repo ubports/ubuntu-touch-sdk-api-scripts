@@ -11,7 +11,7 @@ from . import (
     MARKDOWN_EXTENSIONS,
     SUPPORTED_ARTICLE_TYPES,
 )
-from .publish import get_or_create_page, slugify
+from .publish import get_or_create_page, slugify, update_page
 
 if sys.version_info.major == 2:
     from urlparse import urlparse
@@ -28,18 +28,18 @@ class Article:
         self.write_to = slugify(self.fn)
         self.full_url = write_to
         self.slug = os.path.basename(self.full_url)
+        self.links_rewritten = False
+        self.local_images = []
 
     def _find_local_images(self):
         '''Local images are currently not supported.'''
         soup = BeautifulSoup(self.html, 'html5lib')
-        local_images = []
         for img in soup.find_all('img'):
             if img.has_attr('src'):
                 (scheme, netloc, path, params, query, fragment) = \
                     urlparse(img.attrs['src'])
                 if scheme not in ['http', 'https']:
-                    local_images.extend([img.attrs['src']])
-        return local_images
+                    self.local_images.extend([img.attrs['src']])
 
     def read(self):
         if os.path.splitext(self.fn)[1] not in SUPPORTED_ARTICLE_TYPES:
@@ -54,10 +54,10 @@ class Article:
                     extensions=MARKDOWN_EXTENSIONS)
             elif self.fn.endswith('.html'):
                 self.html = f.read()
-        local_images = self._find_local_images()
-        if local_images:
+        self._find_local_images()
+        if self.local_images:
             logging.error('Found the following local image(s): {}'.format(
-                ', '.join(local_images)
+                ', '.join(self.local_images)
             ))
             return False
         self.title = self._read_title()
@@ -93,7 +93,6 @@ class Article:
 
     def replace_links(self, titles, url_map):
         soup = BeautifulSoup(self.html, 'html5lib')
-        change = False
         for link in soup.find_all('a'):
             if not link.has_attr('class') or \
                'headeranchor-link' not in link.attrs['class']:
@@ -101,10 +100,9 @@ class Article:
                     if title.endswith(link.attrs['href']) and \
                        link.attrs['href'] != url_map[title].full_url:
                         link.attrs['href'] = url_map[title].full_url
-                        change = True
-        if change:
+                        self.links_rewritten = True
+        if self.links_rewritten:
             self.html = soup.prettify()
-        return change
 
     def add_to_db(self):
         '''Publishes pages in their branch alias namespace.'''
@@ -117,6 +115,9 @@ class Article:
         return True
 
     def publish(self):
+        if self.links_rewritten:
+            update_page(self.page, title=self.title, full_url=self.full_url,
+                        menu_title=self.title, html=self.html)
         if self.page.is_dirty(DEFAULT_LANG):
             self.page.publish(DEFAULT_LANG)
             if self.page.get_public_object():
