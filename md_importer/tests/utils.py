@@ -55,8 +55,11 @@ class TestLocalBranchImport(CMSTestCase):
         self.assertEqual(self.fetch_retcode, 0)
 
     def check_local_link(self, url):
+        if not url.startswith('/'):
+            url = '/' + url
         if not url.startswith('/{}/'.format(DEFAULT_LANG)):
-            url = '/{}/{}/'.format(DEFAULT_LANG, url)
+            url = '/{}'.format(DEFAULT_LANG) + url
+        print(url)
         request = self.get_request(url)
         page = get_page_from_request(request)
         return page
