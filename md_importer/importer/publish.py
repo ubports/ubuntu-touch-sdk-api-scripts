@@ -31,6 +31,28 @@ def _find_parent(full_url):
         return None
     return parent_pages[0].page
 
+def update_page(page, title, full_url, menu_title=None,
+                in_navigation=True, redirect=None, html=None):
+    if page.get_title() != title:
+        page.title = title
+    if page.get_menu_title() != menu_title:
+        page.menu_title = menu_title
+    if page.in_navigation != in_navigation:
+        page.in_navigation = in_navigation
+    if page.get_redirect() != redirect:
+        page.redirect = redirect
+    if html:
+        # We create the page, so we know there's just one placeholder
+        placeholder = page.placeholders.all()[0]
+        if placeholder.get_plugins():
+            plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
+            if plugin.body != clean_html(html, full=False):
+                plugin.body = html
+                plugin.save()
+        else:
+            add_plugin(
+                placeholder, 'RawHtmlPlugin',
+                DEFAULT_LANG, body=html)
 
 def get_or_create_page(title, full_url, menu_title=None,
                        in_navigation=True, redirect=None, html=None):
@@ -39,26 +61,8 @@ def get_or_create_page(title, full_url, menu_title=None,
         path__regex=full_url).filter(publisher_is_draft=True)
     if pages:
         page = pages[0].page
-        if page.get_title() != title:
-            page.title = title
-        if page.get_menu_title() != menu_title:
-            page.menu_title = menu_title
-        if page.in_navigation != in_navigation:
-            page.in_navigation = in_navigation
-        if page.get_redirect() != redirect:
-            page.redirect = redirect
-        if html:
-            # We create the page, so we know there's just one placeholder
-            placeholder = page.placeholders.all()[0]
-            if placeholder.get_plugins():
-                plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
-                if plugin.body != clean_html(html, full=False):
-                    plugin.body = html
-                    plugin.save()
-            else:
-                add_plugin(
-                    placeholder, 'RawHtmlPlugin',
-                    DEFAULT_LANG, body=html)
+        update_page(page, title, full_url, menu_title,
+                    in_navigation, redirect, html)
     else:
         parent = _find_parent(full_url)
         if not parent:
