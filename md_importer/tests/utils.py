@@ -59,7 +59,6 @@ class TestLocalBranchImport(CMSTestCase):
             url = '/' + url
         if not url.startswith('/{}/'.format(DEFAULT_LANG)):
             url = '/{}'.format(DEFAULT_LANG) + url
-        print(url)
         request = self.get_request(url)
         page = get_page_from_request(request)
         return page
