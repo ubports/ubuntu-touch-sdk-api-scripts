@@ -107,6 +107,8 @@ class Article:
                     if title.endswith(link.attrs['href']) and \
                        link.attrs['href'] != url_map[title].full_url:
                         link.attrs['href'] = url_map[title].full_url
+                        if not link.attrs['href'].startswith('/'):
+                            link.attrs['href'] = '/' + link.attrs['href']
                         self.links_rewritten = True
         if self.links_rewritten:
             self.html = soup.prettify()
