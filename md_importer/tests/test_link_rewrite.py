@@ -34,7 +34,7 @@ class TestLinkRewrite(TestLocalBranchImport):
                 for link in soup.find_all('a'):
                     if not link.has_attr('class') or \
                        'headeranchor-link' not in link.attrs['class']:
-                       self.assertEqual(link.attrs['href'], 'file2')
+                        self.assertEqual(link.attrs['href'], 'file2')
 
 
 class TestLinkBrokenRewrite(TestLocalBranchImport):

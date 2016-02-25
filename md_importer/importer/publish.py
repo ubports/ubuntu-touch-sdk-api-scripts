@@ -31,6 +31,7 @@ def _find_parent(full_url):
         return None
     return parent_pages[0].page
 
+
 def update_page(page, title, full_url, menu_title=None,
                 in_navigation=True, redirect=None, html=None):
     if page.get_title() != title:
@@ -54,6 +55,7 @@ def update_page(page, title, full_url, menu_title=None,
                 placeholder, 'RawHtmlPlugin',
                 DEFAULT_LANG, body=html)
 
+
 def get_or_create_page(title, full_url, menu_title=None,
                        in_navigation=True, redirect=None, html=None):
     # First check if pages already exist.
@@ -61,8 +63,8 @@ def get_or_create_page(title, full_url, menu_title=None,
         path__regex=full_url).filter(publisher_is_draft=True)
     if pages:
         page = pages[0].page
-        update_page(page, title, full_url, menu_title,
-                    in_navigation, redirect, html)
+        update_page(page, title, full_url, menu_title, in_navigation,
+                    redirect, html)
     else:
         parent = _find_parent(full_url)
         if not parent:
@@ -74,6 +76,4 @@ def get_or_create_page(title, full_url, menu_title=None,
             position='last-child', redirect=redirect)
         placeholder = page.placeholders.get()
         add_plugin(placeholder, 'RawHtmlPlugin', DEFAULT_LANG, body=html)
-        placeholder = page.placeholders.all()[0]
-        plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
     return page

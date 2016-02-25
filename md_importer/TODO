@@ -5,3 +5,4 @@
 - add comment at top of RawHTML plugins, so users know not to edit them,
   currently blocked on LP: #1523925 (RawHTML plugin strips comments)
 - investigate what the api importer does (upload to swift)
+- replaced links should start with a '/'
