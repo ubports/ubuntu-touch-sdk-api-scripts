@@ -74,10 +74,17 @@ class Article:
         return slugify(self.fn).replace('-', ' ').title()
 
     def _remove_body_and_html_tags(self):
-        self.html = re.sub(r"<html>\n\s<body>\n", "", self.html,
+        # These are added by markdown.markdown
+        self.html = re.sub(r"\s<html>\n\s<body>\n", "", self.html,
                            flags=re.MULTILINE)
         self.html = re.sub(r"\s<\/body>\n<\/html>", "", self.html,
                            flags=re.MULTILINE)
+
+        # These are added by BeautifulSoup.prettify
+        self.html = re.sub(r'<html>\n\s<head>\n </head>\n <body>', '',
+                           self.html, flags=re.MULTILINE)
+        self.html = re.sub(r'\s<\/body>\n<\/html>', '',
+                           self.html, flags=re.MULTILINE)
 
     def _use_developer_site_style(self):
         begin = (u"<div class=\"row no-border\">"
@@ -103,6 +110,7 @@ class Article:
                         self.links_rewritten = True
         if self.links_rewritten:
             self.html = soup.prettify()
+            self._remove_body_and_html_tags()
 
     def add_to_db(self):
         '''Publishes pages in their branch alias namespace.'''
