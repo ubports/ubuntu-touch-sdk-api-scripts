@@ -2,9 +2,10 @@ from datetime import datetime
 import pytz
 import shutil
 
-from cms.models import CMSPlugin, Page
+from cms.models import Page
 
 from md_importer.importer.article import Article
+from md_importer.importer.publish import find_text_plugin
 from .utils import TestLocalBranchImport
 
 
@@ -117,9 +118,9 @@ class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
         self.assertEqual(
             Page.objects.filter(publisher_is_draft=False).count(),
             len(self.repo.imported_articles)+1)  # articles + root
+        shutil.rmtree(self.tempdir)
         # Take the time before publishing the second import
         now = datetime.now(pytz.utc)
-        shutil.rmtree(self.tempdir)
         # Run second import
         self.create_repo('data/snapcraft-test')
         self.repo.add_directive('docs', '')
@@ -128,7 +129,7 @@ class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
         # Check the page's plugins
-        for plugin_change in CMSPlugin.objects.filter(
-            plugin_type='RawHtmlPlugin').order_by(
-                '-changed_date'):
-            self.assertGreater(now, plugin_change.changed_date)
+        for page in Page.objects.filter(publisher_is_draft=False):
+            if page != self.root:
+                (dummy, plugin) = find_text_plugin(page)
+                self.assertGreater(now, plugin.changed_date)

@@ -4,9 +4,16 @@ from cms.api import create_page, add_plugin
 from cms.models import Title
 from djangocms_text_ckeditor.html import clean_html
 
+from bs4 import BeautifulSoup
 import logging
 import re
 import os
+
+
+def _compare_html(html_a, html_b):
+    soup_a = BeautifulSoup(html_a, 'html5lib')
+    soup_b = BeautifulSoup(html_b, 'html5lib')
+    return (clean_html(soup_a.prettify()) == clean_html(soup_b.prettify()))
 
 
 def slugify(filename):
@@ -32,6 +39,17 @@ def _find_parent(full_url):
     return parent_pages[0].page
 
 
+def find_text_plugin(page):
+    # We create the page, so we know there's just one placeholder
+    placeholder = page.placeholders.all()[0]
+    if placeholder.get_plugins():
+        return (
+            placeholder,
+            placeholder.get_plugins()[0].get_plugin_instance()[0]
+        )
+    return (placeholder, None)
+
+
 def update_page(page, title, full_url, menu_title=None,
                 in_navigation=True, redirect=None, html=None):
     if page.get_title() != title:
@@ -43,13 +61,23 @@ def update_page(page, title, full_url, menu_title=None,
     if page.get_redirect() != redirect:
         page.redirect = redirect
     if html:
-        # We create the page, so we know there's just one placeholder
-        placeholder = page.placeholders.all()[0]
-        if placeholder.get_plugins():
-            plugin = placeholder.get_plugins()[0].get_plugin_instance()[0]
-            if plugin.body != clean_html(html, full=False):
+        update = True
+        (placeholder, plugin) = find_text_plugin(page)
+        if plugin:
+            if _compare_html(html, plugin.body):
+                update = False
+            elif page.get_public_object():
+                (dummy, published_plugin) = \
+                    find_text_plugin(page.get_public_object())
+                if published_plugin:
+                    if _compare_html(html, published_plugin.body):
+                        update = False
+            if update:
                 plugin.body = html
                 plugin.save()
+            else:
+                # Reset draft
+                page.get_draft_object().revert(DEFAULT_LANG)
         else:
             add_plugin(
                 placeholder, 'RawHtmlPlugin',
