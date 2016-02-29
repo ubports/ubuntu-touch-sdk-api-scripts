@@ -13,6 +13,5 @@ MARKDOWN_EXTENSIONS = [
     'pymdownx.tilde',
     'pymdownx.githubemoji',
     'pymdownx.tasklist',
-    'pymdownx.headeranchor',
     'pymdownx.superfences',
 ]
