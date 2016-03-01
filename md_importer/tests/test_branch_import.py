@@ -83,6 +83,23 @@ class TestArticleHTMLTagsAfterImport(TestLocalBranchImport):
             self.assertNotIn('&lt;body&gt;', article.html)
 
 
+class TestNoneInURLAfterImport(TestLocalBranchImport):
+    def runTest(self):
+        self.create_repo('data/snapcraft-test')
+        self.repo.add_directive('docs', '')
+        self.assertEqual(len(self.repo.directives), 1)
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertGreater(len(self.repo.imported_articles), 3)
+        self.assertTrue(self.repo.publish())
+        pages = Page.objects.all()
+        self.assertGreater(pages.count(), len(self.repo.imported_articles))
+        for article in self.repo.imported_articles:
+            self.assertIsInstance(article, Article)
+            self.assertNotIn('/None/', article.full_url)
+        for page in pages:
+            self.assertIsNotNone(page.get_slug())
+
+
 class TestTwiceImport(TestLocalBranchImport):
     '''Run import on the same contents twice, make sure we don't
        add new pages over and over again.'''

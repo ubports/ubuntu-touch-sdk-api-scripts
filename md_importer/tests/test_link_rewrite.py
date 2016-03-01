@@ -57,6 +57,29 @@ class TestLinkBrokenRewrite(TestLocalBranchImport):
                     self.assertNotIn(page, pages)
 
 
+class TestNoneNotInLinks(TestLocalBranchImport):
+    def runTest(self):
+        self.create_repo('data/snapcraft-test')
+        snappy_page = db_add_empty_page('Snappy', self.root)
+        self.assertFalse(snappy_page.publisher_is_draft)
+        build_apps = db_add_empty_page('Build Apps', snappy_page)
+        self.assertFalse(build_apps.publisher_is_draft)
+        self.assertEqual(
+            3, Page.objects.filter(publisher_is_draft=False).count())
+        self.repo.add_directive('docs/intro.md', 'snappy/build-apps/current')
+        self.repo.add_directive('docs', 'snappy/build-apps/current')
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertTrue(self.repo.publish())
+        pages = Page.objects.all()
+        for article in self.repo.imported_articles:
+            self.assertTrue(isinstance(article, Article))
+            self.assertGreater(len(article.html), 0)
+            soup = BeautifulSoup(article.html, 'html5lib')
+            for link in soup.find_all('a'):
+                if is_local_link(link):
+                    self.assertFalse(link.attrs['href'].startswith('/None/'))
+
+
 class TestSnapcraftLinkRewrite(TestLocalBranchImport):
     def runTest(self):
         self.create_repo('data/snapcraft-test')

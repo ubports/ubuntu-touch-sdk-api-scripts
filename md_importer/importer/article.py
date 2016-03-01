@@ -119,7 +119,9 @@ class Article:
             html=self.html)
         if not self.page:
             return False
-        self.full_url = self.page.get_absolute_url()
+        self.full_url = re.sub(
+            r'^\/None\/', '/{}/'.format(DEFAULT_LANG),
+            self.page.get_absolute_url())
         return True
 
     def publish(self):
