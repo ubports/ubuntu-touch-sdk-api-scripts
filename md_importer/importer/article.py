@@ -141,14 +141,16 @@ class SnappyArticle(Article):
     def read(self):
         if not Article.read(self):
             return False
-        self.release_alias = re.findall(r'snappy/guides/(\S+?)/\S+?',
-                                        self.full_url)[0]
+        matches = re.findall(r'snappy/guides/(\S+?)/\S+?',
+                             self.full_url)
+        if matches:
+            self.release_alias = matches[0]
         self._make_snappy_mods()
         return True
 
     def _make_snappy_mods(self):
         # Make sure the reader knows which documentation she is browsing
-        if self.release_alias != 'current':
+        if self.release_alias and elf.release_alias != 'current':
             before = (u"<div class=\"row no-border\">\n"
                       "<div class=\"eight-col\">\n")
             after = (u"<div class=\"row no-border\">\n"
@@ -171,6 +173,6 @@ class SnappyArticle(Article):
                 redirect="/snappy/guides/current/{}".format(self.slug))
             if not page:
                 return False
-        else:
+        elif self.release_alias:
             self.title += " (%s)" % (self.release_alias,)
         return Article.add_to_db(self)
