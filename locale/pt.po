@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: developer-ubuntu-com\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-01-19 00:07+0000\n"
-"PO-Revision-Date: 2015-12-23 11:13+0000\n"
+"PO-Revision-Date: 2016-02-29 13:01+0000\n"
 "Last-Translator: Ivo Xavier <ivofernandes12@gmail.com>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2016-01-29 05:43+0000\n"
-"X-Generator: Launchpad (build 17902)\n"
+"X-Launchpad-Export-Date: 2016-03-01 05:56+0000\n"
+"X-Generator: Launchpad (build 17925)\n"
 
 #: developer_portal/cms_plugins.py:10
 msgid "Raw HTML"
@@ -61,6 +61,8 @@ msgid ""
 "External branch location, ie: lp:snappy/15.04 or https://github.com/ubuntu-"
 "core/snappy.git"
 msgstr ""
+"Localização de branch externa, ie: lp:snappy/15.04 or "
+"https://github.com/ubuntu-core/snappy.git"
 
 #: md_importer/models.py:14
 msgid "For use with git branches, ie: \"master\" or \"15.04\" or \"1.x\"."
@@ -84,7 +86,7 @@ msgstr ""
 
 #: md_importer/models.py:56
 msgid "Datetime"
-msgstr ""
+msgstr "datahora"
 
 #: md_importer/models.py:56
 msgid "Datetime of last import."
@@ -603,14 +605,3 @@ msgstr "Email do programador"
 #: webapp_creator/views.py:47
 msgid "E.g. miaotian@ubuntu.com"
 msgstr "E.x. miaotian@ubuntu.com"
-
-#~ msgid ""
-#~ "Path alias we want to use for the docs, ie \"snappy/guides/15.04\" or "
-#~ "\"snappy/guides/latest\", etc."
-#~ msgstr ""
-#~ "Caminho que queremos usar para dos docs, ex \"snappy/guides/15.04\" ou "
-#~ "\"snappy/guides/latest\", etc."
-
-#~ msgid "File name of doc to be used as index document, ie \"intro.md\""
-#~ msgstr ""
-#~ "Nome do ficheiro para ser usado como documento de index, ex \"intro.md\""
