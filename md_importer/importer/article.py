@@ -151,7 +151,7 @@ class SnappyArticle(Article):
 
     def _make_snappy_mods(self):
         # Make sure the reader knows which documentation she is browsing
-        if self.release_alias and elf.release_alias != 'current':
+        if self.release_alias and self.release_alias != 'current':
             before = (u"<div class=\"row no-border\">\n"
                       "<div class=\"eight-col\">\n")
             after = (u"<div class=\"row no-border\">\n"
