@@ -100,6 +100,34 @@ class TestNoneInURLAfterImport(TestLocalBranchImport):
             self.assertIsNotNone(page.get_slug())
 
 
+class TestAdvertiseImport(TestLocalBranchImport):
+    '''Check if all imported articles are advertised in the navigation when
+       using defaults.'''
+    def runTest(self):
+        self.create_repo('data/snapcraft-test')
+        self.repo.add_directive('docs', '')
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertTrue(self.repo.publish())
+        for page in Page.objects.filter(publisher_is_draft=False):
+            if page.parent is not None:
+                self.assertEqual(page.parent_id, self.root.id)
+                self.assertTrue(page.in_navigation)
+
+
+class TestNoAdvertiseImport(TestLocalBranchImport):
+    '''Check if all imported articles are advertised in the navigation when
+       using defaults.'''
+    def runTest(self):
+        self.create_repo('data/snapcraft-test')
+        self.repo.add_directive('docs', '', advertise=False)
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertTrue(self.repo.publish())
+        for page in Page.objects.filter(publisher_is_draft=False):
+            if page.parent is not None:
+                self.assertEqual(page.parent_id, self.root.id)
+                self.assertFalse(page.in_navigation)
+
+
 class TestTwiceImport(TestLocalBranchImport):
     '''Run import on the same contents twice, make sure we don't
        add new pages over and over again.'''

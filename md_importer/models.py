@@ -43,6 +43,11 @@ class ExternalDocsBranchImportDirective(models.Model):
         help_text=_('Article URL (for a specific file) or article namespace '
                     'for a directory or a set of files.'),
         blank=True)
+    advertise = models.BooleanField(
+        default=True,
+        help_text=_('Should the imported articles be listed in the '
+                    'navigation? Default: yes.'),
+    )
 
     def __str__(self):
         return "{} -- {}".format(self.external_docs_branch,
