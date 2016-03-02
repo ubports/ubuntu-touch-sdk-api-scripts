@@ -128,7 +128,8 @@ class Article:
     def publish(self):
         if self.links_rewritten:
             update_page(self.page, title=self.title, full_url=self.full_url,
-                        menu_title=self.title, html=self.html)
+                        menu_title=self.title, html=self.html,
+                        in_navigation=self.advertise)
         if self.page.is_dirty(DEFAULT_LANG):
             self.page.publish(DEFAULT_LANG)
             if self.page.get_public_object():

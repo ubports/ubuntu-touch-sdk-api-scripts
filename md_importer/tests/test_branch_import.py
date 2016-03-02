@@ -107,6 +107,8 @@ class TestAdvertiseImport(TestLocalBranchImport):
         self.create_repo('data/snapcraft-test')
         self.repo.add_directive('docs', '')
         self.assertTrue(self.repo.execute_import_directives())
+        for article in self.repo.imported_articles:
+            self.assertTrue(article.advertise)
         self.assertTrue(self.repo.publish())
         for page in Page.objects.filter(publisher_is_draft=False):
             if page.parent is not None:
@@ -121,6 +123,8 @@ class TestNoAdvertiseImport(TestLocalBranchImport):
         self.create_repo('data/snapcraft-test')
         self.repo.add_directive('docs', '', advertise=False)
         self.assertTrue(self.repo.execute_import_directives())
+        for article in self.repo.imported_articles:
+            self.assertFalse(article.advertise)
         self.assertTrue(self.repo.publish())
         for page in Page.objects.filter(publisher_is_draft=False):
             if page.parent is not None:
