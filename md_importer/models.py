@@ -12,6 +12,7 @@ else:
         ('default.html', 'Default'),
     )
 
+
 class ExternalDocsBranch(models.Model):
     origin = models.CharField(
         max_length=200,
