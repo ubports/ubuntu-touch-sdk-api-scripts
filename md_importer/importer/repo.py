@@ -6,6 +6,8 @@ from .article import Article, SnappyArticle
 from .publish import get_or_create_page, slugify
 from .source import SourceCode
 
+from md_importer.models import ExternalDocsBranchImportDirective
+
 import glob
 import logging
 import os
@@ -56,13 +58,18 @@ class Repo:
             return 1
         return 0
 
-    def add_directive(self, import_from, write_to, advertise=True):
+    def add_directive(self, import_from, write_to, advertise=True,
+                      template=None):
+        if template is None:
+            model_info = ExternalDocsBranchImportDirective._meta
+            template = model_info.get_field('template').default
         self.directives += [
             {
                 'import_from': os.path.join(self.checkout_location,
                                             import_from),
                 'write_to': write_to,
                 'advertise': advertise,
+                'template': template,
             }
         ]
 
@@ -73,7 +80,7 @@ class Repo:
                           if os.path.isfile(d['import_from'])]:
             import_list += [
                 (directive['import_from'], directive['write_to'],
-                 directive['advertise'])
+                 directive['advertise'], directive['template'])
             ]
         # Import directories next
         for directive in [d for d in self.directives
@@ -82,7 +89,7 @@ class Repo:
                 if fn not in [a[0] for a in import_list]:
                     import_list += [
                         (fn, os.path.join(directive['write_to'], slugify(fn)),
-                         directive['advertise'])
+                         directive['advertise'], directive['template'])
                     ]
             # If we import into a namespace and don't have an index doc,
             # we need to write one.
@@ -94,7 +101,8 @@ class Repo:
                 return False
         # The actual import
         for entry in import_list:
-            article = self._read_article(entry[0], entry[1], entry[2])
+            article = self._read_article(
+                entry[0], entry[1], entry[2], entry[3])
             if article:
                 self.imported_articles += [article]
                 self.titles[article.fn] = article.title
@@ -109,8 +117,8 @@ class Repo:
             self._write_fake_index_doc()
         return True
 
-    def _read_article(self, fn, write_to, advertise):
-        article = self.article_class(fn, write_to, advertise)
+    def _read_article(self, fn, write_to, advertise, template):
+        article = self.article_class(fn, write_to, advertise, template)
         if article.read():
             return article
         return None

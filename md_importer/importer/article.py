@@ -20,7 +20,7 @@ else:
 
 
 class Article:
-    def __init__(self, fn, write_to, advertise):
+    def __init__(self, fn, write_to, advertise, template):
         self.html = None
         self.page = None
         self.title = ""
@@ -31,6 +31,7 @@ class Article:
         self.links_rewritten = False
         self.local_images = []
         self.advertise = advertise
+        self.template = template
 
     def _find_local_images(self):
         '''Local images are currently not supported.'''
@@ -117,7 +118,8 @@ class Article:
         '''Publishes pages in their branch alias namespace.'''
         self.page = get_or_create_page(
             title=self.title, full_url=self.full_url, menu_title=self.title,
-            html=self.html, in_navigation=self.advertise)
+            html=self.html, in_navigation=self.advertise,
+            template=self.template)
         if not self.page:
             return False
         self.full_url = re.sub(
@@ -129,7 +131,7 @@ class Article:
         if self.links_rewritten:
             update_page(self.page, title=self.title, full_url=self.full_url,
                         menu_title=self.title, html=self.html,
-                        in_navigation=self.advertise)
+                        in_navigation=self.advertise, template=self.template)
         if self.page.is_dirty(DEFAULT_LANG):
             self.page.publish(DEFAULT_LANG)
             if self.page.get_public_object():

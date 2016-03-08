@@ -4,8 +4,13 @@ import shutil
 
 from cms.models import Page
 
+from md_importer.importer import (
+    DEFAULT_TEMPLATE,
+    TEMPLATE_CHOICES,
+)
 from md_importer.importer.article import Article
 from md_importer.importer.publish import find_text_plugin
+
 from .utils import TestLocalBranchImport
 
 
@@ -182,3 +187,32 @@ class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
             if page != self.root:
                 (dummy, plugin) = find_text_plugin(page)
                 self.assertGreater(now, plugin.changed_date)
+
+
+class TestImportNoTemplateChange(TestLocalBranchImport):
+    '''Check if all imported articles use the default template.'''
+    def runTest(self):
+        self.create_repo('data/snapcraft-test')
+        self.repo.add_directive('docs', '')
+        self.assertTrue(self.repo.execute_import_directives())
+        for article in self.repo.imported_articles:
+            self.assertEqual(article.template, DEFAULT_TEMPLATE)
+        self.assertTrue(self.repo.publish())
+        for page in Page.objects.filter(publisher_is_draft=False):
+            if page.parent is not None:
+                self.assertEqual(page.template, DEFAULT_TEMPLATE)
+
+
+class TestImportTemplateChange(TestLocalBranchImport):
+    '''Check if all imported articles use the desired template.'''
+    def runTest(self):
+        self.create_repo('data/snapcraft-test')
+        template_to_use = TEMPLATE_CHOICES[1][0]
+        self.repo.add_directive('docs', '', template=template_to_use)
+        self.assertTrue(self.repo.execute_import_directives())
+        for article in self.repo.imported_articles:
+            self.assertEqual(article.template, template_to_use)
+        self.assertTrue(self.repo.publish())
+        for page in Page.objects.filter(publisher_is_draft=False):
+            if page.parent is not None:
+                self.assertEqual(page.template, template_to_use)

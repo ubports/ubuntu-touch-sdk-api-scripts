@@ -1,4 +1,8 @@
-from md_importer.importer import DEFAULT_LANG, HOME_PAGE_URL
+from md_importer.importer import (
+    DEFAULT_LANG,
+    DEFAULT_TEMPLATE,
+    HOME_PAGE_URL,
+)
 
 from cms.api import create_page, add_plugin
 from cms.models import Title
@@ -51,7 +55,7 @@ def find_text_plugin(page):
 
 
 def update_page(page, title, full_url, menu_title=None,
-                in_navigation=True, redirect=None, html=None):
+                in_navigation=True, redirect=None, html=None, template=None):
     if page.get_title() != title:
         page.title = title
     if page.get_menu_title() != menu_title:
@@ -60,6 +64,8 @@ def update_page(page, title, full_url, menu_title=None,
         page.in_navigation = in_navigation
     if page.get_redirect() != redirect:
         page.redirect = redirect
+    if page.template != template:
+        page.template = template
     if html:
         update = True
         (placeholder, plugin) = find_text_plugin(page)
@@ -85,23 +91,24 @@ def update_page(page, title, full_url, menu_title=None,
 
 
 def get_or_create_page(title, full_url, menu_title=None,
-                       in_navigation=True, redirect=None, html=None):
+                       in_navigation=True, redirect=None, html=None,
+                       template=DEFAULT_TEMPLATE):
     # First check if pages already exist.
     pages = Title.objects.select_related('page').filter(
         path__regex=full_url).filter(publisher_is_draft=True)
     if pages:
         page = pages[0].page
         update_page(page, title, full_url, menu_title, in_navigation,
-                    redirect, html)
+                    redirect, html, template)
     else:
         parent = _find_parent(full_url)
         if not parent:
             return None
         slug = os.path.basename(full_url)
         page = create_page(
-            title, 'default.html', DEFAULT_LANG, slug=slug, parent=parent,
-            menu_title=menu_title, in_navigation=in_navigation,
+            title=title, template=template, language=DEFAULT_LANG, slug=slug,
+            parent=parent, menu_title=menu_title, in_navigation=in_navigation,
             position='last-child', redirect=redirect)
-        placeholder = page.placeholders.get()
+        placeholder = page.placeholders.all()[0]
         add_plugin(placeholder, 'RawHtmlPlugin', DEFAULT_LANG, body=html)
     return page
