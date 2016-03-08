@@ -1,8 +1,16 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from cms.models import Page
 
+
+if settings.CMS_TEMPLATES:
+    cms_templates = settings.CMS_TEMPLATES
+else:
+    cms_templates = (
+        ('default.html', 'Default'),
+    )
 
 class ExternalDocsBranch(models.Model):
     origin = models.CharField(
@@ -47,6 +55,13 @@ class ExternalDocsBranchImportDirective(models.Model):
         default=True,
         help_text=_('Should the imported articles be listed in the '
                     'navigation? Default: yes.'),
+    )
+    template = models.CharField(
+        max_length=50,
+        default=cms_templates[0][0],
+        choices=cms_templates,
+        help_text=_('Django CMS template to use for the imported articles. '
+                    'Default: {}'.format(cms_templates[0][0])),
     )
 
     def __str__(self):
