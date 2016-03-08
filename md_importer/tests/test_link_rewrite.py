@@ -70,7 +70,6 @@ class TestNoneNotInLinks(TestLocalBranchImport):
         self.repo.add_directive('docs', 'snappy/build-apps/current')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
-        pages = Page.objects.all()
         for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, Article))
             self.assertGreater(len(article.html), 0)
