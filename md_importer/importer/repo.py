@@ -153,12 +153,13 @@ class Repo:
         return True
 
     def _write_fake_index_doc(self):
-        list_pages = ''
+        list_pages = u''
         for article in [a for a
                         in self.imported_articles
                         if a.full_url.startswith(self.index_doc_url)]:
-            list_pages += '<li><a href=\"{}\">{}</a></li>'.format(
-                os.path.basename(article.full_url), article.title)
+            list_pages += u'<li><a href=\"{}\">{}</a></li>'.format(
+                unicode(os.path.basename(article.full_url)),
+                article.title)
         self.index_page.html = (
             u'<div class=\"row\"><div class=\"eight-col\">\n'
             '<p>This section contains documentation for the '
