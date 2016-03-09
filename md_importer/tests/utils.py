@@ -27,9 +27,11 @@ def db_create_root_page():
     return db_add_empty_page('root')
 
 
-def db_add_empty_page(title, parent=None):
+def db_add_empty_page(title, parent=None, slug=None):
+    if not slug:
+        slug = slugify(title)
     page = create_page(
-        title, 'default.html', DEFAULT_LANG, slug=slugify(title),
+        title, 'default.html', DEFAULT_LANG, slug=slug,
         published=True, parent=parent)
     page.reload()
     page.publish(DEFAULT_LANG)
