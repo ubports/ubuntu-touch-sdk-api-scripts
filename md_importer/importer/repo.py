@@ -118,7 +118,6 @@ class Repo:
                 logging.error('Publishing of {} aborted.'.format(self.origin))
                 return False
             article.replace_links(self.titles, self.url_map)
-        self.pages = []
         for article in self.imported_articles:
             self.pages.extend([article.publish()])
         if self.index_page:
