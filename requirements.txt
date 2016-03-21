@@ -33,6 +33,7 @@ django-taggit-templatetags==0.2.5
 django-templatetag-sugar==1.0
 django-xmlrpc==0.1.5
 djangocms-admin-style==1.0.8
+djangocms-inherit==0.1.1
 djangocms-link==1.7.1
 djangocms-picture==0.2.0
 djangocms-snippet==1.7.1
