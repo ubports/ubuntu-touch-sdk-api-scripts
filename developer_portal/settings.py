@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'djangocms_text_ckeditor',
 
     'cms', #django CMS itself
+    'djangocms_inherit',
     'djangocms_link',
     'djangocms_picture',
     'djangocms_video',
