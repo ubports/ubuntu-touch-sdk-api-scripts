@@ -1,6 +1,5 @@
 from md_importer.importer import DEFAULT_LANG
 from md_importer.importer.repo import Repo
-from md_importer.importer.article import Article
 from .utils import (
     db_add_empty_page,
     TestLocalBranchImport,
@@ -8,6 +7,7 @@ from .utils import (
 
 from cms.api import add_plugin, publish_pages
 from cms.models import Page
+
 
 class TestSnappyWebsiteRead(TestLocalBranchImport):
     def runTest(self):
