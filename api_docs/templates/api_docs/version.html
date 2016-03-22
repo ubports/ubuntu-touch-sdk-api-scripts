@@ -9,6 +9,14 @@
 <li class="">{{version.name}}</li>
 {% endblock %}
 
+{% block nav_secondary %}
+    {% if perms.api_docs.add_version and version.language.development_version == version %}
+    <span style="float: right; vertical-align: middle;"><nav class="nav-secondary" style="border-bottom: 0px;"><ul><li><a href="{% url 'api_docs:release_version' language.topic.slug language.slug %}">New Release</a></li></ul></nav></span>
+    {% endif %}
+    {{block.super}}
+{% endblock nav_secondary%}
+
+
 {% block content %}
 	<div class="row">
     <h2>{{version.language.name}} {{version.language.topic.name}} for {{version.name}}</h2>

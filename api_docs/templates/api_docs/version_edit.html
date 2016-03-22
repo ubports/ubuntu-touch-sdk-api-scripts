@@ -1,23 +1,20 @@
-{% extends "api_docs/base.html" %}
+{% extends "base.html" %}
 
-{% block editor_links %}
-    <li><a href="{% url version_edit version.id %}?action=delete">Delete</a></li>
-{% endblock %}
+{% block title %}New Release - Ubuntu Developer{% endblock %}
 
 {% block breadcrumbs %}
 {% endblock %}
 
 {% block content %}
-{% if version.id %}
-<h2>Edit {{version.name}}</h2>
-{% else %}
+<div class="row">
 <h2>New Version</h2>
-{% endif %}
-
-<form action="" method="POST" id="element_form">
-{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Save">
-</form>
-
+<h3>(Previous version: {{ previous.slug }})</h3>
+    <div class="six-col">
+        <form action="" method="POST" id="element_form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+        </form>
+    </div>
+</div>
 {% endblock %}
