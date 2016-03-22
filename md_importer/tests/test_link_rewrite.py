@@ -37,7 +37,7 @@ class TestLinkRewrite(TestLocalBranchImport):
                        'headeranchor-link' not in link.attrs['class']:
                         self.assertIn(
                             link.attrs['href'],
-                            ['/file2', '/{}/file2'.format(DEFAULT_LANG)])
+                            ['/file2', '/{}/file2/'.format(DEFAULT_LANG)])
 
 
 class TestLinkBrokenRewrite(TestLocalBranchImport):
