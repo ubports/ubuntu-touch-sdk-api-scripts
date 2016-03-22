@@ -28,6 +28,10 @@ class Version(models.Model):
     name = models.CharField(max_length=64)
     slug = models.CharField(max_length=64)
 
+    def import_from(self, target_version):
+        for section in target_version.section_set.all():
+            self.section_set.add(section.clone())
+            
     def __unicode__(self):
         return self.language.topic.name +' '+self.language.name +' '+self.name
 
@@ -41,6 +45,28 @@ class Section(models.Model):
     def __unicode__(self):
         return self.topic_version.language.topic.name +' '+ self.topic_version.language.name +' '+self.topic_version.name+', '+self.name
 
+    def clone(self):
+        new = Section(name=self.name, description=self.description, topic_version=self.topic_version)
+        new.save()
+        for namespace in self.namespace_set.all():
+            new.namespace_set.add(namespace.clone(new))
+            
+        for element in self.element_set.all():
+            if not element.namespace:
+                element.section = new
+                element.id = None
+                element.save()
+                new.element_set.add(element)
+
+        for page in self.page_set.all():
+            if not page.namespace:
+                page.section = new
+                page.id = None
+                page.save()
+                new.page_set.add(page)
+
+        return new
+        
     @property
     def topic(self):
         return self.topic_version.topic
@@ -76,6 +102,26 @@ class Namespace(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
         
+    def clone(self, new_section):
+        new = Namespace(name=self.name, display_name=self.display_name, data=self.data, source_file=self.source_file, source_format=self.source_format, platform_section=new_section)
+        new.save()
+
+        for element in self.element_set.all():
+            element.section = new_section
+            element.namespace = new
+            element.id = None
+            element.save()
+            new.element_set.add(element)
+
+        for page in self.page_set.all():
+            page.section = new_section
+            page.namespace = new
+            page.id = None
+            page.save()
+            new.page_set.add(page)
+
+        return new
+
     @property
     def display(self):
         if self.display_name:
@@ -137,11 +183,3 @@ class Page(models.Model):
     def __unicode__(self):
         return u'%s' % self.fullname
 
-#class DocSource(models.Model):
-    #'Source of API documentation'
-    #source_name = models.CharField(max_length=64, help_text='Unique name, processed in alphabetical order')
-    #source_url = models.UrlField(max_length=256, help_text='Publicly accessible download location')
-    #last_run = models.DateTime(auto_now=True)
-    #run_script = models.TextField(help_text='Script to run on package contents to import their docs')
-    #last_stdout = models.TextField(help_text='Output from the last run')
-    #last_stdeff = models.TextField(help_text='Errors from the last run')
