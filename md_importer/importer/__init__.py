@@ -1,5 +1,7 @@
 from developer_portal.settings import LANGUAGE_CODE
 
+from md_importer.models import ExternalDocsBranchImportDirective
+
 DEFAULT_LANG = LANGUAGE_CODE
 HOME_PAGE_URL = '/{}/'.format(DEFAULT_LANG)
 SUPPORTED_ARTICLE_TYPES = ['.md', '.html']
@@ -15,3 +17,7 @@ MARKDOWN_EXTENSIONS = [
     'pymdownx.tasklist',
     'pymdownx.superfences',
 ]
+
+model_info = ExternalDocsBranchImportDirective._meta
+TEMPLATE_CHOICES = model_info.get_field('template').choices
+DEFAULT_TEMPLATE = model_info.get_field('template').default

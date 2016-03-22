@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 
 from cms.models import Page
 
+from ..importer import DEFAULT_LANG
 from ..importer.article import Article
 from .utils import (
     db_add_empty_page,
@@ -34,7 +35,9 @@ class TestLinkRewrite(TestLocalBranchImport):
                 for link in soup.find_all('a'):
                     if not link.has_attr('class') or \
                        'headeranchor-link' not in link.attrs['class']:
-                        self.assertEqual(link.attrs['href'], '/file2')
+                        self.assertIn(
+                            link.attrs['href'],
+                            ['/file2', '/{}/file2/'.format(DEFAULT_LANG)])
 
 
 class TestLinkBrokenRewrite(TestLocalBranchImport):
@@ -70,7 +73,6 @@ class TestNoneNotInLinks(TestLocalBranchImport):
         self.repo.add_directive('docs', 'snappy/build-apps/current')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
-        pages = Page.objects.all()
         for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, Article))
             self.assertGreater(len(article.html), 0)

@@ -22,7 +22,9 @@ def process_branch(branch):
     for directive in ExternalDocsBranchImportDirective.objects.filter(
             external_docs_branch=branch):
         repo.add_directive(directive.import_from,
-                           directive.write_to)
+                           directive.write_to,
+                           directive.advertise,
+                           directive.template)
     if not repo.execute_import_directives():
         return False
     if not repo.publish():

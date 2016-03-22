@@ -185,6 +185,7 @@ CMS_TEMPLATES = (
     ('landing_page.html', 'Landing Page'),
     ('no_subnav.html', 'Without Subnav'),
     ('with_hero.html', 'With Hero'),
+    ('snappy_hero_tour.html', 'Snappy Hero Tour'),
 )
 
 LOCALE_PATHS = (
