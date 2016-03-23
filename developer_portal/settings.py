@@ -178,7 +178,8 @@ CMS_PERMISSION = True
 
 CMS_CACHE_DURATIONS = {
     'menus': 0,
-    'content': 0,
+    'content': 60,
+    'permissions': 0,
 }
 
 CMS_TEMPLATES = (
