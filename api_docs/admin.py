@@ -7,7 +7,7 @@ class TopicAdmin(admin.ModelAdmin):
 admin.site.register(Topic, TopicAdmin)
 
 class LanguageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'topic')
+    list_display = ('name', 'slug', 'topic', 'current_version', 'development_version')
     list_filter = ('topic',)
     search_fields = ('name', 'slug')
 admin.site.register(Language, LanguageAdmin)

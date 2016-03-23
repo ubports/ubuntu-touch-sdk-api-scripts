@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'djangocms_text_ckeditor',
 
     'cms', #django CMS itself
+    'djangocms_inherit',
     'djangocms_link',
     'djangocms_picture',
     'djangocms_video',
@@ -177,6 +178,8 @@ CMS_PERMISSION = True
 
 CMS_CACHE_DURATIONS = {
     'menus': 0,
+    'content': 60,
+    'permissions': 3600,
 }
 
 CMS_TEMPLATES = (
@@ -184,6 +187,7 @@ CMS_TEMPLATES = (
     ('landing_page.html', 'Landing Page'),
     ('no_subnav.html', 'Without Subnav'),
     ('with_hero.html', 'With Hero'),
+    ('snappy_hero_tour.html', 'Snappy Hero Tour'),
 )
 
 LOCALE_PATHS = (
