@@ -61,7 +61,7 @@ collectstatic.debug:
 update-pip-cache:
 	@echo "Updating pip-cache"
 	rm -rf pip-cache
-	bzr branch lp:developer-ubuntu-com/dependencies pip-cache
+	bzr checkout --lightweight lp:developer-ubuntu-com/dependencies pip-cache
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
 	bzr add pip-cache/* 
 	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
@@ -72,7 +72,7 @@ update-pip-cache:
 
 pip-cache:
 	@echo "Downloading pip-cache"
-	@bzr branch -r `cat pip-cache-revno.txt` lp:developer-ubuntu-com/dependencies pip-cache
+	@bzr checkout --lightweight -r `cat pip-cache-revno.txt` lp:developer-ubuntu-com/dependencies pip-cache
 
 env: pip-cache
 	@echo "Creating virtualenv"
