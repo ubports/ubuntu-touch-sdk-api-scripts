@@ -35,7 +35,7 @@ crontab:
 	@echo internal_proxy=\"${internal_proxy}\" >> crontab
 	@echo "0 4 * * * cd ${PWD}; ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log" >> crontab
 	@echo "15 4 * * * cd ${PWD}; ${PYTHON} manage.py update-gadget-snaps > ${PWD}/../../logs/update_gadgetsnaps.log 2>${PWD}/../../logs/update_gadgetsnaps_errors.log" >> crontab
-	@echo "20 4 * * * cd ${PWD}; ${PYTHON} manage.py import-external-docs-branches > ${PWD}/../../logs/import-external-docs-branches.log 2>${PWD}/../../logs/import-external-docs-branches_errors.log" >> crontab
+	@echo "20 4 * * * cd ${PWD}; ${PYTHON} manage.py import_md > ${PWD}/../../logs/import_md.log 2>${PWD}/../../logs/import_md.log" >> crontab
 	@crontab ./crontab
 	@rm ./crontab
 
@@ -61,7 +61,7 @@ collectstatic.debug:
 update-pip-cache:
 	@echo "Updating pip-cache"
 	rm -rf pip-cache
-	bzr branch lp:developer-ubuntu-com/dependencies pip-cache
+	bzr checkout --lightweight lp:developer-ubuntu-com/dependencies pip-cache
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
 	bzr add pip-cache/* 
 	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
@@ -72,7 +72,7 @@ update-pip-cache:
 
 pip-cache:
 	@echo "Downloading pip-cache"
-	@bzr branch -r `cat pip-cache-revno.txt` lp:developer-ubuntu-com/dependencies pip-cache
+	@bzr checkout --lightweight -r `cat pip-cache-revno.txt` lp:developer-ubuntu-com/dependencies pip-cache
 
 env: pip-cache
 	@echo "Creating virtualenv"
