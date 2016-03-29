@@ -6,7 +6,7 @@ from .models import GadgetSnap
 
 
 class GadgetSnapListPluginLarge(CMSPluginBase):
-    # Keeping the name short to be able to differentiate them 
+    # Keeping the name short to be able to differentiate them
     # in the editor dropdown
     name = _("Snap list - Gadget")
     render_template = "gadget_snap_list.html"
@@ -20,8 +20,9 @@ class GadgetSnapListPluginLarge(CMSPluginBase):
 
 plugin_pool.register_plugin(GadgetSnapListPluginLarge)
 
+
 class GadgetSnapListPluginSmall(CMSPluginBase):
-    # Keeping the name short to be able to differentiate them 
+    # Keeping the name short to be able to differentiate them
     # in the editor dropdown
     name = _("Snap shortlist - Gadget")
     render_template = "gadget_snap_shortlist.html"
