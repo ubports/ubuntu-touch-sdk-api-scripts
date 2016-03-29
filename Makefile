@@ -62,6 +62,7 @@ update-pip-cache:
 	@echo "Updating pip-cache"
 	rm -rf pip-cache
 	bzr checkout --lightweight lp:developer-ubuntu-com/dependencies pip-cache
+	rm pip-cache/*
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
 	bzr add pip-cache/* 
 	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
