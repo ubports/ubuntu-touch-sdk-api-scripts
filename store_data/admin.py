@@ -1,7 +1,7 @@
 from .models import (
     Architecture,
-    Release,
     GadgetSnap,
+    Release,
     ScreenshotURL,
 )
 from django.contrib import admin
@@ -12,13 +12,13 @@ class ArchitectureAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Release)
-class ReleaseAdmin(admin.ModelAdmin):
+@admin.register(GadgetSnap)
+class GadgetSnapAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(GadgetSnap)
-class GadgetSnapAdmin(admin.ModelAdmin):
+@admin.register(Release)
+class ReleaseAdmin(admin.ModelAdmin):
     pass
 
 
