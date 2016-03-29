@@ -7,22 +7,19 @@ from .models import (
 from django.contrib import admin
 
 
-class ReleaseAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
-admin.site.register(Release, ReleaseAdmin)
-
-
+@admin.register(Architecture)
 class ArchitectureAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name',)
-admin.site.register(Architecture, ArchitectureAdmin)
+    pass
 
 
+@admin.register(Release)
+class ReleaseAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(GadgetSnap)
 class GadgetSnapAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ('name', 'alias', 'publisher')
-admin.site.register(GadgetSnap, GadgetSnapAdmin)
+    pass
 
 
 @admin.register(ScreenshotURL)
