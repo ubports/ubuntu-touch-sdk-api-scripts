@@ -1,7 +1,10 @@
-from .models import Release, Architecture, GadgetSnap
+from .models import (
+    Architecture,
+    Release,
+    GadgetSnap,
+    ScreenshotURL,
+)
 from django.contrib import admin
-
-# Register your models here.
 
 
 class ReleaseAdmin(admin.ModelAdmin):
@@ -20,3 +23,8 @@ class GadgetSnapAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name', 'alias', 'publisher')
 admin.site.register(GadgetSnap, GadgetSnapAdmin)
+
+
+@admin.register(ScreenshotURL)
+class ScreenshotURLAdmin(admin.ModelAdmin):
+    pass
