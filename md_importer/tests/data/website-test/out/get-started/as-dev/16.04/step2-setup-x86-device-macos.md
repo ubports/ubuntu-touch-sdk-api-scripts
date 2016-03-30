@@ -1,22 +1,23 @@
-# Setting up your Raspberry Pi 2
+# Setting up your x86 Device
 
-![Raspberry Pi 2 image](https://raw.githubusercontent.com/ubuntu-core/snappy-dev-website/master/src/img/devices/raspberry-pi.png "Raspberry Pi 2 image")
+![x86 Device image](https://raw.githubusercontent.com/ubuntu-core/snappy-dev-website/master/src/img/devices/baremetal.png "x86 Device image")
 
-From your desktop computer, you can download and install a pre-built Snappy Ubuntu Core 16.04 image for your Raspberry Pi 2 and copy it to an SD card, USB key or external disk that you will attach and boot from. You can then get started with your project!
+From your desktop computer, you can download and install a pre-built Snappy Ubuntu Core 16.04 image for your x86 Device and copy it to an SD card, USB key or external disk that you will attach and boot from. You can then get started with your project!
 
 > Make sure your board or device is connected to the same network as your computer to manage Ubuntu Core remotely via SSH, or has a screen and keyboard attached if you prefer managing Ubuntu Core directly on the board or device.
 
-You will flash and then insert a SD card with Ubuntu Core on it. Then, just power up your device and you are ready to go!
+You can use an **USB card** or **disk drive** that you will attach to after installing Ubuntu Core on it.
+You will need to ensure that the boot order in BIOS/UEFI is set to try that USB storage or new disk first.
 
 
 ## Downloading and installing
 
-1. Start by **downloading the Ubuntu Core image** for Raspberry Pi 2 in your current folder.
+1. Start by **downloading the Ubuntu Core image** for x86 Device in your current folder.
 ```sh
-curl -O http://people.canonical.com/~mvo/all-snaps/rpi2-all-snap.img.xz
+curl -O http://people.canonical.com/~mvo/all-snaps/amd64-all-snap.img.xz
 ```
 
-1. **Extract** the downloaded zip file into your Downloads folder by double clicking on it. You should now have an uncompressed file named rpi2-all-snap.img.
+1. **Extract** the downloaded zip file into your Downloads folder by double clicking on it. You should now have an uncompressed file named amd64-all-snap.img.
 > You might have to install archive extractor software, like [The Unarchiver](https://itunes.apple.com/gb/app/the-unarchiver/id425424353?mt=12) or similar as the standard tools do not support xz
 
 1. **Insert your SD card, USB card or external disk**. Ensure there is no data you care about on this disk or card before running the commands below.
@@ -50,20 +51,20 @@ diskutil list
 
 1. **Copy your downloaded image to the SD/USB card or external disk**. Note that you need to specify the path to the disk device with the number you just wrote down in previous step.
 ```sh
-sudo dd if=~/Downloads/rpi2-all-snap.img of=/dev/diskX bs=32MB
+sudo dd if=~/Downloads/amd64-all-snap.img of=/dev/diskX bs=32MB
 sync
 ```
 You will be prompted to enter your Apple password after this command.
 
  > Note that this operation length can vary depending on your destination disk speed. There is no progress displayed unless you send SIGINFO signal pressing Ctrl+T.
 
-1. **Eject** the SD/USB card or external disk physically from your Mac and **insert or attach it** in your Raspberry Pi 2.
+1. **Eject** the SD/USB card or external disk physically from your Mac and **insert or attach it** in your x86 Device.
 
 ## First boot to Ubuntu Core 16.04
 
 > Note that the first boot can be longer than usual as your primary disk is repartioned to take all available free space.
 
-Power on your Raspberry Pi 2 and wait a couple of minutes for the OS to complete its first boot.
+Power on your x86 Device and wait a couple of minutes for the OS to complete its first boot.
 
 You can then access your snappy Ubuntu Core system by loading the webdm interface from your browser. Just point it to
 http://webdm.local:4200.
