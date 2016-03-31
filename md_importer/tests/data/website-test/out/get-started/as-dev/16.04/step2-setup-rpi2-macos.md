@@ -2,9 +2,12 @@
 
 ![Raspberry Pi 2 image](https://raw.githubusercontent.com/ubuntu-core/snappy-dev-website/master/src/img/devices/raspberry-pi.png "Raspberry Pi 2 image")
 
-From your desktop computer, you can download and install a pre-built Snappy Ubuntu Core 16.04 image for your Raspberry Pi 2 and copy it to an SD card. You can then get started with your project!
+From your desktop computer, you can download and install a pre-built Snappy Ubuntu Core 16.04 image for your Raspberry Pi 2 and copy it to an SD card, USB key or external disk that you will attach and boot from. You can then get started with your project!
 
-> Make sure your board is connected to the same network as your computer to manage Ubuntu Core remotely via SSH, or has a screen and keyboard attached if you prefer managing Ubuntu Core directly on the board.
+> Make sure your board or device is connected to the same network as your computer to manage Ubuntu Core remotely via SSH, or has a screen and keyboard attached if you prefer managing Ubuntu Core directly on the board or device.
+
+You will flash and then insert a SD card with Ubuntu Core on it. Then, just power up your device and you are ready to go!
+
 
 ## Downloading and installing
 
@@ -16,14 +19,14 @@ curl -O http://people.canonical.com/~mvo/all-snaps/rpi2-all-snap.img.xz
 1. **Extract** the downloaded zip file into your Downloads folder by double clicking on it. You should now have an uncompressed file named rpi2-all-snap.img.
 > You might have to install archive extractor software, like [The Unarchiver](https://itunes.apple.com/gb/app/the-unarchiver/id425424353?mt=12) or similar as the standard tools do not support xz
 
-1. **Insert your SD card**. Ensure there is no data you care about on the SD card before running the commands below.
+1. **Insert your SD card, USB card or external disk**. Ensure there is no data you care about on this disk or card before running the commands below.
 
-1. **Determine which disk to write to and inmount it**.
+1. **Determine which disk to write to and mount it**.
  * Run
 ```sh
 diskutil list
 ```
- In the results identify your SD card, it will probably an entry like the one below:
+ In the results identify your SD/USB card, or external disk, it will probably an entry like the one below:
 ```sh
 /dev/disk0
   #:                       TYPE NAME                    SIZE       IDENTIFIER
@@ -39,23 +42,22 @@ diskutil list
   0:     FDisk_partition_scheme                        *7.9 GB     disk3
   1:                 DOS_FAT_32 NO NAME                 7.9 GB     disk3s1
 ```
- > Note that your SD Card must be DOS_FAT_32 formatted. The SIZE will be the size of your SD card, in this example an 8GB SD Card.
 
- Write down the number after /dev/disk that is associated with your SD card, in this case 3.
+ Write down the number after /dev/disk that is associated with your disk, in this case 3.
 
- * Unmount your SD card by entering the command:
+ * Unmount your SD/USB card or external disk by entering the command:
  `diskutil unmountDisk /dev/diskX` where X is the number you just wrote down. When successful you should see a message similar to this one: *Unmount of all volumes on diskX was successful*.
 
-1. **Copy your downloaded image to the SD card**. Note that you need to specify the path to the disk device with the number you just wrote down in previous step.
+1. **Copy your downloaded image to the SD/USB card or external disk**. Note that you need to specify the path to the disk device with the number you just wrote down in previous step.
 ```sh
 sudo dd if=~/Downloads/rpi2-all-snap.img of=/dev/diskX bs=32MB
 sync
 ```
 You will be prompted to enter your Apple password after this command.
 
- > Note that this operation length can vary depending on your SD card speed. There is no progress displayed unless you send SIGINFO signal pressing Ctrl+T.
+ > Note that this operation length can vary depending on your destination disk speed. There is no progress displayed unless you send SIGINFO signal pressing Ctrl+T.
 
-1. **Eject** the SD card physically from your Mac and **insert it** in your Raspberry Pi 2.
+1. **Eject** the SD/USB card or external disk physically from your Mac and **insert or attach it** in your Raspberry Pi 2.
 
 ## First boot to Ubuntu Core 16.04
 
@@ -66,9 +68,12 @@ Power on your Raspberry Pi 2 and wait a couple of minutes for the OS to complete
 You can then access your snappy Ubuntu Core system by loading the webdm interface from your browser. Just point it to
 http://webdm.local:4200.
 
+> Remember that if your device/cloud isn't on the same network or your vm use port redirection, adapt **webm.local** and
+> the port with the appropriate external IP and ports.
+
 ![Webdm vanilla interface](https://raw.githubusercontent.com/ubuntu-core/snappy-dev-website/master/src/img/setup/webdm.png)
 
-<<ADDITIONAL_FIRST_BOOT_NOTES>>
+
 
 Congrats, you just installed your new Snappy Ubuntu Core 16.04 system. It's now time to explore it and
 install some snaps to it!

@@ -1,6 +1,9 @@
 # Snappy Ubuntu Core REST API
 
-Version: 1.0.2 DRAFT
+Version: v2pre0
+
+Note: The v2 API is going to be very different from the 1.0; right now, not
+so much.
 
 ## Versioning
 
@@ -12,7 +15,7 @@ backwards compatible, and will be exposed under a new endpoint.
 ## Connecting
 
 While it is expected to allow clients to connect using HTTPS over a
-TCP socket, at this point only a unix socket is supported. The socket
+TCP socket, at this point only a UNIX socket is supported. The socket
 is `/run/snapd.socket`.
 
 ## Authentication
@@ -63,12 +66,12 @@ When a request results in a background operation, the HTTP code is set
 to 202 (`Accepted`) and the `Location` HTTP header is set to the
 operation's URL.
 
-The body is a json object with the following structure:
+The body is a JSON object with the following structure:
 
 ```javascript
 {
  "result": {
-   "resource": "/1.0/operations/[uuid]",     // see below
+   "resource": "/v2/operations/[uuid]",     // see below
    "status": "running",
    "created_at": "..."                       // and other operation fields
  },
@@ -90,7 +93,11 @@ wrong, in those cases, the following return value is used:
 
 ```javascript
 {
- "result": {},            // may contain more details, for debugging
+ "result": {
+   "message": "human-friendly description of the cause of the error",
+   "kind": "store-error",  // one of a list of kinds (TBD), only present iff "value" is present
+   "value": {"...": "..."} // kind-specific object, as required
+ },
  "status": "Bad Request", // text description of status_code
  "status_code": 400,      // or 401, etc. (same as HTTP code)
  "type": "error"
@@ -99,14 +106,32 @@ wrong, in those cases, the following return value is used:
 
 HTTP code must be one of of 400, 401, 403, 404, 405, 409, 412 or 500.
 
+Error *results* will also be used in the output of `async` responses.
+
+If, in implementing a client, you find yourself keying off of
+`message` to alter the behaviour of your client to e.g. better inform
+the user of the error or otherwise adapt to the error condition,
+**STOP** and *talk to us*; this is where `kind` comes in. New entries
+for `kind` (and associated `value` metadata) will be added as needed
+by client implementations.
+
+#### Error kinds
+
+kind               | value description
+-------------------|--------------------
+`license-required` | see "A note on licenses", below
+
 ### Timestamps
 
-Timestamps are presented in µs since the epoch UTC, formatted as a decimal
-string. For example, `"1234567891234567"` represents
-`2009-02-13T23:31:31.234567`.
+Timestamps are presented in RFC3339 format, with µs precision, and in
+UTC. For example, `2009-02-13T23:31:31.234567Z`.
 
-## /1.0
-### GET
+## `/`
+
+Reserved for human-readable content describing the service.
+
+## `/v2/system-info`
+### `GET`
 
 * Description: Server configuration and environment information
 * Access: guest
@@ -125,152 +150,168 @@ string. For example, `"1234567891234567"` represents
 }
 ```
 
-## /1.0/packages
+## /v2/snaps
 ### GET
 
-* Description: List of packages
+* Description: List of snaps
 * Access: authenticated
 * Operation: sync
-* Return: list of URLs for packages this Ubuntu Core system can handle.
+* Return: list of snaps this Ubuntu Core system can handle.
 
-The result is a JSON object with a packages key; its value is itself a
-JSON object whose keys are qualified package names (e.g.,
-hello-world.canonical), and whose values describe that package.
+The result is a JSON object with a `snaps` key; its value is itself a
+JSON object whose keys are qualified snap names (e.g.,
+`hello-world.canonical`), and whose values describe that snap.
 
 Sample result:
 
 ```javascript
 {
- "packages": {
+ "snaps": {
     "hello-world.canonical": {
       "description": "hello-world",
-      "download_size": "22212",
+      "download_size": 22212,
       "icon": "https://myapps.developer.ubuntu.com/site_media/appmedia/2015/03/hello.svg_NZLfWbh.png",
-      "installed_size": "-1",          // always -1 if not installed
+      "installed_size": -1,          // always -1 if not installed
       "name": "hello-world",
-      "origin": "canonical",
-      "resource": "/1.0/packages/hello-world.canonical",
+      "developer": "canonical",
+      "resource": "/v2/snaps/hello-world.canonical",
       "status": "not installed",
       "type": "app",
-      "version": "1.0.18"
+      "version": "1.0.18",
+      "channel": "stable"
     },
     "http.chipaca": {
       "description": "HTTPie in a snap\nno description",
-      "download_size": "1578272",
-      "icon": "/1.0/icons/http.chipaca/icon",
-      "installed_size": "1821897",
+      "download_size": 1578272,
+      "icon": "/v2/icons/http.chipaca/icon",
+      "installed_size": 1821897,
       "name": "http",
-      "origin": "chipaca",
-      "resource": "/1.0/packages/http.chipaca",
+      "developer": "chipaca",
+      "resource": "/v2/snaps/http.chipaca",
       "status": "active",
       "type": "app",
-      "version": "3.1"
+      "version": "3.1",
+      "channel": "stable"
     },
     "ubuntu-core.ubuntu": {
       "description": "A secure, minimal transactional OS for devices and containers.",
-      "download_size": "19845748",
+      "download_size": 19845748,
       "icon": "",               // core might not have an icon
-      "installed_size": "-1",   // core doesn't have installed_size (yet)
+      "installed_size": -1,     // core doesn't have installed_size (yet)
       "name": "ubuntu-core",
-      "origin": "ubuntu",
-      "resource": "/1.0/packages/ubuntu-core.ubuntu",
+      "developer": "ubuntu",
+      "resource": "/v2/snaps/ubuntu-core.ubuntu",
       "status": "active",
-      "type": "core",
+      "type": "os",
       "update_available": "247",
-      "version": "241"
+      "version": "241",
+      "channel": "stable"
     }
- }
+ },
+ "paging": {
+    "count": 3,
+    "page": 0,
+    "pages": 1
+  },
+  "sources": [
+    "local",
+    "store"
+  ]
 }
 ```
 
 #### Fields
-* `packages`
+* `snaps`
     * `status`: can be either `not installed`, `installed`, `active` (i.e. is
-      current), `removed` (but data present); there is no `purged` state, as a
-      purged package is undistinguishable from a non-installed package.
-    * `name`: the package name.
+      current).
+    * `name`: the snap name.
     * `version`: a string representing the version.
-    * `icon`: a url to the package icon, possibly relative to this server.
-    * `type`: the type of snappy package; one of `app`, `framework`, `kernel`,
+    * `icon`: a url to the snap icon, possibly relative to this server.
+    * `type`: the type of snap; one of `app`, `framework`, `kernel`,
       `gadget`, or `os`.
-    * `description`: package description
-    * `installed_size`: for installed packages, how much space the package
-      itself (not its data) uses, formatted as a decimal string.
-    * `download_size`: for not-installed packages, how big the download will
+    * `description`: snap description
+    * `installed_size`: for installed snaps, how much space the snap
+      itself (not its data) uses.
+    * `download_size`: for not-installed snaps, how big the download will
       be, formatted as a decimal string.
-    * `operation`: if the state signals that an operation is underway
-      (e.g. installing), the operation field describes that operation
-    * `rollback_available`: if present and not empty, it means the package can
+    * `rollback_available`: if present and not empty, it means the snap can
       be rolled back to the version specified as a value to this entry.
-    * `update_available`: if present and not empty, it means the package can be
+    * `update_available`: if present and not empty, it means the snap can be
       updated to the version specified as a value to this entry.
+    * `channel`: which channel the package is currently tracking.
+* `paging`
+    * `count`: the number of snaps on this page
+    * `page`: the page number, starting from `0`
+    * `pages`: the (approximate) number of pages
+* `sources`
+    a list of the sources that were queried (see the `sources` parameter, below)
+
+### Parameters [fixme: is that the right word for these?]
+
+#### `sources`
+
+Can be set to either `local` (to only list local snaps) or `store` (to
+only list snaps from the store), or a comma-separated
+combination. Defaults to `local,store`.
+
+Note that excluding sources will result in incomplete (and in some
+cases incorrect) information about installed packages: information
+about updates will be absent if `store` is not included, whereas if
+`local` is not included information about rollbacks will be missing,
+and the package state for installed packages will be incorrect.
+
+#### `types`
+
+Restricts returned snaps to those with types included in the specified
+comma-separated list. See the description of the `type` field of `snaps` in the
+above section for possible values.
+
+#### `page`
+
+Request the given page when the server is paginating the
+result. Defaults to `0`.
+
+#### `q`
+
+If present, only list snaps that match the query.
 
 ### POST
 
-* Description: Sideload a package to the system. 
+* Description: Sideload a snap to the system.
 * Access: trusted
 * Operation: async
 * Return: background operation or standard error
 
 #### Input
 
-The package to sideload should be provided as part of the body of a
+The snap to sideload should be provided as part of the body of a
 `mutlipart/form-data` request. The form should have only one file. If it also
-has an `allow-unsigned` field (with any value), the package may be unsigned;
-otherwise attempting to sideload an unsigned package will result in a failed
+has an `allow-unsigned` field (with any value), the snap may be unsigned;
+otherwise attempting to sideload an unsigned snap will result in a failed
 background operation.
 
-It's also possible to provide the package as the entire body of a `POST` (not a
+It's also possible to provide the snap as the entire body of a `POST` (not a
 multipart request). In this case the header `X-Allow-Unsigned` may be used to
-allow sideloading unsigned packages.
+allow sideloading unsigned snaps.
 
-### PUT
-
-* Description: change configuration for active packages. It is an error to
-  attempt to change configuration for non-active packages; if a configuration
-  change is requested for a package that is not active in the system the whole
-  command is aborted even if other packages that are active are specified in
-  the same command.
-* Access: trusted
-* Operation: sync
-* Return: configuration for all listed packages
-
-The request body is expected to be a JSON object with keys being the qualified
-package name(s) to configure, and the values will be passed to the configure
-hooks of the packages. The background operation information will similarly
-list individual statuses of the configuration changes.
-
-#### Sample input:
-
-```javascript
-{
-   "dd.canonical": "some-option: 42",
-   "hello-world.canonical": "greeting: Hi"
-}
-```
-
-#### Sample result:
-
-```javascript
-{
-   "dd.canonical": "some-option: 42\nsome-other-option: true",
-   "hello-world.canonical": "greeting: Hi\nheader: false"
-}
-```
-
-## /1.0/packages/[name]
+## /v2/snaps/[name]
 ### GET
 
-* Description: Details for a  package
+* Description: Details for a snap
 * Access: authenticated
 * Operation: sync
-* Return: package details (as in `/1.0/packages/`)
+* Return: snap details (as in `/v2/snaps`)
 
+### Parameters
+
+#### `sources`
+
+See `sources` for `/v2/snaps`.
 
 ### POST
 
-* Description: Install, update, remove, purge, activate, deactivate, or
-  rollback the package
+* Description: Install, update, remove, activate, deactivate, or
+  rollback the snap
 * Access: trusted
 * Operation: async
 * Return: background operation or standard error
@@ -287,14 +328,15 @@ list individual statuses of the configuration changes.
 
 field      | ignored except in action | description
 -----------|-------------------|------------
-`action`   |                   | Required; a string, one of `install`, `update`, `remove`, `purge`, `activate`, `deactivate`, or `rollback`.
-`leave_old`| `install` `update` `remove` | A boolean, default is false (do not leave old packages around). Equivalent to commandline's `--no-gc`.
-`license`  | `install` `update` | A JSON object with `intro`, `license`, and `agreed` fields, the first two of which must match the license (see the section “A note on licenses”, below).
+`action`   |                   | Required; a string, one of `install`, `update`, `remove`, `activate`, `deactivate`, or `rollback`.
+`channel`  | `install` `update` | From which channel to pull the new package (and track henceforth). Channels are a means to discern the maturity of a package or the software it contains, although the exact meaning is left to the application developer. One of `edge`, `beta`, `candidate`, and `stable` which is the default.
+`leave_old`| `install` `update` `remove` | A boolean, equivalent to commandline's `--no-gc`. Default is false (do not leave old snaps around).
+`license`  | `install` `update` | A JSON object with `intro`, `license`, and `agreed` fields, the first two of which must match the license (see the section "A note on licenses", below).
 
 #### A note on licenses
 
-When requesting to install a package that requires agreeing to a license before
-install succeeds, or when requesting an update to a package with such an
+When requesting to install a snap that requires agreeing to a license before
+install succeeds, or when requesting an update to a snap with such an
 agreement that has an updated license version, the initial request will fail
 with an error, and the error object will contain the intro and license texts to
 present to the user for their approval. An example of the command's `output`
@@ -302,32 +344,31 @@ field would be
 
 ```javascript
 "output": {
-    "obj": {
+    "value": {
         "agreed": false,
         "intro": "licensed requires that you accept the following license before continuing",
         "license": "In order to use this software you must agree with us."
     },
-    "str": "License agreement required."
+    "kind": "license-required",
+    "message": "License agreement required."
 }
 ```
 
-> As of `1.0/api_compat 1`.
+## /v2/snaps/[name]/services
 
-## /1.0/packages/[name]/services
-
-Query an active package for information about its services, and alter the
+Query an active snap for information about its services, and alter the
 state of those services. Commands under `.../services` will return an error if
-the package is not active.
+the snap is not active.
 
 ### GET
 
-* Description: Services for a package
+* Description: Services for a snap
 * Access: authenticated
 * Operation: sync
 * Return: service configuration
 
 Returns a JSON object with a result key, its value is a list of JSON objects
-where the package name is the item key. The value is another JSON object that
+where the snap name is the item key. The value is another JSON object that
 has three keys [`op`, `spec`, `status`], spec and status are JSON objects that
 provide description about the service as well as its systemd unit.
 
@@ -354,7 +395,7 @@ provide description about the service as well as its systemd unit.
         "active_state": "inactive",
         "sub_state": "dead",
         "unit_file_state": "enabled",
-        "package_name": "xkcd-webserver",
+        "snap_name": "xkcd-webserver",
         "service_name": "xkcd-webserver"
       }
     }
@@ -367,7 +408,7 @@ provide description about the service as well as its systemd unit.
 
 ### PUT
 
-* Description: Put all services of a package into a specific state
+* Description: Put all services of a snap into a specific state
 * Access: trusted
 * Operation: async
 
@@ -379,18 +420,18 @@ provide description about the service as well as its systemd unit.
 }
 ```
 
-## /1.0/packages/[name]/services/[name]
+## /v2/snaps/[name]/services/[name]
 
 ### GET
 
-* Description: Service for a package
+* Description: Service for a snap
 * Access: authenticated
 * Operation: sync
 * Return: service configuration
 
 The result is a JSON object with a `result` key where the value is a JSON object
 that includes a single object from the list of the upper level endpoint
-(`/1.0/packages/[name]/services`).
+(`/v2/snaps/[name]/services`).
 
 #### Sample result:
 
@@ -414,7 +455,7 @@ that includes a single object from the list of the upper level endpoint
       "active_state": "inactive",
       "sub_state": "dead",
       "unit_file_state": "enabled",
-      "package_name": "xkcd-webserver",
+      "snap_name": "xkcd-webserver",
       "service_name": "xkcd-webserver"
     }
   },
@@ -438,11 +479,11 @@ that includes a single object from the list of the upper level endpoint
 }
 ```
 
-## /1.0/packages/[name]/services/[name]/logs
+## /v2/snaps/[name]/services/[name]/logs
 
 ### GET
 
-* Description: Logs for the service from a package
+* Description: Logs for the service from a snap
 * Access: trusted
 * Operation: sync
 * Return: service logs
@@ -464,17 +505,17 @@ that includes a single object from the list of the upper level endpoint
 ]
 ```
 
-## /1.0/packages/[name]/config
+## /v2/snaps/[name]/config
 
-Query an active package for information about its configuration, and alter
-that configuration. Will return an error if the package is not active.
+Query an active snap for information about its configuration, and alter
+that configuration. Will return an error if the snap is not active.
 
 ### GET
 
-* Description: Configuration for a package
+* Description: Configuration for a snap
 * Access: trusted
 * Operation: sync
-* Return: package configuration
+* Return: snap configuration
 
 #### Sample result:
 
@@ -486,10 +527,10 @@ Notes: user facing implementations in text form must show this data using yaml.
 
 ### PUT
 
-* Description: Set configuration for a package
+* Description: Set configuration for a snap
 * Access: trusted
 * Operation: sync
-* Return: package configuration
+* Return: snap configuration
 
 #### Sample input:
 
@@ -503,7 +544,7 @@ Notes: user facing implementations in text form must show this data using yaml.
 "config:\n  ubuntu-core:\n    autopilot: true\n    timezone: Europe/Berlin\n    hostname: localhost.localdomain\n"
 ```
 
-## /1.0/operations/<uuid>
+## /v2/operations/[uuid]
 
 ### GET
 
@@ -518,8 +559,8 @@ Notes: user facing implementations in text form must show this data using yaml.
 {
  "created_at": "1415639996123456",      // Creation timestamp
  "output": {},
- "resource": "/1.0/packages/camlistore.sergiusens",
- "status": "running",                   // or “succeeded” or “failed”
+ "resource": "/v2/snaps/camlistore.sergiusens",
+ "status": "running",                   // or "succeeded" or "failed"
  "updated_at": "1415639996451214"       // Last update timestamp
 }
 ```
@@ -532,72 +573,125 @@ Notes: user facing implementations in text form must show this data using yaml.
 * Operation: sync
 * Return: standard return value or standard error
 
-## /1.0/icons/[name]/icon
+## /v2/icons/[name]/icon
 
 ### GET
 
 * Description: Get an icon from a snap installed on the system. The
   response will be the raw contents of the icon file; the content-type
-  will be set accordingly.
+  will be set accordingly and the Content-Disposition header will specify
+  the filename.
 
-  This fetches the icon from the package itself.
+  This fetches the icon from the snap itself.
 * Access: guest
 
 This is *not* a standard return type.
 
-## /1.0/capabilities
+## /v2/assertions
+
+### POST
+
+* Description: Tries to add an assertion to the system assertion database.
+* Authorization: trusted
+* Operation: sync
+
+The body of the request provides the assertion to add. The assertion
+may also be a newer revision of a preexisting assertion that it will replace.
+
+To succeed the assertion must be valid, its signature verified with a
+known public key and the assertion consistent with and its
+prerequisite in the database.
+
+## /v2/assertions/[assertionType]
+### GET
+
+* Description: Get all the assertions in the system assertion database of the given type matching the header filters passed as query parameters
+* Access: authenticated
+* Operation: sync
+* Return: stream of assertions
+
+The response is a stream of assertions separated by double newlines.
+The X-Ubuntu-Assertions-Count header is set to the number of
+returned assertions, 0 or more.
+
+## /v2/interfaces
 
 ### GET
 
-* Description: Get all of the capabilities that exist in the system
-* Authorization: authenticated
+* Description: Get all the plugs, slots and their connections.
+* Access: authenticated
 * Operation: sync
-* Return: map of capabilities, see below.
-
-The result is a JSON object with a *capabilities* key; its value itself is a JSON
-object whose keys are capability names (e.g., "power-button") and whose values
-describe that capability.
-
-The method returns *all* capabilities. Regardless of their assignment to snaps.
-Note that capabilities are dynamic, they can be added and removed to the system
-and individual capabilities can change state over time.
-
-Each capability has the following attributes:
-
-name:
-	Name is a key that identifies the capability. It must be unique within its
-	context, which may be either a snap or a snappy runtime.
-
-label:
-	Label provides an optional title for the capability to help a human tell
-	which physical device this capability is referring to. It might say "Front
-	USB", or "Green Serial Port", for example.
-
-type:
-	Type defines the type of this capability. The capability type defines the
-	behavior allowed and expected from providers and consumers of that
-	capability, and also which information should be exchanged by these
-	parties.
-
-attrs:
-	Attrs are key-value pairs that provide type-specific capability details.
-	The attribute 'attrs' itself may not be present if there are no attributes
-	to mention.
+* Return: an object with two arrays of plugs, slots and their connections.
 
 Sample result:
 
 ```javascript
 {
-	"capabilities": {
-		"power-button": {
-			"resource": "/1.0/capabilities/power-button",
-			"name": "power-button",
-			"label": "Power Button",
-			"type": "evdev",
-			"attrs": {
-				"path": "/dev/input/event2"
-			},
-		}
-	}
+    "slots": [
+        {
+            "snap":  "canonical-pi2",
+            "slot":  "pin-13",
+            "interface":  "bool-file",
+            "label": "Pin 13",
+            "connections": [
+                {"snap": "keyboard-lights", "plug": "capslock-led"}
+            ]
+        }
+    ],
+    "plugs": [
+        {
+            "snap":  "keyboard-lights",
+            "plug":  "capslock-led",
+            "interface": "bool-file",
+            "label": "Capslock indicator LED",
+            "connections": [
+                {"snap": "canonical-pi2", "slot": "pin-13"}
+            ]
+        }
+    ]
 }
 ```
+
+### POST
+
+* Description: Issue an action to the interface system
+* Access: authenticated
+* Operation: sync
+* Return: nothing
+
+Available actions are:
+
+- connect: connect the plug to the given slot.
+- disconnect: disconnect the given plug from the given slot.
+
+Sample input:
+
+```javascript
+{
+    "action": "connect",
+    "slots": {{"snap": "canonical-pi2",   "slot": "pin-13"}},
+    "plugs": {{"snap": "keyboard-lights", "plug": "capslock-led"}}
+}
+```
+
+## /v2/events
+
+### GET
+
+* Description: Websocket upgrade
+* Access: trusted
+* Operation: sync
+* Return: nothing (never ending flow of events)
+
+### Parameters
+
+The default is for all notifications to be received but the following filters
+are supported:
+
+#### types
+
+Comma separated list of notification types, either `logging` or `operations`.
+
+#### resource
+
+Generally the UUID of a background operation you are interested in.

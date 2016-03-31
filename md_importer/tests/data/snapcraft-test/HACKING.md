@@ -32,8 +32,24 @@ You can install the daily build PPA by running:
 We'd love the help!
 
 - Submit pull requests against [snapcraft](https://github.com/ubuntu-core/snapcraft/pulls)
+- Make sure to read the [contribution guide](CONTRIBUTING.md)
 - Our mailing list is snappy-devel@lists.ubuntu.com
 - We can also be found on the #snappy IRC channel on Freenode
+
+
+### Staging server
+
+Snapcraft has the ability to upload snaps for publication in the Snappy Store.
+If you're working on a feature that requires you to interact with the store, you
+might want to use the staging server instead of the production store. To do
+that, make sure you have an account on the
+[staging server](https://login.staging.ubuntu.com), then set the following
+environment variables:
+
+    UBUNTU_STORE_API_ROOT_URL='https://myapps.developer.staging.ubuntu.com/dev/api/'
+    UBUNTU_STORE_UPLOAD_ROOT_URL='https://upload.apps.staging.ubuntu.com/'
+    UBUNTU_SSO_API_ROOT_URL='https://login.staging.ubuntu.com/api/v2/'
+
 
 ### Project Layout
 
@@ -46,3 +62,14 @@ We'd love the help!
 - **tests:** Tests, obviously. `unit` holds Python unit tests and `plainbox` holds plainbox integration tests.
 
 - **snapcraft:** The Python module that houses the core snapcraft logic. The `plugins` subdirectory holds the code for each plugin.
+
+### Updating library filter
+
+To update the list of libraries that get excluded from inclusion into a
+snap run:
+
+    ./libraries/generate_lib_list.py libraries/<release>
+
+e.g.; to update the list for 16.04,
+
+    ./libraries/generate_lib_list.py libraries/16.04

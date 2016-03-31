@@ -1,5 +1,13 @@
 # Security policy
 
+Most of the security aspects of the system will be done via interfaces,
+slots and plugs. However for compatibility with the 15.04 snappy
+architecture there is a special interface called `old-security`
+that can be used to migrate using the 15.04 syntax. See the example
+below for the various ways the `old-security` interface can be used.
+
+## Security with the old-security interface
+
 Snap packages run confined under a restrictive security sandbox by default.
 The security policies and store policies work together to allow developers to
 quickly update their applications and to provide safety to end users.
@@ -16,35 +24,33 @@ unspecified, default confinement allows the snap to run as a network client.
 
 Applications are tracked by the system by using the concept of an
 ApplicationId. The `APP_ID is` the composition of the package name, the app's
-origin from the store if applicable -- only snaps of `type: app` (the
-default) use an origin to compose the `APP_ID`), the
+developer from the store if applicable -- only snaps of `type: app` (the
+default) use an developer to compose the `APP_ID`), the
 service/binary name and package version. The `APP_ID` takes the form of
-`<pkgname>.<origin>_<appname>_<version>`. For example, if this is in
-`package.yaml`:
+`<pkgname>.<developer>_<appname>_<version>`. For example, if this is in
+`snap.yaml`:
 
     name: foo
     version: 0.1
     ...
-    services:
-      - name: bar
+    apps:
+      bar:
         start: bin/bar
 
-and the app was uploaded to the `myorigin` origin in the store, then the
-`APP_ID` for the `bar` service is `foo.myorigin_bar_0.1`. The `APP_ID` is used
+and the app was uploaded to the `snapdev` developer in the store, then the
+`APP_ID` for the `bar` service is `foo.snapdev_bar_0.1`. The `APP_ID` is used
 throughout the system including in the enforcement of security policy by the
 app launcher.
 
 Under the hood, the launcher:
 
-* sets up various environment variables (eg, `SNAP_APP_ARCH`,
-  `SNAP_APP_DATA_PATH`, `SNAP_APP_PATH`, `SNAP_APP_TMPDIR`,
-  `SNAP_APP_USER_DATA_PATH`, `SNAP_OLD_PWD`, `HOME` and `TMPDIR` (set to
-  `SNAP_APP_TMPDIR`). See the
+* sets up various environment variables (eg, `SNAP_ARCH`,
+  `SNAP_DATA`, `SNAP`, `SNAP_USER_DATA`,
+  `SNAP_OLD_PWD`, `HOME` and `TMPDIR`. See the
    [snappy FHS](https://developer.ubuntu.com/en/snappy/guides/filesystem-layout/) for details.
-* changes directory to `SNAP_APP_PATH` (the install directory)
 * sets up a device cgroup with default devices (eg, /dev/null, /dev/urandom,
   etc) and any devices which are assigned to this app via Gadget snaps or
-  `snappy hw-assign` (eg, `snappy hw-assign foo.myorigin /dev/bar`).
+  `snappy hw-assign` (eg, `snappy hw-assign foo.snapdev /dev/bar`).
 * sets up the seccomp filter
 * executes the app under an AppArmor profile under a default nice value
 
@@ -59,21 +65,22 @@ areas, whitelist syscall filtering via seccomp and device cgroups provides for
 strong application confinement and isolation (see below for future work).
 
 ### AppArmor
-Upon snap package install, `package.yaml` is examined and AppArmor profiles are
+Upon snap package install, `snap.yaml` is examined and AppArmor profiles are
 generated for each service and binary to have names based on the `APP_ID`.
 As mentioned, AppArmor profiles are template based and may be extended through
 policy groups, which are expressed in the yaml as `caps`.
 
 ### Seccomp
-Upon snap package install, `package.yaml` is examined and seccomp filters are
+Upon snap package install, `snap.yaml` is examined and seccomp filters are
 generated for each service and binary. Like with AppArmor, seccomp filters are
 template based and may be extended through filter groups, which are expressed
 in the yaml as `caps`.
 
 ## Defining snap policy
 
-The `package.yaml` need not specify anything for default confinement. Several
-options are available to modify the confinement:
+The `snap.yaml` need not specify anything for default confinement. Several
+options are available in the `old-security` interface to modify the
+confinement:
 
 * `caps`: (optional) list of (easy to understand, human readable) additional
   security policies to add. The system will translate these to generate
@@ -109,42 +116,65 @@ Eg, consider the following:
 
     name: foo
     version: 1.0
-    services:
-      - name: bar
-      - name: baz
+    apps:
+      bar:
+        command: bar
+      baz:
+        command: baz
+        slots: [baz-caps]
+      qux:
+        command: qux
+        slots: [qux-security]
+      quux:
+        command: quux
+        slots: [quux-policy]
+      corge:
+        command: corge
+        daemon: simple
+        slots: [corge-override]
+      cli-exe:
+        command: cli-exe
+        slots: [no-caps]
+    slots:
+      baz-caps:
+        type: old-security
         caps:
           - network-client
           - norf-framework_client
-      - name: qux
+      qux-security:
+        type: old-security
         security-template: nondefault
-      - name: quux
+      quux-policy:
+        type: old-security
         security-policy:
           apparmor: meta/quux.profile
           seccomp: meta/quux.filter
-      - name: corge
+      corge-override:
+        type: old-security
         security-override:
           apparmor: meta/corge.apparmor
           seccomp: meta/corge.seccomp
-    binaries:
-      - name: cli-exe
+      no-caps:
+        type: old-security
         caps: []
 
-If this package is uploaded to the store in the `myorigin` origin, then:
 
-* `APP_ID` for `bar` is `foo.myorigin_bar_1.0`. It uses the `default` template
+If this package is uploaded to the store in the `snapdev` developer, then:
+
+* `APP_ID` for `bar` is `foo.snapdev_bar_1.0`. It uses the `default` template
   and `network-client` (default) cap
-* `APP_ID` for `baz` is `foo.myorigin_baz_1.0`. It uses the `default` template
+* `APP_ID` for `baz` is `foo.snapdev_baz_1.0`. It uses the `default` template
   and the `network-client` and `norf-framework_client` caps
-* `APP_ID` for `qux` is `foo.myorigin_qux_1.0`. It uses the `nondefault`
+* `APP_ID` for `qux` is `foo.snapdev_qux_1.0`. It uses the `nondefault`
   template and `network-client` (default) cap
-* `APP_ID` for `quux` is `foo.myorigin_quux_1.0`. It does not use a
+* `APP_ID` for `quux` is `foo.snapdev_quux_1.0`. It does not use a
   `security-template` or `caps` but instead ships its own AppArmor policy in
   `meta/quux.profile`
   and seccomp filters in `meta/quux.filter`
-* `APP_ID` for `corge` is `foo.myorigin_corge_1.0`. It does not use a
+* `APP_ID` for `corge` is `foo.snapdev_corge_1.0`. It does not use a
   `security-template` or `caps` but instead ships the override files
   `meta/corge.apparmor` and `meta/corge.seccomp`.
-* `APP_ID` for `cli-exe` is `foo.myorigin_cli-exe_1.0`. It uses the `default`
+* `APP_ID` for `cli-exe` is `foo.snapdev_cli-exe_1.0`. It uses the `default`
   template and no `caps`
 
 As mentioned, security policies and store policies work together to provide
@@ -211,9 +241,9 @@ The following is planned:
   socket says that app is ok).
     * `names`: (optional) list of abstract socket names
       (`<name>_<binaryname>` is prepended)
-    * `allowed-clients`: `<name>.<origin>` or
-     `<name>.<origin>_<binaryname>` (ie, omit version and
-     `binaryname` to allow all from snap `<name>.<origin>` or omit
+    * `allowed-clients`: `<name>.<developer>` or
+     `<name>.<developer>_<binaryname>` (ie, omit version and
+     `binaryname` to allow all from snap `<name>.<developer>` or omit
      version to allow only `binaryname` from snap `<name>`)
 
  Eg:
