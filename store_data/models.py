@@ -4,13 +4,22 @@ from django.db import models
 class Release(models.Model):
     name = models.CharField(max_length=25)
 
+    def __str__(self):
+        return self.name
+
 
 class Architecture(models.Model):
     name = models.CharField(max_length=10)
 
+    def __str__(self):
+        return self.name
+
 
 class ScreenshotURL(models.Model):
     url = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.url
 
 
 class GadgetSnap(models.Model):
@@ -27,5 +36,8 @@ class GadgetSnap(models.Model):
     architecture = models.ManyToManyField(Architecture)
     last_updated = models.DateTimeField()
     description = models.TextField(max_length=5000)
-    screenshot_url = models.ManyToManyField(ScreenshotURL)
+    screenshot_url = models.ManyToManyField(ScreenshotURL, blank=True)
     website = models.URLField(blank=True)
+
+    def __str__(self):
+        return self.name
