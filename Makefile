@@ -14,8 +14,8 @@ update-common:
 
 swift-perms:
 	@echo "Setting up Swift bucket permissions"
-	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' devportal_uploaded; else http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
-	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' devportal_static; else http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
+	@if [ "${SWIFT_CONTAINER_NAME}" = "" ]; then echo "Using default upload container"; swift post --read-acl '.r:*' devportal_uploaded; else swift post --read-acl '.r:*' $(SWIFT_CONTAINER_NAME); fi
+	@if [ "${SWIFT_STATICCONTAINER_NAME}" = "" ]; then echo "Using default static container"; swift post --read-acl '.r:*' devportal_static; else swift post --read-acl '.r:*' $(SWIFT_STATICCONTAINER_NAME); fi
 
 update-apidocs:
 	@if [ $(DATABASE_URL) ]; then DJANGO_SETTINGS_MODULE=charm_settings ./update_apidocs.sh > ${PWD}/../../logs/update_apidocs.log 2>${PWD}/../../logs/update_apidocs_errors.log; fi
@@ -51,17 +51,18 @@ syncdb:
 collectstatic: collectstatic.done
 collectstatic.done:
 	@echo "Collecting static files"
-	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
+	@python manage.py collectstatic -v 0 --noinput --settings charm_settings 2>/dev/null
 	@touch collectstatic.done
 
 collectstatic.debug:
 	@echo "Debugging output from collectstatic"
-	@http_proxy="${swift_proxy}" https_proxy="${swift_proxy}" python manage.py collectstatic -v 1 --noinput --settings charm_settings
+	@python manage.py collectstatic -v 1 --noinput --settings charm_settings
 
 update-pip-cache:
 	@echo "Updating pip-cache"
 	rm -rf pip-cache
 	bzr checkout --lightweight lp:developer-ubuntu-com/dependencies pip-cache
+	rm pip-cache/*
 	pip install --exists-action=w --download pip-cache/ -r requirements.txt
 	bzr add pip-cache/* 
 	bzr commit pip-cache/ -m 'automatically updated devportal requirements'
