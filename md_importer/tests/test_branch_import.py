@@ -11,6 +11,7 @@ from md_importer.importer import (
 )
 from md_importer.importer.article import Article
 from md_importer.importer.publish import find_text_plugin
+from md_importer.importer.tools import remove_trailing_slash
 
 from .utils import TestLocalBranchImport
 
@@ -48,12 +49,9 @@ class TestImportDirectivesBuildHierarchyImport(TestLocalBranchImport):
         self.assertGreater(pages.count(), len(self.repo.imported_articles))
         # Make sure we got the parents right
         for article in self.repo.imported_articles:
-            parent_url = article.page.parent.get_absolute_url()
-            if parent_url.endswith('/'):
-                parent_url = parent_url[:-1]
-            url = article.page.get_absolute_url()
-            if url.endswith('/'):
-                url = url[:-1]
+            parent_url = remove_trailing_slash(
+                article.page.parent.get_absolute_url())
+            url = remove_trailing_slash(article.page.get_absolute_url())
             self.assertEqual(parent_url, os.path.split(url)[0])
             self.assertIsInstance(article, Article)
 
