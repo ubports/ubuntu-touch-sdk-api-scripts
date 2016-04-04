@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import pytz
 import shutil
 
@@ -12,6 +13,49 @@ from md_importer.importer.article import Article
 from md_importer.importer.publish import find_text_plugin
 
 from .utils import TestLocalBranchImport
+
+
+class TestImportDirectivesBuildHierarchyImport(TestLocalBranchImport):
+    '''
+    Build a article tree structure from files in the snapcraft tree.
+    Make sure the top-most articles (in the tree hierarchy) are imported
+    first, so the tree looks like this:
+    a
+    +-- b
+        +------ c
+        |       +-- d
+        |       |   +-- e
+        |       |       +-- f
+        +-- c2  |
+                +-- d2
+    Files in the import directives are random in the beginning.
+    '''
+    def runTest(self):
+        self.create_repo('data/snapcraft-test')
+        self.repo.add_directive('docs/debug.md', 'a/b/c/d')
+        self.repo.add_directive('docs/intro.md', 'a/b')
+        self.repo.add_directive('docs/mir-snaps.md', 'a/b/c/d/e/f')
+        self.repo.add_directive('docs/reference.md', 'a')
+        self.repo.add_directive('docs/snapcraft-advanced-features.md', 'a/b/c')
+        self.repo.add_directive('docs/snapcraft-syntax.md', 'a/b/c2')
+        self.repo.add_directive('docs/upload-your-snap.md', 'a/b/c/d2')
+        self.repo.add_directive('docs/get-started.md', 'a/b/c/d/e')
+        self.assertEqual(len(self.repo.directives), 8)
+        self.assertTrue(self.repo.execute_import_directives())
+        self.assertEqual(len(self.repo.imported_articles), 8)
+        self.assertTrue(self.repo.publish())
+        pages = Page.objects.all()
+        self.assertGreater(pages.count(), len(self.repo.imported_articles))
+        # Make sure we got the parents right
+        for article in self.repo.imported_articles:
+            parent_url = article.page.parent.get_absolute_url()
+            if parent_url.endswith('/'):
+                parent_url = parent_url[:-1]
+            url = article.page.get_absolute_url()
+            if url.endswith('/'):
+                url = url[:-1]
+            self.assertEqual(parent_url, os.path.split(url)[0])
+            self.assertIsInstance(article, Article)
 
 
 class TestOneDirImport(TestLocalBranchImport):
