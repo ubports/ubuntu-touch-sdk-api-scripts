@@ -1,11 +1,12 @@
 from md_importer.importer import (
     DEFAULT_LANG,
     DEFAULT_TEMPLATE,
-    HOME_PAGE_URL,
 )
+from md_importer.importer.tools import remove_leading_and_trailing_slash
 
 from cms.api import create_page, add_plugin
-from cms.models import Title
+from cms.models import Page, Title
+from cms.utils.page_resolver import get_page_from_path
 from djangocms_text_ckeditor.html import clean_html
 
 from bs4 import BeautifulSoup
@@ -25,22 +26,21 @@ def slugify(filename):
 
 
 def _find_parent(full_url):
-    if full_url == HOME_PAGE_URL:
-        # If we set up the homepage, we don't need a parent.
-        return None
-    parent_url = re.sub(
-        r'^\/{}\/'.format(DEFAULT_LANG),
+    parent_url = remove_leading_and_trailing_slash(re.sub(
+        r'^\/None|{}\/'.format(DEFAULT_LANG),
         '',
-        os.path.dirname(full_url))
-
-    parent_pages = Title.objects.select_related('page').filter(
-        path__regex=parent_url, language=DEFAULT_LANG).filter(
-        publisher_is_draft=True)
-    if not parent_pages:
-        logging.error('Parent {} not found.'.format(
-            parent_url))
+        os.path.dirname(full_url)))
+    parent_url = os.path.dirname(full_url)
+    if not parent_url:
+        root = Page.objects.get_home()
+        if not root:
+            return None
+        return root.get_draft_object()
+    parent = get_page_from_path(parent_url, draft=True)
+    if not parent:
+        logging.error('Parent {} not found.'.format(parent_url))
         return None
-    return parent_pages[0].page
+    return parent
 
 
 def find_text_plugin(page):
