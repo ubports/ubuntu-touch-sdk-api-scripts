@@ -161,7 +161,8 @@ class TestAdvertiseImport(TestLocalBranchImport):
         self.assertTrue(self.repo.publish())
         for page in Page.objects.filter(publisher_is_draft=False):
             if page.parent is not None:
-                self.assertEqual(page.parent_id, self.root.id)
+                parent = page.parent.get_public_object()
+                self.assertEqual(parent.id, self.root.id)
                 self.assertTrue(page.in_navigation)
 
 
