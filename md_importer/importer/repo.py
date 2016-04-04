@@ -76,8 +76,14 @@ class Repo:
     def execute_import_directives(self):
         import_list = []
         # Import single files first
-        for directive in [d for d in self.directives
-                          if os.path.isfile(d['import_from'])]:
+        single_files = [d for d in self.directives
+                        if os.path.isfile(d['import_from'])]
+        # Sort by number of '/' in write_to - this should ensure that we
+        # first import entries closer to the root.
+        single_files.sort(
+            cmp=lambda x, y:
+            x['write_to'].count('/')-y['write_to'].count('/'))
+        for directive in single_files:
             import_list += [
                 (directive['import_from'], directive['write_to'],
                  directive['advertise'], directive['template'])
