@@ -134,8 +134,8 @@ class Article:
                         in_navigation=self.advertise, template=self.template)
         if self.page.is_dirty(DEFAULT_LANG):
             self.page.publish(DEFAULT_LANG)
-            if self.page.get_public_object():
-                self.page = self.page.get_public_object()
+        if self.page.get_public_object():
+            self.page = self.page.get_public_object()
         return self.page
 
 
