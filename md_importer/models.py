@@ -75,3 +75,7 @@ class ImportedArticle(models.Model):
     branch = models.ForeignKey(ExternalDocsBranch)
     last_import = models.DateTimeField(
         _('Datetime'), help_text=_('Datetime of last import.'))
+
+    def __str__(self):
+        return '{} -- {} -- {}'.format(
+            self.page.get_absolute_url(), self.branch, self.last_import)
