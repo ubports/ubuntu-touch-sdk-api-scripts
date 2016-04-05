@@ -1,9 +1,9 @@
-from django.core.management import call_command
-
 import datetime
 import pytz
 import shutil
 import tempfile
+
+from django.core.management import call_command
 
 from md_importer.importer.repo import create_repo
 
@@ -18,7 +18,7 @@ def process_branch(branch):
     repo = create_repo(tempdir, branch.origin, branch.branch_name,
                        branch.post_checkout_command)
     if repo.get() != 0:
-        return False
+        return None
     for directive in ExternalDocsBranchImportDirective.objects.filter(
             external_docs_branch=branch):
         repo.add_directive(directive.import_from,
@@ -26,9 +26,9 @@ def process_branch(branch):
                            directive.advertise,
                            directive.template)
     if not repo.execute_import_directives():
-        return False
+        return None
     if not repo.publish():
-        return False
+        return None
     timestamp = datetime.datetime.now(pytz.utc)
 
     # Update data in ImportedArticle table
@@ -36,13 +36,13 @@ def process_branch(branch):
         if ImportedArticle.objects.filter(branch=branch, page=page).count():
             imported_article = ImportedArticle.objects.filter(
                 branch=branch, page=page)[0]
-            imported_article.last_import = datetime.datetime.now(pytz.utc)
+            imported_article.last_import = timestamp
             imported_article.save()
         else:
-            ImportedArticle.objects.get_or_create(
+            imported_article, created = ImportedArticle.objects.get_or_create(
                 branch=branch,
                 page=page,
-                last_import=datetime.datetime.now(pytz.utc))
+                last_import=timestamp)
 
     # Remove old entries
     for imported_article in ImportedArticle.objects.filter(
@@ -59,4 +59,4 @@ def process_branch(branch):
 
     # https://stackoverflow.com/questions/33284171/
     call_command('cms', 'fix-tree')
-    return True
+    return repo
