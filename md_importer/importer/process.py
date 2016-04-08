@@ -5,8 +5,9 @@ import tempfile
 
 from django.core.management import call_command
 
-from md_importer.importer.repo import create_repo
+from cms.models import Page
 
+from md_importer.importer.repo import create_repo
 from md_importer.models import (
     ExternalDocsBranchImportDirective,
     ImportedArticle,
