@@ -21,7 +21,7 @@ class TestLinkRewrite(TestLocalBranchImport):
         self.assertEqual(pages.count(), 1+2)  # root + 2 articles
         for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, Article))
-            self.assertEqual(article.page.parent, self.root)
+            self.assertEqual(article.article_page.page.parent, self.root)
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
                 page = self.check_local_link(link.attrs['href'])
@@ -50,7 +50,7 @@ class TestLinkBrokenRewrite(TestLocalBranchImport):
         self.assertEqual(pages.count(), 1+2)  # root + 2 articles
         for article in self.repo.imported_articles:
             self.assertTrue(isinstance(article, Article))
-            self.assertEqual(article.page.parent, self.root)
+            self.assertEqual(article.article_page.page.parent, self.root)
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
                 if not link.has_attr('class') or \

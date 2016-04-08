@@ -3,7 +3,7 @@ from . import (
     SUPPORTED_ARTICLE_TYPES,
 )
 from .article import Article, SnappyArticle
-from .publish import get_or_create_page, slugify
+from .publish import ArticlePage, slugify
 from .source import SourceCode
 
 from md_importer.models import ExternalDocsBranchImportDirective
@@ -137,9 +137,6 @@ class Repo:
             article.replace_links(self.titles, self.url_map)
         for article in self.imported_articles:
             self.pages.extend([article.publish()])
-        if self.index_page:
-            self.index_page.publish(DEFAULT_LANG)
-            self.pages.extend([self.index_page])
         return True
 
     def _create_fake_index_page(self):
@@ -150,12 +147,15 @@ class Repo:
             redirect = '/snappy/guides'
         else:
             redirect = None
-        self.index_page = get_or_create_page(
-            title=self.index_doc_title, full_url=self.index_doc_url,
-            in_navigation=False, redirect=redirect, html='',
-            menu_title=None)
-        if not self.index_page:
+        try:
+            article_page = ArticlePage(
+                title=self.index_doc_title, full_url=self.index_doc_url,
+                in_navigation=False, redirect=redirect, html='',
+                menu_title=None)
+        except:
             return False
+        article_page.publish()
+        self.index_page = article_page.page
         return True
 
     def _write_fake_index_doc(self):

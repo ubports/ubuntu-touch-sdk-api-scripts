@@ -23,7 +23,7 @@ class TestRemoteImage(TestLocalBranchImport):
         pages = Page.objects.filter(publisher_is_draft=False)
         self.assertEqual(pages.count(), 1+1)  # root + 1 article
         for article in self.repo.imported_articles:
-            self.assertEqual(article.page.parent, self.root)
+            self.assertEqual(article.article_page.page.parent, self.root)
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
                 page = self.check_local_link(link.attrs['href'])

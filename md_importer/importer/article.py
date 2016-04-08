@@ -11,7 +11,7 @@ from . import (
     MARKDOWN_EXTENSIONS,
     SUPPORTED_ARTICLE_TYPES,
 )
-from .publish import get_or_create_page, slugify, update_page
+from .publish import ArticlePage, slugify
 
 if sys.version_info.major == 2:
     from urlparse import urlparse
@@ -22,7 +22,7 @@ else:
 class Article:
     def __init__(self, fn, write_to, advertise, template):
         self.html = None
-        self.page = None
+        self.article_page = None
         self.title = ""
         self.fn = fn
         self.write_to = slugify(self.fn)
@@ -116,27 +116,26 @@ class Article:
 
     def add_to_db(self):
         '''Publishes pages in their branch alias namespace.'''
-        self.page = get_or_create_page(
-            title=self.title, full_url=self.full_url, menu_title=self.title,
-            html=self.html, in_navigation=self.advertise,
-            template=self.template)
-        if not self.page:
+        try:
+            self.article_page = ArticlePage(
+                title=self.title, full_url=self.full_url,
+                menu_title=self.title, html=self.html,
+                in_navigation=self.advertise, template=self.template)
+        except:
             return False
         self.full_url = re.sub(
             r'^\/None\/', '/{}/'.format(DEFAULT_LANG),
-            self.page.get_absolute_url())
+            self.article_page.draft.get_absolute_url())
         return True
 
     def publish(self):
         if self.links_rewritten:
-            update_page(self.page, title=self.title, full_url=self.full_url,
-                        menu_title=self.title, html=self.html,
-                        in_navigation=self.advertise, template=self.template)
-        if self.page.is_dirty(DEFAULT_LANG):
-            self.page.publish(DEFAULT_LANG)
-        if self.page.get_public_object():
-            self.page = self.page.get_public_object()
-        return self.page
+            self.article_page.update(
+                title=self.title, full_url=self.full_url,
+                menu_title=self.title, html=self.html,
+                in_navigation=self.advertise, template=self.template)
+        self.article_page.publish()
+        return self.article_page.page
 
 
 class SnappyArticle(Article):
@@ -171,12 +170,13 @@ class SnappyArticle(Article):
     def add_to_db(self):
         if self.release_alias == "current":
             # Add a guides/<page> redirect to guides/current/<page>
-            page = get_or_create_page(
+            redirect_page = ArticlePage(
                 title=self.title,
                 full_url=self.full_url.replace('/current', ''),
                 redirect="/snappy/guides/current/{}".format(self.slug))
-            if not page:
+            if not redirect_page:
                 return False
+            redirect_page.publish()
         elif self.release_alias:
             self.title += " (%s)" % (self.release_alias,)
         return Article.add_to_db(self)
