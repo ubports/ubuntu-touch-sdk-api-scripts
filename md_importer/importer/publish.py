@@ -128,5 +128,5 @@ def find_text_plugin(page):
     # We create the page, so we know there's just one placeholder
     plugins = placeholders[0].get_plugins()
     if not plugins:
-        return (placeholder, None)
-    return (placeholder, plugins[0].get_plugin_instance()[0])
+        return (placeholders[0], None)
+    return (placeholders[0], plugins[0].get_plugin_instance()[0])
