@@ -108,6 +108,7 @@ class Repo:
             if not self._create_fake_index_page():
                 logging.error('Importing of {} aborted.'.format(self.origin))
                 return False
+            self.pages.extend([self.index_page])
         # The actual import
         for entry in import_list:
             article = self._read_article(
