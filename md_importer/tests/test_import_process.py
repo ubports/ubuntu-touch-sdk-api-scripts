@@ -167,6 +167,7 @@ class TestWholeImportProcessTwice(TestCase):
     '''
     def runTest(self):
         db_empty_page_list()
+        self.assertEqual(Page.objects.count(), 0)
         root = db_create_root_page()
         snappy_page = db_add_empty_page('Snappy', root)
         build_apps = db_add_empty_page(
@@ -174,6 +175,8 @@ class TestWholeImportProcessTwice(TestCase):
         guides = db_add_empty_page('Guides', snappy_page)
         phone = db_add_empty_page('Phone', root)
         publish_pages([snappy_page, build_apps, guides, phone])
+        self.assertEqual(
+            Page.objects.filter(publisher_is_draft=False).count(), 5)
         ExternalDocsBranch.objects.all().delete()
         ExternalDocsBranchImportDirective.objects.all().delete()
         ImportedArticle.objects.all().delete()
