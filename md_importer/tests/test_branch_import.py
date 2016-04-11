@@ -50,8 +50,9 @@ class TestImportDirectivesBuildHierarchyImport(TestLocalBranchImport):
         # Make sure we got the parents right
         for article in self.repo.imported_articles:
             parent_url = remove_trailing_slash(
-                article.page.parent.get_absolute_url())
-            url = remove_trailing_slash(article.page.get_absolute_url())
+                article.article_page.page.parent.get_absolute_url())
+            url = remove_trailing_slash(
+                article.article_page.page.get_absolute_url())
             self.assertEqual(parent_url, os.path.split(url)[0])
             self.assertIsInstance(article, Article)
 
