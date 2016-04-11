@@ -11,8 +11,11 @@ from . import (
     MARKDOWN_EXTENSIONS,
     SUPPORTED_ARTICLE_TYPES,
 )
-from .publish import ArticlePage, slugify
-
+from .publish import (
+    ArticlePage,
+    ParentNotFoundException,
+    slugify,
+)
 if sys.version_info.major == 2:
     from urlparse import urlparse
 else:
@@ -121,7 +124,7 @@ class Article:
                 title=self.title, full_url=self.full_url,
                 menu_title=self.title, html=self.html,
                 in_navigation=self.advertise, template=self.template)
-        except:
+        except ParentNotFoundException:
             return False
         self.full_url = re.sub(
             r'^\/None\/', '/{}/'.format(DEFAULT_LANG),

@@ -2,7 +2,11 @@ from . import (
     SUPPORTED_ARTICLE_TYPES,
 )
 from .article import Article, SnappyArticle
-from .publish import ArticlePage, slugify
+from .publish import (
+    ArticlePage,
+    ParentNotFoundException,
+    slugify,
+)
 from .source import SourceCode
 
 from md_importer.models import ExternalDocsBranchImportDirective
@@ -151,7 +155,7 @@ class Repo:
                 title=self.index_doc_title, full_url=self.index_doc_url,
                 in_navigation=False, redirect=redirect, html='',
                 menu_title=None)
-        except:
+        except ParentNotFoundException:
             return False
         article_page.publish()
         self.index_page = article_page.page
