@@ -15,6 +15,14 @@ import re
 import os
 
 
+class ParentNotFoundException(Exception):
+    def __init__(self, parent_url):
+        self.parent_url = parent_url
+
+    def __str__(self):
+        return repr(self.parent_url)
+
+
 class ArticlePage:
     def update(self, title, full_url, menu_title=None, in_navigation=True,
                redirect=None, html=None, template=None):
@@ -44,7 +52,8 @@ class ArticlePage:
                     self.draft.revert(DEFAULT_LANG)
             else:
                 self.draft_plugin = add_plugin(
-                    self.placeholder, 'RawHtmlPlugin', DEFAULT_LANG, body=html)
+                    self.draft_placeholder, 'RawHtmlPlugin', DEFAULT_LANG,
+                    body=html)
 
     def __init__(self, title, full_url, menu_title=None, in_navigation=True,
                  redirect=None, html=None, template=DEFAULT_TEMPLATE):
@@ -52,37 +61,26 @@ class ArticlePage:
         self.draft = None
         self.draft_placeholder = None
         self.draft_text_plugin = None
-        self.placeholder = None
-        self.text_plugin = None
 
         # First check if pages already exist.
         drafts = Title.objects.select_related('page').filter(
             path__regex=full_url).filter(publisher_is_draft=True)
         if drafts:
             self.draft = drafts[0].page
-            if self.page.get_public_object():
-                self.page = self.page.get_public_object()
-            if self.page:
-                (self.placeholder,
-                 self.text_plugin) = find_text_plugin(self.page)
-            (self.draft_placeholder,
-             self.draft_plugin) = find_text_plugin(self.draft)
-            self._update(title, full_url, menu_title, in_navigation, redirect,
-                         html, template)
         else:
             parent = _find_parent(full_url)
             if not parent:
-                raise Exception('Parent for {} not found.'.format(full_url))
+                raise ParentNotFoundException('Parent for {} not found.'.format(full_url))
             slug = os.path.basename(full_url)
             self.draft = create_page(
                 title=title, template=template, language=DEFAULT_LANG,
                 slug=slug, parent=parent, menu_title=menu_title,
                 in_navigation=in_navigation, position='last-child',
                 redirect=redirect)
-            self.draft_placeholder = self.draft.placeholders.all()[0]
-            self.draft_plugin = add_plugin(
-                self.draft_placeholder, 'RawHtmlPlugin', DEFAULT_LANG,
-                body=html)
+        (self.draft_placeholder,
+         self.draft_plugin) = get_text_plugin(self.draft)
+        self.update(title, full_url, menu_title, in_navigation, redirect,
+                    html, template)
 
     def publish(self):
         if self.draft.is_dirty(DEFAULT_LANG):
@@ -119,7 +117,8 @@ def _find_parent(full_url):
     return parent
 
 
-def find_text_plugin(page):
+def get_text_plugin(page):
+    '''Finds text plugin, creates it if necessary.'''
     if not page:
         return (None, None)
     placeholders = page.placeholders.all()
@@ -127,6 +126,9 @@ def find_text_plugin(page):
         return (None, None)
     # We create the page, so we know there's just one placeholder
     plugins = placeholders[0].get_plugins()
-    if not plugins:
-        return (placeholders[0], None)
-    return (placeholders[0], plugins[0].get_plugin_instance()[0])
+    if plugins:
+        return (placeholders[0], plugins[0].get_plugin_instance()[0])
+    plugin = add_plugin(
+        placeholders[0], 'RawHtmlPlugin', DEFAULT_LANG,
+        body='')
+    return (placeholders[0], plugin)
