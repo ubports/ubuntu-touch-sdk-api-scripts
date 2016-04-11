@@ -89,13 +89,13 @@ class TestImportProcessBranchWhichChangesFiles(TestCase):
             import_from='', write_to='', external_docs_branch=branch)
         self.assertIsNotNone(process_branch(branch))
         self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 3)
+            Page.objects.filter(publisher_is_draft=False).count(), 10)
         branch.origin = os.path.join(
             os.path.dirname(__file__), 'data/link2-test')
         branch.save()
         self.assertTrue(process_branch(branch))
         self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 3)
+            Page.objects.filter(publisher_is_draft=False).count(), 10)
 
 
 class TestImportProcessTwice(TestCase):
@@ -128,7 +128,7 @@ class TestImportProcessTwice(TestCase):
             external_docs_branch=branch)
         repo = process_branch(branch)
         self.assertIsNotNone(repo)
-        self.assertGreater(len(repo.pages), 3)
+        self.assertGreater(len(repo.pages), 10)
         self.assertIn(
             '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
             [p.get_absolute_url() for p in repo.pages])
@@ -136,14 +136,14 @@ class TestImportProcessTwice(TestCase):
         self.assertIn(
             '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
             [p.get_absolute_url() for p in published_pages])
-        self.assertGreater(published_pages.count(), 3)
+        self.assertGreater(published_pages.count(), 10)
         for imported_article in ImportedArticle.objects.all():
             self.assertFalse(imported_article.page.publisher_is_draft)
 
         # Run the import a second time
         repo = process_branch(branch)
         self.assertIsNotNone(repo)
-        self.assertGreater(len(repo.pages), 3)
+        self.assertGreater(len(repo.pages), 10)
         self.assertIn(
             '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
             [p.get_absolute_url() for p in repo.pages])
@@ -151,7 +151,7 @@ class TestImportProcessTwice(TestCase):
         self.assertIn(
             '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
             [p.get_absolute_url() for p in published_pages])
-        self.assertGreater(published_pages.count(), 3)
+        self.assertGreater(published_pages.count(), 10)
         for imported_article in ImportedArticle.objects.all():
             self.assertFalse(imported_article.page.publisher_is_draft)
 
@@ -202,13 +202,13 @@ class TestWholeImportProcessTwice(TestCase):
         # Run the import a first time
         snapcraft_repo = process_branch(snapcraft_branch)
         self.assertIsNotNone(snapcraft_repo)
-        self.assertGreater(len(snapcraft_repo.pages), 3)
+        self.assertGreater(len(snapcraft_repo.pages), 10)
         self.assertIn(
             '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
             [p.get_absolute_url() for p in snapcraft_repo.pages])
         snappy_repo = process_branch(snappy_branch)
         self.assertIsNotNone(snappy_repo)
-        self.assertGreater(len(snappy_repo.pages), 3)
+        self.assertGreater(len(snappy_repo.pages), 10)
         self.assertIn(
             '/{}/snappy/guides/'.format(DEFAULT_LANG),
             [p.get_absolute_url() for p in snappy_repo.pages])
@@ -219,20 +219,20 @@ class TestWholeImportProcessTwice(TestCase):
                       published_urls)
         self.assertIn('/{}/snappy/guides/'.format(DEFAULT_LANG),
                       published_urls)
-        self.assertGreater(published_pages.count(), 6)
+        self.assertGreater(published_pages.count(), 20)
         for imported_article in ImportedArticle.objects.all():
             self.assertFalse(imported_article.page.publisher_is_draft)
 
         # Run the import a second time
         snapcraft_repo = process_branch(snapcraft_branch)
         self.assertIsNotNone(snapcraft_repo)
-        self.assertGreater(len(snapcraft_repo.pages), 3)
+        self.assertGreater(len(snapcraft_repo.pages), 10)
         self.assertIn(
             '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
             [p.get_absolute_url() for p in snapcraft_repo.pages])
         snappy_repo = process_branch(snappy_branch)
         self.assertIsNotNone(snappy_repo)
-        self.assertGreater(len(snappy_repo.pages), 3)
+        self.assertGreater(len(snappy_repo.pages), 10)
         self.assertIn(
             '/{}/snappy/guides/'.format(DEFAULT_LANG),
             [p.get_absolute_url() for p in snappy_repo.pages])
@@ -243,6 +243,6 @@ class TestWholeImportProcessTwice(TestCase):
                       published_urls)
         self.assertIn('/{}/snappy/guides/'.format(DEFAULT_LANG),
                       published_urls)
-        self.assertGreater(published_pages.count(), 6)
+        self.assertGreater(published_pages.count(), 20)
         for imported_article in ImportedArticle.objects.all():
             self.assertFalse(imported_article.page.publisher_is_draft)
