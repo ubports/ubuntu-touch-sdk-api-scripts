@@ -42,7 +42,7 @@ class TestImportProcessPasses(TestCase):
             import_from='HACKING.md',
             write_to='snappy/build-apps/devel/hacking',
             external_docs_branch=branch)
-        self.assertTrue(process_branch(branch))
+        self.assertIsNotNone(process_branch(branch))
 
 
 class TestPageStateAfterImportProcess(TestCase):
