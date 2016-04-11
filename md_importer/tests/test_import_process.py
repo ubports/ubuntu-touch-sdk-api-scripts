@@ -89,13 +89,13 @@ class TestImportProcessBranchWhichChangesFiles(TestCase):
             import_from='', write_to='', external_docs_branch=branch)
         self.assertIsNotNone(process_branch(branch))
         self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 10)
+            Page.objects.filter(publisher_is_draft=False).count(), 3)
         branch.origin = os.path.join(
             os.path.dirname(__file__), 'data/link2-test')
         branch.save()
         self.assertTrue(process_branch(branch))
         self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 10)
+            Page.objects.filter(publisher_is_draft=False).count(), 3)
 
 
 class TestImportProcessTwice(TestCase):
