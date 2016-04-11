@@ -1,5 +1,4 @@
 from . import (
-    DEFAULT_LANG,
     SUPPORTED_ARTICLE_TYPES,
 )
 from .article import Article, SnappyArticle
