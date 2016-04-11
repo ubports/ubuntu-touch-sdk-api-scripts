@@ -53,7 +53,7 @@ class TestSnappyCurrentImport(TestLocalBranchImport):
         current = current_search[0]
         nav_pages = [self.root, snappy_page, guides, current]
         self.assertEqual(
-            2*number_of_articles, # Articles + current redirects
+            2*number_of_articles,  # Articles + current redirects
             pages.count()-len(nav_pages))
         for page in [a for a in pages if a not in nav_pages]:
             if page.get_redirect(DEFAULT_LANG):

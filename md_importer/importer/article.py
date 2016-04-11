@@ -16,6 +16,7 @@ from .publish import (
     ParentNotFoundException,
     slugify,
 )
+
 if sys.version_info.major == 2:
     from urlparse import urlparse
 else:

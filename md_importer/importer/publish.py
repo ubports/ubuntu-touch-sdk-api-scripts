@@ -70,7 +70,8 @@ class ArticlePage:
         else:
             parent = _find_parent(full_url)
             if not parent:
-                raise ParentNotFoundException('Parent for {} not found.'.format(full_url))
+                raise ParentNotFoundException(
+                    'Parent for {} not found.'.format(full_url))
             slug = os.path.basename(full_url)
             self.draft = create_page(
                 title=title, template=template, language=DEFAULT_LANG,
