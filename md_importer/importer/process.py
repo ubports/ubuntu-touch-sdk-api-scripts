@@ -43,11 +43,12 @@ def process_branch(branch):
                 page=page,
                 last_import=timestamp)
 
-    # Remove old entries
-    for imported_article in ImportedArticle.objects.filter(
-            branch=branch, last_import__lt=timestamp):
-        imported_article.page.delete()
-        imported_article.delete()
+    # XXX: This needs fixing!
+    # # Remove old entries
+    # for imported_article in ImportedArticle.objects.filter(
+    #         branch=branch, last_import__lt=timestamp):
+    #     imported_article.page.delete()
+    #     imported_article.delete()
 
     # The import is done, now let's clean up.
     imported_page_ids = [p.id for p in repo.pages
