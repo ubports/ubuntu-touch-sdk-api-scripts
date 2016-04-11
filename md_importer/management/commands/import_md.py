@@ -13,7 +13,7 @@ def import_branches(selection):
         return
     for branch in ExternalDocsBranch.objects.filter(
             origin__regex=selection, active=True):
-        if not process_branch(branch):
+        if process_branch(branch) is None:
             break
 
 

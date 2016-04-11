@@ -69,7 +69,7 @@ class TestPageStateAfterImportProcess(TestCase):
             import_from='HACKING.md',
             write_to='snappy/build-apps/devel/hacking',
             external_docs_branch=branch)
-        self.assertTrue(process_branch(branch))
+        self.assertIsNotNone(process_branch(branch))
         for imported_article in ImportedArticle.objects.all():
             self.assertFalse(imported_article.page.publisher_is_draft)
 
@@ -87,7 +87,7 @@ class TestImportProcessBranchWhichChangesFiles(TestCase):
             branch_name='')
         a, created = ExternalDocsBranchImportDirective.objects.get_or_create(
             import_from='', write_to='', external_docs_branch=branch)
-        self.assertTrue(process_branch(branch))
+        self.assertIsNotNone(process_branch(branch))
         self.assertEqual(
             Page.objects.filter(publisher_is_draft=False).count(), 3)
         branch.origin = os.path.join(
