@@ -213,9 +213,9 @@ class TestWholeImportProcessTwiceVariantA(TestCase):
         snappy_repo = process_branch(snappy_branch)
         self.assertIsNotNone(snappy_repo)
         self.assertGreater(len(snappy_repo.pages), 10)
+        page_urls = [p.get_absolute_url() for p in snappy_repo.pages]
         self.assertIn(
-            '/{}/snappy/guides/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in snappy_repo.pages])
+            '/{}/snappy/guides/'.format(DEFAULT_LANG), page_urls)
 
         published_pages = Page.objects.filter(publisher_is_draft=False)
         published_urls = [p.get_absolute_url() for p in published_pages]
@@ -237,9 +237,9 @@ class TestWholeImportProcessTwiceVariantA(TestCase):
         snappy_repo = process_branch(snappy_branch)
         self.assertIsNotNone(snappy_repo)
         self.assertGreater(len(snappy_repo.pages), 10)
+        published_urls = [p.get_absolute_url() for p in snappy_repo.pages]
         self.assertIn(
-            '/{}/snappy/guides/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in snappy_repo.pages])
+            '/{}/snappy/guides/'.format(DEFAULT_LANG), published_urls)
 
         published_pages = Page.objects.filter(publisher_is_draft=False)
         published_urls = [p.get_absolute_url() for p in published_pages]
@@ -299,15 +299,15 @@ class TestWholeImportProcessTwiceVariantB(TestCase):
         snapcraft_repo = process_branch(snapcraft_branch)
         self.assertIsNotNone(snapcraft_repo)
         self.assertGreater(len(snapcraft_repo.pages), 10)
+        page_urls = [p.get_absolute_url() for p in snapcraft_repo.pages]
         self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in snapcraft_repo.pages])
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG), page_urls)
         snappy_repo = process_branch(snappy_branch)
         self.assertIsNotNone(snappy_repo)
         self.assertGreater(len(snappy_repo.pages), 10)
+        page_urls = [p.get_absolute_url() for p in snappy_repo.pages]
         self.assertIn(
-            '/{}/snappy/guides/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in snappy_repo.pages])
+            '/{}/snappy/guides/'.format(DEFAULT_LANG), page_urls)
 
         published_pages = Page.objects.filter(publisher_is_draft=False)
         published_urls = [p.get_absolute_url() for p in published_pages]
@@ -329,9 +329,9 @@ class TestWholeImportProcessTwiceVariantB(TestCase):
         snappy_repo = process_branch(snappy_branch)
         self.assertIsNotNone(snappy_repo)
         self.assertGreater(len(snappy_repo.pages), 10)
+        page_urls = [p.get_absolute_url() for p in snappy_repo.pages]
         self.assertIn(
-            '/{}/snappy/guides/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in snappy_repo.pages])
+            '/{}/snappy/guides/'.format(DEFAULT_LANG), page_urls)
 
         published_pages = Page.objects.filter(publisher_is_draft=False)
         published_urls = [p.get_absolute_url() for p in published_pages]
