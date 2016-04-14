@@ -154,7 +154,7 @@ class Repo:
         try:
             article_page = ArticlePage(
                 title=self.index_doc_title, full_url=self.index_doc_url,
-                in_navigation=False, redirect=redirect, html='',
+                in_navigation=True, redirect=redirect, html='',
                 menu_title=None)
         except ParentNotFoundException:
             return False
