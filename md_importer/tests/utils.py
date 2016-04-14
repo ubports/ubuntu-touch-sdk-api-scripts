@@ -10,7 +10,11 @@ from cms.models import Page
 from cms.test_utils.testcases import CMSTestCase
 from cms.utils.page_resolver import get_page_from_request
 
-from ..importer import DEFAULT_LANG
+from md_importer.models import ImportedArticle
+from ..importer import (
+    DEFAULT_LANG,
+    DEFAULT_TEMPLATE
+)
 from ..importer.repo import create_repo
 
 if sys.version_info.major == 2:
@@ -67,6 +71,17 @@ class TestLocalBranchImport(CMSTestCase):
 
     def tearDown(self):
         shutil.rmtree(self.tempdir)
+
+
+def is_imported_article(imported_article):
+    assert isinstance(imported_article, ImportedArticle)
+    page = imported_article.page
+    assert page is not None
+    assert page.in_navigation is True, \
+        'Page {} is not in navigation.'.format(page)
+    assert page.template == DEFAULT_TEMPLATE
+    assert page.publisher_is_draft is False
+    return True
 
 
 def is_local_link(link):
