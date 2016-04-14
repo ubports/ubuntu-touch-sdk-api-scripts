@@ -15,6 +15,7 @@ from .utils import (
     db_add_empty_page,
     db_create_root_page,
     db_empty_page_list,
+    is_imported_article,
 )
 
 
@@ -71,7 +72,7 @@ class TestPageStateAfterImportProcess(TestCase):
             external_docs_branch=branch)
         self.assertIsNotNone(process_branch(branch))
         for imported_article in ImportedArticle.objects.all():
-            self.assertFalse(imported_article.page.publisher_is_draft)
+            self.assertTrue(is_imported_article(imported_article))
 
 
 class TestImportProcessBranchWhichChangesFiles(TestCase):
@@ -138,7 +139,7 @@ class TestImportProcessTwice(TestCase):
             [p.get_absolute_url() for p in published_pages])
         self.assertGreater(published_pages.count(), 10)
         for imported_article in ImportedArticle.objects.all():
-            self.assertFalse(imported_article.page.publisher_is_draft)
+            self.assertTrue(is_imported_article(imported_article))
 
         # Run the import a second time
         repo = process_branch(branch)
@@ -153,7 +154,7 @@ class TestImportProcessTwice(TestCase):
             [p.get_absolute_url() for p in published_pages])
         self.assertGreater(published_pages.count(), 10)
         for imported_article in ImportedArticle.objects.all():
-            self.assertFalse(imported_article.page.publisher_is_draft)
+            self.assertTrue(is_imported_article(imported_article))
 
 
 class TestWholeImportProcessTwiceVariantA(TestCase):
@@ -224,7 +225,7 @@ class TestWholeImportProcessTwiceVariantA(TestCase):
                       published_urls)
         self.assertGreater(published_pages.count(), 20)
         for imported_article in ImportedArticle.objects.all():
-            self.assertFalse(imported_article.page.publisher_is_draft)
+            self.assertTrue(is_imported_article(imported_article))
 
         # Run the import a second time
         snapcraft_repo = process_branch(snapcraft_branch)
@@ -248,7 +249,7 @@ class TestWholeImportProcessTwiceVariantA(TestCase):
                       published_urls)
         self.assertGreater(published_pages.count(), 20)
         for imported_article in ImportedArticle.objects.all():
-            self.assertFalse(imported_article.page.publisher_is_draft)
+            self.assertTrue(is_imported_article(imported_article))
 
 
 class TestWholeImportProcessTwiceVariantB(TestCase):
@@ -316,7 +317,7 @@ class TestWholeImportProcessTwiceVariantB(TestCase):
                       published_urls)
         self.assertGreater(published_pages.count(), 20)
         for imported_article in ImportedArticle.objects.all():
-            self.assertFalse(imported_article.page.publisher_is_draft)
+            self.assertTrue(is_imported_article(imported_article))
 
         # Run the import a second time
         snapcraft_repo = process_branch(snapcraft_branch)
@@ -340,4 +341,4 @@ class TestWholeImportProcessTwiceVariantB(TestCase):
                       published_urls)
         self.assertGreater(published_pages.count(), 20)
         for imported_article in ImportedArticle.objects.all():
-            self.assertFalse(imported_article.page.publisher_is_draft)
+            self.assertTrue(is_imported_article(imported_article))
