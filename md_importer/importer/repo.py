@@ -94,7 +94,7 @@ class Repo:
             if not self._create_fake_index_page():
                 logging.error('Importing of {} aborted.'.format(self.origin))
                 return False
-            self.pages.extend([self.index_page])
+            self.pages.extend([self.index_page.page])
         # The actual import
         for entry in import_list:
             article = self._read_article(
@@ -140,7 +140,7 @@ class Repo:
         except ParentNotFoundException:
             return False
         article_page.publish()
-        self.index_page = article_page.page
+        self.index_page = article_page
         return True
 
     def _write_fake_index_doc(self):
@@ -160,6 +160,7 @@ class Repo:
             'href=\"{}\">{}</a>.</p>\n'
             '</div></div>'.format(self.release_alias, list_pages,
                                   self.origin, self.origin))
-        if html != self.index_page.html:
-            self.index_page.html = html
-            self.index_page.publish(DEFAULT_LANG)
+        self.index_page.update(
+            title=self.index_doc_title,full_url=self.index_doc_url,
+            in_navigation=True, html=html, menu_title=None)
+        self.index_page.publish()
