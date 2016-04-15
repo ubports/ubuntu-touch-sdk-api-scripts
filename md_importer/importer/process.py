@@ -5,7 +5,7 @@ import tempfile
 
 from django.core.management import call_command
 
-from md_importer.importer.repo import create_repo
+from md_importer.importer.repo import Repo
 from md_importer.models import (
     ExternalDocsBranchImportDirective,
     ImportedArticle,
@@ -14,8 +14,8 @@ from md_importer.models import (
 
 def process_branch(branch):
     tempdir = tempfile.mkdtemp()
-    repo = create_repo(tempdir, branch.origin, branch.branch_name,
-                       branch.post_checkout_command)
+    repo = Repo(tempdir, branch.origin, branch.branch_name,
+                branch.post_checkout_command)
     if repo.get() != 0:
         return None
     for directive in ExternalDocsBranchImportDirective.objects.filter(

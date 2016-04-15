@@ -15,7 +15,7 @@ from ..importer import (
     DEFAULT_LANG,
     DEFAULT_TEMPLATE
 )
-from ..importer.repo import create_repo
+from ..importer.repo import Repo
 
 if sys.version_info.major == 2:
     from urlparse import urlparse
@@ -56,7 +56,7 @@ class TestLocalBranchImport(CMSTestCase):
     def create_repo(self, docs_path):
         origin = os.path.join(os.path.dirname(__file__), docs_path)
         self.assertTrue(os.path.exists(origin))
-        self.repo = create_repo(self.tempdir, origin, '', '')
+        self.repo = Repo(self.tempdir, origin, '', '')
         self.fetch_retcode = self.repo.get()
         self.assertEqual(self.fetch_retcode, 0)
 

@@ -1,7 +1,8 @@
 from . import (
+    DEFAULT_LANG,
     SUPPORTED_ARTICLE_TYPES,
 )
-from .article import Article, SnappyArticle
+from .article import Article
 from .publish import (
     ArticlePage,
     ParentNotFoundException,
@@ -14,21 +15,6 @@ from md_importer.models import ExternalDocsBranchImportDirective
 import glob
 import logging
 import os
-
-
-def create_repo(tempdir, origin, branch_name, post_checkout_command):
-    if os.path.exists(origin):
-        if 'snappy' in origin:
-            repo_class = SnappyRepo
-        else:
-            repo_class = Repo
-    else:
-        if origin.startswith('lp:snappy') or \
-           'snappy' in origin.split(':')[1].split('.git')[0].split('/'):
-            repo_class = SnappyRepo
-        else:
-            repo_class = Repo
-    return repo_class(tempdir, origin, branch_name, post_checkout_command)
 
 
 class Repo:
@@ -177,17 +163,3 @@ class Repo:
         if html != self.index_page.html:
             self.index_page.html = html
             self.index_page.publish(DEFAULT_LANG)
-
-
-class SnappyRepo(Repo):
-    def __init__(self, tempdir, origin, branch_name, post_checkout_command):
-        Repo.__init__(self, tempdir, origin, branch_name,
-                      post_checkout_command)
-        self.article_class = SnappyArticle
-        self.index_doc_title = 'Snappy documentation'
-
-    def _create_fake_index_page(self):
-        self.release_alias = os.path.basename(self.index_doc_url)
-        if not self.index_doc_url.endswith('current'):
-            self.index_doc_title += ' ({})'.format(self.release_alias)
-        return Repo._create_fake_index_page(self)

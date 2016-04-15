@@ -140,38 +140,3 @@ class Article:
                 in_navigation=self.advertise, template=self.template)
         self.article_page.publish()
         return self.article_page.page
-
-
-class SnappyArticle(Article):
-    release_alias = None
-
-    def read(self):
-        if not Article.read(self):
-            return False
-        matches = re.findall(r'snappy/guides/(\S+?)/\S+?',
-                             self.full_url)
-        if matches:
-            self.release_alias = matches[0]
-        self._make_snappy_mods()
-        return True
-
-    def _make_snappy_mods(self):
-        # Make sure the reader knows which documentation she is browsing
-        if self.release_alias and self.release_alias != 'current':
-            before = (u"<div class=\"row no-border\">\n"
-                      "<div class=\"eight-col\">\n")
-            after = (u"<div class=\"row no-border\">\n"
-                     "<div class=\"box pull-three three-col\">"
-                     "<p>You are browsing the Snappy <code>%s</code> "
-                     "documentation.</p>"
-                     "<p><a href=\"/snappy/guides/current/%s\">"
-                     "Back to the latest stable release &rsaquo;"
-                     "</a></p></div>\n"
-                     "<div class=\"eight-col\">\n") % (self.release_alias,
-                                                       self.slug, )
-            self.html = self.html.replace(before, after)
-
-    def add_to_db(self):
-        if self.release_alias:
-            self.title += " (%s)" % (self.release_alias,)
-        return Article.add_to_db(self)
