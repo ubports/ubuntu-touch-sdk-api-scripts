@@ -170,7 +170,7 @@ class Repo:
             list_pages += u'<li><a href=\"{}\">{}</a></li>'.format(
                 unicode(os.path.basename(article.full_url)),
                 article.title)
-        self.index_page.html = (
+        html = (
             u'<div class=\"row\"><div class=\"eight-col\">\n'
             '<p>This section contains documentation for the '
             '<code>{}</code> Snappy branch.</p>'
@@ -179,6 +179,9 @@ class Repo:
             'href=\"{}\">{}</a>.</p>\n'
             '</div></div>'.format(self.release_alias, list_pages,
                                   self.origin, self.origin))
+        if html != self.index_page.html:
+            self.index_page.html = html
+            self.index_page.publish(DEFAULT_LANG)
 
 
 class SnappyRepo(Repo):
