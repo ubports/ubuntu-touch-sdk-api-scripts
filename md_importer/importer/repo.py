@@ -163,3 +163,11 @@ class Repo:
             title=self.index_doc_title, full_url=self.index_doc_url,
             in_navigation=True, html=html, menu_title=None)
         self.index_page.publish()
+
+    def assert_is_published(self):
+        for page in self.pages:
+            assert page.publisher_is_draft is False
+        return True
+
+    def contains_page(self, url):
+        return url in [p.get_absolute_url() for p in self.pages]

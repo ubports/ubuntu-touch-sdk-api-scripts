@@ -13,7 +13,6 @@ from cms.utils.page_resolver import get_page_from_request
 from md_importer.models import ImportedArticle
 from ..importer import (
     DEFAULT_LANG,
-    DEFAULT_TEMPLATE
 )
 from ..importer.repo import Repo
 
@@ -73,15 +72,16 @@ class TestLocalBranchImport(CMSTestCase):
         shutil.rmtree(self.tempdir)
 
 
-def is_imported_article(imported_article):
+def check_imported_article(imported_article):
+    assert imported_article is not None
     assert isinstance(imported_article, ImportedArticle)
-    page = imported_article.page
-    assert page is not None
-    assert page.in_navigation is True, \
-        'Page {} is not in navigation.'.format(page)
-    assert page.template == DEFAULT_TEMPLATE
-    assert page.publisher_is_draft is False
-    return True
+    return imported_article.verify()
+
+
+def check_repo(repo):
+    assert repo is not None
+    assert isinstance(repo, Repo)
+    return repo.assert_is_published()
 
 
 def is_local_link(link):
@@ -93,3 +93,21 @@ def is_local_link(link):
     if scheme in ['http', 'https', 'mailto']:
         return False
     return True
+
+
+class PublishedPages:
+    def __init__(self):
+        self.published_pages = None
+        self.update()
+
+    def update(self):
+        self.published_pages = Page.objects.filter(publisher_is_draft=False)
+
+    def contains_url(self, url):
+        return url in [p.get_absolute_url() for p in self.published_pages]
+
+    def has_size(self, size):
+        return self.published_pages.count() == size
+
+    def has_at_least_size(self, size):
+        return self.published_pages.count() >= size

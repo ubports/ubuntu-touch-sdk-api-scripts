@@ -79,3 +79,11 @@ class ImportedArticle(models.Model):
     def __str__(self):
         return '{} -- {} -- {}'.format(
             self.page.get_absolute_url(), self.branch, self.last_import)
+
+    def verify(self):
+        assert self.page is not None
+        assert self.page.in_navigation is True, \
+            'Page {} is not in navigation.'.format(self.page)
+        assert self.page.template == cms_templates[0][0]
+        assert self.page.publisher_is_draft is False
+        return True

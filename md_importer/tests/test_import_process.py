@@ -12,10 +12,12 @@ from md_importer.models import (
     ImportedArticle,
 )
 from .utils import (
+    check_repo,
+    check_imported_article,
     db_add_empty_page,
     db_create_root_page,
     db_empty_page_list,
-    is_imported_article,
+    PublishedPages,
 )
 
 
@@ -72,7 +74,7 @@ class TestPageStateAfterImportProcess(TestCase):
             external_docs_branch=branch)
         self.assertIsNotNone(process_branch(branch))
         for imported_article in ImportedArticle.objects.all():
-            self.assertTrue(is_imported_article(imported_article))
+            self.assertTrue(check_imported_article(imported_article))
 
 
 class TestImportProcessBranchWhichChangesFiles(TestCase):
@@ -128,33 +130,29 @@ class TestImportProcessTwice(TestCase):
             import_from='docs', write_to='snappy/build-apps',
             external_docs_branch=branch)
         repo = process_branch(branch)
-        self.assertIsNotNone(repo)
+        self.assertTrue(check_repo(repo))
         self.assertGreater(len(repo.pages), 10)
-        self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in repo.pages])
-        published_pages = Page.objects.filter(publisher_is_draft=False)
-        self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in published_pages])
-        self.assertGreater(published_pages.count(), 10)
+        self.assertTrue(repo.contains_page(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.has_at_least_size(10))
         for imported_article in ImportedArticle.objects.all():
-            self.assertTrue(is_imported_article(imported_article))
+            self.assertTrue(check_imported_article(imported_article))
 
         # Run the import a second time
         repo = process_branch(branch)
-        self.assertIsNotNone(repo)
+        self.assertTrue(check_repo(repo))
         self.assertGreater(len(repo.pages), 10)
-        self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in repo.pages])
-        published_pages = Page.objects.filter(publisher_is_draft=False)
-        self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in published_pages])
-        self.assertGreater(published_pages.count(), 10)
+        self.assertTrue(repo.contains_page(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
+        published_pages.update()
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.has_at_least_size(10))
         for imported_article in ImportedArticle.objects.all():
-            self.assertTrue(is_imported_article(imported_article))
+            self.assertTrue(check_imported_article(imported_article))
 
 
 class TestWholeImportProcessTwiceVariantA(TestCase):
@@ -205,51 +203,45 @@ class TestWholeImportProcessTwiceVariantA(TestCase):
 
         # Run the import a first time
         snapcraft_repo = process_branch(snapcraft_branch)
-        self.assertIsNotNone(snapcraft_repo)
+        self.assertTrue(check_repo(snapcraft_repo))
         self.assertGreater(len(snapcraft_repo.pages), 10)
-        self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in snapcraft_repo.pages])
+        self.assertTrue(snapcraft_repo.contains_page(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
         snappy_repo = process_branch(snappy_branch)
-        self.assertIsNotNone(snappy_repo)
+        self.assertTrue(check_repo(snappy_repo))
         self.assertGreater(len(snappy_repo.pages), 10)
-        page_urls = [p.get_absolute_url() for p in snappy_repo.pages]
-        self.assertIn(
-            '/{}/snappy/guides/'.format(DEFAULT_LANG), page_urls)
+        self.assertTrue(snappy_repo.contains_page(
+            '/{}/snappy/guides/'.format(DEFAULT_LANG)))
 
-        published_pages = Page.objects.filter(publisher_is_draft=False)
-        published_urls = [p.get_absolute_url() for p in published_pages]
-        self.assertIn('/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-                      published_urls)
-        self.assertIn('/{}/snappy/guides/'.format(DEFAULT_LANG),
-                      published_urls)
-        self.assertGreater(published_pages.count(), 20)
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/guides/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.has_at_least_size(20))
         for imported_article in ImportedArticle.objects.all():
-            self.assertTrue(is_imported_article(imported_article))
+            self.assertTrue(check_imported_article(imported_article))
 
         # Run the import a second time
         snapcraft_repo = process_branch(snapcraft_branch)
-        self.assertIsNotNone(snapcraft_repo)
+        self.assertTrue(check_repo(snapcraft_repo))
         self.assertGreater(len(snapcraft_repo.pages), 10)
-        self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in snapcraft_repo.pages])
+        self.assertTrue(snapcraft_repo.contains_page(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
         snappy_repo = process_branch(snappy_branch)
-        self.assertIsNotNone(snappy_repo)
+        self.assertTrue(check_repo(snappy_repo))
         self.assertGreater(len(snappy_repo.pages), 10)
-        published_urls = [p.get_absolute_url() for p in snappy_repo.pages]
-        self.assertIn(
-            '/{}/snappy/guides/'.format(DEFAULT_LANG), published_urls)
+        self.assertTrue(snappy_repo.contains_page(
+            '/{}/snappy/guides/'.format(DEFAULT_LANG)))
 
-        published_pages = Page.objects.filter(publisher_is_draft=False)
-        published_urls = [p.get_absolute_url() for p in published_pages]
-        self.assertIn('/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-                      published_urls)
-        self.assertIn('/{}/snappy/guides/'.format(DEFAULT_LANG),
-                      published_urls)
-        self.assertGreater(published_pages.count(), 20)
+        published_pages.update()
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/guides/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.has_at_least_size(20))
         for imported_article in ImportedArticle.objects.all():
-            self.assertTrue(is_imported_article(imported_article))
+            self.assertTrue(check_imported_article(imported_article))
 
 
 class TestWholeImportProcessTwiceVariantB(TestCase):
@@ -297,48 +289,42 @@ class TestWholeImportProcessTwiceVariantB(TestCase):
 
         # Run the import a first time
         snapcraft_repo = process_branch(snapcraft_branch)
-        self.assertIsNotNone(snapcraft_repo)
+        self.assertTrue(check_repo(snapcraft_repo))
         self.assertGreater(len(snapcraft_repo.pages), 10)
-        page_urls = [p.get_absolute_url() for p in snapcraft_repo.pages]
-        self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG), page_urls)
+        self.assertTrue(snapcraft_repo.contains_page(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
         snappy_repo = process_branch(snappy_branch)
-        self.assertIsNotNone(snappy_repo)
+        self.assertTrue(check_repo(snappy_repo))
         self.assertGreater(len(snappy_repo.pages), 10)
-        page_urls = [p.get_absolute_url() for p in snappy_repo.pages]
-        self.assertIn(
-            '/{}/snappy/guides/'.format(DEFAULT_LANG), page_urls)
+        self.assertTrue(snappy_repo.contains_page(
+            '/{}/snappy/guides/'.format(DEFAULT_LANG)))
 
-        published_pages = Page.objects.filter(publisher_is_draft=False)
-        published_urls = [p.get_absolute_url() for p in published_pages]
-        self.assertIn('/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-                      published_urls)
-        self.assertIn('/{}/snappy/guides/'.format(DEFAULT_LANG),
-                      published_urls)
-        self.assertGreater(published_pages.count(), 20)
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/guides/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.has_at_least_size(20))
         for imported_article in ImportedArticle.objects.all():
-            self.assertTrue(is_imported_article(imported_article))
+            self.assertTrue(check_imported_article(imported_article))
 
         # Run the import a second time
         snapcraft_repo = process_branch(snapcraft_branch)
-        self.assertIsNotNone(snapcraft_repo)
+        self.assertTrue(check_repo(snapcraft_repo))
         self.assertGreater(len(snapcraft_repo.pages), 10)
-        self.assertIn(
-            '/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-            [p.get_absolute_url() for p in snapcraft_repo.pages])
+        self.assertTrue(snapcraft_repo.contains_page(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
         snappy_repo = process_branch(snappy_branch)
-        self.assertIsNotNone(snappy_repo)
+        self.assertTrue(check_repo(snappy_repo))
         self.assertGreater(len(snappy_repo.pages), 10)
-        page_urls = [p.get_absolute_url() for p in snappy_repo.pages]
-        self.assertIn(
-            '/{}/snappy/guides/'.format(DEFAULT_LANG), page_urls)
+        self.assertTrue(snappy_repo.contains_page(
+            '/{}/snappy/guides/'.format(DEFAULT_LANG)))
 
-        published_pages = Page.objects.filter(publisher_is_draft=False)
-        published_urls = [p.get_absolute_url() for p in published_pages]
-        self.assertIn('/{}/snappy/build-apps/'.format(DEFAULT_LANG),
-                      published_urls)
-        self.assertIn('/{}/snappy/guides/'.format(DEFAULT_LANG),
-                      published_urls)
-        self.assertGreater(published_pages.count(), 20)
+        published_pages.update()
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/build-apps/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.contains_url(
+            '/{}/snappy/guides/'.format(DEFAULT_LANG)))
+        self.assertTrue(published_pages.has_at_least_size(20))
         for imported_article in ImportedArticle.objects.all():
-            self.assertTrue(is_imported_article(imported_article))
+            self.assertTrue(check_imported_article(imported_article))
