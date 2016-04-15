@@ -172,16 +172,6 @@ class SnappyArticle(Article):
             self.html = self.html.replace(before, after)
 
     def add_to_db(self):
-        if self.release_alias == "current":
-            # Add a guides/<page> redirect to guides/current/<page>
-            try:
-                redirect_page = ArticlePage(
-                    title=self.title,
-                    full_url=self.full_url.replace('/current', ''),
-                    redirect="/snappy/guides/current/{}".format(self.slug))
-            except ParentNotFoundException:
-                return False
-            redirect_page.publish()
-        elif self.release_alias:
+        if self.release_alias:
             self.title += " (%s)" % (self.release_alias,)
         return Article.add_to_db(self)

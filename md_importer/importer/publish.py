@@ -25,15 +25,13 @@ class ParentNotFoundException(Exception):
 
 class ArticlePage:
     def update(self, title, full_url, menu_title=None, in_navigation=True,
-               redirect=None, html=None, template=None):
+               html=None, template=None):
         if self.draft.get_title() != title:
             self.draft.title = title
         if self.draft.get_menu_title() != menu_title:
             self.draft.menu_title = menu_title
         if self.draft.in_navigation != in_navigation:
             self.draft.in_navigation = in_navigation
-        if self.draft.get_redirect() != redirect:
-            self.draft.redirect = redirect
         if self.draft.template != template:
             self.draft.template = template
         if html:
@@ -56,7 +54,7 @@ class ArticlePage:
                     body=html)
 
     def __init__(self, title, full_url, menu_title=None, in_navigation=True,
-                 redirect=None, html=None, template=DEFAULT_TEMPLATE):
+                 html=None, template=DEFAULT_TEMPLATE):
         self.page = None
         self.draft = None
         self.draft_placeholder = None
@@ -76,12 +74,11 @@ class ArticlePage:
             self.draft = create_page(
                 title=title, template=template, language=DEFAULT_LANG,
                 slug=slug, parent=parent, menu_title=menu_title,
-                in_navigation=in_navigation, position='last-child',
-                redirect=redirect)
+                in_navigation=in_navigation, position='last-child')
         (self.draft_placeholder,
          self.draft_plugin) = get_text_plugin(self.draft)
-        self.update(title, full_url, menu_title, in_navigation, redirect,
-                    html, template)
+        self.update(title, full_url, menu_title, in_navigation, html,
+                    template)
 
     def publish(self):
         if self.draft.is_dirty(DEFAULT_LANG):

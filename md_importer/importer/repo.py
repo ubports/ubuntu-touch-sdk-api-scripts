@@ -147,15 +147,10 @@ class Repo:
         '''Creates a fake index page at the top of the branches
            docs namespace.'''
 
-        if self.index_doc_url.endswith('current'):
-            redirect = '/snappy/guides'
-        else:
-            redirect = None
         try:
             article_page = ArticlePage(
                 title=self.index_doc_title, full_url=self.index_doc_url,
-                in_navigation=True, redirect=redirect, html='',
-                menu_title=None)
+                in_navigation=True, html='', menu_title=None)
         except ParentNotFoundException:
             return False
         article_page.publish()
