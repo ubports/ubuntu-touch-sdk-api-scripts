@@ -102,9 +102,10 @@ class PublishedPages:
 
     def update(self):
         self.published_pages = Page.objects.filter(publisher_is_draft=False)
+        self.urls = [p.get_absolute_url() for p in self.published_pages]
 
     def contains_url(self, url):
-        return url in [p.get_absolute_url() for p in self.published_pages]
+        return url in self.urls
 
     def has_size(self, size):
         return self.published_pages.count() == size

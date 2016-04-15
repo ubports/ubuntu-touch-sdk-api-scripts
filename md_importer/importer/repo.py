@@ -170,4 +170,5 @@ class Repo:
         return True
 
     def contains_page(self, url):
-        return url in [p.get_absolute_url() for p in self.pages]
+        urls = [p.get_absolute_url() for p in self.pages]
+        return url in urls
