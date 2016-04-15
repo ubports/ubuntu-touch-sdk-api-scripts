@@ -1,5 +1,4 @@
 from . import (
-    DEFAULT_LANG,
     SUPPORTED_ARTICLE_TYPES,
 )
 from .article import Article
@@ -161,6 +160,6 @@ class Repo:
             '</div></div>'.format(self.release_alias, list_pages,
                                   self.origin, self.origin))
         self.index_page.update(
-            title=self.index_doc_title,full_url=self.index_doc_url,
+            title=self.index_doc_title, full_url=self.index_doc_url,
             in_navigation=True, html=html, menu_title=None)
         self.index_page.publish()
