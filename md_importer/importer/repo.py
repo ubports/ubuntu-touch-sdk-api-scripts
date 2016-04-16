@@ -28,6 +28,7 @@ class Repo:
         # On top of the pages in imported_articles this also
         # includes index_page
         self.pages = []
+        self.urls = []
         self.origin = origin
         self.branch_name = branch_name
         self.post_checkout_command = post_checkout_command
@@ -89,11 +90,10 @@ class Repo:
             # we need to write one.
             if directive['write_to'] not in [x[1] for x in import_list]:
                 self.index_doc_url = directive['write_to']
-        if self.index_doc_url:
-            if not self._create_fake_index_page():
-                logging.error('Importing of {} aborted.'.format(self.origin))
-                return False
-            self.pages.extend([self.index_page.page])
+        if not self._create_fake_index_page():
+            return self._abort_import(
+                'Could not create fake index page at {}'.format(
+                    self.index_doc_url))
         # The actual import
         for entry in import_list:
             article = self._read_article(
@@ -106,11 +106,14 @@ class Repo:
                 # In this case the article was supported but still reading
                 # it failed, importing should be stopped here to avoid
                 # problems.
-                logging.error('Importing of {} aborted.'.format(self.origin))
-                return False
-        if self.index_doc_url:
-            self._write_fake_index_doc()
+                return self._abort_import('Reading {} failed.'.format(
+                    entry[0]))
+        self._write_fake_index_doc()
         return True
+
+    def _abort_import(self, msg):
+        logging.error('Importing of {} aborted: '.format(self.origin, msg))
+        return False
 
     def _read_article(self, fn, write_to, advertise, template):
         article = self.article_class(fn, write_to, advertise, template)
@@ -125,24 +128,31 @@ class Repo:
                 return False
             article.replace_links(self.titles, self.url_map)
         for article in self.imported_articles:
-            self.pages.extend([article.publish()])
+            page = article.publish()
+            self.pages.extend([page])
+            self.urls.extend([page.get_absolute_url()])
         return True
 
     def _create_fake_index_page(self):
-        '''Creates a fake index page at the top of the branches
-           docs namespace.'''
-
+        '''Creates a fake index page at the top of the branches docs
+           namespace if necessary. The page is filled out in a later step
+           _write_fake_index_doc().'''
+        if not self.index_doc_url:
+            return True
         try:
-            article_page = ArticlePage(
+            self.index_page = ArticlePage(
                 title=self.index_doc_title, full_url=self.index_doc_url,
                 in_navigation=True, html='', menu_title=None)
         except ParentNotFoundException:
+            logging.error('Importing of {} aborted.'.format(self.origin))
             return False
-        article_page.publish()
-        self.index_page = article_page
+        self.index_page.publish()
+        self.pages.extend([self.index_page.page])
         return True
 
     def _write_fake_index_doc(self):
+        if not self.index_doc_url:
+            return
         list_pages = u''
         for article in [a for a
                         in self.imported_articles
@@ -170,5 +180,4 @@ class Repo:
         return True
 
     def contains_page(self, url):
-        urls = [p.get_absolute_url() for p in self.pages]
-        return url in urls
+        return url in self.urls
