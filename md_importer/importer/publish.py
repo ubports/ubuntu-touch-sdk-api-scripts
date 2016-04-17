@@ -59,6 +59,11 @@ class ArticlePage:
         self.draft = None
         self.draft_placeholder = None
         self.draft_text_plugin = None
+        self.full_url = full_url
+        self.title = title
+        self.menu_title = menu_title
+        self.in_navigation = in_navigation
+        self.template = template
 
         # First check if pages already exist.
         drafts = Title.objects.select_related('page').filter(
@@ -85,6 +90,38 @@ class ArticlePage:
             self.draft.publish(DEFAULT_LANG)
         if self.draft.get_public_object():
             self.page = self.draft.get_public_object()
+
+
+class IndexPage(ArticlePage):
+    def __init__(self, title, full_url, menu_title='Overview',
+                 in_navigation=True, html='', template=DEFAULT_TEMPLATE):
+        self.imported_articles = []
+        self.origin = ''
+        ArticlePage.__init__(self, title, full_url, menu_title,
+                             in_navigation, html, template)
+        self.publish()
+
+    def add_imported_articles(self, imported_articles, origin):
+        self.imported_articles = imported_articles
+        self.origin = origin
+        list_pages = u''
+        for article in [a for a
+                        in self.imported_articles
+                        if a.full_url.startswith(self.full_url)]:
+            list_pages += u'<li><a href=\"{}\">{}</a></li>'.format(
+                unicode(os.path.basename(article.full_url)),
+                article.title)
+        html = (
+            u'<div class=\"row\"><div class=\"eight-col\">\n'
+            '<p>This section contains documentation for the '
+            'Snappy project.</p>'
+            '<p><ul class=\"list-ubuntu\">{}</ul></p>\n'
+            '<p>Auto-imported from <a '
+            'href=\"{}\">{}</a>.</p>\n'
+            '</div></div>'.format(list_pages, self.origin, self.origin))
+        self.update(self.title, self.full_url, self.menu_title,
+                    self.in_navigation, html, self.template)
+        self.publish()
 
 
 def _compare_html(html_a, html_b):

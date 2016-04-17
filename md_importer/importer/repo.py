@@ -1,9 +1,10 @@
 from . import (
     SUPPORTED_ARTICLE_TYPES,
+    DEFAULT_TEMPLATE,
 )
 from .article import Article
 from .publish import (
-    ArticlePage,
+    IndexPage,
     ParentNotFoundException,
     slugify,
 )
@@ -22,9 +23,7 @@ class Repo:
         self.imported_articles = []
         self.url_map = {}
         self.titles = {}
-        self.index_doc_url = None
         self.index_page = None
-        self.release_alias = None
         # On top of the pages in imported_articles this also
         # includes index_page
         self.pages = []
@@ -32,10 +31,8 @@ class Repo:
         self.origin = origin
         self.branch_name = branch_name
         self.post_checkout_command = post_checkout_command
-        branch_nick = os.path.basename(self.origin.replace('.git', ''))
-        self.checkout_location = os.path.join(
-            tempdir, branch_nick)
-        self.index_doc_title = branch_nick
+        self.branch_nick = os.path.basename(self.origin.replace('.git', ''))
+        self.checkout_location = os.path.join(tempdir, self.branch_nick)
         self.article_class = Article
 
     def get(self):
@@ -88,12 +85,20 @@ class Repo:
                     ]
             # If we import into a namespace and don't have an index doc,
             # we need to write one.
-            if directive['write_to'] not in [x[1] for x in import_list]:
-                self.index_doc_url = directive['write_to']
-        if not self._create_fake_index_page():
-            return self._abort_import(
-                'Could not create fake index page at {}'.format(
-                    self.index_doc_url))
+            # XXX: Right now we just create one index doc, this will change in
+            # the near future.
+            if directive['write_to'] not in [x[1] for x in import_list] and \
+               not self.index_page:
+                try:
+                    self.index_page = IndexPage(
+                        title=self.branch_nick, full_url=directive['write_to'],
+                        in_navigation=True, html='', menu_title=None,
+                        template=DEFAULT_TEMPLATE)
+                    self.pages.extend([self.index_page.page])
+                except ParentNotFoundException:
+                    return self._abort_import(
+                        'Could not create fake index page at {}'.format(
+                            self.index_doc_url))
         # The actual import
         for entry in import_list:
             article = self._read_article(
@@ -108,7 +113,9 @@ class Repo:
                 # problems.
                 return self._abort_import('Reading {} failed.'.format(
                     entry[0]))
-        self._write_fake_index_doc()
+        if self.index_page:
+            self.index_page.add_imported_articles(
+                self.imported_articles, self.origin)
         return True
 
     def _abort_import(self, msg):
@@ -132,47 +139,6 @@ class Repo:
             self.pages.extend([page])
             self.urls.extend([page.get_absolute_url()])
         return True
-
-    def _create_fake_index_page(self):
-        '''Creates a fake index page at the top of the branches docs
-           namespace if necessary. The page is filled out in a later step
-           _write_fake_index_doc().'''
-        if not self.index_doc_url:
-            return True
-        try:
-            self.index_page = ArticlePage(
-                title=self.index_doc_title, full_url=self.index_doc_url,
-                in_navigation=True, html='', menu_title=None)
-        except ParentNotFoundException:
-            logging.error('Importing of {} aborted.'.format(self.origin))
-            return False
-        self.index_page.publish()
-        self.pages.extend([self.index_page.page])
-        return True
-
-    def _write_fake_index_doc(self):
-        if not self.index_doc_url:
-            return
-        list_pages = u''
-        for article in [a for a
-                        in self.imported_articles
-                        if a.full_url.startswith(self.index_doc_url)]:
-            list_pages += u'<li><a href=\"{}\">{}</a></li>'.format(
-                unicode(os.path.basename(article.full_url)),
-                article.title)
-        html = (
-            u'<div class=\"row\"><div class=\"eight-col\">\n'
-            '<p>This section contains documentation for the '
-            '<code>{}</code> Snappy branch.</p>'
-            '<p><ul class=\"list-ubuntu\">{}</ul></p>\n'
-            '<p>Auto-imported from <a '
-            'href=\"{}\">{}</a>.</p>\n'
-            '</div></div>'.format(self.release_alias, list_pages,
-                                  self.origin, self.origin))
-        self.index_page.update(
-            title=self.index_doc_title, full_url=self.index_doc_url,
-            in_navigation=True, html=html, menu_title=None)
-        self.index_page.publish()
 
     def assert_is_published(self):
         for page in self.pages:
