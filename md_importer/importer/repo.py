@@ -111,7 +111,7 @@ class Repo:
                 # In this case the article was supported but still reading
                 # it failed, importing should be stopped here to avoid
                 # problems.
-                return self._abort_import('Reading {} failed.'.format(
+                return self._abort_import('Reading {} failed'.format(
                     entry[0]))
         if self.index_page:
             self.index_page.add_imported_articles(
@@ -119,7 +119,7 @@ class Repo:
         return True
 
     def _abort_import(self, msg):
-        logging.error('Importing of {} aborted: '.format(self.origin, msg))
+        logging.error('Importing of {} aborted: {}.'.format(self.origin, msg))
         return False
 
     def _read_article(self, fn, write_to, advertise, template):
