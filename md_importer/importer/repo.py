@@ -98,7 +98,7 @@ class Repo:
                 except ParentNotFoundException:
                     return self._abort_import(
                         'Could not create fake index page at {}'.format(
-                            self.index_doc_url))
+                            directive['write_to']))
         # The actual import
         for entry in import_list:
             article = self._read_article(
@@ -138,6 +138,8 @@ class Repo:
             page = article.publish()
             self.pages.extend([page])
             self.urls.extend([page.get_absolute_url()])
+        if self.index_page:
+            self.urls.extend([self.index_page.page.get_absolute_url()])
         return True
 
     def assert_is_published(self):
