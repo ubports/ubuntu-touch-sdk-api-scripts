@@ -78,7 +78,7 @@
 		    <a href="#">{{ user.first_name|default:user.email }}</a>
 		    <ul class="second-level-nav">
 			<li>
-			    <a href="https://myapps.developer.ubuntu.com/openid/login/?next=/dev/click-apps/">My Apps</a>
+			    <a href="https://myapps.developer.ubuntu.com/">My Apps</a>
 			</li>
 			<li>
 			    <a href="/logout?next={{request.path}}"">{% trans "Log out" %}</a>
@@ -87,12 +87,7 @@
 		</li>
 		{% else %}
 		<li class="login">
-		    <a href="#">{% trans "Log in" %}</a>
-		    <ul class="second-level-nav">
-			<li>
-			    <a href="https://myapps.developer.ubuntu.com/openid/login/?next=/dev/click-apps/">My Apps</a>
-			</li>
-		    </ul>
+		    <a href="https://myapps.developer.ubuntu.com/">{% trans "My Apps" %}</a>
 		</li>		
 		{% endif %}
                 </ul>
