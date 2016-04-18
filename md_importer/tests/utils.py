@@ -97,18 +97,18 @@ def is_local_link(link):
 
 class PublishedPages:
     def __init__(self):
-        self.published_pages = None
+        self.pages = None
         self.update()
 
     def update(self):
-        self.published_pages = Page.objects.filter(publisher_is_draft=False)
-        self.urls = [p.get_absolute_url() for p in self.published_pages]
+        self.pages = Page.objects.filter(publisher_is_draft=False)
+        self.urls = [p.get_absolute_url() for p in self.pages]
 
     def contains_url(self, url):
         return url in self.urls
 
     def has_size(self, size):
-        return self.published_pages.count() == size
+        return self.pages.count() == size
 
     def has_at_least_size(self, size):
-        return self.published_pages.count() >= size
+        return self.pages.count() >= size

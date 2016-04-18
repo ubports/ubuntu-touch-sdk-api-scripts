@@ -91,14 +91,14 @@ class TestImportProcessBranchWhichChangesFiles(TestCase):
         a, created = ExternalDocsBranchImportDirective.objects.get_or_create(
             import_from='', write_to='', external_docs_branch=branch)
         self.assertIsNotNone(process_branch(branch))
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 3)
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(3))
         branch.origin = os.path.join(
             os.path.dirname(__file__), 'data/link2-test')
         branch.save()
         self.assertTrue(process_branch(branch))
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 3)
+        published_pages.update()
+        self.assertTrue(published_pages.has_size(3))
 
 
 class TestImportProcessTwice(TestCase):
@@ -174,8 +174,8 @@ class TestWholeImportProcessTwiceVariantA(TestCase):
         guides = db_add_empty_page('Guides', snappy_page)
         phone = db_add_empty_page('Phone', root)
         publish_pages([snappy_page, build_apps, guides, phone])
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 5)
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(5))
         ExternalDocsBranch.objects.all().delete()
         ExternalDocsBranchImportDirective.objects.all().delete()
         ImportedArticle.objects.all().delete()
@@ -260,8 +260,8 @@ class TestWholeImportProcessTwiceVariantB(TestCase):
         snappy_page = db_add_empty_page('Snappy', root)
         guides = db_add_empty_page('Guides', snappy_page)
         publish_pages([snappy_page, guides])
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 3)
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(3))
         ExternalDocsBranch.objects.all().delete()
         ExternalDocsBranchImportDirective.objects.all().delete()
         ImportedArticle.objects.all().delete()

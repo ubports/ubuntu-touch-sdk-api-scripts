@@ -5,6 +5,7 @@ from md_importer.importer.repo import Repo
 from md_importer.importer.article import Article
 from .utils import (
     db_add_empty_page,
+    PublishedPages,
     TestLocalBranchImport,
 )
 
@@ -24,6 +25,7 @@ class TestSnappyDevelImport(TestLocalBranchImport):
         self.assertGreater(len(self.repo.pages), 0)
         devel = Page.objects.filter(parent=guides.get_public_object())
         self.assertEqual(devel.count(), 1)
-        for page in Page.objects.filter(publisher_is_draft=False):
+        published_pages = PublishedPages()
+        for page in published_pages.pages:
             if page not in [self.root, snappy_page, guides, devel[0]]:
                 self.assertEqual(page.parent, devel[0])
