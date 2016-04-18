@@ -5,7 +5,7 @@ from md_importer.importer import (
 from md_importer.importer.tools import remove_leading_and_trailing_slash
 
 from cms.api import create_page, add_plugin
-from cms.models import Page, Title
+from cms.models import Page
 from cms.utils.page_resolver import get_page_from_path
 from djangocms_text_ckeditor.html import clean_html
 
@@ -66,11 +66,8 @@ class ArticlePage:
         self.template = template
 
         # First check if pages already exist.
-        drafts = Title.objects.select_related('page').filter(
-            path__regex=full_url).filter(publisher_is_draft=True)
-        if drafts:
-            self.draft = drafts[0].page
-        else:
+        self.draft = find_page(full_url, draft=True)
+        if not self.draft:
             parent = _find_parent(full_url)
             if not parent:
                 raise ParentNotFoundException(
@@ -134,11 +131,22 @@ def slugify(filename):
     return os.path.basename(filename).replace('.md', '').replace('.html', '')
 
 
+def clean_url(url):
+    return remove_leading_and_trailing_slash(
+        re.sub(
+            r'^\/None|{}\/'.format(DEFAULT_LANG),
+            '',
+            url))
+
+
+def find_page(url, draft=False):
+    page = get_page_from_path(clean_url(url), draft)
+    if page and draft and not page.publisher_is_draft:
+        return page.get_draft_object()
+    return page
+
+
 def _find_parent(full_url):
-    parent_url = remove_leading_and_trailing_slash(re.sub(
-        r'^\/None|{}\/'.format(DEFAULT_LANG),
-        '',
-        os.path.dirname(full_url)))
     parent_url = os.path.dirname(full_url)
     if not parent_url:
         root = Page.objects.get_home()
