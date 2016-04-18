@@ -59,6 +59,7 @@ class ArticlePage:
         self.draft = None
         self.draft_placeholder = None
         self.draft_text_plugin = None
+        self.text_plugin = None
         self.full_url = full_url
         self.title = title
         self.menu_title = menu_title
