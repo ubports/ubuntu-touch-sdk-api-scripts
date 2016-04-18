@@ -8,6 +8,7 @@ import sys
 
 from . import (
     DEFAULT_LANG,
+    DEFAULT_TEMPLATE,
     MARKDOWN_EXTENSIONS,
     SUPPORTED_ARTICLE_TYPES,
 )
@@ -24,7 +25,8 @@ else:
 
 
 class Article:
-    def __init__(self, fn, write_to, advertise, template):
+    def __init__(self, fn, write_to, advertise=True,
+                 template=DEFAULT_TEMPLATE):
         self.html = None
         self.article_page = None
         self.title = ""
