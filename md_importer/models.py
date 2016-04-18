@@ -2,8 +2,6 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from cms.models import Page
-
 
 if settings.CMS_TEMPLATES:
     cms_templates = settings.CMS_TEMPLATES
@@ -71,19 +69,14 @@ class ExternalDocsBranchImportDirective(models.Model):
 
 
 class ImportedArticle(models.Model):
-    page = models.ForeignKey(Page)
+    url = models.CharField(
+        max_length=300,
+        help_text=_('URL of article, e.g. snappy/guides/security'),
+    )
     branch = models.ForeignKey(ExternalDocsBranch)
     last_import = models.DateTimeField(
         _('Datetime'), help_text=_('Datetime of last import.'))
 
     def __str__(self):
         return '{} -- {} -- {}'.format(
-            self.page.get_absolute_url(), self.branch, self.last_import)
-
-    def verify(self):
-        assert self.page is not None
-        assert self.page.in_navigation is True, \
-            'Page {} is not in navigation.'.format(self.page)
-        assert self.page.template == cms_templates[0][0]
-        assert self.page.publisher_is_draft is False
-        return True
+            self.url, self.branch, self.last_import)
