@@ -24,6 +24,13 @@ class ParentNotFoundException(Exception):
 
 
 class ArticlePage:
+    def _text_plugin_needs_update(self, html):
+        if _compare_html(html, self.draft_text_plugin.body):
+            return False
+        if self.text_plugin and _compare_html(html, self.text_plugin.body):
+            return False
+        return True
+
     def update(self, title, full_url, menu_title=None, in_navigation=True,
                html=None, template=None):
         if self.draft.get_title() != title:
@@ -35,14 +42,13 @@ class ArticlePage:
         if self.draft.template != template:
             self.draft.template = template
         if html:
-            update = True
+            (self.draft_placeholder,
+             self.draft_text_plugin) = get_text_plugin(self.draft)
+            if self.page:
+                (self.placeholder,
+                 self.text_plugin) = get_text_plugin(self.page)
             if self.draft_text_plugin:
-                if _compare_html(html, self.draft_text_plugin.body):
-                    update = False
-                elif self.text_plugin:
-                        if _compare_html(html, self.text_plugin.body):
-                            update = False
-                if update:
+                if self._text_plugin_needs_update(html):
                     self.draft_text_plugin.body = html
                     self.draft_text_plugin.save()
                 else:
@@ -60,6 +66,7 @@ class ArticlePage:
         self.draft_placeholder = None
         self.draft_text_plugin = None
         self.text_plugin = None
+        self.placeholder = None
         self.full_url = full_url
         self.title = title
         self.menu_title = menu_title
@@ -78,8 +85,6 @@ class ArticlePage:
                 title=title, template=template, language=DEFAULT_LANG,
                 slug=slug, parent=parent, menu_title=menu_title,
                 in_navigation=in_navigation, position='last-child')
-        (self.draft_placeholder,
-         self.draft_plugin) = get_text_plugin(self.draft)
         self.update(title, full_url, menu_title, in_navigation, html,
                     template)
 
