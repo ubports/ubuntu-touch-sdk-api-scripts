@@ -103,6 +103,7 @@ class TestArticleLinkRewrite(TestCase):
         self.assertNotEqual(html, intro.html)
         self.assertTrue(intro.publish())
 
+
 class TestArticleLinkRewriteTwice(TestCase):
     def runTest(self):
         db_empty_page_list()
