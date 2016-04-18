@@ -8,10 +8,15 @@ import sys
 
 from . import (
     DEFAULT_LANG,
+    DEFAULT_TEMPLATE,
     MARKDOWN_EXTENSIONS,
     SUPPORTED_ARTICLE_TYPES,
 )
-from .publish import get_or_create_page, slugify, update_page
+from .publish import (
+    ArticlePage,
+    ParentNotFoundException,
+    slugify,
+)
 
 if sys.version_info.major == 2:
     from urlparse import urlparse
@@ -20,9 +25,10 @@ else:
 
 
 class Article:
-    def __init__(self, fn, write_to, advertise, template):
+    def __init__(self, fn, write_to, advertise=True,
+                 template=DEFAULT_TEMPLATE):
         self.html = None
-        self.page = None
+        self.article_page = None
         self.title = ""
         self.fn = fn
         self.write_to = slugify(self.fn)
@@ -116,67 +122,23 @@ class Article:
 
     def add_to_db(self):
         '''Publishes pages in their branch alias namespace.'''
-        self.page = get_or_create_page(
-            title=self.title, full_url=self.full_url, menu_title=self.title,
-            html=self.html, in_navigation=self.advertise,
-            template=self.template)
-        if not self.page:
+        try:
+            self.article_page = ArticlePage(
+                title=self.title, full_url=self.full_url,
+                menu_title=self.title, html=self.html,
+                in_navigation=self.advertise, template=self.template)
+        except ParentNotFoundException:
             return False
         self.full_url = re.sub(
             r'^\/None\/', '/{}/'.format(DEFAULT_LANG),
-            self.page.get_absolute_url())
+            self.article_page.draft.get_absolute_url())
         return True
 
     def publish(self):
         if self.links_rewritten:
-            update_page(self.page, title=self.title, full_url=self.full_url,
-                        menu_title=self.title, html=self.html,
-                        in_navigation=self.advertise, template=self.template)
-        if self.page.is_dirty(DEFAULT_LANG):
-            self.page.publish(DEFAULT_LANG)
-            if self.page.get_public_object():
-                self.page = self.page.get_public_object()
-        return self.page
-
-
-class SnappyArticle(Article):
-    release_alias = None
-
-    def read(self):
-        if not Article.read(self):
-            return False
-        matches = re.findall(r'snappy/guides/(\S+?)/\S+?',
-                             self.full_url)
-        if matches:
-            self.release_alias = matches[0]
-        self._make_snappy_mods()
-        return True
-
-    def _make_snappy_mods(self):
-        # Make sure the reader knows which documentation she is browsing
-        if self.release_alias and self.release_alias != 'current':
-            before = (u"<div class=\"row no-border\">\n"
-                      "<div class=\"eight-col\">\n")
-            after = (u"<div class=\"row no-border\">\n"
-                     "<div class=\"box pull-three three-col\">"
-                     "<p>You are browsing the Snappy <code>%s</code> "
-                     "documentation.</p>"
-                     "<p><a href=\"/snappy/guides/current/%s\">"
-                     "Back to the latest stable release &rsaquo;"
-                     "</a></p></div>\n"
-                     "<div class=\"eight-col\">\n") % (self.release_alias,
-                                                       self.slug, )
-            self.html = self.html.replace(before, after)
-
-    def add_to_db(self):
-        if self.release_alias == "current":
-            # Add a guides/<page> redirect to guides/current/<page>
-            page = get_or_create_page(
-                title=self.title,
-                full_url=self.full_url.replace('/current', ''),
-                redirect="/snappy/guides/current/{}".format(self.slug))
-            if not page:
-                return False
-        elif self.release_alias:
-            self.title += " (%s)" % (self.release_alias,)
-        return Article.add_to_db(self)
+            self.article_page.update(
+                title=self.title, full_url=self.full_url,
+                menu_title=self.title, html=self.html,
+                in_navigation=self.advertise, template=self.template)
+        self.article_page.publish()
+        return self.article_page.page

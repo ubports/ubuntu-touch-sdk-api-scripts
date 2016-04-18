@@ -4,13 +4,13 @@ import tempfile
 
 from django.test import TestCase
 
-from md_importer.importer.repo import create_repo, Repo
+from md_importer.importer.repo import Repo
 
 
 class TestBranchFetch(TestCase):
     def test_git_fetch(self):
         tempdir = tempfile.mkdtemp()
-        repo = create_repo(
+        repo = Repo(
             tempdir,
             'https://github.com/ubuntu-core/snapcraft.git',
             'master',
@@ -22,7 +22,7 @@ class TestBranchFetch(TestCase):
 
     def test_bzr_fetch(self):
         tempdir = tempfile.mkdtemp()
-        repo = create_repo(
+        repo = Repo(
             tempdir,
             'lp:snapcraft',  # outdated, but should work for testing
             '',
@@ -34,7 +34,7 @@ class TestBranchFetch(TestCase):
 
     def test_post_checkout_command(self):
         tempdir = tempfile.mkdtemp()
-        repo = create_repo(
+        repo = Repo(
             tempdir,
             'lp:snapcraft',
             '',

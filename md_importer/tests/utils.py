@@ -10,8 +10,11 @@ from cms.models import Page
 from cms.test_utils.testcases import CMSTestCase
 from cms.utils.page_resolver import get_page_from_request
 
-from ..importer import DEFAULT_LANG
-from ..importer.repo import create_repo
+from md_importer.models import ImportedArticle
+from ..importer import (
+    DEFAULT_LANG,
+)
+from ..importer.repo import Repo
 
 if sys.version_info.major == 2:
     from urlparse import urlparse
@@ -52,7 +55,7 @@ class TestLocalBranchImport(CMSTestCase):
     def create_repo(self, docs_path):
         origin = os.path.join(os.path.dirname(__file__), docs_path)
         self.assertTrue(os.path.exists(origin))
-        self.repo = create_repo(self.tempdir, origin, '', '')
+        self.repo = Repo(self.tempdir, origin, '', '')
         self.fetch_retcode = self.repo.get()
         self.assertEqual(self.fetch_retcode, 0)
 
@@ -69,6 +72,18 @@ class TestLocalBranchImport(CMSTestCase):
         shutil.rmtree(self.tempdir)
 
 
+def check_imported_article(imported_article):
+    assert imported_article is not None
+    assert isinstance(imported_article, ImportedArticle)
+    return True
+
+
+def check_repo(repo):
+    assert repo is not None
+    assert isinstance(repo, Repo)
+    return repo.assert_is_published()
+
+
 def is_local_link(link):
     if link.has_attr('class') and \
        'headeranchor-link' in link.attrs['class']:
@@ -78,3 +93,22 @@ def is_local_link(link):
     if scheme in ['http', 'https', 'mailto']:
         return False
     return True
+
+
+class PublishedPages:
+    def __init__(self):
+        self.pages = None
+        self.update()
+
+    def update(self):
+        self.pages = Page.objects.filter(publisher_is_draft=False)
+        self.urls = [p.get_absolute_url() for p in self.pages]
+
+    def contains_url(self, url):
+        return url in self.urls
+
+    def has_size(self, size):
+        return self.pages.count() == size
+
+    def has_at_least_size(self, size):
+        return self.pages.count() >= size

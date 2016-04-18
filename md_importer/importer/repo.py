@@ -1,9 +1,13 @@
 from . import (
-    DEFAULT_LANG,
     SUPPORTED_ARTICLE_TYPES,
+    DEFAULT_TEMPLATE,
 )
-from .article import Article, SnappyArticle
-from .publish import get_or_create_page, slugify
+from .article import Article
+from .publish import (
+    IndexPage,
+    ParentNotFoundException,
+    slugify,
+)
 from .source import SourceCode
 
 from md_importer.models import ExternalDocsBranchImportDirective
@@ -13,40 +17,22 @@ import logging
 import os
 
 
-def create_repo(tempdir, origin, branch_name, post_checkout_command):
-    if os.path.exists(origin):
-        if 'snappy' in origin:
-            repo_class = SnappyRepo
-        else:
-            repo_class = Repo
-    else:
-        if origin.startswith('lp:snappy') or \
-           'snappy' in origin.split(':')[1].split('.git')[0].split('/'):
-            repo_class = SnappyRepo
-        else:
-            repo_class = Repo
-    return repo_class(tempdir, origin, branch_name, post_checkout_command)
-
-
 class Repo:
     def __init__(self, tempdir, origin, branch_name, post_checkout_command):
         self.directives = []
         self.imported_articles = []
         self.url_map = {}
         self.titles = {}
-        self.index_doc_url = None
         self.index_page = None
-        self.release_alias = None
         # On top of the pages in imported_articles this also
         # includes index_page
         self.pages = []
+        self.urls = []
         self.origin = origin
         self.branch_name = branch_name
         self.post_checkout_command = post_checkout_command
-        branch_nick = os.path.basename(self.origin.replace('.git', ''))
-        self.checkout_location = os.path.join(
-            tempdir, branch_nick)
-        self.index_doc_title = branch_nick
+        self.branch_nick = os.path.basename(self.origin.replace('.git', ''))
+        self.checkout_location = os.path.join(tempdir, self.branch_nick)
         self.article_class = Article
 
     def get(self):
@@ -99,12 +85,20 @@ class Repo:
                     ]
             # If we import into a namespace and don't have an index doc,
             # we need to write one.
-            if directive['write_to'] not in [x[1] for x in import_list]:
-                self.index_doc_url = directive['write_to']
-        if self.index_doc_url:
-            if not self._create_fake_index_page():
-                logging.error('Importing of {} aborted.'.format(self.origin))
-                return False
+            # XXX: Right now we just create one index doc, this will change in
+            # the near future.
+            if directive['write_to'] not in [x[1] for x in import_list] and \
+               not self.index_page:
+                try:
+                    self.index_page = IndexPage(
+                        title=self.branch_nick, full_url=directive['write_to'],
+                        in_navigation=True, html='', menu_title=None,
+                        template=DEFAULT_TEMPLATE)
+                    self.pages.extend([self.index_page.page])
+                except ParentNotFoundException:
+                    return self._abort_import(
+                        'Could not create fake index page at {}'.format(
+                            directive['write_to']))
         # The actual import
         for entry in import_list:
             article = self._read_article(
@@ -117,11 +111,16 @@ class Repo:
                 # In this case the article was supported but still reading
                 # it failed, importing should be stopped here to avoid
                 # problems.
-                logging.error('Importing of {} aborted.'.format(self.origin))
-                return False
-        if self.index_doc_url:
-            self._write_fake_index_doc()
+                return self._abort_import('Reading {} failed'.format(
+                    entry[0]))
+        if self.index_page:
+            self.index_page.add_imported_articles(
+                self.imported_articles, self.origin)
         return True
+
+    def _abort_import(self, msg):
+        logging.error('Importing of {} aborted: {}.'.format(self.origin, msg))
+        return False
 
     def _read_article(self, fn, write_to, advertise, template):
         article = self.article_class(fn, write_to, advertise, template)
@@ -136,56 +135,17 @@ class Repo:
                 return False
             article.replace_links(self.titles, self.url_map)
         for article in self.imported_articles:
-            self.pages.extend([article.publish()])
+            page = article.publish()
+            self.pages.extend([page])
+            self.urls.extend([page.get_absolute_url()])
         if self.index_page:
-            self.index_page.publish(DEFAULT_LANG)
-            self.pages.extend([self.index_page])
+            self.urls.extend([self.index_page.page.get_absolute_url()])
         return True
 
-    def _create_fake_index_page(self):
-        '''Creates a fake index page at the top of the branches
-           docs namespace.'''
-
-        if self.index_doc_url.endswith('current'):
-            redirect = '/snappy/guides'
-        else:
-            redirect = None
-        self.index_page = get_or_create_page(
-            title=self.index_doc_title, full_url=self.index_doc_url,
-            in_navigation=False, redirect=redirect, html='',
-            menu_title=None)
-        if not self.index_page:
-            return False
+    def assert_is_published(self):
+        for page in self.pages:
+            assert page.publisher_is_draft is False
         return True
 
-    def _write_fake_index_doc(self):
-        list_pages = u''
-        for article in [a for a
-                        in self.imported_articles
-                        if a.full_url.startswith(self.index_doc_url)]:
-            list_pages += u'<li><a href=\"{}\">{}</a></li>'.format(
-                unicode(os.path.basename(article.full_url)),
-                article.title)
-        self.index_page.html = (
-            u'<div class=\"row\"><div class=\"eight-col\">\n'
-            '<p>This section contains documentation for the '
-            '<code>{}</code> Snappy branch.</p>'
-            '<p><ul class=\"list-ubuntu\">{}</ul></p>\n'
-            '<p>Auto-imported from <a '
-            'href=\"{}\">{}</a>.</p>\n'
-            '</div></div>'.format(self.release_alias, list_pages,
-                                  self.origin, self.origin))
-
-
-class SnappyRepo(Repo):
-    def __init__(self, tempdir, origin, branch_name, post_checkout_command):
-        Repo.__init__(self, tempdir, origin, branch_name,
-                      post_checkout_command)
-        self.article_class = SnappyArticle
-        self.index_doc_title = 'Snappy documentation'
-
-    def _create_fake_index_page(self):
-        self.release_alias = os.path.basename(self.index_doc_url)
-        if not self.index_doc_url.endswith('current'):
-            self.index_doc_title += ' ({})'.format(self.release_alias)
-        return Repo._create_fake_index_page(self)
+    def contains_page(self, url):
+        return url in self.urls

@@ -10,10 +10,13 @@ from md_importer.importer import (
     TEMPLATE_CHOICES,
 )
 from md_importer.importer.article import Article
-from md_importer.importer.publish import find_text_plugin
+from md_importer.importer.publish import get_text_plugin
 from md_importer.importer.tools import remove_trailing_slash
 
-from .utils import TestLocalBranchImport
+from .utils import (
+    PublishedPages,
+    TestLocalBranchImport,
+)
 
 
 class TestImportDirectivesBuildHierarchyImport(TestLocalBranchImport):
@@ -50,8 +53,9 @@ class TestImportDirectivesBuildHierarchyImport(TestLocalBranchImport):
         # Make sure we got the parents right
         for article in self.repo.imported_articles:
             parent_url = remove_trailing_slash(
-                article.page.parent.get_absolute_url())
-            url = remove_trailing_slash(article.page.get_absolute_url())
+                article.article_page.page.parent.get_absolute_url())
+            url = remove_trailing_slash(
+                article.article_page.page.get_absolute_url())
             self.assertEqual(parent_url, os.path.split(url)[0])
             self.assertIsInstance(article, Article)
 
@@ -62,10 +66,11 @@ class TestOneDirImport(TestLocalBranchImport):
         self.repo.add_directive('docs', '')
         self.assertEqual(len(self.repo.directives), 1)
         self.assertTrue(self.repo.execute_import_directives())
-        self.assertGreater(len(self.repo.imported_articles), 3)
+        self.assertGreater(len(self.repo.imported_articles), 10)
         self.assertTrue(self.repo.publish())
-        pages = Page.objects.all()
-        self.assertGreater(pages.count(), len(self.repo.imported_articles))
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(
+            len(self.repo.imported_articles)+1))  # + landing/index page
         for article in self.repo.imported_articles:
             self.assertIsInstance(article, Article)
 
@@ -78,13 +83,14 @@ class TestOneDirAndTwoFilesImport(TestLocalBranchImport):
         self.repo.add_directive('HACKING.md', 'hacking')
         self.assertEqual(len(self.repo.directives), 3)
         self.assertTrue(self.repo.execute_import_directives())
-        self.assertGreater(len(self.repo.imported_articles), 5)
+        self.assertGreater(len(self.repo.imported_articles), 10)
         self.assertTrue(self.repo.publish())
-        pages = Page.objects.filter(publisher_is_draft=False)
-        self.assertEqual(pages.count(), len(self.repo.imported_articles))
-        self.assertGreater(pages.count(), 5)
-        self.assertIn(u'/en/', [p.get_absolute_url() for p in pages])
-        self.assertIn(u'/en/hacking/', [p.get_absolute_url() for p in pages])
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(
+            len(self.repo.imported_articles)))
+        self.assertTrue(published_pages.has_at_least_size(10))
+        self.assertTrue(published_pages.contains_url(u'/en/'))
+        self.assertTrue(published_pages.contains_url('/en/hacking/'))
 
 
 class TestArticletreeOneFileImport(TestLocalBranchImport):
@@ -96,9 +102,10 @@ class TestArticletreeOneFileImport(TestLocalBranchImport):
         self.assertTrue(self.repo.execute_import_directives())
         self.assertEqual(len(self.repo.imported_articles), 1)
         self.assertTrue(self.repo.publish())
-        self.assertEqual(
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(
             1+1,  # readme + root
-            Page.objects.filter(publisher_is_draft=False).count())
+        ))
         self.assertEqual(self.repo.pages[0].parent, self.root)
 
 
@@ -109,7 +116,8 @@ class TestArticletreeOneDirImport(TestLocalBranchImport):
         self.repo.add_directive('docs', '')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
-        for page in Page.objects.filter(publisher_is_draft=False):
+        published_pages = PublishedPages()
+        for page in published_pages.pages:
             if page.parent is not None:
                 self.assertEqual(page.parent_id, self.root.id)
 
@@ -120,10 +128,11 @@ class TestArticleHTMLTagsAfterImport(TestLocalBranchImport):
         self.repo.add_directive('docs', '')
         self.assertEqual(len(self.repo.directives), 1)
         self.assertTrue(self.repo.execute_import_directives())
-        self.assertGreater(len(self.repo.imported_articles), 3)
+        self.assertGreater(len(self.repo.imported_articles), 10)
         self.assertTrue(self.repo.publish())
-        pages = Page.objects.all()
-        self.assertGreater(pages.count(), len(self.repo.imported_articles))
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(
+            len(self.repo.imported_articles)+1))  # + landing/index page
         for article in self.repo.imported_articles:
             self.assertIsInstance(article, Article)
             self.assertNotIn('<body>', article.html)
@@ -136,14 +145,15 @@ class TestNoneInURLAfterImport(TestLocalBranchImport):
         self.repo.add_directive('docs', '')
         self.assertEqual(len(self.repo.directives), 1)
         self.assertTrue(self.repo.execute_import_directives())
-        self.assertGreater(len(self.repo.imported_articles), 3)
+        self.assertGreater(len(self.repo.imported_articles), 10)
         self.assertTrue(self.repo.publish())
-        pages = Page.objects.all()
-        self.assertGreater(pages.count(), len(self.repo.imported_articles))
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(
+            len(self.repo.imported_articles)+1))  # + landing/index page
         for article in self.repo.imported_articles:
             self.assertIsInstance(article, Article)
             self.assertNotIn('/None/', article.full_url)
-        for page in pages:
+        for page in published_pages.pages:
             self.assertIsNotNone(page.get_slug())
 
 
@@ -157,7 +167,8 @@ class TestAdvertiseImport(TestLocalBranchImport):
         for article in self.repo.imported_articles:
             self.assertTrue(article.advertise)
         self.assertTrue(self.repo.publish())
-        for page in Page.objects.filter(publisher_is_draft=False):
+        published_pages = PublishedPages()
+        for page in published_pages.pages:
             if page.parent is not None:
                 parent = page.parent.get_public_object()
                 self.assertEqual(parent.id, self.root.id)
@@ -174,7 +185,8 @@ class TestNoAdvertiseImport(TestLocalBranchImport):
         for article in self.repo.imported_articles:
             self.assertFalse(article.advertise)
         self.assertTrue(self.repo.publish())
-        for page in Page.objects.filter(publisher_is_draft=False):
+        published_pages = PublishedPages()
+        for page in published_pages.pages:
             if page.parent is not None:
                 self.assertEqual(page.parent_id, self.root.id)
                 self.assertFalse(page.in_navigation)
@@ -188,9 +200,9 @@ class TestTwiceImport(TestLocalBranchImport):
         self.repo.add_directive('docs', '')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(),
-            len(self.repo.imported_articles)+1)  # articles + root
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(
+            len(self.repo.imported_articles)+1))  # articles + root
         # Run second import
         shutil.rmtree(self.tempdir)
         self.create_repo('data/snapcraft-test')
@@ -199,9 +211,9 @@ class TestTwiceImport(TestLocalBranchImport):
         self.assertEqual(len(self.repo.imported_articles), 0)
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(),
-            len(self.repo.imported_articles)+1)  # articles + root
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(
+            len(self.repo.imported_articles)+1))  # articles + root
 
 
 class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
@@ -212,9 +224,9 @@ class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
         self.repo.add_directive('docs', '')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(),
-            len(self.repo.imported_articles)+1)  # articles + root
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(
+            len(self.repo.imported_articles)+1))  # articles + root
         shutil.rmtree(self.tempdir)
         # Take the time before publishing the second import
         now = datetime.now(pytz.utc)
@@ -226,9 +238,10 @@ class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
         # Check the page's plugins
-        for page in Page.objects.filter(publisher_is_draft=False):
+        published_pages.update()
+        for page in published_pages.pages:
             if page != self.root:
-                (dummy, plugin) = find_text_plugin(page)
+                (dummy, plugin) = get_text_plugin(page)
                 self.assertGreater(now, plugin.changed_date)
 
 
@@ -241,7 +254,8 @@ class TestImportNoTemplateChange(TestLocalBranchImport):
         for article in self.repo.imported_articles:
             self.assertEqual(article.template, DEFAULT_TEMPLATE)
         self.assertTrue(self.repo.publish())
-        for page in Page.objects.filter(publisher_is_draft=False):
+        published_pages = PublishedPages()
+        for page in published_pages.pages:
             if page.parent is not None:
                 self.assertEqual(page.template, DEFAULT_TEMPLATE)
 
@@ -256,6 +270,7 @@ class TestImportTemplateChange(TestLocalBranchImport):
         for article in self.repo.imported_articles:
             self.assertEqual(article.template, template_to_use)
         self.assertTrue(self.repo.publish())
-        for page in Page.objects.filter(publisher_is_draft=False):
+        published_pages = PublishedPages()
+        for page in published_pages.pages:
             if page.parent is not None:
                 self.assertEqual(page.template, template_to_use)

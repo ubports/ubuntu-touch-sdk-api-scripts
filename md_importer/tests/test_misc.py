@@ -1,8 +1,7 @@
 from bs4 import BeautifulSoup
 
-from cms.models import Page
-
 from .utils import (
+    PublishedPages,
     TestLocalBranchImport,
 )
 
@@ -20,10 +19,10 @@ class TestRemoteImage(TestLocalBranchImport):
         self.repo.add_directive('', '')
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
-        pages = Page.objects.filter(publisher_is_draft=False)
-        self.assertEqual(pages.count(), 1+1)  # root + 1 article
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(1+1))  # root + 1 article
         for article in self.repo.imported_articles:
-            self.assertEqual(article.page.parent, self.root)
+            self.assertEqual(article.article_page.page.parent, self.root)
             soup = BeautifulSoup(article.html, 'html5lib')
             for link in soup.find_all('a'):
                 page = self.check_local_link(link.attrs['href'])
@@ -31,5 +30,5 @@ class TestRemoteImage(TestLocalBranchImport):
                     page,
                     msg='Link {} not found. Available pages: {}'.format(
                         link.attrs['href'],
-                        ', '.join([p.get_absolute_url() for p in pages])))
-                self.assertIn(page, pages)
+                        ', '.join(published_pages.urls)))
+                self.assertIn(page, published_pages.pages)

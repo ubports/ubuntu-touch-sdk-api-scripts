@@ -2,11 +2,11 @@ from md_importer.importer import DEFAULT_LANG
 from md_importer.importer.repo import Repo
 from .utils import (
     db_add_empty_page,
+    PublishedPages,
     TestLocalBranchImport,
 )
 
 from cms.api import add_plugin, publish_pages
-from cms.models import Page
 
 
 class TestSnappyWebsiteRead(TestLocalBranchImport):
@@ -44,7 +44,7 @@ class TestSnappyWebsiteIA(TestLocalBranchImport):
         self.assertTrue(self.repo.execute_import_directives())
         self.assertTrue(self.repo.publish())
         self.assertGreater(len(self.repo.pages), 10)
-        pages = Page.objects.filter(publisher_is_draft=False)
+        published_pages = PublishedPages()
         expected_urls = [
             '/en/',
             '/en/snappy/',
@@ -85,6 +85,6 @@ class TestSnappyWebsiteIA(TestLocalBranchImport):
             '/en/snappy/start/as-dev/16-04/step4-first-snap/',
             '/en/snappy/start/as-dev/16-04/step5-further-readings/',
         ]
-        self.assertEqual(len(expected_urls), len(pages))
+        self.assertTrue(published_pages.has_size(len(expected_urls)))
         for url in expected_urls:
-            self.assertTrue(url in [p.get_absolute_url() for p in pages])
+            self.assertTrue(published_pages.contains_url(url))

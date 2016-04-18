@@ -8,6 +8,7 @@ from .utils import (
     db_add_empty_page,
     db_create_root_page,
     db_empty_page_list,
+    PublishedPages,
     TestLocalBranchImport,
 )
 
@@ -22,8 +23,8 @@ class PageDBActivities(TestCase):
         root = db_create_root_page()
         self.assertNotEqual(root, None)
         self.assertFalse(root.publisher_is_draft)
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 1)
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(1))
 
     def test_simple_articletree(self):
         db_empty_page_list()
@@ -33,8 +34,8 @@ class PageDBActivities(TestCase):
         self.assertFalse(snappy.publisher_is_draft)
         guides = db_add_empty_page('Guides', snappy)
         self.assertFalse(guides.publisher_is_draft)
-        self.assertEqual(
-            Page.objects.filter(publisher_is_draft=False).count(), 3)
+        published_pages = PublishedPages()
+        self.assertTrue(published_pages.has_size(3))
         self.assertEqual(guides.parent.get_public_object(), snappy)
         self.assertEqual(snappy.parent.get_public_object(), root)
 
