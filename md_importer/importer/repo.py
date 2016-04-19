@@ -33,7 +33,6 @@ class Repo:
         self.post_checkout_command = post_checkout_command
         self.branch_nick = os.path.basename(self.origin.replace('.git', ''))
         self.checkout_location = os.path.join(tempdir, self.branch_nick)
-        self.article_class = Article
 
     def get(self):
         sourcecode = SourceCode(self.origin, self.checkout_location,
@@ -92,8 +91,8 @@ class Repo:
                 try:
                     self.index_page = IndexPage(
                         title=self.branch_nick, full_url=directive['write_to'],
-                        in_navigation=True, html='', menu_title=None,
-                        template=DEFAULT_TEMPLATE)
+                        in_navigation=directive['advertise'], html='',
+                        menu_title=None, template=DEFAULT_TEMPLATE)
                     self.pages.extend([self.index_page.page])
                 except ParentNotFoundException:
                     return self._abort_import(
@@ -123,7 +122,7 @@ class Repo:
         return False
 
     def _read_article(self, fn, write_to, advertise, template):
-        article = self.article_class(fn, write_to, advertise, template)
+        article = Article(fn, write_to, advertise, template)
         if article.read():
             return article
         return None
