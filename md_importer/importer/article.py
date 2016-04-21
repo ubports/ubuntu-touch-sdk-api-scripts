@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import codecs
-import logging
 import markdown
 import os
 import re
@@ -9,6 +8,7 @@ import sys
 from . import (
     DEFAULT_LANG,
     DEFAULT_TEMPLATE,
+    logger,
     MARKDOWN_EXTENSIONS,
     SUPPORTED_ARTICLE_TYPES,
 )
@@ -51,7 +51,7 @@ class Article:
 
     def read(self):
         if os.path.splitext(self.fn)[1] not in SUPPORTED_ARTICLE_TYPES:
-            logging.error("Don't know how to interpret '{}'.".format(
+            logger.error("Don't know how to interpret '{}'.".format(
                 self.fn))
             return False
         with codecs.open(self.fn, 'r', encoding='utf-8') as f:
@@ -64,7 +64,7 @@ class Article:
                 self.html = f.read()
         self._find_local_images()
         if self.local_images:
-            logging.error('Found the following local image(s): {}'.format(
+            logger.error('Found the following local image(s): {}'.format(
                 ', '.join(self.local_images)
             ))
             return False

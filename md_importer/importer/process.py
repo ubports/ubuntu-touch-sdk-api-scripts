@@ -1,11 +1,11 @@
 import datetime
-import logging
 import pytz
 import shutil
 import tempfile
 
 from django.core.management import call_command
 
+from md_importer.importer import logger
 from md_importer.importer.publish import find_page
 from md_importer.importer.repo import Repo
 from md_importer.models import (
@@ -51,7 +51,7 @@ def process_branch(branch):
             branch=branch, last_import__lt=timestamp):
         page = find_page(imported_article.url)
         if not page:
-            logging.error('Page {} not found for deletion.'.format(url))
+            logger.error('Page {} not found for deletion.'.format(url))
         else:
             page.delete()
             imported_article.delete()

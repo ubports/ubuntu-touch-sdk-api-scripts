@@ -98,7 +98,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'django.middleware.cache.FetchFromCacheMiddleware',
-    
+
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
@@ -317,13 +317,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
-    
+
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
-    
+
     #'PAGINATE_BY': 10,
 }
 
@@ -347,11 +347,17 @@ MIGRATION_MODULES = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'normal': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
+        },
+    },
     'handlers': {
         'errors': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             'filename': './error.log',
+            'formatter': 'normal',
         },
     },
     'loggers': {

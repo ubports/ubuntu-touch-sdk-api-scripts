@@ -1,6 +1,7 @@
 from md_importer.importer import (
     DEFAULT_LANG,
     DEFAULT_TEMPLATE,
+    logger,
 )
 from md_importer.importer.tools import remove_leading_and_trailing_slash
 
@@ -12,7 +13,6 @@ from cms.utils.page_resolver import get_page_from_path
 from djangocms_text_ckeditor.html import clean_html
 
 from bs4 import BeautifulSoup
-import logging
 import re
 import os
 
@@ -158,7 +158,7 @@ def _find_parent(full_url):
         return root
     parent = get_page_from_path(parent_url, draft=True)
     if not parent:
-        logging.error('Parent {} not found.'.format(parent_url))
+        logger.error('Parent {} not found.'.format(parent_url))
         return None
     return parent
 
