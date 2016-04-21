@@ -241,7 +241,7 @@ class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
         published_pages.update()
         for page in published_pages.pages:
             if page != self.root:
-                (dummy, plugin) = find_text_plugin(page)
+                plugin = find_text_plugin(page)
                 self.assertGreater(now, plugin.changed_date)
 
 
