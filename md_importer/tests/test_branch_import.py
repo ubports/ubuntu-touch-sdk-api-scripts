@@ -10,7 +10,7 @@ from md_importer.importer import (
     TEMPLATE_CHOICES,
 )
 from md_importer.importer.article import Article
-from md_importer.importer.publish import get_text_plugin
+from md_importer.importer.publish import find_text_plugin
 from md_importer.importer.tools import remove_trailing_slash
 
 from .utils import (
@@ -241,7 +241,7 @@ class TestTwiceImportNoHtmlChange(TestLocalBranchImport):
         published_pages.update()
         for page in published_pages.pages:
             if page != self.root:
-                (dummy, plugin) = get_text_plugin(page)
+                (dummy, plugin) = find_text_plugin(page)
                 self.assertGreater(now, plugin.changed_date)
 
 

@@ -1,4 +1,3 @@
-from md_importer.importer import DEFAULT_LANG
 from md_importer.importer.repo import Repo
 from .utils import (
     db_add_empty_page,
@@ -6,7 +5,7 @@ from .utils import (
     TestLocalBranchImport,
 )
 
-from cms.api import add_plugin, publish_pages
+from cms.api import publish_pages
 
 
 class TestSnappyWebsiteRead(TestLocalBranchImport):
@@ -29,8 +28,6 @@ class TestSnappyWebsiteIA(TestLocalBranchImport):
             'Get started', parent=snappy_page, slug='start')
         as_dev = db_add_empty_page(
             'As developer', parent=start, slug='as-dev')
-        placeholder = as_dev.placeholders.all()[0]
-        add_plugin(placeholder, 'RawHtmlPlugin', DEFAULT_LANG, body='')
         page_16_04 = db_add_empty_page(
             '16.04', parent=as_dev, slug='16-04')
         publish_pages([snappy_page, start, as_dev, page_16_04])
