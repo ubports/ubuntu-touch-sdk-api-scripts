@@ -143,18 +143,42 @@
         var url = "";
         if (position == 1) {
             if (path.includes("/step")) {
-                url = "..";
+                url = "../..";
             }
             else {
                 url += "#";
             }
         }
-        else {
+	else if (position == 2) {
             if (path.includes("/step")) {
-                url = "../step" + position + "-" + host + "-" + target + "/";
+                url = "../step" + position + "-setup-" + target + "-" + host + "/";
             }
             else {
-                url = version + "/step" + position + "-" + host + "-" + target + "/";
+                url = version + "/step" + position + "-setup-" + target + "-" + host + "/";
+            }
+        }
+	else if (position == 3) {
+            if (path.includes("/step")) {
+                url = "../step" + position + "-get-familiar/";
+            }
+            else {
+                url = version + "/step" + position + "-get-familiar/";
+            }
+        }
+	else if (position == 4) {
+            if (path.includes("/step")) {
+                url = "../step" + position + "-first-snap/";
+            }
+            else {
+                url = version + "/step" + position + "-first-snap/";
+            }
+        }
+	else {
+            if (path.includes("/step")) {
+                url = "../step" + position + "-further-readings/";
+            }
+            else {
+                url = version + "/step" + position + "-further-readings/";
             }
         }
         return url;
@@ -332,3 +356,4 @@ p.here {
 {% endblock %}
 {% block footer %}
 {% endblock %}
+
