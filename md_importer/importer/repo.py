@@ -1,6 +1,7 @@
 from . import (
     SUPPORTED_ARTICLE_TYPES,
     DEFAULT_TEMPLATE,
+    logger,
 )
 from .article import Article
 from .publish import (
@@ -13,7 +14,6 @@ from .source import SourceCode
 from md_importer.models import ExternalDocsBranchImportDirective
 
 import glob
-import logging
 import os
 
 
@@ -38,7 +38,7 @@ class Repo:
         sourcecode = SourceCode(self.origin, self.checkout_location,
                                 self.branch_name, self.post_checkout_command)
         if sourcecode.get() != 0:
-            logging.error(
+            logger.error(
                     'Could not check out branch "{}".'.format(self.origin))
             return 1
         return 0
@@ -118,7 +118,7 @@ class Repo:
         return True
 
     def _abort_import(self, msg):
-        logging.error('Importing of {} aborted: {}.'.format(self.origin, msg))
+        logger.error('Importing of {} aborted: {}.'.format(self.origin, msg))
         return False
 
     def _read_article(self, fn, write_to, advertise, template):
@@ -130,7 +130,7 @@ class Repo:
     def publish(self):
         for article in self.imported_articles:
             if not article.add_to_db():
-                logging.error('Publishing of {} aborted.'.format(self.origin))
+                logger.error('Publishing of {} aborted.'.format(self.origin))
                 return False
             article.replace_links(self.titles, self.url_map)
         for article in self.imported_articles:

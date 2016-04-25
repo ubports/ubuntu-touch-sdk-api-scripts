@@ -1,8 +1,11 @@
 from md_importer.importer import (
     DEFAULT_LANG,
     DEFAULT_TEMPLATE,
+    logger,
 )
 from md_importer.importer.tools import remove_leading_and_trailing_slash
+
+from developer_portal.models import RawHtml
 
 from cms.api import create_page, add_plugin
 from cms.models import Page
@@ -10,7 +13,6 @@ from cms.utils.page_resolver import get_page_from_path
 from djangocms_text_ckeditor.html import clean_html
 
 from bs4 import BeautifulSoup
-import logging
 import re
 import os
 
@@ -42,31 +44,21 @@ class ArticlePage:
         if self.draft.template != template:
             self.draft.template = template
         if html:
-            (self.draft_placeholder,
-             self.draft_text_plugin) = get_text_plugin(self.draft)
             if self.page:
-                (self.placeholder,
-                 self.text_plugin) = get_text_plugin(self.page)
-            if self.draft_text_plugin:
-                if self._text_plugin_needs_update(html):
-                    self.draft_text_plugin.body = html
-                    self.draft_text_plugin.save()
-                else:
-                    # Reset draft
-                    self.draft.revert(DEFAULT_LANG)
+                self.text_plugin = find_text_plugin(self.page)
+            if self._text_plugin_needs_update(html):
+                self.draft_text_plugin.body = html
+                self.draft_text_plugin.save()
             else:
-                self.draft_plugin = add_plugin(
-                    self.draft_placeholder, 'RawHtmlPlugin', DEFAULT_LANG,
-                    body=html)
+                # Reset draft
+                self.draft.revert(DEFAULT_LANG)
 
     def __init__(self, title, full_url, menu_title=None, in_navigation=True,
                  html=None, template=DEFAULT_TEMPLATE):
         self.page = None
         self.draft = None
-        self.draft_placeholder = None
         self.draft_text_plugin = None
         self.text_plugin = None
-        self.placeholder = None
         self.full_url = full_url
         self.title = title
         self.menu_title = menu_title
@@ -85,6 +77,11 @@ class ArticlePage:
                 title=title, template=template, language=DEFAULT_LANG,
                 slug=slug, parent=parent, menu_title=menu_title,
                 in_navigation=in_navigation, position='last-child')
+        else:
+            remove_superfluous_placeholders(self.draft)
+            remove_superfluous_plugins(self.draft)
+        add_rawhtml_plugin(self.draft)
+        self.draft_text_plugin = find_text_plugin(self.draft)
         self.update(title, full_url, menu_title, in_navigation, html,
                     template)
 
@@ -161,23 +158,44 @@ def _find_parent(full_url):
         return root
     parent = get_page_from_path(parent_url, draft=True)
     if not parent:
-        logging.error('Parent {} not found.'.format(parent_url))
+        logger.error('Parent {} not found.'.format(parent_url))
         return None
     return parent
 
 
-def get_text_plugin(page):
-    '''Finds text plugin, creates it if necessary.'''
+# More than one placeholder -> old style page
+def remove_superfluous_placeholders(page):
+    if page.placeholders.count() > 1:
+        for placeholder in page.placeholders.all()[1:]:
+            placeholder.delete()
+    return page.placeholders.all()[0]
+
+
+def remove_superfluous_plugins(page):
+    placeholder = page.placeholders.all()[0]
+    plugins = placeholder.get_plugins()
+    if plugins.count() >= 1:
+        for plugin in plugins[1:]:
+            plugin.delete()
+    if plugins.count() == 1 and \
+       type(plugins[0].get_plugin_instance()[0]) != RawHtml:
+        plugins[0].delete()
+
+
+def add_rawhtml_plugin(page):
+    placeholder = page.placeholders.all()[0]
+    if not placeholder.get_plugins().count():
+        add_plugin(
+            placeholder, 'RawHtmlPlugin', DEFAULT_LANG,
+            body='')
+
+
+def find_text_plugin(page):
     if not page:
-        return (None, None)
+        return None
     placeholders = page.placeholders.all()
     if not placeholders:
-        return (None, None)
+        return None
     # We create the page, so we know there's just one placeholder
     plugins = placeholders[0].get_plugins()
-    if plugins:
-        return (placeholders[0], plugins[0].get_plugin_instance()[0])
-    plugin = add_plugin(
-        placeholders[0], 'RawHtmlPlugin', DEFAULT_LANG,
-        body='')
-    return (placeholders[0], plugin)
+    return plugins[0].get_plugin_instance()[0]

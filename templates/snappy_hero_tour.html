@@ -99,31 +99,31 @@
         document.getElementById("button-container-right").style.display = "block";
     }
 
-    // Set next button url
-    nextBtn.href = getChoicesString();
+    // Get cookies
+    getChoicesString();
 
     // Setup navigation dots
-    setDots()
+    setNav()
 
     // Dynamically update all nav urls to match user choices
     if (!path.includes("/step")) {
         var atags = document.getElementsByTagName('a');
         for (var i = 0, length = atags.length; i < length; i++) { 
             atags[i].addEventListener('mouseover', function () {
-                nextBtn.href = getChoicesString();
-                setDots();
+                getChoicesString();
+                setNav();
             });
             atags[i].addEventListener('mousedown', function () {
-                nextBtn.href = getChoicesString();
-                setDots();
+                getChoicesString();
+                setNav();
             });
         }
     }
 
-    function setDots() {
+    function setNav() {
         var dots = document.getElementsByClassName("dot");
         for (var i = 0, length = dots.length; i < length; i++) {
-            dots[i].firstChild.href = createURLForDot(dots.length, i + 1)
+            dots[i].firstChild.href = createURLForDot(i + 1)
             var short_path = path.split("/snappy/get-started/")[1];
             var short_url = dots[i].firstChild.href.split("/snappy/get-started/")[1];
             if (short_path == short_url.replace("#", "")) {
@@ -134,27 +134,59 @@
                 removeClass(dots[i].firstChild.children[1], "here");
             }
         }
+        if (path.includes("/step")) {
+            page = path.split("/").reverse()[1];
+            current_step = page.split("-")[0].slice(-1);
+            }
+        else {
+            current_step = 1;
+        }
+        nextBtn.href = createURLForDot(parseInt(current_step)+1)
     }
 
-    function createURLForDot(length, position) {
+    function createURLForDot(position) {
         var host = getCookie("snappy-tour-host");
         var version = getCookie("snappy-tour-version");
         var target = getCookie("snappy-tour-target");
         var url = "";
         if (position == 1) {
             if (path.includes("/step")) {
-                url = "..";
+                url = "../..";
             }
             else {
                 url += "#";
             }
         }
-        else {
+	else if (position == 2) {
             if (path.includes("/step")) {
-                url = "../step" + position + "-" + host + "-" + target + "/";
+                url = "../step" + position + "-setup-" + target + "-" + host + "/";
             }
             else {
-                url = version + "/step" + position + "-" + host + "-" + target + "/";
+                url = version + "/step" + position + "-setup-" + target + "-" + host + "/";
+            }
+        }
+	else if (position == 3) {
+            if (path.includes("/step")) {
+                url = "../step" + position + "-get-familiar/";
+            }
+            else {
+                url = version + "/step" + position + "-get-familiar/";
+            }
+        }
+	else if (position == 4) {
+            if (path.includes("/step")) {
+                url = "../step" + position + "-first-snap/";
+            }
+            else {
+                url = version + "/step" + position + "-first-snap/";
+            }
+        }
+	else {
+            if (path.includes("/step")) {
+                url = "../step" + position + "-further-readings/";
+            }
+            else {
+                url = version + "/step" + position + "-further-readings/";
             }
         }
         return url;
@@ -167,7 +199,6 @@
             next_step = current_step.replace(/(\d+)/, function () {
                 return arguments[1] * 1 + 1;
             });
-            return "../" + page.replace(current_step, next_step);
         }
         else {
             var step = "step2";
@@ -193,7 +224,6 @@
             setCookie("snappy-tour-version", version);
             setCookie("snappy-tour-host", host);
             setCookie("snappy-tour-target", target);
-            return version + "/" + step + "-" + host + "-" + target + "/";
         }
     }
 
@@ -332,3 +362,4 @@ p.here {
 {% endblock %}
 {% block footer %}
 {% endblock %}
+

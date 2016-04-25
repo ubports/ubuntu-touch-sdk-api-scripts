@@ -2,6 +2,9 @@ from developer_portal.settings import LANGUAGE_CODE
 
 from md_importer.models import ExternalDocsBranchImportDirective
 
+import logging
+logger = logging.getLogger('django')
+
 DEFAULT_LANG = LANGUAGE_CODE
 HOME_PAGE_URL = '/{}/'.format(DEFAULT_LANG)
 SUPPORTED_ARTICLE_TYPES = ['.md', '.html']

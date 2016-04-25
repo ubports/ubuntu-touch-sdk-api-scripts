@@ -1,4 +1,5 @@
-import logging
+from md_importer.importer import logger
+
 import os
 import shutil
 import subprocess
@@ -43,7 +44,7 @@ class SourceCode():
                                            self.branch_name])
                 os.chdir(pwd)
             return retcode
-        logging.error(
+        logger.error(
             'Repo format "{}" not understood.'.format(self.origin))
         return 1
 
@@ -56,5 +57,5 @@ class SourceCode():
         retcode = process.wait()
         os.chdir(pwd)
         if retcode != 0:
-            logging.error(out)
+            logger.error(out)
         return retcode
