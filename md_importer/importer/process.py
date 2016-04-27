@@ -63,6 +63,4 @@ def process_branch(branch):
         branch=branch).filter(id__in=imported_page_ids).delete()
     shutil.rmtree(tempdir)
 
-    # https://stackoverflow.com/questions/33284171/
-    call_command('cms', 'fix-tree')
     return repo
