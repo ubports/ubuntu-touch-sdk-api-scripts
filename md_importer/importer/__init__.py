@@ -12,6 +12,7 @@ SUPPORTED_ARTICLE_TYPES = ['.md', '.html']
 # Instead of just using pymdownx.github, we go with these because of
 # https://github.com/facelessuser/pymdown-extensions/issues/11
 MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.footnotes',
     'markdown.extensions.tables',
     'pymdownx.magiclink',
     'pymdownx.betterem',
