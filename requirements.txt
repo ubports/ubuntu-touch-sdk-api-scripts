@@ -16,7 +16,7 @@ django-blog-zinnia==0.16
 django-ckeditor==5.0.3
 django-ckeditor-updated==4.4.4
 django-classy-tags==0.7.0
-django-cms==3.2.3
+django-cms==3.2.5
 django-contrib-comments==1.7.0
 django-meta==0.3.1
 django-meta-mixin==0.2.1
@@ -52,3 +52,4 @@ django-pygments==0.1
 django-openid-auth==0.7
 python-openid==2.2.5
 djangorestframework==3.3.2
+msgpack-python==0.4.7
