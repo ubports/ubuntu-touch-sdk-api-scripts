@@ -24,28 +24,12 @@
                 {'from':'/start/ubuntu-sdk/', 'to':'/phone/platform/sdk/'},
                 {'from':'/start/', 'to':'/phone/'}]
 
-    function returnStatus(req, status) {
-        if(status == 200) {
-            window.location = new_path
-        }
-    }
-
-    function fetchStatus(address) {
-        var client = new XMLHttpRequest();
-        client.onreadystatechange = function() {
-            if(this.readyState == 4)
-                returnStatus(this, this.status);
-        }
-        client.open("HEAD", address);
-        client.send();
-    }
-
     for (var i = 0; i < move.length; i++) {
         var m = "/" + "{{ lang }}" + move[i]['from']
         var t = "/" + "{{ lang }}" + move[i]['to']
         if (path.lastIndexOf(m, 0) === 0) {
             var new_path = path.replace(m, t);
-                fetchStatus(new_path)
+                window.location = new_path
             break;
         }
     }
