@@ -23,7 +23,7 @@ class ScreenshotURL(models.Model):
 
 
 class GadgetSnap(models.Model):
-    icon_url = models.URLField(blank=True)
+    icon_url = models.URLField(blank=True, null=True)
     release = models.ManyToManyField(Release)
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=250, blank=True, null=True)
