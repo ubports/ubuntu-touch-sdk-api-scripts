@@ -27,7 +27,10 @@
         <div class="two-col no-margin-bottom">
             <h4>
             {% with snap_name=snap.title|default_if_none:snap.name %}
-	        {{ snap_name|style_snap_name }}
+	              {{ snap_name|style_snap_name }}
+                {% if snap.publisher == "Canonical" %}
+                 (officially supported)
+                {% endif %}
             {% endwith %}
             </h4>
         </div>
