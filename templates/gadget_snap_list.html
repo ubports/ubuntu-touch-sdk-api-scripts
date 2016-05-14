@@ -2,6 +2,10 @@
 
 <div class="no-border">
     {% for snap in gadget_snap_list %}
+        {% ifchanged snap.release.all|first %}
+            <h2>Available on release: {{ snap.release.all|first }}</h2>
+        {% endifchanged %}
+
         {% if gadget_snap_list|index:snap|divisibleby:1 %}
             <div class="left twelve-col last-col box">
         {% else %}
@@ -12,7 +16,7 @@
                 <img src="{{ snap.icon_url }}"/>
             </div>
         {% else %}
-            {% with 0|randint:10|string as rand %} 
+            {% with 0|randint:10|string as rand %}
                 {% with "img/boards/noboard-"|add:rand|add:".png" as noboard %}
                     <div class="two-col no-margin-bottom">
                         <img src="{% static noboard %}"/>
