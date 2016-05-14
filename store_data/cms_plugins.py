@@ -14,7 +14,7 @@ class GadgetSnapListPluginLarge(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         context.update({
-            'gadget_snap_list': GadgetSnap.objects.all(),
+            'gadget_snap_list': GadgetSnap.objects.order_by('-release'),
         })
         return context
 
@@ -30,7 +30,7 @@ class GadgetSnapListPluginSmall(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         context.update({
-            'gadget_snap_list': GadgetSnap.objects.all(),
+            'gadget_snap_list': GadgetSnap.objects.order_by('-release'),
         })
         return context
 
