@@ -24,13 +24,11 @@
                 {% endwith %}
             {% endwith %}
         {% endif %}
-        <div class="ten-col last-col no-margin-bottom">
+        <div class="ten-col last-col">
+
         <h3>
         {% with snap_name=snap.title|default_if_none:snap.name %}
 	          {{ snap_name|style_snap_name }}
-            {% if snap.publisher == "Canonical" %}
-             (officially supported)
-            {% endif %}
         {% endwith %}
         </h3>
             {% if snap.description|length > 180 %}
@@ -38,11 +36,14 @@
             {% else %}
                 <p>{% autoescape off %}{{ snap.description|html_links }}{% endautoescape %}</p>
             {% endif %}
-                <ul class="list-ubuntu">
-                    <li>
-                    <a href="https://developer.ubuntu.com/en/snappy/start/">{% trans "Install Snappy on this device" %}</a>
-                    </li>
-                </ul>
+            {% if snap.publisher == "Canonical" %}
+          </div>
+            <div class="one-col append-nine">
+              <img src="{% static "img/official.svg" %}" alt="Officially supported" />
+            </div>
+            <div class="ten-col">
+            {% endif %}
+
             </div>
         </div>
     {% endfor %}
