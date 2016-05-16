@@ -3,7 +3,7 @@
 <div class="no-border">
     {% for snap in gadget_snap_list %}
         {% ifchanged snap.release.all|first %}
-            <h2>Available on release: {{ snap.release.all|first }}</h2>
+            <h4>Available on release: {{ snap.release.all|first }}</h4>
         {% endifchanged %}
 
         {% if gadget_snap_list|index:snap|divisibleby:1 %}
@@ -24,11 +24,11 @@
                 {% endwith %}
             {% endwith %}
         {% endif %}
-        <div class="ten-col last-col">
+        <div class="eight-col">
 
         <h3>
         {% with snap_name=snap.title|default_if_none:snap.name %}
-	          {{ snap_name|style_snap_name }}
+	          {{ snap_name|style_snap_name }}             {% if snap.publisher == "Canonical" %}<img src="{% static "img/official.svg" %}" title="Officially supported" alt="Officially supported" style="width:5%;"/>            {% endif %}
         {% endwith %}
         </h3>
             {% if snap.description|length > 180 %}
@@ -36,13 +36,12 @@
             {% else %}
                 <p>{% autoescape off %}{{ snap.description|html_links }}{% endautoescape %}</p>
             {% endif %}
-            {% if snap.publisher == "Canonical" %}
+
           </div>
-            <div class="one-col append-nine">
-              <img src="{% static "img/official.svg" %}" alt="Officially supported" />
-            </div>
-            <div class="ten-col">
-            {% endif %}
+
+            
+            <div class="ten-col no-margin-bottom">
+
 
             </div>
         </div>
