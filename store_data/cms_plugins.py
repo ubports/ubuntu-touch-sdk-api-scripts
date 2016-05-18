@@ -5,6 +5,14 @@ from django.utils.translation import ugettext_lazy as _
 from .models import GadgetSnap
 
 
+def get_gadget_snaps():
+    snaps = [a for a in GadgetSnap.objects.exclude(
+        release__name='rolling-core').order_by('-release')]
+    snaps += [a for a in GadgetSnap.objects.filter(
+        release__name='rolling-core')]
+    return snaps
+
+
 class GadgetSnapListPluginLarge(CMSPluginBase):
     # Keeping the name short to be able to differentiate them
     # in the editor dropdown
@@ -14,7 +22,7 @@ class GadgetSnapListPluginLarge(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         context.update({
-            'gadget_snap_list': GadgetSnap.objects.all(),
+            'gadget_snap_list': get_gadget_snaps(),
         })
         return context
 
@@ -30,7 +38,7 @@ class GadgetSnapListPluginSmall(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         context.update({
-            'gadget_snap_list': GadgetSnap.objects.all(),
+            'gadget_snap_list': get_gadget_snaps(),
         })
         return context
 
