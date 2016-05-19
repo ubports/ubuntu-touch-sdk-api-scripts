@@ -57,5 +57,5 @@ class Command(BaseCommand):
                 print('Please remove them manually.')
 
         if not options['delete']:
-            print('If you want any incosistencies fixed, please re-run this '
+            print('If you want any inconsistencies fixed, please re-run this '
                   'command with the --delete option.')
