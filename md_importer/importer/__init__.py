@@ -14,6 +14,7 @@ SUPPORTED_ARTICLE_TYPES = ['.md', '.html']
 MARKDOWN_EXTENSIONS = [
     'markdown.extensions.footnotes',
     'markdown.extensions.tables',
+    'markdown.extensions.toc',
     'pymdownx.magiclink',
     'pymdownx.betterem',
     'pymdownx.tilde',
