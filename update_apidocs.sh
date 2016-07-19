@@ -41,6 +41,9 @@ python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Graphical Int
 gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-onlineaccounts2/html/ubuntuonlineaccounts2.index.gz
 python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.OnlineAccounts -i /tmp/apidoc_sources/usr/share/doc/ubuntu-onlineaccounts2/html/ubuntuonlineaccounts2.index
 
+./get_package qml-module-ubuntu-onlineaccounts-client-doc
+python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.OnlineAccounts.Client -i /tmp/apidoc_sources/usr/share/online-accounts-client/doc/html/onlineaccountsclient-qml-api.index
+
 ## Ubuntu.Content
 ./get_package.py libcontent-hub-doc
 gunzip -f /tmp/apidoc_sources/usr/share/doc/content-hub/qml/html/ubuntu-content-qml-api.index.gz
