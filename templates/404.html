@@ -11,27 +11,4 @@
 
 <div class="row">{% trans "This page does not exist or has been moved. If you feel that this is an error, please <a href='https://bugs.launchpad.net/developer-ubuntu-com/+filebug'>file a bug</a>." %}</div>
 
-<script>
-
-    var path = "{{ request.path }}";
-
-    var move = [{'from':'/apps/', 'to':'/phone/apps/'},
-                {'from':'/scopes/', 'to':'/phone/scopes/'},
-                {'from':'/web/', 'to':'/phone/web/'},
-                {'from':'/start/ubuntu-for-devices/', 'to':'/phone/devices/'},
-                {'from':'/start/platform/', 'to':'/phone/platform/'},
-                {'from':'/start/quality/', 'to':'/phone/platform/quality/'},
-                {'from':'/start/ubuntu-sdk/', 'to':'/phone/platform/sdk/'},
-                {'from':'/start/', 'to':'/phone/'}]
-
-    for (var i = 0; i < move.length; i++) {
-        var m = "/" + "{{ lang }}" + move[i]['from']
-        var t = "/" + "{{ lang }}" + move[i]['to']
-        if (path.lastIndexOf(m, 0) === 0) {
-            var new_path = path.replace(m, t);
-                window.location = new_path
-            break;
-        }
-    }
-</script>
 {% endblock %}
