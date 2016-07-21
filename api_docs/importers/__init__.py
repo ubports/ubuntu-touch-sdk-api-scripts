@@ -93,7 +93,7 @@ class Importer(object):
                     url_base = match.group('url').split('/')[-1]
                     if self.verbosity >= 2:
                         print "URL base: %s" % url_base
-                    element = Element.objects.filter(source_file=url_base, source_format=self.SOURCE_FORMAT)
+                    element = Element.objects.filter(source_file=url_base, source_format=self.SOURCE_FORMAT, section__topic_version=self.version)
                     if element:
                         element = element[0]
                         new_link = '/'.join(('/api', element.section.topic_version.language.topic.slug, element.section.topic_version.language.slug, element.section.topic_version.slug, element.fullname, ''))

@@ -37,8 +37,12 @@ python manage.py import_qdoc -t apps -l qml -r development -s "Platform Services
 python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Graphical Interface" -n Ubuntu.Components -i /tmp/apidoc_sources/usr/share/ubuntu-ui-toolkit/doc/html/ubuntuuserinterfacetoolkit.index
 
 ## Ubuntu.OnlineAccounts
-./get_package.py accounts-qml-module-doc
-python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.OnlineAccounts -i /tmp/apidoc_sources/usr/share/accounts-qml-module/doc/html/onlineaccounts-qml-api.index
+./get_package.py qml-module-ubuntu-onlineaccounts2-doc
+gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-onlineaccounts2/html/ubuntuonlineaccounts2.index.gz
+python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.OnlineAccounts -i /tmp/apidoc_sources/usr/share/doc/ubuntu-onlineaccounts2/html/ubuntuonlineaccounts2.index
+
+./get_package qml-module-ubuntu-onlineaccounts-client-doc
+python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.OnlineAccounts.Client -i /tmp/apidoc_sources/usr/share/online-accounts-client/doc/html/onlineaccountsclient-qml-api.index
 
 ## Ubuntu.Content
 ./get_package.py libcontent-hub-doc
