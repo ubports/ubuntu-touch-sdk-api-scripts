@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'api_docs',
 
     'md_importer',
+    'redirects',
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -92,6 +93,7 @@ MIDDLEWARE_CLASSES = (
     #
     #'django.contrib.sessions.middleware.SessionMiddleware',
     'developer_portal.middleware.CacheFriendlySessionMiddleware',
+    'redirects.middleware.Redirect404Middleware',
 
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
