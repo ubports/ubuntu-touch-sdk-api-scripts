@@ -3,7 +3,7 @@
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
   {% block defaulthead %}
-  
+
   {% block defaultmeta %}
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -29,7 +29,7 @@
   <script src="{% assets 'sites/ubuntu/latest/u/js/plugins/Imager.js' %}"></script>
   <script>var website_assets="{% assets 'sites/ubuntu/latest/u' %}";</script>
   {% endblock defaultheadjs %}
- 
+
   {% endblock defaulthead %}
   {% block extrahead %}{% endblock %}
   {% render_block "css" %}
@@ -81,14 +81,14 @@
 			    <a href="https://myapps.developer.ubuntu.com/">My Apps</a>
 			</li>
 			<li>
-			    <a href="/logout?next={{request.path}}"">{% trans "Log out" %}</a>
+			    <a href="/logout?next={{request.path}}">{% trans "Log out" %}</a>
 			</li>
 		    </ul>
 		</li>
 		{% else %}
 		<li class="login">
 		    <a href="https://myapps.developer.ubuntu.com/">{% trans "My Apps" %}</a>
-		</li>		
+		</li>
 		{% endif %}
                 </ul>
 
@@ -172,23 +172,22 @@
 	if(!core){ var core = {}; }
 	core.globalPrepend = 'body';
 </script>
-<script src="{% assets 'sites/ubuntu/latest/u/js/plugins/yui-combined.min.js' %}"></script>
-<script src="{% assets 'sites/ubuntu/latest/u/js/global.js' %}"></script>
+<script src="https://assets.ubuntu.com/v1/40d25181-yui-combined.min.js"></script>
+<script src="https://assets.ubuntu.com/v1/ab9f5f4b-global.js"></script>
 
 <script src="{% assets 'sites/guidelines/js/responsive/core.js' %}"></script>
-<script src="{% assets 'sites/ubuntu/latest/u/js/global.js' %}"></script>
 <script src="{% assets 'sites/ubuntu/latest/u/js/scratch.js' %}"></script>
 <script src="{% assets 'sites/ubuntu/latest/u/js/plugins/respond.min.js' %}"></script>
 
 <script type="text/javascript">
     var _gaq = _gaq || [];
-      
-    /* Save to developer.ubuntu.com profile */	
+
+    /* Save to developer.ubuntu.com profile */
     _gaq.push(['_setAccount', 'UA-1018242-33']);
     _gaq.push(['_setDomainName', '.ubuntu.com']);
     _gaq.push(['_trackPageview']);
 
-    /* Save to www.ubuntu.com profile */	
+    /* Save to www.ubuntu.com profile */
     _gaq.push(['b._setAccount', 'UA-1018242-4']);
     _gaq.push(['b._setDomainName', '.ubuntu.com']);
     _gaq.push(['b._trackPageview']);
