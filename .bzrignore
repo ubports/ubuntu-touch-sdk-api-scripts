@@ -1,6 +1,0 @@
-./env
-./static
-*.sqlite3
-local_settings.py
-locale/[a-z_]*
-locale/*/LC_MESSAGES/*

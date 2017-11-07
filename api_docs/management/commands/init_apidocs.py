@@ -1,31 +1,28 @@
-#!/usr/bin/python
-
 from django.core.management.base import BaseCommand
-from optparse import make_option
 
-from django.conf import settings
+from api_docs.models import Topic, Language, Version
 
-import subprocess
-import os
-import sys
-
-from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
 
 class Command(BaseCommand):
-    help = "Make sure The API Website database is set up properly."
+    help = "Make sure the API database is set up properly."
 
     def handle(self, *args, **options):
+        apps, _ = Topic.objects.update_or_create(name="apps", defaults={"slug": "apps"})
+        autopilot, _ = Topic.objects.update_or_create(name="autopilot", defaults={"slug": "autopilot"})
+        scopes, _ = Topic.objects.update_or_create(name="scopes", defaults={"slug": "scopes"})
 
-        apidocs_perms = Permission.objects.filter(content_type__app_label='api_docs')
-        authtoken_perms = Permission.objects.filter(content_type__app_label='authtoken')
+        qml, _ = Language.objects.update_or_create(name="qml", defaults={'slug': 'qml', 'topic': apps})
+        html, _ = Language.objects.update_or_create(name="html5", defaults={'slug': 'html5', 'topic': apps})
+        python, _ = Language.objects.update_or_create(name="python", defaults={'slug': 'python', 'topic': autopilot})
+        cpp, _ = Language.objects.update_or_create(name="cpp", defaults={'slug': 'cpp', 'topic': scopes})
+        js, _ = Language.objects.update_or_create(name="js", defaults={'slug': 'js', 'topic': scopes})
 
-        if hasattr(settings, 'ADMIN_GROUP') and settings.ADMIN_GROUP != "":
-            devs, created = Group.objects.get_or_create(name=settings.ADMIN_GROUP)
-            devs.permissions.add(*list(apidocs_perms))
-            devs.permissions.add(*list(authtoken_perms))
+        for lang in Language.objects.all():
+            name = '{}-dev'.format(lang.name)
+            version, _ = Version.objects.update_or_create(name=name, defaults={
+                'slug': name,
+                'language': lang,
+            })
 
-        if hasattr(settings, 'EDITOR_GROUP') and settings.EDITOR_GROUP != "":
-            importers, created = Group.objects.get_or_create(name=settings.EDITOR_GROUP)
-            importers.permissions.add(*list(apidocs_perms))
-            
+            lang.development_version = version
+            lang.save()

@@ -15,11 +15,16 @@ TMP_DIR = os.path.expanduser("~/tmp/")
 UNPACKED_USRSHARE_DIR = os.path.join(TMP_DIR, "1/usr/share")
 OUTPUT_DIR = os.getenv("OUTPUT_DIR", default="/tmp/apidoc_sources/")
 
-APT_LINES = [ "deb http://ppa.launchpad.net/ci-train-ppa-service/stable-phone-overlay/ubuntu %s main" % RELEASE,
-              "deb http://archive.ubuntu.com/ubuntu %s main" % RELEASE,
-              "deb http://archive.ubuntu.com/ubuntu %s universe" % RELEASE ]
+APT_LINES = [
+    'deb http://repo.ubports.com %s main' % RELEASE,
+    'deb http://ppa.launchpad.net/ubports-developers/overlay/ubuntu %s main' % RELEASE,
+    'deb http://ppa.launchpad.net/ci-train-ppa-service/stable-phone-overlay/ubuntu %s main' % RELEASE,
+    'deb http://archive.ubuntu.com/ubuntu %s main' % RELEASE,
+    'deb http://archive.ubuntu.com/ubuntu %s universe' % RELEASE 
+]
+
 if (APT_SOURCE):
-    APT_LINES.append("deb %s %s main" % (APT_SOURCE, RELEASE))
+    APT_LINES = ["deb %s %s main" % (APT_SOURCE, RELEASE)]
 
 PARTIAL_DIR = os.path.join(TMP_DIR, "lists/partial")
 ETC_APT_DIR = os.path.join(TMP_DIR, "etc/apt")

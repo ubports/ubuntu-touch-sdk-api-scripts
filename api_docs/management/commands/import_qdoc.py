@@ -18,7 +18,7 @@ __all__ = (
 )
 
 class Command(BaseCommand):
-    
+
     option_list = BaseCommand.option_list + (
         make_option(
             "-i",
@@ -90,6 +90,6 @@ class Command(BaseCommand):
         else:
             version = Version.objects.get(slug=options.get('version'), language=language)
         section, created = Section.objects.get_or_create(name=options.get('section'), topic_version=version)
-        
+
         importer = QDocImporter(topic, language, version, section, options)
         importer.run()

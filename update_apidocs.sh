@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -x
+set -e
+
 mkdir -p /tmp/apidoc_sources/
 
 # Archives to download packages from
@@ -25,7 +28,7 @@ python manage.py import_qdoc -t apps -l qml -r development -s "Device and Sensor
 
 ## QtLocation
 ./get_package.py qtlocation5-doc-html
-python manage.py import_qdoc -p -t apps -l qml -r development.1 -s "Platform Services" -i /tmp/apidoc_sources/usr/share/qt5/doc/qtlocation/qtlocation.index
+python manage.py import_qdoc -p -t apps -l qml -r development -s "Platform Services" -i /tmp/apidoc_sources/usr/share/qt5/doc/qtlocation/qtlocation.index
 
 ## QtOrganizer
 ./get_package.py qtpim5-doc-html
@@ -41,7 +44,7 @@ python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Graphical Int
 gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-onlineaccounts2/html/ubuntuonlineaccounts2.index.gz
 python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.OnlineAccounts -i /tmp/apidoc_sources/usr/share/doc/ubuntu-onlineaccounts2/html/ubuntuonlineaccounts2.index
 
-./get_package qml-module-ubuntu-onlineaccounts-client-doc
+./get_package.py qml-module-ubuntu-onlineaccounts-client-doc
 python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.OnlineAccounts.Client -i /tmp/apidoc_sources/usr/share/online-accounts-client/doc/html/onlineaccountsclient-qml-api.index
 
 ## Ubuntu.Content
@@ -59,7 +62,7 @@ gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-download-manager/qml/html/ubu
 python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.DownloadManager -i /tmp/apidoc_sources/usr/share/doc/ubuntu-download-manager/qml/html/ubuntu-download-manager-qml-api.index
 
 ## Ubuntu.Web
-./get_package.py qtdeclarative5-ubuntu-web-plugin-doc
+SOURCE=http://archive.ubuntu.com/ubuntu ./get_package.py qtdeclarative5-ubuntu-web-plugin-doc
 gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index.gz
 python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Graphical Interface" -N Ubuntu.Web -i /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index
 
@@ -97,13 +100,13 @@ python manage.py import_sphinx -t autopilot -l python -r development -s ./api_do
 find /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/ -name "*.gz" -print0 |xargs -0 gunzip
 python manage.py import_sphinx -t autopilot -l python -r development -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/objects.inv
 
-#### Scopes/C++ 
+#### Scopes/C++
 ## unity.scopes
 ./get_package.py libunity-scopes-doc
 python manage.py import_doxygen -t scopes -l cpp -r development -s ./api_docs/importers/scope_sections.py -N unity.scopes -d /tmp/apidoc_sources/usr/share/doc/unity-scopes/
 
 ## Accounts
-./get_package.py libaccounts-qt-doc
+SOURCE=http://archive.ubuntu.com/ubuntu ./get_package.py libaccounts-qt-doc
 python manage.py import_doxygen -t scopes -l cpp -r development -s ./api_docs/importers/accounts_sections.py -n Accounts -d /tmp/apidoc_sources/usr/share/doc/libaccounts-qt/html/
 
 ## U1db
@@ -111,7 +114,7 @@ python manage.py import_doxygen -t scopes -l cpp -r development -s ./api_docs/im
 python manage.py import_qdoc -Pp -N U1db -t scopes -l cpp -r development -s "Platform Services" -i /tmp/apidoc_sources/usr/share/u1db-qt/doc/html/u1db-qt.index
 
 #### Scopes/Javascript
-SOURCE=http://ppa.launchpad.net/ubuntu-sdk-team/ppa/ubuntu ./get_package.py unity-js-scopes-doc
+SOURCE="http://ppa.launchpad.net/ubuntu-sdk-team/ppa/ubuntu xenial" ./get_package.py unity-js-scopes-doc
 python manage.py import_yuidoc -t scopes -l js -r development -s "Platform Services" -d /tmp/apidoc_sources/usr/share/unity-js-scopes/doc/docbuild/data.json
 
 rm -r /tmp/apidoc_sources/
