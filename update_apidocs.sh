@@ -6,7 +6,7 @@ set -e
 mkdir -p /tmp/apidoc_sources/
 
 # Archives to download packages from
-export SERIES="vivid"
+export SERIES="xenial"
 
 #### Apps/QML
 ## QtQML & QtQuick
