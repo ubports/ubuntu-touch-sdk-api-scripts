@@ -13,6 +13,8 @@ outside of developer.ubuntu.com this step has not been taken yet.
     * Run: `vagrant up`
 * SSH into the vagrant VM
     * Run: `vagrant ssh`
+* Move into the development files
+    * Run: `cd /vagrant`
 * Import the docs into the database
     * Run: `./update_apidocs.sh`
 * Export the docs to rst

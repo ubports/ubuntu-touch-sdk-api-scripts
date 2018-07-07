@@ -3,8 +3,8 @@ VAGRANTFILE_API_VERSION = "2"
 $script = <<SCRIPT
 apt update
 apt -y install python-pip bzr pandoc
-pip install -r requirements.txt
 cd /vagrant
+pip install -r requirements.txt
 python manage.py migrate
 python manage.py init_apidocs
 echo 'cd /vagrant' >> /home/ubuntu/.bashrc
