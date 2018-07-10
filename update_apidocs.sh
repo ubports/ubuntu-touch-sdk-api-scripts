@@ -62,9 +62,10 @@ gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-download-manager/qml/html/ubu
 python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.DownloadManager -i /tmp/apidoc_sources/usr/share/doc/ubuntu-download-manager/qml/html/ubuntu-download-manager-qml-api.index
 
 ## Ubuntu.Web
-SOURCE=http://archive.ubuntu.com/ubuntu ./get_package.py qtdeclarative5-ubuntu-web-plugin-doc
-gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index.gz
-python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Graphical Interface" -N Ubuntu.Web -i /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index
+# TODO: Removed since the current Oxide-based webbrowser's doc has gone away
+# SOURCE=http://archive.ubuntu.com/ubuntu ./get_package.py qtdeclarative5-ubuntu-web-plugin-doc
+# gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index.gz
+# python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Graphical Interface" -N Ubuntu.Web -i /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index
 
 ## Ubuntu.Connectivity
 ./get_package.py connectivity-doc

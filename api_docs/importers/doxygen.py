@@ -103,8 +103,13 @@ class DoxygenImporter(Importer):
             else:
                 print "Sections file does not contain a SECTIONS dictionary"
                 exit(3)
-                
-        self.read_classes(self.read_json_file(os.path.join(self.source, 'annotated.js')))
+        
+        # Some projects have annotated.js, others annotated_dup.js
+        try:
+            self.read_classes(self.read_json_file(os.path.join(self.source, 'annotated.js')))
+        except IOError:
+            self.read_classes(self.read_json_file(os.path.join(self.source, 'annotated_dup.js')))
+
         if not self.options.get('no_pages', False):
             if os.path.exists(os.path.join(self.source, 'navtreedata.js')):
                 self.read_pages(self.read_json_file(os.path.join(self.source, 'navtreedata.js')), self.parse_namespace(None))
