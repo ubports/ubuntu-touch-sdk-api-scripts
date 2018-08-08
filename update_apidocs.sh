@@ -62,10 +62,9 @@ gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-download-manager/qml/html/ubu
 python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Platform Services" -N Ubuntu.DownloadManager -i /tmp/apidoc_sources/usr/share/doc/ubuntu-download-manager/qml/html/ubuntu-download-manager-qml-api.index
 
 ## Ubuntu.Web
-# TODO: Removed since the current Oxide-based webbrowser's doc has gone away
-# SOURCE=http://archive.ubuntu.com/ubuntu ./get_package.py qtdeclarative5-ubuntu-web-plugin-doc
-# gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index.gz
-# python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Graphical Interface" -N Ubuntu.Web -i /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index
+./get_package.py qml-module-ubuntu-web-doc
+gunzip -f /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index.gz
+python manage.py import_qdoc -Pp -t apps -l qml -r development -s "Graphical Interface" -N Ubuntu.Web -i /tmp/apidoc_sources/usr/share/doc/ubuntu-web/html/ubuntuweb.index
 
 ## Ubuntu.Connectivity
 ./get_package.py connectivity-doc
@@ -89,33 +88,29 @@ python manage.py import_yuidoc -t apps -l html5 -r development -s "Platform Serv
 
 #### Autopilot/Python
 ## Autopilot
-./get_package.py python3-autopilot
-find /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
-python manage.py import_sphinx -t autopilot -l python -r development -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/objects.inv
+# ./get_package.py python3-autopilot
+#find /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
+# python manage.py import_sphinx -t autopilot -l python -r development -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-autopilot/json/objects.inv
 
-./get_package.py ubuntu-ui-toolkit-autopilot
-find /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
-python manage.py import_sphinx -t autopilot -l python -r development -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/objects.inv
+# ./get_package.py ubuntu-ui-toolkit-autopilot
+#find /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/ -name "*.gz" -print0 |xargs -0 gunzip
+# python manage.py import_sphinx -t autopilot -l python -r development -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/ubuntu-ui-toolkit-autopilot/json/objects.inv
 
-./get_package.py python3-scope-harness
-find /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/ -name "*.gz" -print0 |xargs -0 gunzip
-python manage.py import_sphinx -t autopilot -l python -r development -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/objects.inv
+# ./get_package.py python3-scope-harness
+# find /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/ -name "*.gz" -print0 |xargs -0 gunzip
+# python manage.py import_sphinx -t autopilot -l python -r development -s ./api_docs/importers/autopilot_sections.py -i /tmp/apidoc_sources/usr/share/doc/python3-scope-harness/json/objects.inv
 
 #### Scopes/C++
 ## unity.scopes
-./get_package.py libunity-scopes-doc
-python manage.py import_doxygen -t scopes -l cpp -r development -s ./api_docs/importers/scope_sections.py -N unity.scopes -d /tmp/apidoc_sources/usr/share/doc/unity-scopes/
+# ./get_package.py libunity-scopes-doc
+# python manage.py import_doxygen -t scopes -l cpp -r development -s ./api_docs/importers/scope_sections.py -N unity.scopes -d /tmp/apidoc_sources/usr/share/doc/unity-scopes/
 
 ## Accounts
-SOURCE=http://archive.ubuntu.com/ubuntu ./get_package.py libaccounts-qt-doc
-python manage.py import_doxygen -t scopes -l cpp -r development -s ./api_docs/importers/accounts_sections.py -n Accounts -d /tmp/apidoc_sources/usr/share/doc/libaccounts-qt/html/
+./get_package.py libaccounts-qt-doc
+python manage.py import_doxygen -t apps -l cpp -r development -s ./api_docs/importers/accounts_sections.py -n Accounts -d /tmp/apidoc_sources/usr/share/doc/libaccounts-qt/html/
 
 ## U1db
 ./get_package.py libu1db-qt5-doc
-python manage.py import_qdoc -Pp -N U1db -t scopes -l cpp -r development -s "Platform Services" -i /tmp/apidoc_sources/usr/share/u1db-qt/doc/html/u1db-qt.index
-
-#### Scopes/Javascript
-SOURCE="http://ppa.launchpad.net/ubuntu-sdk-team/ppa/ubuntu xenial" ./get_package.py unity-js-scopes-doc
-python manage.py import_yuidoc -t scopes -l js -r development -s "Platform Services" -d /tmp/apidoc_sources/usr/share/unity-js-scopes/doc/docbuild/data.json
+python manage.py import_qdoc -Pp -N U1db -t apps -l cpp -r development -s "Platform Services" -i /tmp/apidoc_sources/usr/share/u1db-qt/doc/html/u1db-qt.index
 
 rm -r /tmp/apidoc_sources/

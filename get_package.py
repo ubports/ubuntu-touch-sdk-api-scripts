@@ -17,7 +17,6 @@ OUTPUT_DIR = os.getenv("OUTPUT_DIR", default="/tmp/apidoc_sources/")
 
 APT_LINES = [
     'deb http://repo.ubports.com %s main' % RELEASE,
-    'deb http://repo.ubports.com %s main' % RELEASE,
     'deb http://ppa.launchpad.net/ci-train-ppa-service/stable-phone-overlay/ubuntu %s main' % RELEASE,
     'deb http://archive.ubuntu.com/ubuntu %s main' % RELEASE,
     'deb http://archive.ubuntu.com/ubuntu %s universe' % RELEASE 

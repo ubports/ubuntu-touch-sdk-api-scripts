@@ -13,6 +13,8 @@ class Command(BaseCommand):
     help = "Export the docs as rst"
 
     BASE_DIR = '/tmp/sdk'
+    # These are duplicates which should not be added to root toctrees
+    DUPLICATES = ['actuator', 'hapticseffect', 'themeeffect']
 
     def paths(self, page):
         directory = '{}/{}/{}'.format(
@@ -34,6 +36,16 @@ class Command(BaseCommand):
         return (directory, path, title, link)
 
     def write_toctrees(self, toctrees):
+        """ Write many Table Of Contents trees
+
+        :param toctrees:
+            Dict of the following format::
+
+                {
+                    "/path/where/toctree/will/be/placed": set(["Title of page to link to", "Title of page to link to", ...]),
+                    ...
+                }
+        """
         for directory, values in toctrees.items():
             values = list(values)
             values = sorted(values)
@@ -46,7 +58,7 @@ class Command(BaseCommand):
             else:
                 title = split[-1]
 
-            data = '{}\n{}\n\n.. toctree::\n    :maxdepth: 1\n\n{}'.format(
+            data = '{}\n{}\n\n.. toctree::\n    :maxdepth: 1\n\n{}\n'.format(
                 title,
                 '=' * len(title),
                 '\n'.join(['    {}'.format(value) for value in values])
@@ -59,18 +71,31 @@ class Command(BaseCommand):
             with open('{}/index.rst'.format(directory), 'wb') as f:
                 f.write(data.encode('utf-8'))
 
+    def write_root_toctrees(self):
+        """Writes toctrees for the top-level directories which don't already have one."""
+
+        toctrees_to_write = {}
+
+        for root, dirs, files in os.walk(self.BASE_DIR):
+            if "index.rst" in files:
+                # Folder already has an index
+                continue
+
+            toctrees_to_write[root] = set([dir + "/index" for dir in dirs \
+                                            if dir not in self.DUPLICATES])
+
+        self.write_toctrees(toctrees_to_write)
+
     def handle(self, *args, **options):
-        base = '/tmp/sdk'
+        base = self.BASE_DIR
         if os.path.exists(base):
             shutil.rmtree(base)
 
-        # These are duplicates
-        skip = ['actuator', 'hapticseffect', 'themeeffect']
         all_pages = list(Page.objects.all()) + list(Element.objects.all())
         pages = []
         for page in all_pages:
             title = page.title if type(page) == Page else page.name
-            if title not in skip:
+            if title not in self.DUPLICATES:
                 pages.append(page)
 
         lang_toctrees = {}
@@ -102,6 +127,7 @@ class Command(BaseCommand):
 
         self.write_toctrees(lang_toctrees)
         self.write_toctrees(namespace_toctrees)
+        self.write_root_toctrees()
 
         for page in pages:
             if page.section.topic_version.language.topic.name != 'apps':
